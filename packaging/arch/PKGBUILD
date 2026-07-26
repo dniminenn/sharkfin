@@ -1,0 +1,55 @@
+# Maintainer: JR Lanteigne <root at dnim dot dev>
+# SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+pkgname=sharkfin
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Configurator for Attack Shark and other ROYUAN keyboards'
+arch=('x86_64')
+url='https://github.com/dniminenn/sharkfin'
+license=('GPL-3.0-or-later')
+depends=('gcc-libs' 'glibc' 'gtk3' 'hicolor-icon-theme' 'systemd-libs' 'webkit2gtk-4.1')
+makedepends=('cargo' 'npm')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+b2sums=('SKIP')
+
+prepare() {
+  cd "$pkgname-$pkgver/app"
+  npm ci --cache "$srcdir/npm-cache"
+  cd src-tauri
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/^host: //p')"
+}
+
+build() {
+  cd "$pkgname-$pkgver/app"
+  npm run build
+  cd src-tauri
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --frozen --release
+}
+
+check() {
+  cd "$pkgname-$pkgver/app/src-tauri"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo test --frozen --lib
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  install -Dm0755 "app/src-tauri/target/release/$pkgname" -t "$pkgdir/usr/bin/"
+  install -Dm0644 "packaging/$pkgname.desktop" -t "$pkgdir/usr/share/applications/"
+  install -Dm0644 "packaging/70-$pkgname.rules" -t "$pkgdir/usr/lib/udev/rules.d/"
+  local _size
+  for _size in 32 128; do
+    install -Dm0644 "app/src-tauri/icons/${_size}x${_size}.png" \
+      "$pkgdir/usr/share/icons/hicolor/${_size}x${_size}/apps/$pkgname.png"
+  done
+  install -Dm0644 'app/src-tauri/icons/128x128@2x.png' \
+    "$pkgdir/usr/share/icons/hicolor/256x256/apps/$pkgname.png"
+  install -Dm0644 'app/src-tauri/icons/icon.png' \
+    "$pkgdir/usr/share/icons/hicolor/512x512/apps/$pkgname.png"
+}

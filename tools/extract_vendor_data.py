@@ -1,0 +1,732 @@
+#!/usr/bin/env python3
+# SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+# SPDX-License-Identifier: GPL-3.0-or-later
+"""Extract the ROYUAN/AttackShark device catalog from the vendor app bundle.
+
+usage:
+  extract_vendor_data.py BUNDLE_PRETTY_JS [--dist-js DIR]
+      [--devices-out FILE] [--layouts-out DIR]
+
+BUNDLE_PRETTY_JS is a prettified copy of the vendor webapp main bundle
+(dist/js/index.*.js run through `npx prettier --parser babel`). --dist-js is
+the vendor app's original dist/js directory (minified chunks); it is required
+for protocol-family classification and layout matrix indices.
+
+--dist-js is repeatable and results are unioned: each brand ships this same
+driver with only its own devices' layouts bundled. Two sources cover the
+catalogue as of 2026-07-26 -- any desktop installer (Attack Shark's, say) for
+the defaultMatrix data, plus the hosted web build under gearhub.top/v4/js/,
+which carries every referenced layout but almost no defaultMatrix. Order does
+not matter: matrix lookup tries every build that claims a device until one
+resolves. The web host wants a browser User-Agent.
+
+Vendor builds are never committed. Unpack them outside the working tree and
+point --dist-js at them there; what belongs in the repo is the generated
+output, which this script reproduces.
+
+Outputs:
+  devices.json  - every type:"keyboard" registry entry, deduped by id
+  layouts dir   - one <keyLayoutName>.json per extractable *_keymappings_ui_info
+                  object (Common80_k72x86 is skipped: src/lib/layouts/x86.json
+                  is canonical)
+
+Family derivation (printed per run): each device name is looked up in the
+lazy-loader maps inside the dist chunks (name -> import("<chunk>") with a
+static dependency preload list). A dep list containing 438d24dc.js
+(CommonKbYc500) => "yc500"; containing 5e635fe2.js (the generic keyboard base)
+=> "gen2"; both/neither/no loader entry => "unknown". sharkfin only enables
+writes for family "yc500".
+"""
+
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+
+
+class ParseError(Exception):
+    pass
+
+
+IDENT_RE = re.compile(r"[^\W\d][\w$]*(?:\.[^\W\d][\w$]*)*|\$[\w$]*")
+NUM_RE = re.compile(r"-?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][+-]?\d+)?")
+
+
+class JsValueParser:
+    """Parses the JS literal subset used by the vendor data tables: objects
+    with identifier/string/computed keys, strings, numbers (with constant
+    * / + - arithmetic, e.g. 1 * 60 * 60), arrays, !0/!1, bare identifier
+    references (returned as {"$ident": name})."""
+
+    def __init__(self, text, pos=0):
+        self.t = text
+        self.i = pos
+
+    def ws(self):
+        t, n = self.t, len(self.t)
+        while self.i < n:
+            c = t[self.i]
+            if c in " \t\r\n":
+                self.i += 1
+            elif t.startswith("//", self.i):
+                j = t.find("\n", self.i)
+                self.i = n if j < 0 else j + 1
+            elif t.startswith("/*", self.i):
+                j = t.find("*/", self.i + 2)
+                if j < 0:
+                    raise ParseError("unterminated comment")
+                self.i = j + 2
+            else:
+                return
+
+    def peek(self):
+        self.ws()
+        if self.i >= len(self.t):
+            raise ParseError("eof")
+        return self.t[self.i]
+
+    def value(self):
+        c = self.peek()
+        if c == "{":
+            return self.object()
+        if c == "[":
+            return self.array()
+        if c in "\"'`":
+            return self.string()
+        if c == "!":
+            self.i += 1
+            v = self.value()
+            return not v
+        if c.isdigit() or c in "-.":
+            return self.number_expr()
+        m = IDENT_RE.match(self.t, self.i)
+        if not m:
+            raise ParseError(f"unexpected {c!r} at {self.i}")
+        name = m.group(0)
+        self.i = m.end()
+        if name == "true":
+            return True
+        if name == "false":
+            return False
+        if name == "null":
+            return None
+        if name == "new":
+            return self.value()
+        if name == "void":
+            self.ws()
+            m2 = NUM_RE.match(self.t, self.i)
+            if m2:
+                self.i = m2.end()
+            return None
+        self.ws()
+        if self.i < len(self.t) and self.t[self.i] == "(":
+            self.skip_parens()
+            return {"$call": name}
+        return {"$ident": name}
+
+    def skip_parens(self):
+        depth = 0
+        t, n = self.t, len(self.t)
+        while self.i < n:
+            c = t[self.i]
+            if c in "\"'`":
+                self.string()
+                continue
+            if c == "(":
+                depth += 1
+            elif c == ")":
+                depth -= 1
+                if depth == 0:
+                    self.i += 1
+                    return
+            self.i += 1
+        raise ParseError("unterminated parens")
+
+    def number_expr(self):
+        v = self.number()
+        while True:
+            self.ws()
+            if self.i >= len(self.t):
+                return v
+            op = self.t[self.i]
+            if op not in "*/+-":
+                return v
+            save = self.i
+            self.i += 1
+            try:
+                rhs = self.number()
+            except ParseError:
+                self.i = save
+                return v
+            if op == "*":
+                v *= rhs
+            elif op == "/":
+                v = float("inf") if rhs == 0 else v / rhs
+            elif op == "+":
+                v += rhs
+            else:
+                v -= rhs
+
+    def number(self):
+        self.ws()
+        m = NUM_RE.match(self.t, self.i)
+        if not m:
+            raise ParseError(f"expected number at {self.i}")
+        self.i = m.end()
+        s = m.group(0)
+        return float(s) if ("." in s or "e" in s or "E" in s) else int(s)
+
+    def string(self):
+        q = self.t[self.i]
+        self.i += 1
+        out = []
+        t, n = self.t, len(self.t)
+        while self.i < n:
+            c = t[self.i]
+            if c == "\\":
+                e = t[self.i + 1]
+                esc = {"n": "\n", "t": "\t", "r": "\r", "b": "\b", "f": "\f", "0": "\0"}
+                if e == "u":
+                    if t[self.i + 2] == "{":
+                        j = t.index("}", self.i + 3)
+                        out.append(chr(int(t[self.i + 3 : j], 16)))
+                        self.i = j + 1
+                    else:
+                        out.append(chr(int(t[self.i + 2 : self.i + 6], 16)))
+                        self.i += 6
+                elif e == "x":
+                    out.append(chr(int(t[self.i + 2 : self.i + 4], 16)))
+                    self.i += 4
+                else:
+                    out.append(esc.get(e, e))
+                    self.i += 2
+            elif c == q:
+                self.i += 1
+                return "".join(out)
+            else:
+                out.append(c)
+                self.i += 1
+        raise ParseError("unterminated string")
+
+    def array(self):
+        self.i += 1
+        out = []
+        while True:
+            c = self.peek()
+            if c == "]":
+                self.i += 1
+                return out
+            out.append(self.value())
+            c = self.peek()
+            if c == ",":
+                self.i += 1
+            elif c != "]":
+                raise ParseError(f"bad array at {self.i}")
+
+    def object(self):
+        self.i += 1
+        out = {}
+        while True:
+            c = self.peek()
+            if c == "}":
+                self.i += 1
+                return out
+            if c in "\"'":
+                key = self.string()
+            elif c == "[":
+                self.i += 1
+                v = self.value()
+                key = v["$ident"] if isinstance(v, dict) and "$ident" in v else str(v)
+                if self.peek() != "]":
+                    raise ParseError(f"bad computed key at {self.i}")
+                self.i += 1
+            else:
+                m = IDENT_RE.match(self.t, self.i)
+                if not m:
+                    raise ParseError(f"bad key at {self.i}")
+                key = m.group(0)
+                self.i = m.end()
+            if self.peek() != ":":
+                raise ParseError(f"expected : at {self.i}")
+            self.i += 1
+            out[key] = self.value()
+            c = self.peek()
+            if c == ",":
+                self.i += 1
+            elif c != "}":
+                raise ParseError(f"bad object at {self.i}")
+
+
+def parse_object_at(text, pos):
+    p = JsValueParser(text, pos)
+    return p.object(), p.i
+
+
+def ident_name(v):
+    if isinstance(v, dict) and "$ident" in v:
+        n = v["$ident"]
+        return n[2:] if n.startswith("c.") else n
+    return v
+
+
+def as_str(v, default=""):
+    return v if isinstance(v, str) else default
+
+
+def extract_registry(bundle):
+    devices, seen_spans = [], set()
+    for m in re.finditer(r"\bid:\s*\d+\s*,", bundle):
+        j = m.start() - 1
+        while j >= 0 and bundle[j] in " \t\r\n":
+            j -= 1
+        if j < 0 or bundle[j] != "{" or j in seen_spans:
+            continue
+        try:
+            obj, _ = parse_object_at(bundle, j)
+        except (ParseError, ValueError, IndexError):
+            continue
+        if not {"id", "vid", "pid", "name", "type"} <= obj.keys():
+            continue
+        seen_spans.add(j)
+        devices.append(obj)
+    return devices
+
+
+ENUM_UI_RE = re.compile(
+    r'\[[A-Za-z_$][\w$]*\.(\w+)\]:\s*"(\w+_keymappings_ui_info)"'
+)
+
+
+def extract_enum_ui_map(bundle, dists=()):
+    """keyLayout enum -> ui_info name.
+
+    The enum variable is minified per build, and some builds keep this map in a
+    chunk rather than the main bundle, so match any identifier prefix and scan
+    the chunks too.
+    """
+    mapping = dict(ENUM_UI_RE.findall(bundle))
+    for dist in dists or ():
+        for f in sorted(dist.glob("*.js")):
+            text = f.read_text(encoding="utf-8", errors="replace")
+            if "_keymappings_ui_info" not in text:
+                continue
+            for k, v in ENUM_UI_RE.findall(text):
+                mapping.setdefault(k, v)
+    return mapping
+
+
+def extract_enum_keys(bundle):
+    return set(re.findall(r'\(e\.(\w+) =\s*\n?\s*"', bundle)) | set(
+        re.findall(r'\be\.(\w+) = "', bundle)
+    )
+
+
+def extract_hid_table(bundle):
+    table = {}
+    for m in re.finditer(r'htmlCode:\s*"(\w+)"', bundle):
+        j = bundle.rfind("{", 0, m.start())
+        try:
+            obj, _ = parse_object_at(bundle, j)
+        except (ParseError, ValueError, IndexError):
+            continue
+        code, hid = obj.get("htmlCode"), obj.get("hidCode")
+        if isinstance(code, str) and isinstance(hid, int) and code not in table:
+            table[code] = hid
+    return table
+
+
+LOADER_RE = re.compile(
+    r'([A-Za-z0-9_$]+):\(\)=>[\w$]+\(\(\)=>import\("\./([0-9a-f]{8}\.js)"\),\[([^\]]*)\]'
+)
+
+
+def load_loader_maps(dists):
+    """Union across builds; each brand's build only bundles its own devices.
+
+    A device can appear in several builds pointing at different chunk files,
+    and only some of those chunks carry a defaultMatrix -- the hosted web build
+    in particular has almost none. Keep every candidate so matrix lookup can
+    fall through instead of binding to whichever build happened to be last.
+    """
+    loaders = {}
+    for dist in dists:
+        for name, (chunk, deps) in _load_loader_maps_one(dist).items():
+            entry = loaders.setdefault(name, {"deps": set(), "chunks": []})
+            entry["deps"] |= deps
+            if (dist, chunk) not in entry["chunks"]:
+                entry["chunks"].append((dist, chunk))
+    return loaders
+
+
+def _load_loader_maps_one(dist):
+    loaders = {}
+    for f in sorted(dist.glob("*.js")):
+        text = f.read_text(encoding="utf-8", errors="replace")
+        for m in LOADER_RE.finditer(text):
+            name, chunk, deps_raw = m.groups()
+            deps = set(re.findall(r'"\./([^"]+)"', deps_raw)) | {chunk}
+            loaders.setdefault(name, (chunk, deps))
+    return loaders
+
+
+def find_base_chunks(dists):
+    """Locate each family's base class chunk by opcode signature.
+
+    Chunk filenames are content hashes and the class names are minified away
+    in some builds, so neither is a stable marker. The keymatrix opcode is:
+    the yc500 base declares 9, its gen2 sibling declares 10.
+    """
+    yc500, gen2 = set(), set()
+    for dist in dists:
+        for f in sorted(dist.glob("*.js")):
+            text = f.read_text(encoding="utf-8", errors="replace")
+            if "FEA_CMD_SET_KEYMATRIX" not in text:
+                continue
+            vals = set(re.findall(r"FEA_CMD_SET_KEYMATRIX\s*=\s*(\d+)", text))
+            if "9" in vals:
+                yc500.add(f.name)
+            if "10" in vals:
+                gen2.add(f.name)
+    return yc500, gen2
+
+
+def classify_family(deps, bases=None):
+    if bases:
+        yc500, gen2 = bases
+        y, g = bool(deps & yc500), bool(deps & gen2)
+    else:
+        y, g = "438d24dc.js" in deps, "5e635fe2.js" in deps
+    if y and not g:
+        return "yc500"
+    if g and not y:
+        return "gen2"
+    return "unknown"
+
+
+EXPORT_RE = re.compile(r"export\s*\{([^}]*)\}")
+
+
+def extract_ui_defs(dists):
+    defs = {}
+    for dist in dists:
+        for k, v in _extract_ui_defs_one(dist).items():
+            defs.setdefault(k, v)
+    return defs
+
+
+def _extract_ui_defs_one(dist):
+    defs = {}
+    for f in sorted(dist.glob("*.js")):
+        text = f.read_text(encoding="utf-8", errors="replace")
+        if "_keymappings_ui_info" not in text:
+            continue
+        for em in EXPORT_RE.finditer(text):
+            for part in em.group(1).split(","):
+                part = part.strip()
+                if not part:
+                    continue
+                toks = part.split()
+                local, exported = (
+                    (toks[0], toks[2]) if len(toks) == 3 and toks[1] == "as" else (toks[0], toks[0])
+                )
+                if not exported.endswith("_keymappings_ui_info") or exported in defs:
+                    continue
+                for dm in re.finditer(
+                    r"(?<![\w$.])" + re.escape(local) + r"\s*=\s*\{", text
+                ):
+                    try:
+                        obj, _ = parse_object_at(text, dm.end() - 1)
+                    except (ParseError, ValueError, IndexError):
+                        continue
+                    if isinstance(obj.get("layout"), dict) and "width" in obj:
+                        defs[exported] = (obj, f.name)
+                        break
+    return defs
+
+
+def first_default_matrix(candidates):
+    """First chunk across all builds that actually yields a defaultMatrix."""
+    for dist, chunk in candidates:
+        mat = extract_default_matrix(dist, chunk)
+        if mat:
+            return mat
+    return None
+
+
+def extract_default_matrix(dist, chunk, cache={}):
+    key = (str(dist), chunk)
+    if key in cache:
+        return cache[key]
+    path = dist / chunk
+    result = None
+    if path.exists():
+        text = path.read_text(encoding="utf-8", errors="replace")
+        ms = re.findall(r"defaultMatrix=\[([\d,\s]*)\]", text)
+        if len(ms) == 1:
+            vals = [int(x) for x in ms[0].split(",") if x.strip()]
+            if vals and len(vals) % 4 == 0:
+                result = vals
+    cache[key] = result
+    return result
+
+
+def hid_to_matrix(hid):
+    if hid <= 255:
+        return [0, 0, hid, 0]
+    return [(hid >> 24) & 255, (hid >> 16) & 255, (hid >> 8) & 255, hid & 255]
+
+
+def build_layout(ui, hid_table, matrix, report):
+    canvas = {"width": ui["width"], "height": ui["height"]}
+    slots = None
+    if matrix:
+        slots = [tuple(matrix[i : i + 4]) for i in range(0, len(matrix), 4)]
+    keys, used_slots, entry_counts = [], set(), {}
+    for code, info in ui["layout"].items():
+        if not isinstance(info, dict) or "x" not in info:
+            continue
+        dt = info.get("displayText")
+        text = "\n".join(dt) if isinstance(dt, list) and dt else None
+        hid = hid_table.get(code)
+        entry = hid_to_matrix(hid) if hid is not None else None
+        if entry is None:
+            report.setdefault("unmapped_codes", []).append(code)
+        hid_usage = hid if hid is not None and hid <= 255 else None
+        consumer = None
+        if entry and entry[0] == 3:
+            consumer = entry[2] | (entry[3] << 8)
+        idx = None
+        if slots and entry:
+            et = tuple(entry)
+            nth = entry_counts.get(et, 0)
+            entry_counts[et] = nth + 1
+            hits = [s for s, v in enumerate(slots) if v == et]
+            if nth < len(hits):
+                idx = hits[nth]
+                used_slots.add(idx)
+            if len(hits) > 1:
+                report.setdefault("duplicate_entries", set()).add(code)
+        keys.append(
+            {
+                "code": code,
+                "type": info.get("type"),
+                "x": info["x"],
+                "y": info["y"],
+                "w": info.get("width"),
+                "h": info.get("height"),
+                "text": text,
+                "matrixIndex": idx,
+                "matrixEntry": entry,
+                "hidUsage": hid_usage,
+                "consumerUsage": consumer,
+            }
+        )
+    if slots:
+        keys.sort(key=lambda k: (k["matrixIndex"] is None, k["matrixIndex"] or 0))
+    out = {"canvas": canvas, "keys": keys}
+    if slots:
+        out["matrixEntriesWithoutUIKey"] = [
+            {"matrixIndex": s, "entry": list(v)}
+            for s, v in enumerate(slots)
+            if any(v) and s not in used_slots
+        ]
+    return out
+
+
+def dump_layout(layout):
+    lines = ["{", ' "canvas": ' + json.dumps(layout["canvas"], separators=(",", ":")) + ",", ' "keys": [']
+    keylines = [
+        "  " + json.dumps(k, separators=(",", ":"), ensure_ascii=False)
+        for k in layout["keys"]
+    ]
+    lines.append(",\n".join(keylines))
+    if "matrixEntriesWithoutUIKey" in layout:
+        lines.append(" ],")
+        lines.append(
+            ' "matrixEntriesWithoutUIKey": '
+            + json.dumps(layout["matrixEntriesWithoutUIKey"], separators=(",", ":"))
+        )
+    else:
+        lines.append(" ]")
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
+def convention_ui_name(enum_key, ui_defs):
+    m = re.match(r"(?:Common|Special)(\d+)_(.+)", enum_key)
+    if not m:
+        return None
+    cand = f"keyboard_{m.group(1)}_{m.group(2).lower()}_keymappings_ui_info"
+    return cand if cand in ui_defs else None
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("bundle", type=Path)
+    ap.add_argument(
+        "--dist-js",
+        type=Path,
+        action="append",
+        default=None,
+        help="an unpacked build's dist/js dir; repeat to union several brands' builds",
+    )
+    here = Path(__file__).resolve().parent
+    ap.add_argument("--devices-out", type=Path, default=here.parent / "app/src-tauri/data/devices.json")
+    ap.add_argument("--layouts-out", type=Path, default=here.parent / "app/src/lib/layouts/vendor")
+    args = ap.parse_args()
+
+    bundle = args.bundle.read_text(encoding="utf-8", errors="replace")
+    raw = extract_registry(bundle)
+    keyboards = [d for d in raw if d.get("type") == "keyboard"]
+
+    loaders, bases = {}, None
+    if args.dist_js:
+        loaders = load_loader_maps(args.dist_js)
+        bases = find_base_chunks(args.dist_js)
+
+    seen, devices, collisions = {}, [], []
+    for d in keyboards:
+        did = d["id"]
+        if did in seen:
+            collisions.append(did)
+            continue
+        seen[did] = d
+        other = d.get("other") or {}
+        if not isinstance(other, dict):
+            other = {}
+        magnetic = bool(d.get("magnetism"))
+        family = "unknown"
+        if d["name"] in loaders:
+            family = classify_family(loaders[d["name"]]["deps"], bases)
+        knob = other.get("knobKeyCodes")
+        if isinstance(knob, list):
+            knob = [k for k in knob if isinstance(k, str)]
+        company = as_str(d.get("company"))
+        devices.append(
+            {
+                "id": did,
+                "name": d["name"],
+                "displayName": as_str(d.get("displayName"), d["name"]),
+                "company": company,
+                "vendor": company,
+                "vendorId": d["vid"],
+                "productId": d["pid"],
+                "internalName": d["name"],
+                "keyLayout": as_str(ident_name(d.get("keyLayout")), "Unknown"),
+                "lightLayout": as_str(ident_name(d.get("lightLayout"))),
+                "sideLightLayout": as_str(ident_name(d.get("sideLightLayout"))),
+                "profiles": d.get("layer") if isinstance(d.get("layer"), int) else 1,
+                "magnetic": magnetic,
+                "family": family,
+                "features": {
+                    "knob": knob if isinstance(knob, list) else [],
+                    "debounce": "deBounce" in other,
+                    "sleep24": bool(other.get("sleep24")),
+                    "sleepBT": bool(other.get("sleepBT")),
+                    "magneticSwitches": magnetic,
+                    "screen": bool(other.get("screen")),
+                    # Physical edge light. The firmware answers 0x88 whether or
+                    # not the board has one, so the registry is the authority.
+                    "sideLight": d.get("sideLightLayout") is not None,
+                },
+            }
+        )
+    devices.sort(key=lambda d: d["id"])
+    args.devices_out.parent.mkdir(parents=True, exist_ok=True)
+    args.devices_out.write_text(
+        json.dumps(devices, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+    fam_counts = {}
+    for d in devices:
+        fam_counts[d["family"]] = fam_counts.get(d["family"], 0) + 1
+
+    print(f"devices: {len(devices)} keyboards written to {args.devices_out}")
+    print(f"  raw keyboard entries: {len(keyboards)}, id collisions dropped: {sorted(set(collisions))}")
+    print(f"  family (from loader-map deps in dist chunks): {fam_counts}")
+    if not args.dist_js:
+        print("  NOTE: no --dist-js given; every family is 'unknown'")
+
+    if not args.dist_js:
+        return
+
+    ui_map = extract_enum_ui_map(bundle, args.dist_js or ())
+    ui_defs = extract_ui_defs(args.dist_js)
+    hid_table = extract_hid_table(bundle)
+    enum_keys = extract_enum_keys(bundle)
+
+    for k in enum_keys:
+        if k not in ui_map:
+            cand = convention_ui_name(k, ui_defs)
+            if cand:
+                ui_map[k] = cand
+
+    matrices_by_layout = {}
+    for d in devices:
+        if d["family"] != "yc500" or d["name"] not in loaders:
+            continue
+        mat = first_default_matrix(loaders[d["name"]]["chunks"])
+        if mat:
+            matrices_by_layout.setdefault(d["keyLayout"], set()).add(tuple(mat))
+
+    # Clear stale output: layouts accumulate across runs otherwise, and the
+    # committed set must be exactly what the current sources reproduce.
+    args.layouts_out.mkdir(parents=True, exist_ok=True)
+    for old_layout in args.layouts_out.glob("*.json"):
+        old_layout.unlink()
+    written, no_matrix, ambiguous = [], [], []
+    for enum_key, ui_name in sorted(ui_map.items()):
+        if enum_key == "Common80_k72x86":
+            continue
+        if ui_name not in ui_defs:
+            continue
+        ui, _chunk = ui_defs[ui_name]
+        mats = matrices_by_layout.get(enum_key, set())
+        matrix = None
+        if len(mats) == 1:
+            matrix = list(next(iter(mats)))
+        elif len(mats) > 1:
+            ambiguous.append(enum_key)
+        else:
+            no_matrix.append(enum_key)
+        report = {}
+        layout = build_layout(ui, hid_table, matrix, report)
+        (args.layouts_out / f"{enum_key}.json").write_text(
+            dump_layout(layout), encoding="utf-8"
+        )
+        written.append(enum_key)
+        for code in report.get("unmapped_codes", []):
+            print(f"  {enum_key}: no hid mapping for UI key {code!r} (matrixEntry=null)")
+        if report.get("duplicate_entries"):
+            print(
+                f"  {enum_key}: duplicate default-matrix entries for "
+                f"{sorted(report['duplicate_entries'])} (nth-occurrence slot assignment)"
+            )
+
+    mapped_uis = set(ui_map.values())
+    orphans = sorted(set(ui_defs) - mapped_uis - {"keyboard_80_k72x86_keymappings_ui_info"})
+    for ui_name in orphans:
+        layout = build_layout(ui_defs[ui_name][0], hid_table, None, {})
+        (args.layouts_out / f"{ui_name}.json").write_text(
+            dump_layout(layout), encoding="utf-8"
+        )
+    unbundled = sorted(
+        set(re.findall(r"\b(\w+_keymappings_ui_info)\b", bundle)) - set(ui_defs)
+    )
+
+    print(f"layouts: {len(written)} written to {args.layouts_out}")
+    print("  matrix indices come from the defaultMatrix of yc500-family devices only")
+    print(f"  geometry+matrix: {len(written) - len(no_matrix) - len(ambiguous)}")
+    print(f"  geometry only (no yc500 device with a resolvable defaultMatrix): {sorted(no_matrix)}")
+    print(f"  geometry only (yc500 devices disagree on defaultMatrix): {sorted(ambiguous)}")
+    if orphans:
+        print(
+            "  ui_info objects with no keyLayout mapping, written under their own name "
+            f"(geometry only): {orphans}"
+        )
+    print(f"  ui_info names referenced but never bundled (unextractable): {len(unbundled)}")
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Let the logged-in user talk to ROYUAN keyboards (USB VID 0x3151).
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"

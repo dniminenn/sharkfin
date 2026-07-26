@@ -1,0 +1,11 @@
+<svg width="128" height="128" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="sharkfin">
+  <defs>
+    <linearGradient id="fin" x1="32" y1="7" x2="32" y2="47" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8fdcf2"/>
+      <stop offset="1" stop-color="#3d9fc4"/>
+    </linearGradient>
+  </defs>
+  <path d="M9.5 46.5 C 11.5 33, 18 15.5, 36.5 7.2 C 37.6 6.7, 38.6 7.6, 38.2 8.7 C 36 14.5, 35.6 21.5, 39.4 28.2 C 40.1 29.4, 39.3 30.4, 38.1 30.2 C 36.9 30, 35.9 30.6, 36.6 31.8 C 40.5 38.1, 47.5 43, 55 46.5 Z" fill="url(#fin)"/>
+  <path d="M3 52.5 C 8 48.5, 13 48.5, 18 52.5 S 28 56.5, 33 52.5 S 43 48.5, 48 52.5 S 58 56.5, 61 52.5" stroke="#4fb2d4" stroke-width="3.6" stroke-linecap="round" opacity="0.55"/>
+  <path d="M14 59.5 C 17.5 56.7, 21 56.7, 24.5 59.5 S 31.5 62.3, 35 59.5" stroke="#4fb2d4" stroke-width="2.8" stroke-linecap="round" opacity="0.3"/>
+</svg>

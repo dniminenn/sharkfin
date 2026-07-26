@@ -1,0 +1,163 @@
+// SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-License-Identifier: GPL-3.0-or-later
+import { useMemo } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { BoardLayout, LayoutKey } from "@/lib/layout-loader";
+
+export type { BoardLayout, LayoutKey };
+
+export const KNOB_PRESS_SLOT = 84;
+const KNOB_PRESS_KEY: LayoutKey = {
+  code: "KnobPress",
+  type: "knob",
+  x: 0,
+  y: 0,
+  w: 0,
+  h: 0,
+  text: "Knob press",
+  matrixIndex: KNOB_PRESS_SLOT,
+  matrixEntry: [10, 12, 0, 0],
+  hidUsage: null,
+  consumerUsage: null,
+};
+
+const ACCENT = new Set(["Escape", "Enter"]);
+const MOD_USAGES = new Set([42, 43, 57, 74, 75, 76, 78, 79, 80, 81, 82]);
+
+function role(k: LayoutKey): "accent" | "mod" | "base" {
+  if (ACCENT.has(k.code)) return "accent";
+  if (k.matrixEntry[0] !== 0) return "mod";
+  const u = k.hidUsage ?? 0;
+  if ((u >= 224 && u <= 231) || MOD_USAGES.has(u)) return "mod";
+  return "base";
+}
+
+const ROLE_VARS: Record<string, React.CSSProperties> = {
+  base: { "--key": "var(--key-base)", "--key-fg": "var(--key-legend)" } as React.CSSProperties,
+  mod: { "--key": "var(--key-mod)", "--key-fg": "var(--key-mod-legend)" } as React.CSSProperties,
+  accent: { "--key": "var(--key-accent)", "--key-fg": "var(--key-accent-legend)" } as React.CSSProperties,
+};
+
+interface Props {
+  layout: BoardLayout;
+  selected: number | null;
+  entries: Map<number, number[]>;
+  modified: Set<number>;
+  labelFor: (k: LayoutKey, entry: number[] | undefined) => string;
+  onSelect: (k: LayoutKey) => void;
+}
+
+function pct(v: number, of: number) {
+  return `${(v / of) * 100}%`;
+}
+
+function Knob({
+  layout,
+  selected,
+  onSelect,
+}: Pick<Props, "layout" | "selected" | "onSelect">) {
+  const knobKeys = layout.keys.filter((k) => k.type === "knob");
+  if (!knobKeys.length) return null;
+  const box = {
+    x: Math.min(...knobKeys.map((k) => k.x)),
+    y: Math.min(...knobKeys.map((k) => k.y)),
+    w: Math.max(...knobKeys.map((k) => k.x + k.w)) - Math.min(...knobKeys.map((k) => k.x)),
+    h: Math.max(...knobKeys.map((k) => k.y + k.h)) - Math.min(...knobKeys.map((k) => k.y)),
+  };
+  const down = knobKeys.find((k) => k.code === "AudioVolumeDown");
+  const up = knobKeys.find((k) => k.code === "AudioVolumeUp");
+  return (
+    <div
+      className="absolute"
+      style={{
+        left: pct(box.x, layout.canvas.width),
+        top: pct(box.y, layout.canvas.height),
+        width: pct(box.w, layout.canvas.width),
+        height: pct(box.h, layout.canvas.height),
+      }}
+    >
+      <div className="knob-ring absolute inset-0" />
+      <button
+        title="Knob · rotate left"
+        data-selected={selected === down?.matrixIndex}
+        onClick={() => down && onSelect(down)}
+        className="knob-zone absolute inset-y-0 left-0 z-10 flex w-[38%] items-center justify-start"
+      >
+        <span className="knob-target knob-arc flex h-[45%] w-[70%] items-center justify-center">
+          <ChevronLeft className="h-full w-full" strokeWidth={3} />
+        </span>
+      </button>
+      <button
+        title="Knob · rotate right"
+        data-selected={selected === up?.matrixIndex}
+        onClick={() => up && onSelect(up)}
+        className="knob-zone absolute inset-y-0 right-0 z-10 flex w-[38%] items-center justify-end"
+      >
+        <span className="knob-target knob-arc flex h-[45%] w-[70%] items-center justify-center">
+          <ChevronRight className="h-full w-full" strokeWidth={3} />
+        </span>
+      </button>
+      <button
+        title="Knob · press"
+        data-selected={selected === KNOB_PRESS_SLOT}
+        onClick={() => onSelect(KNOB_PRESS_KEY)}
+        className="knob-zone absolute left-1/2 top-1/2 z-20 h-[52%] w-[52%] -translate-x-1/2 -translate-y-1/2"
+      >
+        <span className="knob-target knob-cap absolute inset-0 flex items-center justify-center">
+          <span className="h-[30%] w-[30%] rounded-full bg-current opacity-70" />
+        </span>
+      </button>
+    </div>
+  );
+}
+
+export default function KeyboardView({
+  layout,
+  selected,
+  entries,
+  modified,
+  labelFor,
+  onSelect,
+}: Props) {
+  const plainKeys = useMemo(
+    () => layout.keys.filter((k) => k.matrixIndex !== null && k.type !== "knob"),
+    [layout],
+  );
+  return (
+    <div className="w-full" style={{ containerType: "inline-size" }}>
+      <div className="keycap-plate mx-auto max-w-[920px] rounded-2xl p-[1.6%]">
+        <div
+          className="relative"
+          style={{ aspectRatio: `${layout.canvas.width} / ${layout.canvas.height}` }}
+        >
+          {plainKeys.map((k) => {
+            const entry = entries.get(k.matrixIndex!);
+            const isMod = modified.has(k.matrixIndex!);
+            return (
+              <button
+                key={`${k.code}-${k.matrixIndex}`}
+                onClick={() => onSelect(k)}
+                title={k.code}
+                data-selected={selected === k.matrixIndex}
+                className="keycap absolute flex items-center justify-center overflow-hidden rounded-[8%] text-[1.15cqw] font-medium leading-none tracking-tight"
+                style={{
+                  ...ROLE_VARS[role(k)],
+                  left: pct(k.x, layout.canvas.width),
+                  top: pct(k.y, layout.canvas.height),
+                  width: pct(k.w, layout.canvas.width),
+                  height: pct(k.h, layout.canvas.height),
+                }}
+              >
+                {labelFor(k, entry)}
+                {isMod && (
+                  <span className="absolute right-[8%] top-[8%] h-[0.45em] w-[0.45em] rounded-full bg-(--ring)" />
+                )}
+              </button>
+            );
+          })}
+          <Knob layout={layout} selected={selected} onSelect={onSelect} />
+        </div>
+      </div>
+    </div>
+  );
+}

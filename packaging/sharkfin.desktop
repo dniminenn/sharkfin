@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+# SPDX-License-Identifier: GPL-3.0-or-later
+[Desktop Entry]
+Type=Application
+Name=sharkfin
+GenericName=Keyboard configurator
+Comment=Remap keys, set the RGB and record macros on Attack Shark keyboards
+Exec=sharkfin
+Icon=sharkfin
+Terminal=false
+Categories=Settings;HardwareSettings;
+Keywords=keyboard;keymap;macro;rgb;lighting;
+StartupNotify=true
+StartupWMClass=sharkfin

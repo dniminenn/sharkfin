@@ -1,0 +1,27 @@
+name: Bug
+description: Something in sharkfin is broken
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, and what the keyboard or app did instead.
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Windows 11 / Fedora 42 / macOS 15
+    validations:
+      required: true
+  - type: textarea
+    id: bundle
+    attributes:
+      label: Data bundle
+      description: >
+        Contribute tab → Collect data bundle → Copy. It identifies your board
+        and what it reported, which is usually enough to find the problem.
+      render: text
