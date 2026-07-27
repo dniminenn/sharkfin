@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! Handshake device ID -> board spec, shipped as data.
+use std::sync::OnceLock;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -102,6 +104,21 @@ pub fn by_id(id: u32) -> Option<DeviceSpec> {
     all().into_iter().find(|d| d.id == id)
 }
 
+/// Every USB vendor ID in the registry. Most of these boards are ROYUAN's
+/// `0x3151`, but a minority ship under the brand's own ID, and discovery that
+/// looks only for `0x3151` leaves those owners staring at an empty app while
+/// the support list claims their board works. Derived from the registry so
+/// the two can never disagree.
+pub fn vendor_ids() -> &'static [u16] {
+    static IDS: OnceLock<Vec<u16>> = OnceLock::new();
+    IDS.get_or_init(|| {
+        let mut v: Vec<u16> = all().iter().map(|d| d.vendor_id).collect();
+        v.sort_unstable();
+        v.dedup();
+        v
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -143,6 +160,29 @@ mod tests {
                 d.id
             );
         }
+    }
+
+    #[test]
+    fn discovery_covers_every_vendor_in_the_registry() {
+        let ids = vendor_ids();
+        assert!(
+            ids.contains(&crate::protocol::VENDOR_ID),
+            "the ROYUAN OEM id"
+        );
+        // A board whose vendor id is not scanned for can never be found, no
+        // matter what the support list says about it.
+        for d in all() {
+            assert!(
+                ids.contains(&d.vendor_id),
+                "device {} ({:04x}) is in the registry but would never be discovered",
+                d.id,
+                d.vendor_id
+            );
+        }
+        assert!(
+            ids.len() > 1,
+            "the registry has boards under several vendor ids; do not hardcode one"
+        );
     }
 
     #[test]

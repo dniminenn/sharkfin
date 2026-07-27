@@ -5,6 +5,8 @@
 //! Opcodes below are the CommonKbYc500 family (X86 = device 1967),
 //! hardware-verified. Bulk reads reply with raw pages, no opcode echo.
 
+/// ROYUAN's own USB vendor ID, which most of these boards use. It is not the
+/// only one: see `registry::vendor_ids()`, which is what discovery scans for.
 pub const VENDOR_ID: u16 = 0x3151;
 pub const USAGE_PAGE: u16 = 0xFFFF;
 pub const USAGE: u16 = 0x0002;

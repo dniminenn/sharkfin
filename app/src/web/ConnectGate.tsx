@@ -12,8 +12,11 @@ import { accessProblem, grantedDevices, hidAvailable, requestDevice } from "./ba
 
 type GateState = "checking" | "unsupported" | "unpaired" | "paired" | "denied";
 
+// Most of these boards are ROYUAN's 3151, but 61 of the 523 in the registry
+// ship under a different vendor ID, so matching 3151 alone locks their owners
+// out. Keep in step with `tools/coverage.py`, which prints the same list.
 const UDEV_RULE =
-  'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"';
+  'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"';
 
 // One paste: write the rule, reload, apply. `tee` because the redirect would
 // run as the user, not as root. Deliberately not a script to download and

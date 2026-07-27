@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<!--
+  SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+  SPDX-License-Identifier: GPL-3.0-or-later
+
+  WebHID feasibility probe. Read-only: it sends four GET opcodes from a fixed
+  allowlist and prints the replies. Nothing here writes to the board.
+
+  Serve over http://localhost (WebHID needs a secure context) and open in
+  Chrome, Edge or another Chromium browser. On Linux the udev rule from the
+  README is required, same as the app.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sharkfin WebHID probe</title>
+<style>
+  :root {
+    --bg: #0d131f; --card: #16202f; --edge: rgba(223,232,242,0.1);
+    --text: #dfe8f2; --muted: #8fa2b8; --accent: #6ed3ee;
+    --ok: #6ee7a8; --bad: #f2856f; --warn: #e8c96e;
+    --mono: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--mono);
+    font-size: 14px; line-height: 1.55; padding: 32px 24px 64px;
+  }
+  main { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+  h1 { font-size: 1.5rem; letter-spacing: -0.01em; }
+  h2 { font-size: 0.95rem; color: var(--muted); font-weight: 600; }
+  p { color: var(--muted); max-width: 70ch; }
+  .card { background: var(--card); border: 1px solid var(--edge); border-radius: 12px; padding: 18px; }
+  button {
+    font-family: var(--mono); font-size: 0.9rem; font-weight: 600; cursor: pointer;
+    padding: 10px 20px; border-radius: 9px; border: 1px solid transparent;
+    background: var(--accent); color: #0b1620;
+  }
+  button.ghost { background: none; color: var(--text); border-color: rgba(223,232,242,0.25); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--edge); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  td.val { color: var(--accent); }
+  .hex { color: var(--muted); font-size: 0.8rem; word-break: break-all; }
+  .pill { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+  .pill.ok { background: rgba(110,231,168,0.15); color: var(--ok); }
+  .pill.bad { background: rgba(242,133,111,0.15); color: var(--bad); }
+  .pill.warn { background: rgba(232,201,110,0.15); color: var(--warn); }
+  #log { white-space: pre-wrap; font-size: 0.8rem; color: var(--muted); max-height: 300px; overflow-y: auto; }
+  .verdict { font-size: 1.05rem; font-weight: 700; }
+  .hide { display: none; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; font-size: 0.85rem; }
+  dt { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+
+  <div>
+    <h1>sharkfin WebHID probe</h1>
+    <p>Checks whether a Chromium browser can reach the vendor collection on a
+    ROYUAN keyboard and round-trip the config protocol. Read-only: four GET
+    opcodes from a fixed allowlist. It does not write to the board.</p>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <button id="connect">Connect keyboard</button>
+      <button id="run" class="ghost" disabled>Run probe</button>
+      <button id="copy" class="ghost" disabled>Copy report</button>
+    </div>
+    <p id="support" style="margin-top:12px"></p>
+  </div>
+
+  <div class="card hide" id="devcard">
+    <h2>Device</h2>
+    <dl id="devinfo"></dl>
+  </div>
+
+  <div class="card hide" id="resultcard">
+    <h2>Probe results</h2>
+    <table>
+      <thead><tr><th>Check</th><th>Status</th><th>Value</th></tr></thead>
+      <tbody id="results"></tbody>
+    </table>
+    <p class="verdict" id="verdict" style="margin-top:16px"></p>
+  </div>
+
+  <div class="card hide" id="logcard">
+    <h2>Log</h2>
+    <div id="log"></div>
+  </div>
+
+</main>
+
+<script>
+"use strict";
+
+const VID = 0x3151;
+const USAGE_PAGE = 0xFFFF;
+const USAGE = 0x0002;
+const REPORT_LEN = 64;
+const REPORT_ID = 0;
+
+// Pacing from docs/PROTOCOL.md. The firmware stalls its control endpoint if
+// written faster than this, and a stalled endpoint needs re-enumeration.
+const MIN_WRITE_GAP_MS = 12;
+const SETTLE_MS = 10;
+
+// Read-only allowlist. Every opcode this page can send is in this map, so a
+// write opcode or a destructive one (0xAC erases flash; 0x30/0x40 are
+// bootloader entry points) cannot be sent even by mistake.
+const READS = [
+  { op: 0x8F, name: "Identify", decode: decodeIdentify },
+  { op: 0x80, name: "Firmware revision", decode: decodeRevision },
+  { op: 0x85, name: "Active profile", decode: decodeProfile },
+  { op: 0x87, name: "Lighting", decode: decodeLighting },
+];
+const ALLOWED = new Set(READS.map((r) => r.op));
+
+const $ = (id) => document.getElementById(id);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const hex = (b) => [...b].map((x) => x.toString(16).padStart(2, "0")).join(" ");
+
+let device = null;
+let lastWrite = 0;
+const logLines = [];
+
+function log(msg) {
+  const line = `${new Date().toISOString().slice(11, 23)}  ${msg}`;
+  logLines.push(line);
+  $("logcard").classList.remove("hide");
+  $("log").textContent = logLines.join("\n");
+  $("log").scrollTop = $("log").scrollHeight;
+}
+
+function checksumBit7(buf) {
+  let sum = 0;
+  for (let i = 0; i < 7; i++) sum += buf[i];
+  buf[7] = 0xFF - (sum & 0xFF);
+}
+
+function packet(op) {
+  const buf = new Uint8Array(REPORT_LEN);
+  buf[0] = op;
+  checksumBit7(buf);
+  return buf;
+}
+
+async function pace() {
+  const since = performance.now() - lastWrite;
+  if (since < MIN_WRITE_GAP_MS) await sleep(MIN_WRITE_GAP_MS - since);
+  lastWrite = performance.now();
+}
+
+async function readReport() {
+  const dv = await device.receiveFeatureReport(REPORT_ID);
+  const all = new Uint8Array(dv.buffer, dv.byteOffset, dv.byteLength);
+  // Chrome prefixes the report ID on some platforms; tolerate both shapes,
+  // the same way the desktop transport does.
+  return all.length === REPORT_LEN + 1 ? all.slice(1) : all.slice(0, REPORT_LEN);
+}
+
+// Send a GET and wait for the reply that echoes the opcode in byte 0.
+async function roundtrip(op) {
+  if (!ALLOWED.has(op)) throw new Error(`opcode 0x${op.toString(16)} is not on the read-only allowlist`);
+  await pace();
+  await device.sendFeatureReport(REPORT_ID, packet(op));
+  for (let attempt = 0; attempt < 5; attempt++) {
+    await sleep(SETTLE_MS * (attempt + 1));
+    const reply = await readReport();
+    if (reply[0] === op) return reply;
+  }
+  throw new Error("no reply echoing the opcode after 5 attempts");
+}
+
+function decodeIdentify(r) {
+  const id = r[1] | (r[2] << 8) | (r[3] << 16) | (r[4] << 24);
+  return { text: `device id ${id}`, ok: id > 0 && id < 100000 };
+}
+
+function decodeRevision(r) {
+  const rev = (r[2] << 8) | r[1];
+  return { text: `0x${rev.toString(16).padStart(4, "0")}`, ok: rev !== 0 };
+}
+
+function decodeProfile(r) {
+  return { text: `profile ${r[1] + 1} of 3`, ok: r[1] <= 2 };
+}
+
+const PRESETS = ["red", "orange", "yellow", "green", "cyan", "blue", "magenta"];
+
+function decodeLighting(r) {
+  const mode = r[1];
+  const speed = 5 - r[2]; // wire 5..1 is UI 0..4
+  const bright = r[3];
+  const flags = r[4] & 0x0F;
+  // A flags nibble of 0..6 is a firmware preset-colour index and overrides
+  // the RGB bytes, so reading those would report the wrong colour.
+  const colour = flags <= 6
+    ? PRESETS[flags]
+    : "#" + [r[5], r[6], r[7]].map((c) => c.toString(16).padStart(2, "0")).join("");
+  return { text: `mode ${mode}, speed ${speed}, brightness ${bright}, ${colour}`, ok: mode > 0 };
+}
+
+function addRow(name, status, cls, value, raw) {
+  const tr = document.createElement("tr");
+  const td = (html) => { const c = document.createElement("td"); c.innerHTML = html; return c; };
+  tr.appendChild(td(name));
+  tr.appendChild(td(`<span class="pill ${cls}">${status}</span>`));
+  const v = document.createElement("td");
+  v.className = "val";
+  v.textContent = value;
+  if (raw) {
+    const d = document.createElement("div");
+    d.className = "hex";
+    d.textContent = hex(raw.slice(0, 16));
+    v.appendChild(d);
+  }
+  tr.appendChild(v);
+  $("results").appendChild(tr);
+}
+
+async function connect() {
+  try {
+    const devices = await navigator.hid.requestDevice({
+      filters: [{ vendorId: VID, usagePage: USAGE_PAGE, usage: USAGE }],
+    });
+    if (!devices.length) { log("No device picked."); return; }
+    device = devices[0];
+    log(`Picked: ${device.productName}`);
+
+    if (!device.opened) await device.open();
+    log("Opened.");
+
+    const cols = device.collections.map((c) => ({
+      usagePage: c.usagePage, usage: c.usage,
+      featureLen: (c.featureReports || []).length,
+    }));
+    log(`Collections: ${JSON.stringify(cols)}`);
+
+    const vendor = cols.find((c) => c.usagePage === USAGE_PAGE && c.usage === USAGE);
+
+    $("devcard").classList.remove("hide");
+    $("devinfo").innerHTML = `
+      <dt>Product</dt><dd>${device.productName || "(none)"}</dd>
+      <dt>Vendor</dt><dd>0x${VID.toString(16)}</dd>
+      <dt>Collections</dt><dd>${cols.length}</dd>
+      <dt>Vendor collection</dt><dd>${vendor ? "present (0xFFFF / 2)" : "NOT EXPOSED"}</dd>
+      <dt>Platform</dt><dd>${navigator.platform} · ${navigator.userAgent.match(/(Chrome|Edg)\/[\d.]+/)?.[0] || "unknown"}</dd>`;
+
+    if (!vendor) {
+      log("The vendor collection was not exposed. The protocol is unreachable from the browser here.");
+      return;
+    }
+    $("run").disabled = false;
+    log("Vendor collection reachable. Ready to probe.");
+  } catch (e) {
+    log(`Connect failed: ${e.message}`);
+  }
+}
+
+async function run() {
+  $("run").disabled = true;
+  $("results").innerHTML = "";
+  $("resultcard").classList.remove("hide");
+  let passed = 0;
+  let previous = null;
+
+  for (const { op, name, decode } of READS) {
+    const label = `${name} (0x${op.toString(16).toUpperCase()})`;
+    try {
+      const reply = await roundtrip(op);
+      const { text, ok } = decode(reply);
+      // An unsupported command returns the previous reply rather than an
+      // error, so an identical payload means the opcode did not answer.
+      const echoed = previous && reply.every((b, i) => b === previous[i]);
+      if (echoed) {
+        addRow(label, "stale", "warn", "identical to the previous reply, opcode likely unsupported", reply);
+        log(`${label}: stale reply`);
+      } else if (ok) {
+        addRow(label, "pass", "ok", text, reply);
+        log(`${label}: ${text}`);
+        passed++;
+      } else {
+        addRow(label, "odd", "warn", text, reply);
+        log(`${label}: answered but the value looks wrong: ${text}`);
+      }
+      previous = reply;
+    } catch (e) {
+      addRow(label, "fail", "bad", e.message, null);
+      log(`${label}: ${e.message}`);
+    }
+  }
+
+  const v = $("verdict");
+  if (passed === READS.length) {
+    v.textContent = "WebHID reaches the protocol. All four reads round-tripped.";
+    v.style.color = "var(--ok)";
+  } else if (passed > 0) {
+    v.textContent = `Partial: ${passed} of ${READS.length} reads round-tripped.`;
+    v.style.color = "var(--warn)";
+  } else {
+    v.textContent = "No reads round-tripped.";
+    v.style.color = "var(--bad)";
+  }
+  log(v.textContent);
+  $("run").disabled = false;
+  $("copy").disabled = false;
+}
+
+$("connect").addEventListener("click", connect);
+$("run").addEventListener("click", run);
+$("copy").addEventListener("click", async () => {
+  await navigator.clipboard.writeText(logLines.join("\n"));
+  log("Report copied.");
+});
+
+if (!("hid" in navigator)) {
+  $("support").innerHTML = '<span class="pill bad">unsupported</span> This browser has no WebHID. Use Chrome, Edge or another Chromium browser.';
+  $("connect").disabled = true;
+} else if (!window.isSecureContext) {
+  $("support").innerHTML = '<span class="pill bad">insecure context</span> Serve this over http://localhost or https.';
+  $("connect").disabled = true;
+} else {
+  $("support").innerHTML = '<span class="pill ok">WebHID available</span> Plug the keyboard in with a USB cable, then connect.';
+}
+</script>
+</body>
+</html>

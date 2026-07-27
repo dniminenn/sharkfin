@@ -19,8 +19,10 @@
 ![keymap editor](docs/keys-abyss.png)
 
 Remap keys, set the RGB, record macros and change device settings on 523
-keyboards built on ROYUAN hardware (USB VID `0x3151`): Attack Shark, Hator,
-ikbc, NOPPOO, Epomaker, Akko, MEETION, rongyuan and more.
+keyboards built on ROYUAN hardware: Attack Shark, Hator, ikbc, NOPPOO,
+Epomaker, Akko, MEETION, rongyuan and more. Most identify as USB vendor
+`0x3151`; a minority ship under their brand's own ID, so `docs/BOARDS.md`
+lists the real one per board and discovery scans for all of them.
 
 **Use a USB cable.** There's no config interface over 2.4 GHz or Bluetooth.
 sharkfin never flashes firmware.
@@ -92,7 +94,7 @@ udev rule to reach it. The browser build needs it too, because Chrome opens
 the same node. One line, then replug the keyboard:
 
 ```sh
-echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"' \
+echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"' \
   | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \
   && sudo udevadm control --reload-rules && sudo udevadm trigger
 ```

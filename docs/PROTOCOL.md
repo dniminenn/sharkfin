@@ -11,7 +11,7 @@ X65HE, gen2). **[JS]** vendor host code only, never exercised.
 
 | | |
 |---|---|
-| USB VID | `0x3151` |
+| USB VID | `0x3151` on most boards; `0x379a`, `0x374a`, `0x38a9`, `0x046a`, `0x2ea8` and `0x145f` also occur. Discovery scans `registry::vendor_ids()`, not a constant |
 | Collection | usage page `0xFFFF`, usage `2` |
 | Reports | 64 bytes, feature, report ID 0, both directions |
 | Settle | ~10 ms between request and reply |

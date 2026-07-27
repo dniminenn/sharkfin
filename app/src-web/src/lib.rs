@@ -411,6 +411,14 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
     }
 }
 
+/// Every USB vendor ID the registry knows about. The JS side needs these to
+/// build WebHID filters; hardcoding `0x3151` there would hide every board
+/// that ships under its brand's own ID.
+#[wasm_bindgen]
+pub fn vendor_ids() -> Vec<u16> {
+    registry::vendor_ids().to_vec()
+}
+
 /// Cached connection state; the JS scan loop combines this with
 /// `navigator.hid` device presence.
 #[wasm_bindgen]

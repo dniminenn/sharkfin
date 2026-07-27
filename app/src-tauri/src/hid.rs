@@ -8,7 +8,7 @@ use std::time::{Duration, Instant};
 use hidapi::{HidApi, HidDevice};
 use parking_lot::Mutex;
 
-use crate::protocol::{self, Checksum, REPORT_LEN, USAGE, USAGE_PAGE, VENDOR_ID};
+use crate::protocol::{self, Checksum, REPORT_LEN, USAGE, USAGE_PAGE};
 
 #[derive(Debug, thiserror::Error)]
 pub enum HidError {
@@ -50,7 +50,9 @@ pub struct DiscoveredDevice {
 pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
     api.device_list()
         .filter(|d| {
-            d.vendor_id() == VENDOR_ID && d.usage_page() == USAGE_PAGE && d.usage() == USAGE
+            d.usage_page() == USAGE_PAGE
+                && d.usage() == USAGE
+                && crate::registry::vendor_ids().contains(&d.vendor_id())
         })
         .map(|d| DiscoveredDevice {
             path: d.path().to_string_lossy().into_owned(),

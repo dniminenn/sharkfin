@@ -103,12 +103,22 @@ export interface DeviceSettings {
   sideLight: SledParam | null;
 }
 
-const VENDOR_ID = 0x3151;
 const USAGE_PAGE = 0xffff;
 const USAGE = 0x0002;
 
-const isVendorCollection = (d: HIDDevice) =>
-  d.vendorId === VENDOR_ID &&
+// Which vendor IDs to look for comes from the registry, not from a constant
+// here: most of these boards are ROYUAN's 0x3151, but a minority ship under
+// the brand's own ID and would otherwise never appear in the picker.
+let vendorIds: number[] | null = null;
+
+async function knownVendors(): Promise<number[]> {
+  await ensure();
+  if (!vendorIds) vendorIds = Array.from(core.vendor_ids());
+  return vendorIds;
+}
+
+const isVendorCollection = (d: HIDDevice, vendors: number[]) =>
+  vendors.includes(d.vendorId) &&
   d.collections.some((c) => c.usagePage === USAGE_PAGE && c.usage === USAGE);
 
 let ready: Promise<void> | null = null;
@@ -139,14 +149,16 @@ export function hidAvailable(): boolean {
 /** Devices this origin already holds permission for. */
 export async function grantedDevices(): Promise<HIDDevice[]> {
   if (!hidAvailable()) return [];
+  const vendors = await knownVendors();
   const all = await navigator.hid.getDevices();
-  return all.filter(isVendorCollection);
+  return all.filter((d) => isVendorCollection(d, vendors));
 }
 
 /** Shows the browser's device picker. Must run from a user gesture. */
 export async function requestDevice(): Promise<boolean> {
+  const vendors = await knownVendors();
   const picked = await navigator.hid.requestDevice({
-    filters: [{ vendorId: VENDOR_ID, usagePage: USAGE_PAGE, usage: USAGE }],
+    filters: vendors.map((vendorId) => ({ vendorId, usagePage: USAGE_PAGE, usage: USAGE })),
   });
   return picked.length > 0;
 }
