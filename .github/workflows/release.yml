@@ -81,3 +81,21 @@ jobs:
             [docs/BOARDS.md](https://github.com/dniminenn/sharkfin/blob/master/docs/BOARDS.md)
             or [getsharkfin.com/boards](https://getsharkfin.com/boards/).
           args: ${{ matrix.args }}
+
+  # tauri-action creates the release as a draft and each matrix job uploads
+  # into it. Publishing it from the build job would expose a release with only
+  # one platform's binaries in it, so it is published here instead: once, after
+  # all three have finished. A failed build leaves it a draft, which is what
+  # you want.
+  publish:
+    name: Publish
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Take the release out of draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release edit "${{ github.ref_name }}" \
+            --repo "${{ github.repository }}" \
+            --draft=false --prerelease

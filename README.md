@@ -129,4 +129,5 @@ is in [CONTRIBUTING.md](CONTRIBUTING.md); the wire protocol is in
 
 ## License
 
-GPL-3.0-or-later.
+GPL-3.0-or-later. sharkfin is an independent project, not affiliated with
+or endorsed by Attack Shark, ROYUAN or any keyboard brand.
