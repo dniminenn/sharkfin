@@ -246,7 +246,7 @@ export const GROUPS: { name: string; items: Assignable[] }[] = [
   {
     name: "Special",
     items: [
-      { label: "Off", entry: [0, 0, 0, 0] },
+      { label: "Disable", entry: [0, 0, 0, 0] },
     ],
   },
 ];
@@ -322,15 +322,19 @@ const USAGE_LABELS: Record<number, string> = (() => {
 export const usageLabel = (usage: number): string =>
   USAGE_LABELS[usage] ?? `0x${usage.toString(16).toUpperCase()}`;
 
+/** Shown on a keycap with nothing bound. The firmware blocks the key
+ *  outright, so this is QMK's `KC_NO`, not a transparent fall-through. */
+export const DISABLED_GLYPH = "\u2715";
+
 /** Reverse lookup: label for a 4-byte matrix entry. */
 export function entryLabel(entry: number[]): string {
+  if (entry.length === 4 && entry.every((b) => b === 0)) return DISABLED_GLYPH;
   for (const g of GROUPS) {
     for (const item of g.items) {
       if (item.entry.every((b, i) => b === entry[i])) return item.label;
     }
   }
   const [tag, a, b, c] = entry;
-  if (tag === 0 && a === 0 && b === 0 && c === 0) return "off";
   if (tag === 0 && (a !== 0 || c !== 0))
     return [a, b, c].filter(Boolean).map(usageLabel).join("+");
   if (tag === 1) return "Mouse";
