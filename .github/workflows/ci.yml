@@ -35,7 +35,9 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          workspaces: app/src-tauri
+          workspaces: |
+            app/src-tauri
+            app/src-web
 
       - name: Support list is current
         run: |
@@ -60,6 +62,26 @@ jobs:
       - name: Unit tests
         working-directory: app/src-tauri
         run: cargo test --lib
+
+      - name: Install wasm toolchain
+        run: |
+          rustup target add wasm32-unknown-unknown
+          curl -sSL https://rustwasm.github.io/wasm-pack/installer/init.sh | sh
+
+      - name: Browser build format & lint
+        working-directory: app/src-web
+        run: |
+          cargo fmt --check
+          cargo clippy --target wasm32-unknown-unknown --all-targets -- -D warnings
+
+      # The wasm package is generated, not committed, so it has to exist
+      # before the frontend can be typechecked against it.
+      - name: Browser build
+        working-directory: app
+        run: |
+          npm run web:wasm
+          npx tsc -p tsconfig.web.json --noEmit
+          npx vite build --config vite.web.config.ts
 
   build:
     name: Build (${{ matrix.os }})
