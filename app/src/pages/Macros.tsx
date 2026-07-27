@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Circle, Send, Square, Trash2, X } from "lucide-react";
+import { Circle, MousePointer2, Send, Square, Trash2, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,6 +20,7 @@ import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout } from "@/lib/layout-loader";
 import { CODE_TO_USAGE, entryLabel, usageLabel } from "@/lib/hid-usages";
 import {
+  readFnKeymap,
   readKeymap,
   readMacro,
   setKey,
@@ -30,6 +31,21 @@ import {
 
 const SLOTS = Array.from({ length: 50 }, (_, i) => i);
 const PROFILES = [0, 1, 2];
+const DIRECTIONS = [
+  ["left", -1, 0],
+  ["right", 1, 0],
+  ["up", 0, -1],
+  ["down", 0, 1],
+] as const;
+
+// Step size per event. The firmware sets how fast a held macro repeats, so
+// this is the only speed control available.
+const SPEEDS = [
+  { label: "slow", step: 2 },
+  { label: "medium", step: 5 },
+  { label: "fast", step: 12 },
+];
+
 const MODES = [
   { value: 0, label: "Repeat count" },
   { value: 1, label: "Toggle" },
@@ -55,6 +71,9 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
   const [recording, setRecording] = useState(false);
   const [busy, setBusy] = useState(false);
   const [profile, setProfile] = useState(0);
+  const [layer, setLayer] = useState<"base" | "fn">("base");
+  const [dir, setDir] = useState<(typeof DIRECTIONS)[number][0]>("right");
+  const [speed, setSpeed] = useState(5);
   const [mode, setMode] = useState(0);
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
   const lastTs = useRef<number | null>(null);
@@ -77,14 +96,14 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
       setEntries(null);
       return;
     }
-    readKeymap(profile)
+    (layer === "fn" ? readFnKeymap(profile) : readKeymap(profile))
       .then((matrix) => {
         const m = new Map<number, number[]>();
         for (let s = 0; s < 128; s++) m.set(s, matrix.slice(s * 4, s * 4 + 4));
         setEntries(m);
       })
       .catch(() => setEntries(null));
-  }, [connected, profile]);
+  }, [connected, profile, layer]);
 
   const record = useCallback((e: MacroEvent) => {
     const now = performance.now();
@@ -123,6 +142,27 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
     record({ kind: "mouseButton", button, pressed, delayMs: 10 });
   };
 
+  const makeMouseKey = async () => {
+    const d = DIRECTIONS.find(([l]) => l === dir)!;
+    const next: MacroEvent[] = Array.from({ length: 4 }, () => ({
+      kind: "mouseMove",
+      dx: d[1] * speed,
+      dy: d[2] * speed,
+      delayMs: 8,
+    }));
+    setEvents(next);
+    setMode(2);
+    setBusy(true);
+    try {
+      await writeMacro(slot, { repeat: 1, events: next });
+      toast.success(`Macro ${slot + 1} moves the cursor ${dir}. Now click a key.`);
+    } catch (e) {
+      toast.error(`Send failed: ${e}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const setDelay = (i: number, delayMs: number) =>
     setEvents((prev) => prev.map((e, j) => (j === i ? { ...e, delayMs } : e)));
 
@@ -149,7 +189,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
     setBusy(true);
     try {
       const value: [number, number, number, number] = [9, mode, slot, 0];
-      await setKey(profile, matrixIndex, value, false);
+      await setKey(profile, matrixIndex, value, layer === "fn");
       setEntries((prev) => {
         const next = new Map(prev);
         next.set(matrixIndex, value);
@@ -253,6 +293,42 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
               Type or click here. Every press and release is captured.
             </div>
           )}
+          <div className="flex flex-wrap items-center gap-2 rounded-md border p-2 text-sm">
+            <span className="shrink-0 text-muted-foreground">Mouse key</span>
+            {DIRECTIONS.map(([label]) => (
+              <Button
+                key={label}
+                size="sm"
+                variant={dir === label ? "default" : "outline"}
+                disabled={recording}
+                onClick={() => setDir(label)}
+              >
+                <MousePointer2 className="mr-1 h-3.5 w-3.5" />
+                {label}
+              </Button>
+            ))}
+            <Select value={String(speed)} onValueChange={(v) => setSpeed(Number(v))}>
+              <SelectTrigger className="w-28">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SPEEDS.map((sp) => (
+                  <SelectItem key={sp.step} value={String(sp.step)}>
+                    {sp.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button size="sm" disabled={busy || recording} onClick={makeMouseKey}>
+              Build and send
+            </Button>
+            <span className="w-full text-xs text-muted-foreground">
+              Builds a macro that nudges the cursor, sends it to slot {slot + 1},
+              and sets the binding to While held so it repeats. Then click a key
+              below.
+            </span>
+          </div>
+
           {events.length === 0 && !recording ? (
             <div className="py-6 text-center text-sm text-muted-foreground">
               Empty. Hit Record to capture a sequence.
@@ -300,9 +376,23 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
       <Card>
         <CardHeader className="flex-row items-center justify-between space-y-0">
           <CardTitle className="text-base">
-            Bind macro {slot + 1} to a key
+            Bind macro {slot + 1} to a {layer === "fn" ? "Fn layer " : ""}key
           </CardTitle>
           <div className="flex items-center gap-2">
+            <div className="flex rounded-md border p-0.5">
+              {(["base", "fn"] as const).map((l) => (
+                <button
+                  key={l}
+                  onClick={() => setLayer(l)}
+                  className={cn(
+                    "rounded px-3 py-1 text-sm transition-colors",
+                    layer === l ? "bg-primary/10 font-medium" : "text-muted-foreground",
+                  )}
+                >
+                  {l === "base" ? "Base" : "Fn layer"}
+                </button>
+              ))}
+            </div>
             <span className="text-sm text-muted-foreground">Mode</span>
             <Select value={String(mode)} onValueChange={(v) => setMode(Number(v))}>
               <SelectTrigger className="w-36">
@@ -347,7 +437,9 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                 selected={null}
                 entries={entries}
                 modified={bound}
-                labelFor={(k, entry) => (entry ? entryLabel(entry) : (k.text ?? k.code))}
+                labelFor={(k, entry) =>
+                  entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
+                }
                 onSelect={(k) => !busy && bind(k.matrixIndex!, k.text ?? k.code)}
               />
             </>

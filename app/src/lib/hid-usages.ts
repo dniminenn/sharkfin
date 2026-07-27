@@ -93,6 +93,14 @@ export const GROUPS: { name: string; items: Assignable[] }[] = [
       { label: "Middle", entry: [1, 0, 242, 0] },
       { label: "Back", entry: [1, 0, 243, 0] },
       { label: "Forward", entry: [1, 0, 244, 0] },
+      // Axis in byte 2, signed step in byte 3. 246 is X, 247 is Y, and the
+      // vendor only ever emits a step of 5.
+      { label: "Move left", entry: [1, 0, 246, 251] },
+      { label: "Move right", entry: [1, 0, 246, 5] },
+      { label: "Move up", entry: [1, 0, 247, 251] },
+      { label: "Move down", entry: [1, 0, 247, 5] },
+      { label: "Wheel up", entry: [1, 0, 245, 1] },
+      { label: "Wheel down", entry: [1, 0, 245, 255] },
       { label: "Scroll Up", entry: [4, 1, 0, 0] },
       { label: "Scroll Down", entry: [4, 2, 0, 0] },
       { label: "Tilt left", entry: [4, 3, 0, 0] },
