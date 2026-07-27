@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/lib/backend": ["./src/web/backend.ts"],
+      "@/*": ["./src/*"],
+      "@tauri-apps/plugin-dialog": ["./src/web/dialog-shim.ts"],
+      "@tauri-apps/plugin-opener": ["./src/web/opener-shim.ts"]
+    }
+  },
+  "include": ["src"],
+  "exclude": []
+}

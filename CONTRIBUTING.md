@@ -9,8 +9,17 @@ Reporting a bug or a board? You don't need any of this. Open the app's
 ```sh
 cd app && npm install
 npm run tauri dev      # the app
+npm run web:build      # the browser build -> app/dist-web
 cargo test --lib       # protocol tests, no hardware needed (app/src-tauri/)
 ```
+
+The browser build is the same frontend with `@/lib/backend` aliased to
+`src/web/backend.ts`, which drives the `app/src-web` wasm crate over WebHID.
+That crate includes `protocol.rs` and `registry.rs` from `src-tauri` by path
+rather than copying them, so the wire format cannot drift between the two
+builds; only the transport and the command layer differ. It needs
+`rustup target add wasm32-unknown-unknown` and
+[wasm-pack](https://rustwasm.github.io/wasm-pack/).
 
 With a keyboard plugged in, `app/src-tauri/examples/` has a few tools that
 talk to it directly. `smoke` checks it answers at all, `probe` shows which
@@ -26,6 +35,9 @@ cargo fmt --check
 cargo clippy --all-targets -- -D warnings
 cargo test --lib
 npx tsc --noEmit
+npx tsc -p tsconfig.web.json --noEmit
+(cd src-web && cargo fmt --check \
+  && cargo clippy --target wasm32-unknown-unknown --all-targets -- -D warnings)
 ```
 
 Style notes:
@@ -35,6 +47,8 @@ Style notes:
 - UI uses shadcn/ui components only. Colours come from the colorway CSS
   variables in `app/src/index.css`, never hard-coded; keycap styling is the
   `.keycap` class.
+- Pacing and rate limits belong in the core, next to the packet builders, so
+  both builds inherit them. The browser has no backend to put them behind.
 
 ## Adding a read-only board
 

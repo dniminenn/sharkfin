@@ -6,7 +6,7 @@
 
 <p align="center">
   Open-source configurator for Attack Shark and other ROYUAN keyboards.<br/>
-  Linux, Windows, macOS.
+  Linux, Windows, macOS, or straight from a Chromium browser.
 </p>
 
 <p align="center">
@@ -25,7 +25,8 @@ ikbc, NOPPOO, Epomaker, Akko, MEETION, rongyuan and more.
 **Use a USB cable.** There's no config interface over 2.4 GHz or Bluetooth.
 sharkfin never flashes firmware.
 
-**[Download](https://github.com/dniminenn/sharkfin/releases) ·
+**[Use it in a browser](https://app.getsharkfin.com/) ·
+[Download](https://github.com/dniminenn/sharkfin/releases) ·
 [Is my board supported?](docs/BOARDS.md)**
 
 ## Supported boards
@@ -56,12 +57,19 @@ rest show a slot grid.
 
 ![lighting, Olivia colorway](docs/lighting-olivia.png)
 
-No cloud, no telemetry, no background services. One binary, fully offline.
-There's no report-rate setting because this hardware doesn't have one.
+No cloud, no telemetry, no background services. The desktop app is one
+binary and works offline; the browser build is a static page that talks to
+nothing but your keyboard. There's no report-rate setting because this
+hardware doesn't have one.
 
 ## Install
 
-Download a release, or build it yourself:
+Nothing to install: open **[app.getsharkfin.com](https://app.getsharkfin.com/)**
+in Chrome, Edge or another Chromium browser and plug the keyboard in. The page
+reaches the keyboard's settings channel over WebHID and never sees your typing,
+because the browser does not expose the keyboard's own collections.
+
+For the desktop app, download a release or build it yourself:
 
 ```sh
 cd app
@@ -69,7 +77,18 @@ npm install
 npm run tauri build
 ```
 
-On Linux, add a udev rule so the app can reach the keyboard:
+The browser build needs the wasm toolchain
+(`rustup target add wasm32-unknown-unknown`, plus
+[wasm-pack](https://rustwasm.github.io/wasm-pack/)):
+
+```sh
+cd app
+npm install
+npm run web:build   # -> app/dist-web
+```
+
+On Linux, add a udev rule so sharkfin can reach the keyboard. The browser
+build needs it too, because Chrome opens the same device node:
 
 ```
 # /etc/udev/rules.d/70-sharkfin.rules
@@ -81,7 +100,8 @@ SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"
 It happens: the firmware stops answering, and the app says the board needs a
 replug. Typing still works. In order:
 
-1. **Close sharkfin.** While it's open it keeps trying to reach the board.
+1. **Close sharkfin**, or the browser tab. While it's open it keeps trying to
+   reach the board.
 2. **Unplug the cable, wait ten seconds, plug it back in.** It needs to lose
    power, not just reconnect.
 3. **Fn + Home** turns the lighting back on if the backlight is dead.
