@@ -246,7 +246,7 @@ export const GROUPS: { name: string; items: Assignable[] }[] = [
   {
     name: "Special",
     items: [
-      { label: "Disable", entry: [0, 0, 0, 0] },
+      { label: "Clear", entry: [0, 0, 0, 0] },
     ],
   },
 ];
@@ -322,13 +322,16 @@ const USAGE_LABELS: Record<number, string> = (() => {
 export const usageLabel = (usage: number): string =>
   USAGE_LABELS[usage] ?? `0x${usage.toString(16).toUpperCase()}`;
 
-/** Shown on a keycap with nothing bound. The firmware blocks the key
- *  outright, so this is QMK's `KC_NO`, not a transparent fall-through. */
+/** An all-zero slot on the Fn layer falls through to the base layer, like
+ *  QMK's `KC_TRNS`. On the base layer there is nothing beneath, so the key
+ *  is simply dead, like `KC_NO`. */
+export const PASSTHRU_GLYPH = "\u25BD";
 export const DISABLED_GLYPH = "\u2715";
 
 /** Reverse lookup: label for a 4-byte matrix entry. */
-export function entryLabel(entry: number[]): string {
-  if (entry.length === 4 && entry.every((b) => b === 0)) return DISABLED_GLYPH;
+export function entryLabel(entry: number[], fnLayer = false): string {
+  if (entry.length === 4 && entry.every((b) => b === 0))
+    return fnLayer ? PASSTHRU_GLYPH : DISABLED_GLYPH;
   for (const g of GROUPS) {
     for (const item of g.items) {
       if (item.entry.every((b, i) => b === entry[i])) return item.label;

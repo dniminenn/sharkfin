@@ -20,6 +20,7 @@ struct Inner {
     open: Option<OpenDevice>,
     last_flash: Option<Instant>,
     last_light: Option<Instant>,
+    last_key: Option<Instant>,
     /// Set when the firmware stalls. Reopening a stalled device does not
     /// recover it and the extra traffic keeps it pinned, so scanning stops
     /// until the hardware disappears from the bus, i.e. someone replugs.
@@ -57,6 +58,11 @@ const FLASH_PAGE_GAP: Duration = Duration::from_millis(100);
 /// throughout, which also keeps the frontend's polling off the wire.
 const FLASH_SETTLE: Duration = Duration::from_secs(2);
 
+/// Single-slot key writes persist to onboard storage, so they are flash
+/// writes too. Measured on an X86: nine of them 150 ms apart stalled the
+/// control endpoint. One per click is fine; anything in a loop is not.
+const KEY_GAP: Duration = Duration::from_millis(400);
+
 /// Lighting is the one thing a UI drags, and sustained feature reports stall
 /// the control endpoint even when nothing touches flash. The frontend
 /// coalesces, but the floor lives here so no caller can flood the board.
@@ -70,6 +76,7 @@ impl Default for AppState {
                 open: None,
                 last_flash: None,
                 last_light: None,
+                last_key: None,
                 stalled: false,
             }),
         }
@@ -391,6 +398,7 @@ pub fn set_key(
     value: [u8; 4],
     fn_layer: bool,
 ) -> Result<(), String> {
+    key_gap(&state);
     with_writable(&state, |t, fc| {
         t.send(&key_write_packet(
             need(fc)?,
@@ -549,6 +557,22 @@ pub fn factory_reset(state: tauri::State<AppState>) -> Result<(), String> {
         let pkt = crate::protocol::packet(need(fc)?.set_reset, &[], Checksum::Bit7);
         t.send(&pkt)
     })
+}
+
+/// Spaces key writes by KEY_GAP.
+fn key_gap(state: &tauri::State<AppState>) {
+    let mut inner = state.inner.lock();
+    if let Some(prev) = inner.last_key {
+        let since = prev.elapsed();
+        if since < KEY_GAP {
+            let wait = KEY_GAP - since;
+            drop(inner);
+            std::thread::sleep(wait);
+            state.inner.lock().last_key = Some(Instant::now());
+            return;
+        }
+    }
+    inner.last_key = Some(Instant::now());
 }
 
 /// Spaces lighting writes by LIGHT_GAP.
@@ -803,6 +827,7 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
                     if current[slot * 4..slot * 4 + 4] != want {
                         t.send(&key_write_packet(fc, p as u8, slot as u8, want, fn_layer)?)?;
                         keys_written += 1;
+                        std::thread::sleep(KEY_GAP);
                     }
                 }
             }

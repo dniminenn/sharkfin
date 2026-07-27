@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { BoardLayout, LayoutKey } from "@/lib/layout-loader";
-import { DISABLED_GLYPH } from "@/lib/hid-usages";
+import { DISABLED_GLYPH, PASSTHRU_GLYPH } from "@/lib/hid-usages";
 
 export type { BoardLayout, LayoutKey };
 
@@ -46,6 +46,12 @@ interface Props {
   modified: Set<number>;
   labelFor: (k: LayoutKey, entry: number[] | undefined) => string;
   onSelect: (k: LayoutKey) => void;
+}
+
+function describe(label: string) {
+  if (label === DISABLED_GLYPH) return "does nothing";
+  if (label === PASSTHRU_GLYPH) return "falls through to the base layer";
+  return label;
 }
 
 function pct(v: number, of: number) {
@@ -138,11 +144,7 @@ export default function KeyboardView({
               <button
                 key={`${k.code}-${k.matrixIndex}`}
                 onClick={() => onSelect(k)}
-                title={`${k.text ?? k.code}: ${
-                  labelFor(k, entry) === DISABLED_GLYPH
-                    ? "disabled, sends nothing"
-                    : labelFor(k, entry)
-                }`}
+                title={`${k.text ?? k.code}: ${describe(labelFor(k, entry))}`}
                 data-selected={selected === k.matrixIndex}
                 className="keycap absolute flex items-center justify-center overflow-hidden rounded-[8%] text-[1.15cqw] font-medium leading-none tracking-tight"
                 style={{

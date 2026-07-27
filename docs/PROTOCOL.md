@@ -103,7 +103,7 @@ profile. Overwriting a slot holding Fn (`[0x0A,0x01,0,0]`) is permitted.
 | `0x03` | consumer usage | `[0, lo, hi]`, Vol+ = `[3,0,0xE9,0]` |
 | `0x09` | macro | `[mode, index, 0]`; 0 repeat, 1 toggle, 2 hold |
 | `0x0A` | special | `[1,0,0]` Fn, `[12,0,0]` power save |
-| all zero | key disabled, sends nothing. Not a layer fall-through | |
+| all zero | on the Fn layer, falls through to the base layer; on the base layer the key is dead | |
 
 X86 knob: slot 90 turn right, 91 turn left, 84 press.
 

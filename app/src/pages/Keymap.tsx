@@ -16,7 +16,14 @@ import {
 import { cn } from "@/lib/utils";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
-import { GROUPS, entryLabel, usageLabel, type Assignable } from "@/lib/hid-usages";
+import {
+  DISABLED_GLYPH,
+  GROUPS,
+  PASSTHRU_GLYPH,
+  entryLabel,
+  usageLabel,
+  type Assignable,
+} from "@/lib/hid-usages";
 import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
 
 const PROFILES = [0, 1, 2];
@@ -217,17 +224,22 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
             entries={entries}
             modified={modified}
             labelFor={(k, entry) =>
-              entry ? entryLabel(entry) : (k.text ?? k.code)
+              entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
             }
             onSelect={setSelected}
           />
 
-          {defaults.size > 0 && (
-            <p className="text-center text-xs text-muted-foreground">
-              <span className="mr-1 inline-block h-[0.5em] w-[0.5em] rounded-full bg-(--ring) align-middle" />
-              marks a key that differs from this board's factory default.
-            </p>
-          )}
+          <p className="text-center text-xs text-muted-foreground">
+            {defaults.size > 0 && (
+              <>
+                <span className="mr-1 inline-block h-[0.5em] w-[0.5em] rounded-full bg-(--ring) align-middle" />
+                marks a key that differs from this board's factory default.{" "}
+              </>
+            )}
+            {layer === "fn"
+              ? `${PASSTHRU_GLYPH} means the key falls through to the base layer.`
+              : `${DISABLED_GLYPH} means the key does nothing.`}
+          </p>
 
           <Card className={cn(!selected && "opacity-60")}>
             <CardHeader className="flex-row items-center justify-between space-y-0">
@@ -237,7 +249,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                   : "Select a key above"}
                 {selected && selectedEntry && (
                   <Badge variant="outline" className="ml-2">
-                    now: {entryLabel(selectedEntry)}
+                    now: {entryLabel(selectedEntry, layer === "fn")}
                   </Badge>
                 )}
               </CardTitle>
