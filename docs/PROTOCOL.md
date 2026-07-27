@@ -214,12 +214,20 @@ byte 8. Display it by selecting light mode 13.
 `GET_USERPIC 0x8C` returns stable data that does not reflect writes. Treat
 as write-only.
 
-**Uploads land in flash and stall the firmware if repeated.** Measured:
+**Uploads land in flash and stall the firmware if repeated.** Measured on
+an X86:
 
 | cadence | result |
 |---|---|
 | 7 reports / 500 ms | control endpoint dies after ~13 reports |
 | 7 reports / 3 s | 42 reports, still responsive |
+| 2 uploads / 5 s, pages 40 ms apart, mode switch 600 ms after | stalled on the second |
+
+The third row is the one that matters: surviving a synthetic loop does not
+mean an upload followed by anything else is safe. sharkfin now spaces pages
+100 ms apart, leaves the board alone for 2 s afterwards, waits 10 s between
+uploads, and skips the mode switch when the board is already showing the
+pattern.
 
 Individual reports need ~12 ms spacing. A stalled endpoint fails every
 report (`ioctl (SFEATURE): Protocol error`) and does not recover on

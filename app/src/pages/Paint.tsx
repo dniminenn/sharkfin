@@ -97,8 +97,9 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Paint</h1>
           <p className="text-sm text-muted-foreground">
-            Click or drag to colour keys, then send it. Patterns are stored in
-            the keyboard's flash, so sending is deliberate rather than live.
+            Click or drag to colour keys, then send it. Patterns go into the
+            keyboard's flash, which is slow and easily upset, so sending is
+            deliberate and takes a few seconds.
           </p>
         </div>
       </div>

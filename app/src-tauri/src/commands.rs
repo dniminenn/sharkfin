@@ -44,12 +44,18 @@ const LIVENESS_TTL: Duration = Duration::from_secs(20);
 /// the control endpoint within a couple of batches: measured on an X86,
 /// 7 reports every 500 ms dies after ~13, every 3 s survives indefinitely.
 /// Enforced here rather than in the UI so no caller can wedge a keyboard.
-const FLASH_COOLDOWN: Duration = Duration::from_secs(5);
+const FLASH_COOLDOWN: Duration = Duration::from_secs(10);
 
 /// Spacing between pages inside one upload. Transport's 12 ms floor pushes
 /// the whole batch out in under 100 ms, which is far harder than anything
 /// the firmware was measured surviving.
-const FLASH_PAGE_GAP: Duration = Duration::from_millis(40);
+const FLASH_PAGE_GAP: Duration = Duration::from_millis(100);
+
+/// How long the board is left completely alone after a flash batch. The
+/// vendor waits 500 ms; two uploads at that pace stalled an X86, so assume
+/// the commit takes longer than the vendor thinks and hold the device lock
+/// throughout, which also keeps the frontend's polling off the wire.
+const FLASH_SETTLE: Duration = Duration::from_secs(2);
 
 /// Lighting is the one thing a UI drags, and sustained feature reports stall
 /// the control endpoint even when nothing touches flash. The frontend
@@ -98,6 +104,9 @@ pub struct ScanResult {
     /// retried while this is set.
     pub stalled: bool,
 }
+
+/// Light mode that displays an uploaded per-key pattern.
+const PER_KEY_MODE: u8 = 13;
 
 /// Shown whenever the firmware has stalled. Only a replug clears it.
 pub const STALL_MESSAGE: &str =
@@ -596,17 +605,25 @@ pub fn write_per_key(
     }
     flash_cooldown(&state);
     with_writable(&state, |t, _| {
+        // Decide about the mode switch before the upload: asking afterwards
+        // means talking to a board that is still writing flash.
+        let needs_mode = activate
+            && t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)
+                .ok()
+                .and_then(|r| LedParam::from_reply(&r))
+                .map(|p| p.mode != PER_KEY_MODE)
+                .unwrap_or(true);
+
         for page in 0..7u8 {
             t.send(&crate::protocol::userpic_write_packet(page, &colors))?;
             std::thread::sleep(FLASH_PAGE_GAP);
         }
-        // The vendor settles for 500 ms after a batch before touching the
-        // board again.
-        std::thread::sleep(Duration::from_millis(600));
-        if activate {
+        std::thread::sleep(FLASH_SETTLE);
+
+        if needs_mode {
             t.send(
                 &LedParam {
-                    mode: 13,
+                    mode: PER_KEY_MODE,
                     speed: 2,
                     brightness: 4,
                     option: 0,
