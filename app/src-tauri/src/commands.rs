@@ -19,6 +19,11 @@ struct Inner {
     api: Option<hidapi::HidApi>,
     open: Option<OpenDevice>,
     last_flash: Option<Instant>,
+    last_light: Option<Instant>,
+    /// Set when the firmware stalls. Reopening a stalled device does not
+    /// recover it and the extra traffic keeps it pinned, so scanning stops
+    /// until the hardware disappears from the bus, i.e. someone replugs.
+    stalled: bool,
 }
 
 struct OpenDevice {
@@ -39,7 +44,17 @@ const LIVENESS_TTL: Duration = Duration::from_secs(20);
 /// the control endpoint within a couple of batches: measured on an X86,
 /// 7 reports every 500 ms dies after ~13, every 3 s survives indefinitely.
 /// Enforced here rather than in the UI so no caller can wedge a keyboard.
-const FLASH_COOLDOWN: Duration = Duration::from_secs(3);
+const FLASH_COOLDOWN: Duration = Duration::from_secs(5);
+
+/// Spacing between pages inside one upload. Transport's 12 ms floor pushes
+/// the whole batch out in under 100 ms, which is far harder than anything
+/// the firmware was measured surviving.
+const FLASH_PAGE_GAP: Duration = Duration::from_millis(40);
+
+/// Lighting is the one thing a UI drags, and sustained feature reports stall
+/// the control endpoint even when nothing touches flash. The frontend
+/// coalesces, but the floor lives here so no caller can flood the board.
+const LIGHT_GAP: Duration = Duration::from_millis(120);
 
 impl Default for AppState {
     fn default() -> Self {
@@ -48,6 +63,8 @@ impl Default for AppState {
                 api: None,
                 open: None,
                 last_flash: None,
+                last_light: None,
+                stalled: false,
             }),
         }
     }
@@ -77,7 +94,14 @@ pub struct DiscoveredUnknown {
 pub struct ScanResult {
     pub connected: Option<ConnectedDevice>,
     pub unknown: Vec<DiscoveredUnknown>,
+    /// The firmware stalled and the board must be replugged. Nothing is
+    /// retried while this is set.
+    pub stalled: bool,
 }
+
+/// Shown whenever the firmware has stalled. Only a replug clears it.
+pub const STALL_MESSAGE: &str =
+    "The keyboard stopped responding. Unplug it, wait ten seconds, and plug it back in.";
 
 fn err_str<E: std::fmt::Display>(e: E) -> String {
     e.to_string()
@@ -114,6 +138,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                     spec: open.spec.clone(),
                 }),
                 unknown: vec![],
+                stalled: false,
             });
         }
         inner.open = None;
@@ -123,6 +148,20 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
         let api = inner.api()?;
         hid::discover(api)
     };
+
+    if inner.stalled {
+        // Opening a stalled device does not recover it, and the traffic keeps
+        // it wedged. Wait for it to leave the bus, which is what a replug does.
+        if found.is_empty() {
+            inner.stalled = false;
+        } else {
+            return Ok(ScanResult {
+                connected: None,
+                unknown: vec![],
+                stalled: true,
+            });
+        }
+    }
 
     let mut unknown = Vec::new();
     let mut connected = None;
@@ -169,7 +208,11 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
         }
     }
 
-    Ok(ScanResult { connected, unknown })
+    Ok(ScanResult {
+        connected,
+        unknown,
+        stalled: false,
+    })
 }
 
 /// The two families assign the same opcodes to different registers, so a
@@ -207,7 +250,8 @@ fn run<T>(
             if e.is_stall() {
                 log::warn!("device stalled, dropping handle: {e}");
                 inner.open = None;
-                Err("the keyboard stopped responding; reconnecting. If it persists, unplug and replug the cable".into())
+                inner.stalled = true;
+                Err(STALL_MESSAGE.into())
             } else {
                 Err(e.to_string())
             }
@@ -242,6 +286,7 @@ pub fn get_led_param(state: tauri::State<AppState>) -> Result<LedParam, String> 
 
 #[tauri::command]
 pub fn set_led_param(state: tauri::State<AppState>, param: LedParam) -> Result<(), String> {
+    light_gap(&state);
     with_writable(&state, |t, _| {
         t.send(&param.to_packet())?;
         Ok(())
@@ -497,6 +542,22 @@ pub fn factory_reset(state: tauri::State<AppState>) -> Result<(), String> {
     })
 }
 
+/// Spaces lighting writes by LIGHT_GAP.
+fn light_gap(state: &tauri::State<AppState>) {
+    let mut inner = state.inner.lock();
+    if let Some(prev) = inner.last_light {
+        let since = prev.elapsed();
+        if since < LIGHT_GAP {
+            let wait = LIGHT_GAP - since;
+            drop(inner);
+            std::thread::sleep(wait);
+            state.inner.lock().last_light = Some(Instant::now());
+            return;
+        }
+    }
+    inner.last_light = Some(Instant::now());
+}
+
 /// Blocks until FLASH_COOLDOWN has passed since the last flash-backed upload,
 /// then stamps the clock for the next caller.
 fn flash_cooldown(state: &tauri::State<AppState>) {
@@ -535,11 +596,12 @@ pub fn write_per_key(
     }
     flash_cooldown(&state);
     with_writable(&state, |t, _| {
-        // Transport paces individual reports; the firmware also wants a breather
-        // after a full batch, matching the vendor's 500 ms post-batch settle.
         for page in 0..7u8 {
             t.send(&crate::protocol::userpic_write_packet(page, &colors))?;
+            std::thread::sleep(FLASH_PAGE_GAP);
         }
+        // The vendor settles for 500 ms after a batch before touching the
+        // board again.
         std::thread::sleep(Duration::from_millis(600));
         if activate {
             t.send(

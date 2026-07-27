@@ -76,6 +76,21 @@ On Linux, add a udev rule so the app can reach the keyboard:
 SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"
 ```
 
+## If the keyboard stops responding
+
+It happens: the firmware stops answering, and the app says the board needs a
+replug. Typing still works. In order:
+
+1. **Close sharkfin.** While it's open it keeps trying to reach the board.
+2. **Unplug the cable, wait ten seconds, plug it back in.** It needs to lose
+   power, not just reconnect.
+3. **Fn + Home** turns the lighting back on if the backlight is dead.
+4. **Fn + Esc**, held for about three seconds, resets the board's settings.
+5. Still wrong? Open sharkfin and use **Device, then Factory reset**.
+
+None of this touches firmware, and nothing here can leave the board
+unusable.
+
 ## Contributing
 
 Bugs and board reports both start in the app's **Contribute** tab, which

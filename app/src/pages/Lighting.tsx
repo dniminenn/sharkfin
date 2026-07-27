@@ -54,12 +54,20 @@ function rgbToHex(r: number, g: number, b: number) {
 const isNearBlack = (c: { r: number; g: number; b: number }) =>
   Math.max(c.r, c.g, c.b) < 8;
 
+// The board stalls its control endpoint under sustained feature reports, so
+// a drag must coalesce into one write per gap rather than one per event.
+const WRITE_GAP = 200;
+
 export default function LightingPage({ connected }: { connected: boolean }) {
   const [param, setParam] = useState<LedParam | null>(null);
   const [side, setSide] = useState<SledParam | null>(null);
   const [opts, setOpts] = useState<KbOptions | null>(null);
+  const paramRef = useRef<LedParam | null>(null);
+  const sideRef = useRef<SledParam | null>(null);
   const pushTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const sideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const lastSent = useRef(0);
+  const lastSideSent = useRef(0);
 
   useEffect(() => {
     if (!connected) {
@@ -67,10 +75,14 @@ export default function LightingPage({ connected }: { connected: boolean }) {
       return;
     }
     getLedParam()
-      .then(setParam)
+      .then((p) => {
+        paramRef.current = p;
+        setParam(p);
+      })
       .catch((e) => toast.error(`Failed to read lighting: ${e}`));
     getSettings()
       .then((s) => {
+        sideRef.current = s.sideLight;
         setSide(s.sideLight);
         setOpts(s.options);
       })
@@ -88,28 +100,35 @@ export default function LightingPage({ connected }: { connected: boolean }) {
   };
 
   const updateSide = (patch: Partial<SledParam>) => {
-    setSide((prev) => {
-      if (!prev) return prev;
-      const next = { ...prev, ...patch };
-      clearTimeout(sideTimer.current);
-      sideTimer.current = setTimeout(() => {
+    const base = sideRef.current;
+    if (!base) return;
+    const next = { ...base, ...patch };
+    sideRef.current = next;
+    setSide(next);
+    clearTimeout(sideTimer.current);
+    sideTimer.current = setTimeout(
+      () => {
+        lastSideSent.current = Date.now();
         setSideLight(next).catch((e) => toast.error(`Write failed: ${e}`));
-      }, 120);
-      return next;
-    });
+      },
+      Math.max(0, WRITE_GAP - (Date.now() - lastSideSent.current)),
+    );
   };
 
-  // Debounced push so slider drags don't flood the wire.
   const update = (patch: Partial<LedParam>) => {
-    setParam((prev) => {
-      if (!prev) return prev;
-      const next = { ...prev, ...patch };
-      clearTimeout(pushTimer.current);
-      pushTimer.current = setTimeout(() => {
+    const base = paramRef.current;
+    if (!base) return;
+    const next = { ...base, ...patch };
+    paramRef.current = next;
+    setParam(next);
+    clearTimeout(pushTimer.current);
+    pushTimer.current = setTimeout(
+      () => {
+        lastSent.current = Date.now();
         setLedParam(next).catch((e) => toast.error(`Write failed: ${e}`));
-      }, 120);
-      return next;
-    });
+      },
+      Math.max(0, WRITE_GAP - (Date.now() - lastSent.current)),
+    );
   };
 
   // Black is not a colour the LEDs can show, so route it to the real
@@ -228,7 +247,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               type="color"
               value={hex}
               disabled={colorless}
-              onChange={(e) => pickColor(hexToRgb(e.target.value))}
+              onChange={(e) => update({ ...hexToRgb(e.target.value), dazzle: false })}
               className="h-8 w-8 cursor-pointer rounded-full border bg-transparent"
               aria-label="Custom color"
             />

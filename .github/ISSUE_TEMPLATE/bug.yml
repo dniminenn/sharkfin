@@ -10,6 +10,17 @@ body:
       description: What you did, and what the keyboard or app did instead.
     validations:
       required: true
+  - type: dropdown
+    id: recovered
+    attributes:
+      label: Did the keyboard stop responding?
+      description: See the recovery steps in the README if so.
+      options:
+        - "No"
+        - "Yes, and a replug fixed it"
+        - "Yes, and it needed Fn+Esc or a factory reset"
+    validations:
+      required: true
   - type: input
     id: os
     attributes:

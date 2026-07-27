@@ -47,6 +47,8 @@ export interface DiscoveredUnknown {
 export interface ScanResult {
   connected: ConnectedDevice | null;
   unknown: DiscoveredUnknown[];
+  /** Firmware stalled; nothing is retried until the board is replugged. */
+  stalled: boolean;
 }
 
 export interface LedParam {

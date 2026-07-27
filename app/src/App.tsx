@@ -42,6 +42,7 @@ const NAV: { id: Page; label: string; icon: typeof Lightbulb }[] = [
 export default function App() {
   const [page, setPage] = useState<Page>("lighting");
   const [device, setDevice] = useState<ConnectedDevice | null>(null);
+  const [stalled, setStalled] = useState(false);
   const [scanning, setScanning] = useState(true);
   const guided = useRef<number | null>(null);
 
@@ -56,7 +57,9 @@ export default function App() {
 
   const doScan = useCallback(async () => {
     try {
-      setDevice((await scan()).connected);
+      const r = await scan();
+      setDevice(r.connected);
+      setStalled(r.stalled);
     } catch {
       setDevice(null);
     } finally {
@@ -112,9 +115,11 @@ export default function App() {
                 <div className="truncate text-sm font-medium">
                   {device
                     ? deviceLabel(device.spec)
-                    : scanning
-                      ? "Scanning…"
-                      : "No device"}
+                    : stalled
+                      ? "Needs a replug"
+                      : scanning
+                        ? "Scanning…"
+                        : "No device"}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {device ? (
@@ -127,6 +132,8 @@ export default function App() {
                     >
                       {readOnly(device) ? "read-only" : `USB · id ${device.deviceId}`}
                     </Badge>
+                  ) : stalled ? (
+                    "Unplug, wait 10s, plug back in"
                   ) : (
                     "Connect by cable"
                   )}

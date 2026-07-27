@@ -1,6 +1,6 @@
 [package]
 name = "sharkfin"
-version = "0.1.0"
+version = "0.1.1"
 description = "Configurator for Attack Shark / ROYUAN keyboards"
 authors = ["dniminenn"]
 edition = "2021"
@@ -30,4 +30,5 @@ parking_lot = "0.12"
 log = "0.4"
 tauri-plugin-log = "2"
 tauri-plugin-dialog = "2.7.2"
+tauri-plugin-single-instance = "2.4.3"
 
