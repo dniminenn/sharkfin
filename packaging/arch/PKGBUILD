@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 pkgname=sharkfin
-pkgver=0.1.6
+pkgver=0.1.7
 pkgrel=1
 pkgdesc='Configurator for Attack Shark and other ROYUAN keyboards'
 arch=('x86_64')

@@ -61,20 +61,23 @@ jobs:
           releaseBody: |
             Alpha. Back up from the Device tab before you rely on it.
 
+            You can also use sharkfin without installing anything, at
+            [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
+            Edge or another Chromium browser. Same app, same keyboard.
+
             Plug the keyboard in with a USB cable. There is no config
             interface over 2.4 GHz or Bluetooth.
 
-            **Linux** also needs a udev rule so the app can reach the
-            keyboard:
+            **Linux** needs a udev rule before either the app or the browser
+            can reach the keyboard. Paste this and replug it:
 
+            ```sh
+            echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"' \
+              | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \
+              && sudo udevadm control --reload-rules && sudo udevadm trigger
             ```
-            # /etc/udev/rules.d/70-sharkfin.rules
-            SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"
-            ```
-
-            Then `sudo udevadm control --reload-rules && sudo udevadm trigger`,
-            and replug the keyboard.
 
             Not sure if your board is supported? See
-            [docs/BOARDS.md](https://github.com/dniminenn/sharkfin/blob/master/docs/BOARDS.md).
+            [docs/BOARDS.md](https://github.com/dniminenn/sharkfin/blob/master/docs/BOARDS.md)
+            or [getsharkfin.com/boards](https://getsharkfin.com/boards/).
           args: ${{ matrix.args }}
