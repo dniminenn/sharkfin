@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 pkgname=sharkfin
-pkgver=0.1.0
+pkgver=0.1.4
 pkgrel=1
 pkgdesc='Configurator for Attack Shark and other ROYUAN keyboards'
 arch=('x86_64')
@@ -15,8 +15,7 @@ makedepends=('cargo' 'npm')
 # The hidapi crate compiles vendored C; makepkg's LTO makes ld drop its symbols.
 options=('!lto')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-# Run updpkgsums once the tag exists; v0.1.0 is not published yet.
-b2sums=('SKIP')
+b2sums=('5e0019c056d2b8f5062e9f87a8df2f36efecdd4dadfb4ac9c7a12ce9ed6c45f034aa8d6e4796c260b10e7a36cd06189d9c7bf55ec7cfe3cdf4a4c89d93e724a9')
 
 prepare() {
   cd "$pkgname-$pkgver/app"
