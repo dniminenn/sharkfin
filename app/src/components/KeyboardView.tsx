@@ -137,7 +137,7 @@ export default function KeyboardView({
               <button
                 key={`${k.code}-${k.matrixIndex}`}
                 onClick={() => onSelect(k)}
-                title={k.code}
+                title={`${k.text ?? k.code}: ${labelFor(k, entry)}`}
                 data-selected={selected === k.matrixIndex}
                 className="keycap absolute flex items-center justify-center overflow-hidden rounded-[8%] text-[1.15cqw] font-medium leading-none tracking-tight"
                 style={{

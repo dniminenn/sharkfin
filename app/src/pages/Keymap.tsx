@@ -222,6 +222,13 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
             onSelect={setSelected}
           />
 
+          {defaults.size > 0 && (
+            <p className="text-center text-xs text-muted-foreground">
+              <span className="mr-1 inline-block h-[0.5em] w-[0.5em] rounded-full bg-(--ring) align-middle" />
+              marks a key that differs from this board's factory default.
+            </p>
+          )}
+
           <Card className={cn(!selected && "opacity-60")}>
             <CardHeader className="flex-row items-center justify-between space-y-0">
               <CardTitle className="text-base">

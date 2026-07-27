@@ -14,11 +14,6 @@ const key = (usage: number, label: string): Assignable => ({
   entry: [0, 0, usage, 0],
 });
 
-const consumer = (usage: number, label: string): Assignable => ({
-  label,
-  entry: [3, 0, usage & 0xff, (usage >> 8) & 0xff],
-});
-
 export const GROUPS: { name: string; items: Assignable[] }[] = [
   {
     name: "Letters",
@@ -91,26 +86,167 @@ export const GROUPS: { name: string; items: Assignable[] }[] = [
     ],
   },
   {
+    name: "Mouse",
+    items: [
+      { label: "Left", entry: [1, 0, 240, 0] },
+      { label: "Right", entry: [1, 0, 241, 0] },
+      { label: "Middle", entry: [1, 0, 242, 0] },
+      { label: "Back", entry: [1, 0, 243, 0] },
+      { label: "Forward", entry: [1, 0, 244, 0] },
+      { label: "Scroll Up", entry: [4, 1, 0, 0] },
+      { label: "Scroll Down", entry: [4, 2, 0, 0] },
+      { label: "Tilt left", entry: [4, 3, 0, 0] },
+      { label: "Tilt right", entry: [4, 4, 0, 0] },
+    ],
+  },
+  {
     name: "Media",
     items: [
-      consumer(0xe9, "Vol +"),
-      consumer(0xea, "Vol −"),
-      consumer(0xe2, "Mute"),
-      consumer(0xcd, "Play/Pause"),
-      consumer(0xb5, "Next"),
-      consumer(0xb6, "Prev"),
-      consumer(0xb7, "Stop"),
-      consumer(0x223, "Home page"),
-      consumer(0x18a, "Mail"),
-      consumer(0x192, "Calculator"),
-      consumer(0x194, "My PC"),
+      { label: "Next", entry: [3, 0, 181, 0] },
+      { label: "Prev", entry: [3, 0, 182, 0] },
+      { label: "Stop", entry: [3, 0, 183, 0] },
+      { label: "Play/Pause", entry: [3, 0, 205, 0] },
+      { label: "Mute", entry: [3, 0, 226, 0] },
+      { label: "Vol +", entry: [3, 0, 233, 0] },
+      { label: "Vol -", entry: [3, 0, 234, 0] },
+      { label: "Media", entry: [3, 0, 131, 2] },
+      { label: "Mail", entry: [3, 0, 138, 1] },
+      { label: "Calculator", entry: [3, 0, 146, 1] },
+      { label: "My PC", entry: [3, 0, 148, 1] },
+      { label: "Screen +", entry: [3, 0, 111, 0] },
+      { label: "Screen -", entry: [3, 0, 112, 0] },
+      { label: "Search", entry: [3, 0, 33, 2] },
+      { label: "Home page", entry: [3, 0, 35, 2] },
+      { label: "Back", entry: [3, 0, 36, 2] },
+      { label: "Forward", entry: [3, 0, 37, 2] },
+      { label: "Stop page", entry: [3, 0, 38, 2] },
+      { label: "Refresh", entry: [3, 0, 39, 2] },
+      { label: "Favourites", entry: [3, 0, 42, 2] },
+    ],
+  },
+  {
+    name: "Lighting",
+    items: [
+      { label: "LED on/off", entry: [13, 0, 0, 0] },
+      { label: "Effect Loop", entry: [13, 1, 0, 0] },
+      { label: "Effect Inc", entry: [13, 1, 1, 0] },
+      { label: "Effect Dec", entry: [13, 1, 2, 0] },
+      { label: "Brightness Loop", entry: [13, 2, 0, 0] },
+      { label: "Brightness Inc", entry: [13, 2, 1, 0] },
+      { label: "Brightness Dec", entry: [13, 2, 2, 0] },
+      { label: "Speed Loop", entry: [13, 3, 0, 0] },
+      { label: "Speed Inc", entry: [13, 3, 1, 0] },
+      { label: "Speed Dec", entry: [13, 3, 2, 0] },
+      { label: "Direction Loop", entry: [13, 5, 0, 0] },
+      { label: "Direction Right", entry: [13, 5, 0, 1] },
+      { label: "Direction Left", entry: [13, 5, 0, 2] },
+      { label: "Color Loop", entry: [13, 5, 1, 0] },
+      { label: "Color white", entry: [13, 5, 1, 2] },
+      { label: "Color Inc", entry: [13, 5, 1, 3] },
+      { label: "Color Dec", entry: [13, 5, 1, 4] },
+      { label: "User Pic", entry: [13, 6, 128, 0] },
+      { label: "Effect Loop0", entry: [13, 7, 4, 0] },
+      { label: "Effect Loop1", entry: [13, 7, 5, 0] },
+      { label: "Effect Loop2", entry: [13, 7, 6, 0] },
+      { label: "Effect Loop3", entry: [13, 7, 7, 0] },
+      { label: "Effect Loop4", entry: [13, 7, 8, 0] },
+      { label: "Effect Loop5", entry: [13, 7, 9, 0] },
+      { label: "SLED Effect", entry: [13, 8, 0, 0] },
+      { label: "SLED Brightness Loop", entry: [13, 8, 1, 0] },
+      { label: "SLED Speed", entry: [13, 8, 2, 0] },
+      { label: "SLED Speed +", entry: [13, 8, 2, 1] },
+      { label: "SLED Speed -", entry: [13, 8, 2, 2] },
+      { label: "SLED Color", entry: [13, 8, 3, 0] },
+      { label: "SLED Color +", entry: [13, 8, 3, 1] },
+      { label: "SLED Color -", entry: [13, 8, 3, 2] },
+      { label: "SLED Option", entry: [13, 8, 4, 0] },
+      { label: "SLED Option +", entry: [13, 8, 4, 1] },
+      { label: "SLED Option -", entry: [13, 8, 4, 2] },
+    ],
+  },
+  {
+    name: "Keyboard",
+    items: [
+      { label: "Fn", entry: [10, 1, 0, 0] },
+      { label: "Reset", entry: [10, 2, 0, 0] },
+      { label: "WINLOCK", entry: [10, 3, 0, 0] },
+      { label: "Office/Gaming", entry: [10, 6, 0, 0] },
+      { label: "KB Lock", entry: [10, 7, 0, 0] },
+      { label: "Check Battery", entry: [10, 8, 0, 0] },
+      { label: "LED ON/OFF", entry: [10, 9, 0, 0] },
+      { label: "WASD Change", entry: [10, 10, 0, 0] },
+      { label: "Fn matrix", entry: [10, 11, 0, 0] },
+      { label: "Power saves", entry: [10, 12, 0, 0] },
+      { label: "Fn Lock", entry: [10, 13, 0, 0] },
+      { label: "Wheel Swap", entry: [10, 14, 0, 0] },
+      { label: "Caps Swap", entry: [10, 15, 0, 0] },
+      { label: "Caps LED Swap", entry: [10, 17, 0, 0] },
+      { label: "Power Down", entry: [10, 18, 0, 0] },
+      { label: "Fn Key Swap", entry: [10, 19, 0, 0] },
+      { label: "ALT TAB", entry: [10, 20, 0, 0] },
+      { label: "Language Switch", entry: [10, 21, 0, 0] },
+      { label: "Charge LED On OFF", entry: [10, 22, 0, 0] },
+      { label: "APP CTRL Change", entry: [10, 23, 0, 0] },
+    ],
+  },
+  {
+    name: "System",
+    items: [
+      { label: "System Power", entry: [2, 129, 0, 0] },
+      { label: "System Sleep", entry: [2, 130, 0, 0] },
+      { label: "System Wake", entry: [2, 131, 0, 0] },
+    ],
+  },
+  {
+    name: "Profile",
+    items: [
+      { label: "Profile+", entry: [8, 0, 1, 0] },
+      { label: "Profile-", entry: [8, 0, 2, 0] },
+      { label: "Profile+ loop", entry: [8, 0, 3, 0] },
+    ],
+  },
+  {
+    name: "Wireless",
+    items: [
+      { label: "24G device", entry: [14, 0, 5, 0] },
+      { label: "BLUETOOTH1", entry: [14, 0, 0, 0] },
+      { label: "BLUETOOTH2", entry: [14, 0, 1, 0] },
+      { label: "BLUETOOTH3", entry: [14, 0, 2, 0] },
+      { label: "BLUETOOTH4", entry: [14, 0, 3, 0] },
+      { label: "BLUETOOTH5", entry: [14, 0, 4, 0] },
+      { label: "WIRED", entry: [14, 0, 6, 0] },
+      { label: "Cycle link", entry: [14, 0, 255, 0] },
+      { label: "24G Match", entry: [14, 1, 0, 0] },
+      { label: "BT Match", entry: [14, 1, 1, 0] },
+    ],
+  },
+  {
+    name: "Screen",
+    items: [
+      { label: "Main Class Loop +", entry: [19, 0, 0, 0] },
+      { label: "Main Class Loop -", entry: [19, 0, 1, 0] },
+      { label: "Main Class Inc", entry: [19, 0, 2, 0] },
+      { label: "Main Class Dec", entry: [19, 0, 3, 0] },
+      { label: "Loop Class Loop +", entry: [19, 1, 0, 0] },
+      { label: "Loop Class Loop -", entry: [19, 1, 1, 0] },
+      { label: "Loop Class Inc", entry: [19, 1, 2, 0] },
+      { label: "Loop Class Dec", entry: [19, 1, 3, 0] },
+      { label: "OLED_SWITCH", entry: [19, 2, 0, 0] },
+      { label: "OLED_WHEEL", entry: [19, 3, 0, 0] },
+    ],
+  },
+  {
+    name: "Report rate",
+    items: [
+      { label: "Report rate +", entry: [5, 0, 1, 0] },
+      { label: "Report rate -", entry: [5, 0, 2, 0] },
+      { label: "Report rate + loop", entry: [5, 0, 3, 0] },
     ],
   },
   {
     name: "Special",
     items: [
-      { label: "Fn", entry: [10, 1, 0, 0] },
-      { label: "Disabled", entry: [0, 0, 0, 0] },
+      { label: "Off", entry: [0, 0, 0, 0] },
     ],
   },
 ];
@@ -198,7 +334,9 @@ export function entryLabel(entry: number[]): string {
   if (tag === 0 && (a !== 0 || c !== 0))
     return [a, b, c].filter(Boolean).map(usageLabel).join("+");
   if (tag === 1) return "Mouse";
-  if (tag === 3) return `Media ${(c << 8) | b}`;
+  if (tag === 3) return "Media";
+  if (tag === 13) return "Light";
+  if (tag === 14) return "Link";
   if (tag === 9) return `Macro ${b + 1}`;
   if (tag === 10 && a === 1) return "Fn";
   if (tag === 10 && a === 12) return "Power save";
