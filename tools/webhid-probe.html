@@ -99,7 +99,9 @@
 <script>
 "use strict";
 
-const VID = 0x3151;
+// Every vendor id in the registry, not just ROYUAN's own: some boards ship
+// under their brand's id and would otherwise never appear in the picker.
+const VIDS = [0x3151, 0x379a, 0x374a, 0x38a9, 0x046a, 0x2ea8, 0x145f];
 const USAGE_PAGE = 0xFFFF;
 const USAGE = 0x0002;
 const REPORT_LEN = 64;
@@ -227,7 +229,7 @@ function addRow(name, status, cls, value, raw) {
 async function connect() {
   try {
     const devices = await navigator.hid.requestDevice({
-      filters: [{ vendorId: VID, usagePage: USAGE_PAGE, usage: USAGE }],
+      filters: VIDS.map((vendorId) => ({ vendorId, usagePage: USAGE_PAGE, usage: USAGE })),
     });
     if (!devices.length) { log("No device picked."); return; }
     device = devices[0];
@@ -247,7 +249,7 @@ async function connect() {
     $("devcard").classList.remove("hide");
     $("devinfo").innerHTML = `
       <dt>Product</dt><dd>${device.productName || "(none)"}</dd>
-      <dt>Vendor</dt><dd>0x${VID.toString(16)}</dd>
+      <dt>Vendor</dt><dd>0x${device.vendorId.toString(16).padStart(4, "0")}</dd>
       <dt>Collections</dt><dd>${cols.length}</dd>
       <dt>Vendor collection</dt><dd>${vendor ? "present (0xFFFF / 2)" : "NOT EXPOSED"}</dd>
       <dt>Platform</dt><dd>${navigator.platform} · ${navigator.userAgent.match(/(Chrome|Edg)\/[\d.]+/)?.[0] || "unknown"}</dd>`;

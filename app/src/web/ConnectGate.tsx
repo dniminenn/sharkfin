@@ -21,9 +21,14 @@ const UDEV_RULE =
 // One paste: write the rule, reload, apply. `tee` because the redirect would
 // run as the user, not as root. Deliberately not a script to download and
 // pipe into a shell: everything it does is visible in the line itself.
+// Continued across lines so it stays readable in a narrow panel. Pasting it
+// still runs as one command, and a visual wrap inserts no newline of its own.
 const UDEV_ONELINER =
-  `echo '${UDEV_RULE}' | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null` +
-  " && sudo udevadm control --reload-rules && sudo udevadm trigger";
+  `echo '${UDEV_RULE}' \\
+` +
+  "  | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \\
+" +
+  "  && sudo udevadm control --reload-rules && sudo udevadm trigger";
 
 const isLinux = () =>
   navigator.userAgent.includes("Linux") && !navigator.userAgent.includes("Android");
@@ -47,7 +52,7 @@ function PermissionHelp() {
             it to you. Paste this into a terminal, then unplug the keyboard and plug it
             back in:
           </p>
-          <pre className="overflow-x-auto rounded-md border bg-muted/50 p-2 text-xs">
+          <pre className="whitespace-pre-wrap break-all rounded-md border bg-muted/50 p-2 text-[11px] leading-relaxed">
             {UDEV_ONELINER}
           </pre>
           <div className="flex items-center gap-3">
