@@ -87,13 +87,20 @@ npm install
 npm run web:build   # -> app/dist-web
 ```
 
-On Linux, add a udev rule so sharkfin can reach the keyboard. The browser
-build needs it too, because Chrome opens the same device node:
+On Linux the keyboard's device node belongs to root, so sharkfin needs a
+udev rule to reach it. The browser build needs it too, because Chrome opens
+the same node. One line, then replug the keyboard:
 
+```sh
+echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"' \
+  | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \
+  && sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
-# /etc/udev/rules.d/70-sharkfin.rules
-SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"
-```
+
+If you already configure keyboards on this machine you may have a rule from
+VIA, Vial or a vendor package that covers it, in which case nothing is
+needed. The browser build shows you this command if it finds a keyboard it
+cannot open.
 
 ## If the keyboard stops responding
 

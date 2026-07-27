@@ -113,6 +113,15 @@ const isVendorCollection = (d: HIDDevice) =>
 
 let ready: Promise<void> | null = null;
 
+/// Set when the browser can see the device but cannot open it. On Linux that
+/// is almost always a missing udev rule, and without saying so the app just
+/// looks broken: the picker succeeds, then nothing happens.
+let accessDenied = false;
+
+export function accessProblem(): boolean {
+  return accessDenied;
+}
+
 function ensure(): Promise<void> {
   if (ready) return ready;
   const started = init().then(() => {
@@ -166,12 +175,14 @@ export const scan = async (): Promise<ScanResult> => {
   for (const d of devices) {
     try {
       const info = JSON.parse((await core.connect(d)) as string) as ConnectedDevice;
+      accessDenied = false;
       return { connected: info, unknown: [], stalled: false };
     } catch (e) {
       let deviceId: number | null = null;
       try {
         const f = JSON.parse(String(e)) as { kind?: string; deviceId?: number };
         if (f.kind === "stalled") return { connected: null, unknown: [], stalled: true };
+        if (f.kind === "openFailed") accessDenied = true;
         deviceId = f.deviceId ?? null;
       } catch {
         // not a structured failure; fall through to an unknown row
