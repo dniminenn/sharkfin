@@ -130,6 +130,10 @@ Modes: 1 static, 2 breathing, 3 spectrum, 4 wave (4 dirs), 5 ripple,
 12 neon (2), 14 radiant, 15 loop (2), 16 colour grid, 17 snowfall,
 18 meteor, 19 silent snow. Modes 13, 21, 22, 23 need host-side data.
 
+Caps LED Swap, key function `[10, 17, 0, 0]`, lights that key white while
+caps lock is active. The colour is fixed in firmware: no command sets it,
+and a per-key pattern underneath is ignored while the key is lit. **[HW]**
+
 ### Edge light [HW]
 
 Own mode table: 0 off, 1 static, 2 breathing, 3 spectrum, 4 wave, 5 snake,
