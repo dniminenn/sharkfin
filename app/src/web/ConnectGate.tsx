@@ -8,9 +8,9 @@
 import { useEffect, useState } from "react";
 import { Check, Copy, Usb } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { accessProblem, grantedDevices, hidAvailable, requestDevice } from "./backend";
+import { accessProblem, grantedDevices, requestDevice } from "./backend";
 
-type GateState = "checking" | "unsupported" | "unpaired" | "paired" | "denied";
+type GateState = "checking" | "unpaired" | "paired" | "denied";
 
 // Most of these boards are ROYUAN's 3151, but 61 of the 523 in the registry
 // ship under a different vendor ID, so matching 3151 alone locks their owners
@@ -85,10 +85,6 @@ export default function ConnectGate() {
   const [state, setState] = useState<GateState>("checking");
 
   useEffect(() => {
-    if (!hidAvailable()) {
-      setState("unsupported");
-      return;
-    }
     let live = true;
     const check = async () => {
       const devices = await grantedDevices();
@@ -109,12 +105,7 @@ export default function ConnectGate() {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
       <div className="pointer-events-auto flex items-center gap-3 rounded-xl border bg-card px-4 py-3 shadow-lg">
-        {state === "unsupported" ? (
-          <span className="text-sm text-muted-foreground">
-            This browser can't reach USB devices. Use Chrome, Edge or another Chromium
-            browser, or download the desktop app.
-          </span>
-        ) : state === "denied" ? (
+        {state === "denied" ? (
           <PermissionHelp />
         ) : (
           <>
