@@ -23,12 +23,11 @@ const UDEV_RULE =
 // pipe into a shell: everything it does is visible in the line itself.
 // Continued across lines so it stays readable in a narrow panel. Pasting it
 // still runs as one command, and a visual wrap inserts no newline of its own.
-const UDEV_ONELINER =
-  `echo '${UDEV_RULE}' \\
-` +
-  "  | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \\
-" +
-  "  && sudo udevadm control --reload-rules && sudo udevadm trigger";
+const UDEV_ONELINER = [
+  `echo '${UDEV_RULE}' \\`,
+  "  | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \\",
+  "  && sudo udevadm control --reload-rules && sudo udevadm trigger",
+].join("\n");
 
 const isLinux = () =>
   navigator.userAgent.includes("Linux") && !navigator.userAgent.includes("Android");
