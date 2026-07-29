@@ -186,6 +186,20 @@ mod tests {
     }
 
     #[test]
+    fn packaged_udev_rule_covers_every_vendor_in_the_registry() {
+        // The .deb, .rpm and Arch packages all install this file. A vendor id
+        // missing from it leaves that board's node owned by root, and the app
+        // reports "no device" with the keyboard plugged in.
+        let rules = include_str!("../../../packaging/70-sharkfin.rules");
+        for vid in vendor_ids() {
+            assert!(
+                rules.contains(&format!("{vid:04x}")),
+                "vendor {vid:04x} is missing from packaging/70-sharkfin.rules"
+            );
+        }
+    }
+
+    #[test]
     fn labels_are_never_empty() {
         for d in all() {
             assert!(!d.label().trim().is_empty(), "device {} has no label", d.id);

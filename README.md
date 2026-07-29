@@ -91,7 +91,9 @@ npm run web:build   # -> app/dist-web
 
 On Linux the keyboard's device node belongs to root, so sharkfin needs a
 udev rule to reach it. The browser build needs it too, because Chrome opens
-the same node. One line, then replug the keyboard:
+the same node. The .deb, .rpm and Arch packages install the rule; replug
+the keyboard after installing. The AppImage and the browser build cannot
+install it. For those, one line, then replug the keyboard:
 
 ```sh
 echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"' \

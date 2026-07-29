@@ -1,4 +1,6 @@
 # SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 # SPDX-License-Identifier: GPL-3.0-or-later
-# Let the logged-in user talk to ROYUAN keyboards (USB VID 0x3151).
-SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", MODE="0660", TAG+="uaccess"
+# Let the logged-in user talk to the keyboards in the registry. Most are
+# ROYUAN's USB VID 0x3151; the rest ship under the brand's own ID. A test in
+# app/src-tauri/src/registry.rs keeps this list complete.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"
