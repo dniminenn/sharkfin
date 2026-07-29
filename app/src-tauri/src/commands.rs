@@ -107,6 +107,10 @@ pub struct DiscoveredUnknown {
 pub struct ScanResult {
     pub connected: Option<ConnectedDevice>,
     pub unknown: Vec<DiscoveredUnknown>,
+    /// A keyboard was found but its device node could not be opened. On
+    /// Linux that is almost always a missing udev rule; without saying so
+    /// the app reports "no device" with the keyboard plugged in.
+    pub open_failed: bool,
     /// The firmware stalled and the board must be replugged. Nothing is
     /// retried while this is set.
     pub stalled: bool,
@@ -154,6 +158,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                     spec: open.spec.clone(),
                 }),
                 unknown: vec![],
+                open_failed: false,
                 stalled: false,
             });
         }
@@ -174,6 +179,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
             return Ok(ScanResult {
                 connected: None,
                 unknown: vec![],
+                open_failed: false,
                 stalled: true,
             });
         }
@@ -181,6 +187,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
 
     let mut unknown = Vec::new();
     let mut connected = None;
+    let mut open_failed = false;
 
     for d in found {
         let api = inner.api.as_ref().unwrap();
@@ -188,6 +195,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
             Ok(t) => t,
             Err(e) => {
                 log::warn!("open {} failed: {e}", d.path);
+                open_failed = true;
                 continue;
             }
         };
@@ -227,6 +235,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
     Ok(ScanResult {
         connected,
         unknown,
+        open_failed,
         stalled: false,
     })
 }

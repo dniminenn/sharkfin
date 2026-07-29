@@ -18,6 +18,7 @@ import { deviceLabel } from "@/lib/brands";
 import { scan, type ConnectedDevice } from "@/lib/backend";
 import ColorwayPicker from "@/components/ColorwayPicker";
 import SharkfinLogo from "@/components/SharkfinLogo";
+import PermissionNotice from "@/components/PermissionNotice";
 import ReadOnlyNotice from "@/components/ReadOnlyNotice";
 import LightingPage from "@/pages/Lighting";
 import KeymapPage from "@/pages/Keymap";
@@ -42,6 +43,7 @@ const NAV: { id: Page; label: string; icon: typeof Lightbulb }[] = [
 export default function App() {
   const [page, setPage] = useState<Page>("lighting");
   const [device, setDevice] = useState<ConnectedDevice | null>(null);
+  const [openFailed, setOpenFailed] = useState(false);
   const [stalled, setStalled] = useState(false);
   const [scanning, setScanning] = useState(true);
   const guided = useRef<number | null>(null);
@@ -59,9 +61,11 @@ export default function App() {
     try {
       const r = await scan();
       setDevice(r.connected);
+      setOpenFailed(r.openFailed);
       setStalled(r.stalled);
     } catch {
       setDevice(null);
+      setOpenFailed(false);
     } finally {
       setScanning(false);
     }
@@ -158,6 +162,7 @@ export default function App() {
           {page === "contribute" && <ContributePage device={device} />}
         </div>
       </main>
+      {!device && openFailed && <PermissionNotice />}
       <Toaster position="bottom-right" />
     </div>
   );

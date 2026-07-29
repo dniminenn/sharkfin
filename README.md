@@ -103,8 +103,8 @@ echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f"
 
 If you already configure keyboards on this machine you may have a rule from
 VIA, Vial or a vendor package that covers it, in which case nothing is
-needed. The browser build shows you this command if it finds a keyboard it
-cannot open.
+needed. The app shows you this command if it finds a keyboard it cannot
+open.
 
 ## If the keyboard stops responding
 

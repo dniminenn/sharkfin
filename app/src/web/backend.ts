@@ -52,6 +52,9 @@ export interface DiscoveredUnknown {
 export interface ScanResult {
   connected: ConnectedDevice | null;
   unknown: DiscoveredUnknown[];
+  /** A keyboard is there but its node can't be opened; on Linux that is
+   * almost always a missing udev rule. */
+  openFailed: boolean;
   /** Firmware stalled; nothing is retried until the board is replugged. */
   stalled: boolean;
 }
@@ -123,15 +126,6 @@ const isVendorCollection = (d: HIDDevice, vendors: number[]) =>
 
 let ready: Promise<void> | null = null;
 
-/// Set when the browser can see the device but cannot open it. On Linux that
-/// is almost always a missing udev rule, and without saying so the app just
-/// looks broken: the picker succeeds, then nothing happens.
-let accessDenied = false;
-
-export function accessProblem(): boolean {
-  return accessDenied;
-}
-
 function ensure(): Promise<void> {
   if (ready) return ready;
   const started = init().then(() => {
@@ -164,13 +158,14 @@ export async function requestDevice(): Promise<boolean> {
 }
 
 export const scan = async (): Promise<ScanResult> => {
-  if (!hidAvailable()) return { connected: null, unknown: [], stalled: false };
+  const empty = { connected: null, unknown: [], openFailed: false, stalled: false };
+  if (!hidAvailable()) return empty;
   await ensure();
   const st = JSON.parse(core.status() as string) as {
     connected: ConnectedDevice | null;
     stalled: boolean;
   };
-  if (st.connected) return { connected: st.connected, unknown: [], stalled: false };
+  if (st.connected) return { ...empty, connected: st.connected };
 
   const devices = await grantedDevices();
   if (st.stalled) {
@@ -179,22 +174,26 @@ export const scan = async (): Promise<ScanResult> => {
     if (devices.length === 0) {
       core.clear_stall();
     } else {
-      return { connected: null, unknown: [], stalled: true };
+      return { ...empty, stalled: true };
     }
   }
 
   const unknown: DiscoveredUnknown[] = [];
+  let openFailed = false;
   for (const d of devices) {
     try {
       const info = JSON.parse((await core.connect(d)) as string) as ConnectedDevice;
-      accessDenied = false;
-      return { connected: info, unknown: [], stalled: false };
+      return { ...empty, connected: info };
     } catch (e) {
       let deviceId: number | null = null;
       try {
         const f = JSON.parse(String(e)) as { kind?: string; deviceId?: number };
-        if (f.kind === "stalled") return { connected: null, unknown: [], stalled: true };
-        if (f.kind === "openFailed") accessDenied = true;
+        if (f.kind === "stalled") return { ...empty, stalled: true };
+        if (f.kind === "openFailed") {
+          // Unopenable is not unknown: the board never got to speak.
+          openFailed = true;
+          continue;
+        }
         deviceId = f.deviceId ?? null;
       } catch {
         // not a structured failure; fall through to an unknown row
@@ -207,7 +206,7 @@ export const scan = async (): Promise<ScanResult> => {
       });
     }
   }
-  return { connected: null, unknown, stalled: false };
+  return { ...empty, unknown, openFailed };
 };
 
 const withCore = async <T>(f: () => Promise<T>): Promise<T> => {

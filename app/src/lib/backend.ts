@@ -47,6 +47,9 @@ export interface DiscoveredUnknown {
 export interface ScanResult {
   connected: ConnectedDevice | null;
   unknown: DiscoveredUnknown[];
+  /** A keyboard is there but its node can't be opened; on Linux that is
+   * almost always a missing udev rule. */
+  openFailed: boolean;
   /** Firmware stalled; nothing is retried until the board is replugged. */
   stalled: boolean;
 }
