@@ -15,7 +15,7 @@ makedepends=('cargo' 'npm')
 # The hidapi crate compiles vendored C; makepkg's LTO makes ld drop its symbols.
 options=('!lto')
 source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-b2sums=('e9c937fd574ddee2cd1115d9ea0aeb85911fbbb772712515271eb3a2e0b09140c62af1581fbd7b5a6b36f16b4c42d4cb75dd0bb8c4816849b2b73252d1c796a4')
+b2sums=('b0fdf1a34662694dafae5150bb584e58c0a6bdaaf47a643acf6687e2389271a9584fdc7cbce73a8b81bf4fce34da2de7c09749c85d39059712c88e826ffd345d')
 
 prepare() {
   cd "$pkgname-$pkgver/app"
