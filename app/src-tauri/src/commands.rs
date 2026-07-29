@@ -890,18 +890,44 @@ const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x97 auto-OS (yc500)", 0x97, &[]),
 ];
 
+fn probe_sweep(t: &Transport, out: &mut String) {
+    use std::fmt::Write;
+    let _ = writeln!(
+        out,
+        "\nread sweep, both families' GET opcodes; an unimplemented \
+         command echoes the previous reply:"
+    );
+    for (label, opcode, payload) in BUNDLE_PROBES {
+        match t.read_raw_page(*opcode, payload, Checksum::Bit7) {
+            Ok(reply) => {
+                let hex: String = reply.iter().fold(String::new(), |mut s, b| {
+                    let _ = write!(s, "{b:02x} ");
+                    s
+                });
+                let _ = writeln!(out, "{label:<24} {}", hex.trim_end());
+            }
+            Err(e) => {
+                let _ = writeln!(out, "{label:<24} error: {e}");
+            }
+        }
+    }
+}
+
 /// Everything a developer needs from a board they don't own, as text the
-/// owner pastes into a GitHub issue. Read-only.
+/// owner pastes into a GitHub issue. Read-only. `path` reaches a discovered
+/// board the registry does not know; without it the open board is used.
 #[tauri::command]
-pub fn contribution_bundle(state: tauri::State<AppState>) -> Result<String, String> {
+pub fn contribution_bundle(
+    state: tauri::State<AppState>,
+    path: Option<String>,
+) -> Result<String, String> {
     use std::fmt::Write;
     let spec = {
         let inner = state.inner.lock();
-        inner
-            .open
-            .as_ref()
-            .map(|o| o.spec.clone())
-            .ok_or("no device connected")?
+        inner.open.as_ref().map(|o| o.spec.clone())
+    };
+    let Some(spec) = spec else {
+        return unregistered_bundle(&state, path.ok_or("no device connected")?);
     };
     with_open(&state, |t, _| {
         let mut out = String::new();
@@ -923,28 +949,55 @@ pub fn contribution_bundle(state: tauri::State<AppState>) -> Result<String, Stri
                 "read-only"
             }
         );
-        let _ = writeln!(
-            out,
-            "\nread sweep, both families' GET opcodes; an unimplemented \
-             command echoes the previous reply:"
-        );
-        for (label, opcode, payload) in BUNDLE_PROBES {
-            match t.read_raw_page(*opcode, payload, Checksum::Bit7) {
-                Ok(reply) => {
-                    let hex: String = reply.iter().fold(String::new(), |mut s, b| {
-                        let _ = write!(s, "{b:02x} ");
-                        s
-                    });
-                    let _ = writeln!(out, "{label:<24} {}", hex.trim_end());
-                }
-                Err(e) => {
-                    let _ = writeln!(out, "{label:<24} error: {e}");
-                }
-            }
-        }
+        probe_sweep(t, &mut out);
         let _ = writeln!(out, "```");
         Ok(out)
     })
+}
+
+/// Bundle for a discovered board whose identify answer is not in the
+/// registry. The same read-only probes; the header carries what discovery
+/// saw instead of a registry entry.
+fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<String, String> {
+    use std::fmt::Write;
+    let mut inner = state.inner.lock();
+    if inner.stalled {
+        return Err(STALL_MESSAGE.into());
+    }
+    let (d, t) = {
+        let api = inner.api()?;
+        let d = hid::discover(api)
+            .into_iter()
+            .find(|d| d.path == path)
+            .ok_or("that keyboard is no longer there")?;
+        let t = Transport::open(api, &path).map_err(err_str)?;
+        (d, t)
+    };
+    let mut out = String::new();
+    let _ = writeln!(out, "```");
+    let _ = writeln!(out, "sharkfin {} data bundle", env!("CARGO_PKG_VERSION"));
+    let product = if d.product.is_empty() {
+        "unnamed board"
+    } else {
+        &d.product
+    };
+    let _ = writeln!(out, "board  : {product} (not in the registry)");
+    let _ = writeln!(out, "usb    : {:04x}:{:04x}", d.vendor_id, d.product_id);
+    match t.identify() {
+        Ok(id) => {
+            let _ = writeln!(out, "identify: device id {id}");
+        }
+        Err(e) if e.is_stall() => {
+            inner.stalled = true;
+            return Err(STALL_MESSAGE.into());
+        }
+        Err(_) => {
+            let _ = writeln!(out, "identify: no answer");
+        }
+    }
+    probe_sweep(&t, &mut out);
+    let _ = writeln!(out, "```");
+    Ok(out)
 }
 
 /// Dev escape hatch.

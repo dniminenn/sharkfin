@@ -9,19 +9,34 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { deviceLabel } from "@/lib/brands";
-import { contributionBundle, type ConnectedDevice } from "@/lib/backend";
+import {
+  contributionBundle,
+  type ConnectedDevice,
+  type DiscoveredUnknown,
+} from "@/lib/backend";
 
 const REPO = "https://github.com/dniminenn/sharkfin";
 
 // Both flows land on a template whose first field is the pasted bundle.
-function issueUrl(device: ConnectedDevice | null, kind: "board-report" | "bug") {
+function issueUrl(
+  device: ConnectedDevice | null,
+  unknown: DiscoveredUnknown | null,
+  kind: "board-report" | "bug",
+) {
   const url = `${REPO}/issues/new?template=${kind}.yml`;
-  if (!device) return url;
+  const name = device ? deviceLabel(device.spec) : unknown?.product;
+  if (!name) return url;
   const tag = kind === "bug" ? "bug" : "board";
-  return `${url}&title=${encodeURIComponent(`[${tag}] ${deviceLabel(device.spec)}`)}`;
+  return `${url}&title=${encodeURIComponent(`[${tag}] ${name}`)}`;
 }
 
-export default function ContributePage({ device }: { device: ConnectedDevice | null }) {
+export default function ContributePage({
+  device,
+  unknown,
+}: {
+  device: ConnectedDevice | null;
+  unknown: DiscoveredUnknown | null;
+}) {
   const [bundle, setBundle] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -29,7 +44,7 @@ export default function ContributePage({ device }: { device: ConnectedDevice | n
   const collect = async () => {
     setBusy(true);
     try {
-      setBundle(await contributionBundle());
+      setBundle(await contributionBundle(device ? undefined : unknown?.path));
       setCopied(false);
     } catch (e) {
       toast.error(`Bundle failed: ${e}`);
@@ -60,12 +75,18 @@ export default function ContributePage({ device }: { device: ConnectedDevice | n
       <Card>
         <CardHeader className="flex-row items-center justify-between space-y-0">
           <CardTitle className="text-base">
-            {device ? deviceLabel(device.spec) : "No keyboard connected"}
+            {device
+              ? deviceLabel(device.spec)
+              : unknown
+                ? unknown.product || "Unrecognized keyboard"
+                : "No keyboard connected"}
           </CardTitle>
-          {device && (
+          {device ? (
             <Badge variant="outline">
               {device.readOnly ? "read-only" : `id ${device.deviceId}`}
             </Badge>
+          ) : (
+            unknown && <Badge variant="outline">not in the registry</Badge>
           )}
         </CardHeader>
         <CardContent className="space-y-4">
@@ -75,17 +96,23 @@ export default function ContributePage({ device }: { device: ConnectedDevice | n
               bundle is the first step.
             </p>
           )}
+          {!device && unknown && (
+            <p className="text-sm text-muted-foreground">
+              sharkfin does not know this board yet. A bundle is the first
+              step to adding it.
+            </p>
+          )}
 
           <ol className="space-y-3 text-sm">
             <li className="flex items-center gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
                 1
               </span>
-              <Button size="sm" onClick={collect} disabled={busy || !device}>
+              <Button size="sm" onClick={collect} disabled={busy || (!device && !unknown)}>
                 <FileDown className="mr-1 h-3.5 w-3.5" />
                 {busy ? "Reading board…" : "Collect data bundle"}
               </Button>
-              {!device && (
+              {!device && !unknown && (
                 <span className="text-muted-foreground">
                   connect a keyboard by USB cable
                 </span>
@@ -111,14 +138,14 @@ export default function ContributePage({ device }: { device: ConnectedDevice | n
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => openUrl(issueUrl(device, "board-report"))}
+                onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
               >
                 <Keyboard className="mr-1 h-3.5 w-3.5" /> Report this board
               </Button>
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => openUrl(issueUrl(device, "bug"))}
+                onClick={() => openUrl(issueUrl(device, unknown, "bug"))}
               >
                 <Bug className="mr-1 h-3.5 w-3.5" /> Report a bug
               </Button>

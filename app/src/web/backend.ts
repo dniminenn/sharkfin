@@ -259,8 +259,15 @@ export const readMacro = (slot: number): Promise<Macro> =>
 export const writeMacro = (slot: number, data: Macro) =>
   withCore(() => core.write_macro(slot, JSON.stringify(data)));
 
-export const contributionBundle = (): Promise<string> =>
-  withCore(async () => (await core.contribution_bundle()) as string);
+/** With `path`, bundles a granted board the registry does not know; WebHID
+ * paths are opaque, so the first granted device stands in for it. */
+export const contributionBundle = (path?: string): Promise<string> =>
+  withCore(async () => {
+    if (path === undefined) return (await core.contribution_bundle()) as string;
+    const [d] = await grantedDevices();
+    if (!d) throw "no keyboard connected";
+    return (await core.unknown_bundle(d)) as string;
+  });
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));

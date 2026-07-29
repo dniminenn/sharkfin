@@ -56,6 +56,8 @@ extern "C" {
     fn product_name(this: &JsHidDevice) -> String;
     #[wasm_bindgen(method, getter, js_name = productId)]
     fn product_id(this: &JsHidDevice) -> u16;
+    #[wasm_bindgen(method, getter, js_name = vendorId)]
+    fn vendor_id(this: &JsHidDevice) -> u16;
     #[wasm_bindgen(method)]
     fn open(this: &JsHidDevice) -> js_sys::Promise;
     #[wasm_bindgen(method, js_name = sendFeatureReport)]
@@ -1027,6 +1029,33 @@ const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x97 auto-OS (yc500)", 0x97, &[]),
 ];
 
+async fn probe_sweep(t: &Transport, out: &mut String) -> Result<(), JsValue> {
+    use std::fmt::Write;
+    let _ = writeln!(
+        out,
+        "\nread sweep, both families' GET opcodes; an unimplemented \
+         command echoes the previous reply:"
+    );
+    for (label, opcode, payload) in BUNDLE_PROBES {
+        match t.read_raw_page(*opcode, payload, Checksum::Bit7).await {
+            Ok(reply) => {
+                let hex: String = reply.iter().fold(String::new(), |mut s, b| {
+                    let _ = write!(s, "{b:02x} ");
+                    s
+                });
+                let _ = writeln!(out, "{label:<24} {}", hex.trim_end());
+            }
+            Err(e) => {
+                if e.is_stall() {
+                    return Err(fail(e).into());
+                }
+                let _ = writeln!(out, "{label:<24} error: {e}");
+            }
+        }
+    }
+    Ok(())
+}
+
 #[wasm_bindgen]
 pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
     use std::fmt::Write;
@@ -1055,28 +1084,58 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
             "read-only"
         }
     );
+    probe_sweep(&t, &mut out).await?;
+    let _ = writeln!(out, "```");
+    Ok(out.into())
+}
+
+/// Bundle for a picker-granted board whose identify answer is not in the
+/// registry. The same read-only probes; the header carries what WebHID
+/// exposes instead of a registry entry.
+#[wasm_bindgen]
+pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
+    use std::fmt::Write;
+    let _busy = acquire().await;
+    let stalled = STATE.with(|s| s.borrow().stalled);
+    if stalled {
+        return Err(JsValue::from(STALL_MESSAGE));
+    }
+    if !device.opened() {
+        JsFuture::from(device.open())
+            .await
+            .map_err(|e| JsValue::from(js_err_text(e)))?;
+    }
+    let product = device.product_name();
+    let vid = device.vendor_id();
+    let pid = device.product_id();
+    let t = Transport {
+        dev: device,
+        last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
+    };
+    let mut out = String::new();
+    let _ = writeln!(out, "```");
     let _ = writeln!(
         out,
-        "\nread sweep, both families' GET opcodes; an unimplemented \
-         command echoes the previous reply:"
+        "sharkfin {} data bundle (web)",
+        env!("CARGO_PKG_VERSION")
     );
-    for (label, opcode, payload) in BUNDLE_PROBES {
-        match t.read_raw_page(*opcode, payload, Checksum::Bit7).await {
-            Ok(reply) => {
-                let hex: String = reply.iter().fold(String::new(), |mut s, b| {
-                    let _ = write!(s, "{b:02x} ");
-                    s
-                });
-                let _ = writeln!(out, "{label:<24} {}", hex.trim_end());
-            }
-            Err(e) => {
-                if e.is_stall() {
-                    return Err(fail(e).into());
-                }
-                let _ = writeln!(out, "{label:<24} error: {e}");
-            }
+    let product = if product.is_empty() {
+        "unnamed board".into()
+    } else {
+        product
+    };
+    let _ = writeln!(out, "board  : {product} (not in the registry)");
+    let _ = writeln!(out, "usb    : {vid:04x}:{pid:04x}");
+    match t.identify().await {
+        Ok(id) => {
+            let _ = writeln!(out, "identify: device id {id}");
+        }
+        Err(e) if e.is_stall() => return Err(fail(e).into()),
+        Err(_) => {
+            let _ = writeln!(out, "identify: no answer");
         }
     }
+    probe_sweep(&t, &mut out).await?;
     let _ = writeln!(out, "```");
     Ok(out.into())
 }

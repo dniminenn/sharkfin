@@ -146,7 +146,10 @@ export const readMacro = (slot: number) => invoke<Macro>("read_macro", { slot })
 export const writeMacro = (slot: number, data: Macro) =>
   invoke<void>("write_macro", { slot, data });
 
-export const contributionBundle = () => invoke<string>("contribution_bundle");
+/** `path` reaches a discovered board the registry does not know; without it
+ * the open board is used. */
+export const contributionBundle = (path?: string) =>
+  invoke<string>("contribution_bundle", { path });
 export const exportConfig = (path: string) =>
   invoke<string>("export_config", { path });
 export const importConfig = (path: string) =>

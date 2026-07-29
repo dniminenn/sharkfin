@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { deviceLabel } from "@/lib/brands";
-import { scan, type ConnectedDevice } from "@/lib/backend";
+import { scan, type ConnectedDevice, type DiscoveredUnknown } from "@/lib/backend";
 import ColorwayPicker from "@/components/ColorwayPicker";
 import SharkfinLogo from "@/components/SharkfinLogo";
 import PermissionNotice from "@/components/PermissionNotice";
@@ -43,10 +43,12 @@ const NAV: { id: Page; label: string; icon: typeof Lightbulb }[] = [
 export default function App() {
   const [page, setPage] = useState<Page>("lighting");
   const [device, setDevice] = useState<ConnectedDevice | null>(null);
+  const [unknown, setUnknown] = useState<DiscoveredUnknown | null>(null);
   const [openFailed, setOpenFailed] = useState(false);
   const [stalled, setStalled] = useState(false);
   const [scanning, setScanning] = useState(true);
   const guided = useRef<number | null>(null);
+  const guidedUnknown = useRef<string | null>(null);
 
   // Read-only boards can't do anything on the other tabs; point their owner
   // at the report flow once per board, never repeatedly.
@@ -57,14 +59,24 @@ export default function App() {
     }
   }, [device]);
 
+  // Boards the registry doesn't know can only be reported; same guidance.
+  useEffect(() => {
+    if (!device && unknown && guidedUnknown.current !== unknown.path) {
+      guidedUnknown.current = unknown.path;
+      setPage("contribute");
+    }
+  }, [device, unknown]);
+
   const doScan = useCallback(async () => {
     try {
       const r = await scan();
       setDevice(r.connected);
+      setUnknown(r.unknown[0] ?? null);
       setOpenFailed(r.openFailed);
       setStalled(r.stalled);
     } catch {
       setDevice(null);
+      setUnknown(null);
       setOpenFailed(false);
     } finally {
       setScanning(false);
@@ -121,9 +133,11 @@ export default function App() {
                     ? deviceLabel(device.spec)
                     : stalled
                       ? "Needs a replug"
-                      : scanning
-                        ? "Scanning…"
-                        : "No device"}
+                      : unknown
+                        ? unknown.product || "Unrecognized keyboard"
+                        : scanning
+                          ? "Scanning…"
+                          : "No device"}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {device ? (
@@ -138,6 +152,10 @@ export default function App() {
                     </Badge>
                   ) : stalled ? (
                     "Unplug, wait 10s, plug back in"
+                  ) : unknown ? (
+                    <Badge variant="outline" className="mt-1">
+                      not in the registry
+                    </Badge>
                   ) : (
                     "Connect by cable"
                   )}
@@ -159,7 +177,7 @@ export default function App() {
           {page === "keymap" && <KeymapPage device={device} />}
           {page === "macros" && <MacrosPage device={device} />}
           {page === "settings" && <DevicePage device={device} />}
-          {page === "contribute" && <ContributePage device={device} />}
+          {page === "contribute" && <ContributePage device={device} unknown={unknown} />}
         </div>
       </main>
       {!device && openFailed && <PermissionNotice />}
