@@ -69,7 +69,9 @@ jobs:
             interface over 2.4 GHz or Bluetooth.
 
             **Linux** needs a udev rule before either the app or the browser
-            can reach the keyboard. Paste this and replug it:
+            can reach the keyboard. The .deb and .rpm install it; replug the
+            keyboard after installing. For the AppImage or the browser,
+            paste this and replug it:
 
             ```sh
             echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"' \
