@@ -20,6 +20,10 @@ DEVICES = ROOT / "app/src-tauri/data/devices.json"
 VENDOR_LAYOUTS = ROOT / "app/src/lib/layouts/vendor"
 CANONICAL = {"Common80_k72x86"}
 
+# Mirrors KNOWN_FAMILIES in app/src-tauri/src/registry.rs. Anything else is
+# read-only. Keep the two in step or this report describes a different app.
+WRITABLE_FAMILIES = ("yc500", "gen2")
+
 
 def layouts_present() -> set[str]:
     have = set(CANONICAL)
@@ -38,7 +42,7 @@ def write_markdown(devices: list[dict], have: set[str], path: Path) -> None:
     rows = sorted(devices, key=lambda d: (label(d).lower(), d["id"]))
     total = len(rows)
     drawn = sum(1 for d in rows if d["keyLayout"] in have)
-    writable = sum(1 for d in rows if d.get("family") in ("yc500", "gen2"))
+    writable = sum(1 for d in rows if d.get("family") in WRITABLE_FAMILIES)
 
     out = [
         "# Board support",
@@ -68,7 +72,7 @@ def write_markdown(devices: list[dict], have: set[str], path: Path) -> None:
                 d["vendorId"],
                 d["productId"],
                 fam,
-                "yes" if fam in ("yc500", "gen2") else "",
+                "yes" if fam in WRITABLE_FAMILIES else "",
                 "yes" if d["keyLayout"] in have else "",
             )
         )
@@ -95,7 +99,7 @@ def main() -> None:
         write_markdown(devices, have, Path(args.markdown))
         return
 
-    writable = [d for d in devices if d.get("family") == "yc500"]
+    writable = [d for d in devices if d.get("family") in WRITABLE_FAMILIES]
 
     def covered(ds):
         return sum(1 for d in ds if d["keyLayout"] in have)

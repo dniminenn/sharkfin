@@ -34,8 +34,9 @@ Family derivation (printed per run): each device name is looked up in the
 lazy-loader maps inside the dist chunks (name -> import("<chunk>") with a
 static dependency preload list). A dep list containing 438d24dc.js
 (CommonKbYc500) => "yc500"; containing 5e635fe2.js (the generic keyboard base)
-=> "gen2"; both/neither/no loader entry => "unknown". sharkfin only enables
-writes for family "yc500".
+=> "gen2"; both/neither/no loader entry => "unknown". sharkfin enables writes
+for "yc500" and "gen2". "unknown" is read-only: see KNOWN_FAMILIES in
+app/src-tauri/src/registry.rs.
 """
 
 import argparse
