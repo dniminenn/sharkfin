@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! Put the backlight back to a known-good static setting.
-//! Usage: cargo run --example restore_light [mode] [r] [g] [b]
+//! Usage: cargo run --example restore_light [mode] [r] [g] [b] [brightness] [speed] [rainbow]
+//! `rainbow` is 0 or 1; with 1 the mode cycles colour and r/g/b are ignored.
 
 use sharkfin_lib::hid::{discover, Transport};
 use sharkfin_lib::protocol::{cmd, Checksum, LedParam};
@@ -13,10 +14,10 @@ fn main() {
     let num = |i: usize, d: u8| a.get(i).and_then(|s| s.parse().ok()).unwrap_or(d);
     let want = LedParam {
         mode: num(0, 1),
-        speed: 3,
+        speed: num(5, 3),
         brightness: num(4, 1),
         option: 0,
-        dazzle: false,
+        dazzle: num(6, 0) != 0,
         r: num(1, 0),
         g: num(2, 255),
         b: num(3, 255),
