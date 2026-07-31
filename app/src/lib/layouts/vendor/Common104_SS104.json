@@ -99,7 +99,7 @@
   {"code":"Numpad9","type":"key","x":923,"y":195,"w":40,"h":40,"text":"9","matrixIndex":null,"matrixEntry":[0,0,97,0],"hidUsage":97,"consumerUsage":null},
   {"code":"NumpadDecimal","type":"key","x":923,"y":241,"w":40,"h":40,"text":".\nDel","matrixIndex":null,"matrixEntry":[0,0,99,0],"hidUsage":99,"consumerUsage":null},
   {"code":"NumpadSubtract","type":"key","x":969,"y":57,"w":40,"h":40,"text":"-","matrixIndex":null,"matrixEntry":[0,0,86,0],"hidUsage":86,"consumerUsage":null},
-  {"code":"Ctrl_P","type":"key","x":693,"y":11,"w":40,"h":40,"text":"Print","matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null},
+  {"code":"Ctrl_P","type":"key","x":693,"y":11,"w":40,"h":40,"text":"Print","matrixIndex":null,"matrixEntry":[0,0,224,19],"hidUsage":null,"consumerUsage":null},
   {"code":"ScrollLock","type":"key","x":739,"y":11,"w":40,"h":40,"text":"Scroll","matrixIndex":null,"matrixEntry":[0,0,71,0],"hidUsage":71,"consumerUsage":null},
   {"code":"Pause","type":"key","x":785,"y":11,"w":40,"h":40,"text":"Pause","matrixIndex":null,"matrixEntry":[0,0,72,0],"hidUsage":72,"consumerUsage":null},
   {"code":"Insert","type":"key","x":693,"y":57,"w":40,"h":40,"text":"Ins","matrixIndex":null,"matrixEntry":[0,0,73,0],"hidUsage":73,"consumerUsage":null},

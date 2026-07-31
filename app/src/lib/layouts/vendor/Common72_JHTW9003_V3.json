@@ -76,6 +76,6 @@
   {"code":"Digit1","type":"key","x":157,"y":56,"w":40,"h":40,"text":"1!","matrixIndex":null,"matrixEntry":[0,0,30,0],"hidUsage":30,"consumerUsage":null},
   {"code":"Escape","type":"key","x":111,"y":56,"w":40,"h":40,"text":"Esc","matrixIndex":null,"matrixEntry":[0,0,41,0],"hidUsage":41,"consumerUsage":null},
   {"code":"Copy","type":"key","x":57,"y":56,"w":40,"h":40,"text":"M5","matrixIndex":null,"matrixEntry":[0,0,224,6],"hidUsage":null,"consumerUsage":null},
-  {"code":"OpenWebsiteDriver","type":"key","x":355,"y":1,"w":141,"h":40,"text":"Web","matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null}
+  {"code":"OpenWebsiteDriver","type":"key","x":355,"y":1,"w":141,"h":40,"text":"Web","matrixIndex":null,"matrixEntry":[19,0,0,0],"hidUsage":null,"consumerUsage":null}
  ]
 }

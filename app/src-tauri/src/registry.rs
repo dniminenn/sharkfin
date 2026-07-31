@@ -150,6 +150,29 @@ mod tests {
         }
     }
 
+    /// Boards the vendor bundle cannot supply: one the vendor removed, one it
+    /// never listed. `tools/extract_vendor_data.py` merges
+    /// `data/devices.extra.json` into the registry it writes, so regenerating
+    /// without the extras silently drops real hardware. Fail instead.
+    #[test]
+    fn hand_added_boards_survive_a_regeneration() {
+        static EXTRA_JSON: &str = include_str!("../data/devices.extra.json");
+        let extras: Vec<DeviceSpec> =
+            serde_json::from_str(EXTRA_JSON).expect("devices.extra.json parses as DeviceSpec");
+        assert!(!extras.is_empty(), "extras file is empty");
+        for e in extras {
+            let got = by_id(e.id).unwrap_or_else(|| {
+                panic!(
+                    "device {} is in devices.extra.json but not the registry",
+                    e.id
+                )
+            });
+            assert_eq!(got.family, e.family, "device {} family", e.id);
+            assert_eq!(got.vendor_id, e.vendor_id, "device {} vendor id", e.id);
+            assert_eq!(got.product_id, e.product_id, "device {} product id", e.id);
+        }
+    }
+
     #[test]
     fn side_light_flag_tracks_the_registry_layout() {
         for d in all() {

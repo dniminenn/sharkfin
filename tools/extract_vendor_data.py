@@ -5,7 +5,7 @@
 
 usage:
   extract_vendor_data.py BUNDLE_PRETTY_JS [--dist-js DIR]
-      [--devices-out FILE] [--layouts-out DIR]
+      [--extras FILE] [--devices-out FILE] [--layouts-out DIR]
 
 BUNDLE_PRETTY_JS is a prettified copy of the vendor webapp main bundle
 (dist/js/index.*.js run through `npx prettier --parser babel`). --dist-js is
@@ -24,8 +24,16 @@ Vendor builds are never committed. Unpack them outside the working tree and
 point --dist-js at them there; what belongs in the repo is the generated
 output, which this script reproduces.
 
+The catalogue is not a superset of itself over time: boards get removed, and
+some never appear at all. `data/devices.extra.json` (--extras) holds those by
+hand and is merged in, so the generated registry is still reproducible from
+the bundle plus that file. An extra whose id the bundle now carries is ignored
+and reported, so it can be deleted. A test in app/src-tauri/src/registry.rs
+fails if a regeneration drops one.
+
 Outputs:
-  devices.json  - every type:"keyboard" registry entry, deduped by id
+  devices.json  - every type:"keyboard" registry entry, deduped by id, plus
+                  --extras entries the bundle does not carry
   layouts dir   - one <keyLayoutName>.json per extractable *_keymappings_ui_info
                   object (Common80_k72x86 is skipped: src/lib/layouts/x86.json
                   is canonical)
@@ -562,6 +570,25 @@ def convention_ui_name(enum_key, ui_defs):
     return cand if cand in ui_defs else None
 
 
+def load_extras(path):
+    """Hand-maintained entries the bundle cannot supply.
+
+    Two cases: a board the vendor has removed from its catalogue, and a board
+    that was never in it but answered a read sweep on real hardware. Keys
+    beginning with `_` are notes for the next reader and are stripped here, so
+    the generated registry stays uniform.
+    """
+    if not path or not path.is_file():
+        return []
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    extras = [{k: v for k, v in e.items() if not k.startswith("_")} for e in raw]
+    ids = [e["id"] for e in extras]
+    dupes = {i for i in ids if ids.count(i) > 1}
+    if dupes:
+        raise SystemExit(f"{path}: duplicate ids {sorted(dupes)}")
+    return extras
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("bundle", type=Path)
@@ -573,6 +600,12 @@ def main():
         help="an unpacked build's dist/js dir; repeat to union several brands' builds",
     )
     here = Path(__file__).resolve().parent
+    ap.add_argument(
+        "--extras",
+        type=Path,
+        default=here.parent / "app/src-tauri/data/devices.extra.json",
+        help="hand-maintained entries for boards the bundle does not carry",
+    )
     ap.add_argument("--devices-out", type=Path, default=here.parent / "app/src-tauri/data/devices.json")
     ap.add_argument("--layouts-out", type=Path, default=here.parent / "app/src/lib/layouts/vendor")
     args = ap.parse_args()
@@ -611,8 +644,11 @@ def main():
                 "displayName": as_str(d.get("displayName"), d["name"]),
                 "company": company,
                 "vendor": company,
-                "vendorId": d["vid"],
-                "productId": d["pid"],
+                # The vendor writes some ids in exponential form (`pid: 1e3`),
+                # which parses as a float and then formats as `1000.0` instead
+                # of a hex USB id.
+                "vendorId": int(d["vid"]),
+                "productId": int(d["pid"]),
                 "internalName": d["name"],
                 "keyLayout": as_str(ident_name(d.get("keyLayout")), "Unknown"),
                 "lightLayout": as_str(ident_name(d.get("lightLayout"))),
@@ -633,11 +669,25 @@ def main():
                 },
             }
         )
+    extras = load_extras(args.extras)
+    from_bundle = {d["id"] for d in devices}
+    redundant = [e["id"] for e in extras if e["id"] in from_bundle]
+    devices.extend(e for e in extras if e["id"] not in from_bundle)
+
     devices.sort(key=lambda d: d["id"])
     args.devices_out.parent.mkdir(parents=True, exist_ok=True)
     args.devices_out.write_text(
         json.dumps(devices, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
+
+    if extras:
+        kept = [e["id"] for e in extras if e["id"] not in from_bundle]
+        print(f"  extras merged from {args.extras.name}: {sorted(kept)}")
+    if redundant:
+        print(
+            f"  extras now in the bundle, delete them from {args.extras.name}: "
+            f"{sorted(set(redundant))}"
+        )
 
     fam_counts = {}
     for d in devices:

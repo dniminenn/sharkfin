@@ -77,8 +77,7 @@ python3 tools/extract_vendor_data.py /tmp/bundle.pretty.js --dist-js <app>/dist/
 
 `--dist-js` is repeatable. Every brand ships the same driver with only
 its own devices' layouts bundled, so unioning several brands' builds is
-how layout coverage grows. Provenance for the builds used lives in
-`VENDOR_SOURCES.md`:
+how layout coverage grows:
 
 ```sh
 python3 tools/extract_vendor_data.py /tmp/bundle.pretty.js \
@@ -88,14 +87,24 @@ python3 tools/extract_vendor_data.py /tmp/bundle.pretty.js \
 The script:
 
 - Parses the device registry arrays out of the prettified main bundle.
+- Parses the device registry arrays out of the prettified main bundle.
 - Classifies each device's protocol family from the lazy-loader
-  dependency lists in the minified dist chunks: `438d24dc.js` → `yc500`,
-  `5e635fe2.js` → `gen2`, anything else → unknown. (Family determines
+  dependency lists in the minified dist chunks. The base chunks are matched
+  by content, not filename: yc500 declares `FEA_CMD_SET_KEYMATRIX = 9`,
+  gen2 declares `10`. Hashes change between builds. (Family determines
   whether sharkfin will write to a board.)
+- Merges `app/src-tauri/data/devices.extra.json`: boards the vendor has
+  removed from its catalogue, and boards it never listed. Each entry
+  records its own evidence in `_` keys, which are stripped on merge.
+  `hand_added_boards_survive_a_regeneration` fails if a run drops one.
 - Extracts every bundled `*_keymappings_ui_info` layout object. Matrix
   slot indices are computed against the `defaultMatrix` of yc500-family
   devices only, and omitted when no yc500 device resolves or when the
   devices disagree.
+
+A build with no `defaultMatrix` yields geometry-only layouts. Copying
+those over layouts that have `matrixIndex` loses it silently, so diff the
+layout output before copying it in.
 
 `app/src/lib/layouts/x86.json` is hand-maintained as the canonical layout for
 `Common80_k72x86` and is never regenerated.

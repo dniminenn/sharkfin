@@ -3,4 +3,4 @@
 # Let the logged-in user talk to the keyboards in the registry. Most are
 # ROYUAN's USB VID 0x3151; the rest ship under the brand's own ID. A test in
 # app/src-tauri/src/registry.rs keeps this list complete.
-SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|0db0|145f|14a5|2ea8|3121|3299|331a|374a|379a|38a9|391d|3984|39a8|39ab|54ab", MODE="0660", TAG+="uaccess"

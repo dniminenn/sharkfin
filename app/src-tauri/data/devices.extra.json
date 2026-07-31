@@ -1,0 +1,57 @@
+[
+  {
+    "_why": "Present in the vendor catalogue until the 2026-07-30 refresh, then removed. The hardware still exists, so dropping it would take away support someone already has. Delete this entry if the vendor lists id 2872 again.",
+    "_evidence": "Entry copied verbatim from the registry generated at commit ed7c686. Family gen2 as classified by the vendor's own loader map at that time.",
+    "id": 2872,
+    "name": "ry5088_mod007sv3he_uk_8k_soc",
+    "displayName": "MOD007B V3-HE(UK)",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_mod007sv3he_uk_8k_soc",
+    "keyLayout": "Common83_mod007sv3he_uk",
+    "lightLayout": "jt",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "Reported in issue #4. Never appeared in any vendor catalogue, so an extraction alone will not add it.",
+    "_evidence": "Read sweep from the owner's board. GET_KEYMATRIX 0x89 returns a decodable yc500 keymap (Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0); the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 at bytes 1..9. identify 0x8F returns 1748. That fixes the family as yc500, whose write paths are already [HW] evidenced on an X86.",
+    "_unknown": "keyLayout and profile count were not observable from a read sweep. keyLayout Unknown renders a slot grid; profiles is pinned to 1 so nothing writes to a profile the board may not have.",
+    "id": 1748,
+    "name": "epomaker_cypher81",
+    "displayName": "Cypher 81",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "epomaker_cypher81",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  }
+]
