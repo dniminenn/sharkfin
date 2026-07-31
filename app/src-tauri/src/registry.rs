@@ -86,6 +86,18 @@ impl DeviceSpec {
     }
 }
 
+/// What a data bundle calls this build. The version alone does not identify
+/// one: the browser app is deployed straight from master, and a bug report can
+/// arrive from any commit between two releases. `SHARKFIN_COMMIT` comes from
+/// each crate's build script and is absent when building from a release
+/// tarball, which has no git metadata.
+pub fn build_id() -> String {
+    match option_env!("SHARKFIN_COMMIT") {
+        Some(commit) => format!("{} ({commit})", env!("CARGO_PKG_VERSION")),
+        None => env!("CARGO_PKG_VERSION").to_string(),
+    }
+}
+
 static DEVICES_JSON: &str = include_str!("../data/devices.json");
 
 /// A malformed registry must not take the app down; callers fall back to
@@ -171,6 +183,19 @@ mod tests {
             assert_eq!(got.vendor_id, e.vendor_id, "device {} vendor id", e.id);
             assert_eq!(got.product_id, e.product_id, "device {} product id", e.id);
         }
+    }
+
+    /// A bundle has to name the build it came from, or a report from between
+    /// two releases cannot be placed. The commit is absent in a tarball build,
+    /// so only the version prefix is guaranteed.
+    #[test]
+    fn build_id_starts_with_the_version() {
+        let id = build_id();
+        println!("build id: {id}");
+        assert!(
+            id.starts_with(env!("CARGO_PKG_VERSION")),
+            "build id {id} does not start with the crate version"
+        );
     }
 
     #[test]

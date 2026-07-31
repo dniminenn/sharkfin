@@ -1063,11 +1063,7 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
     let (t, spec) = get_open(false)?;
     let mut out = String::new();
     let _ = writeln!(out, "```");
-    let _ = writeln!(
-        out,
-        "sharkfin {} data bundle (web)",
-        env!("CARGO_PKG_VERSION")
-    );
+    let _ = writeln!(out, "sharkfin {} data bundle (web)", registry::build_id());
     let _ = writeln!(out, "board  : {} (device id {})", spec.label(), spec.id);
     let _ = writeln!(
         out,
@@ -1114,11 +1110,7 @@ pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
     };
     let mut out = String::new();
     let _ = writeln!(out, "```");
-    let _ = writeln!(
-        out,
-        "sharkfin {} data bundle (web)",
-        env!("CARGO_PKG_VERSION")
-    );
+    let _ = writeln!(out, "sharkfin {} data bundle (web)", registry::build_id());
     let product = if product.is_empty() {
         "unnamed board".into()
     } else {

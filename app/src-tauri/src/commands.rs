@@ -932,7 +932,7 @@ pub fn contribution_bundle(
     with_open(&state, |t, _| {
         let mut out = String::new();
         let _ = writeln!(out, "```");
-        let _ = writeln!(out, "sharkfin {} data bundle", env!("CARGO_PKG_VERSION"));
+        let _ = writeln!(out, "sharkfin {} data bundle", registry::build_id());
         let _ = writeln!(out, "board  : {} (device id {})", spec.label(), spec.id);
         let _ = writeln!(
             out,
@@ -975,7 +975,7 @@ fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<S
     };
     let mut out = String::new();
     let _ = writeln!(out, "```");
-    let _ = writeln!(out, "sharkfin {} data bundle", env!("CARGO_PKG_VERSION"));
+    let _ = writeln!(out, "sharkfin {} data bundle", registry::build_id());
     let product = if d.product.is_empty() {
         "unnamed board"
     } else {
