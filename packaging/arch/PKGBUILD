@@ -4,7 +4,7 @@
 
 pkgname=sharkfin-keyboard
 _pkgname=sharkfin
-pkgver=0.1.8
+pkgver=0.1.9
 pkgrel=1
 pkgdesc='Configurator for Attack Shark and other ROYUAN keyboards'
 arch=('x86_64')

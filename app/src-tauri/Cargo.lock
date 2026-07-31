@@ -3086,7 +3086,7 @@ dependencies = [
 
 [[package]]
 name = "sharkfin"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "hidapi",
  "log",
