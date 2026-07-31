@@ -233,32 +233,37 @@ mod tests {
         );
     }
 
+    /// The udev rule is written out in three places and has drifted in two of
+    /// them already. A vendor id missing from any one of them leaves that
+    /// board's node owned by root, and the app reports "no device" with the
+    /// keyboard plugged in, which reads as the rule having failed rather than
+    /// being incomplete.
     #[test]
-    fn packaged_udev_rule_covers_every_vendor_in_the_registry() {
-        // The .deb, .rpm and Arch packages all install this file. A vendor id
-        // missing from it leaves that board's node owned by root, and the app
-        // reports "no device" with the keyboard plugged in.
-        let rules = include_str!("../../../packaging/70-sharkfin.rules");
-        for vid in vendor_ids() {
-            assert!(
-                rules.contains(&format!("{vid:04x}")),
-                "vendor {vid:04x} is missing from packaging/70-sharkfin.rules"
-            );
-        }
-    }
-
-    #[test]
-    fn in_app_udev_rule_covers_every_vendor_in_the_registry() {
-        // The Linux permission panel offers this rule to paste. If it lags the
-        // registry, an owner of a newer board pastes a rule that cannot match
-        // their keyboard and the app still reports "no device", which reads as
-        // the fix having failed rather than being incomplete.
-        let notice = include_str!("../../src/components/PermissionNotice.tsx");
-        for vid in vendor_ids() {
-            assert!(
-                notice.contains(&format!("{vid:04x}")),
-                "vendor {vid:04x} is missing from the rule in PermissionNotice.tsx"
-            );
+    fn every_copy_of_the_udev_rule_covers_the_whole_registry() {
+        let copies = [
+            // installed by the .deb, .rpm and Arch packages
+            (
+                "packaging/70-sharkfin.rules",
+                include_str!("../../../packaging/70-sharkfin.rules"),
+            ),
+            // offered for pasting by the Linux permission panel
+            (
+                "app/src/components/PermissionNotice.tsx",
+                include_str!("../../src/components/PermissionNotice.tsx"),
+            ),
+            // inlined in every release's notes
+            (
+                ".github/workflows/release.yml",
+                include_str!("../../../.github/workflows/release.yml"),
+            ),
+        ];
+        for (what, text) in copies {
+            for vid in vendor_ids() {
+                assert!(
+                    text.contains(&format!("{vid:04x}")),
+                    "vendor {vid:04x} is missing from the udev rule in {what}"
+                );
+            }
         }
     }
 

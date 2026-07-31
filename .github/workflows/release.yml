@@ -74,7 +74,7 @@ jobs:
             paste this and replug it:
 
             ```sh
-            echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"' \
+            echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|0db0|145f|14a5|2ea8|3121|3299|331a|374a|379a|38a9|391d|3984|39a8|39ab|54ab", MODE="0660", TAG+="uaccess"' \
               | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \
               && sudo udevadm control --reload-rules && sudo udevadm trigger
             ```
@@ -84,14 +84,63 @@ jobs:
             or [getsharkfin.com/boards](https://getsharkfin.com/boards/).
           args: ${{ matrix.args }}
 
+  # The browser build is the same protocol core over WebHID. It ships as a
+  # release asset so the site can pin a version instead of tracking master;
+  # the pin lives in the getsharkfin repo. Needs `build` only because
+  # tauri-action is what creates the draft release this uploads into.
+  web:
+    name: Browser build
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: app/src-web
+
+      - run: cargo install wasm-pack --locked
+
+      - run: npm ci
+        working-directory: app
+
+      - run: npm run web:build
+        working-directory: app
+
+      # Contents, not a wrapping directory, so it unpacks straight into the
+      # site's public/app. The two stock Vite/Tauri logos are template
+      # leftovers the site has never served.
+      - name: Pack the browser build
+        run: |
+          rm -f app/dist-web/tauri.svg app/dist-web/vite.svg
+          tar -czf "sharkfin-web-${{ github.ref_name }}.tar.gz" -C app/dist-web .
+
+      - name: Attach it to the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.ref_name }}" \
+            "sharkfin-web-${{ github.ref_name }}.tar.gz" \
+            --repo "${{ github.repository }}" --clobber
+
   # tauri-action creates the release as a draft and each matrix job uploads
   # into it. Publishing it from the build job would expose a release with only
   # one platform's binaries in it, so it is published here instead: once, after
-  # all three have finished. A failed build leaves it a draft, which is what
+  # every build has finished. A failed build leaves it a draft, which is what
   # you want.
   publish:
     name: Publish
-    needs: build
+    needs: [build, web]
     runs-on: ubuntu-latest
     steps:
       - name: Take the release out of draft
