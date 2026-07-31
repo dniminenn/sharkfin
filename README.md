@@ -18,7 +18,7 @@
 
 ![keymap editor](docs/keys-abyss.png)
 
-Remap keys, set the RGB, record macros and change device settings on 523
+Remap keys, set the RGB, record macros and change device settings on 943
 keyboards built on ROYUAN hardware: Attack Shark, Hator, ikbc, NOPPOO,
 Epomaker, Akko, MEETION, rongyuan and more. Most identify as USB vendor
 `0x3151`; a minority ship under their brand's own ID, so `docs/BOARDS.md`
@@ -35,7 +35,7 @@ sharkfin never flashes firmware.
 
 **Alpha, so back up first.**
 
-519 of 523 accept changes, 4 are read-only. 463 have a drawn layout; the
+939 of 943 accept changes, 4 are read-only. 881 have a drawn layout; the
 rest show a slot grid.
 
 ## Features

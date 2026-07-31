@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-//! Verification tool for the gen2 protocol family (477 of the 523 registry
+//! Verification tool for the gen2 protocol family (836 of the 943 registry
 //! boards). Refuses to run on anything else. Read-only by default; pass
 //! `--write` to exercise the paths sharkfin actually uses -- keymap, profile
 //! and debounce -- each restored afterwards. Paste the output into an issue.

@@ -223,6 +223,21 @@ mod tests {
     }
 
     #[test]
+    fn in_app_udev_rule_covers_every_vendor_in_the_registry() {
+        // The Linux permission panel offers this rule to paste. If it lags the
+        // registry, an owner of a newer board pastes a rule that cannot match
+        // their keyboard and the app still reports "no device", which reads as
+        // the fix having failed rather than being incomplete.
+        let notice = include_str!("../../src/components/PermissionNotice.tsx");
+        for vid in vendor_ids() {
+            assert!(
+                notice.contains(&format!("{vid:04x}")),
+                "vendor {vid:04x} is missing from the rule in PermissionNotice.tsx"
+            );
+        }
+    }
+
+    #[test]
     fn labels_are_never_empty() {
         for d in all() {
             assert!(!d.label().trim().is_empty(), "device {} has no label", d.id);
