@@ -2,6 +2,10 @@
 # SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+# pkgver and the checksums below are set from the git tag by the `aur` job
+# in .github/workflows/release.yml, which is what publishes this. The values
+# committed here are the last published ones, kept so the file still builds
+# by hand.
 pkgname=sharkfin-keyboard
 _pkgname=sharkfin
 pkgver=0.1.11

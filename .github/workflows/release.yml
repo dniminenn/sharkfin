@@ -150,3 +150,86 @@ jobs:
           gh release edit "${{ github.ref_name }}" \
             --repo "${{ github.repository }}" \
             --draft=false --prerelease
+
+  # Both AUR packages fetch from the published release: the source package the
+  # tag tarball, the -bin package the .deb. So neither can be built before
+  # publish, hence `needs`.
+  #
+  # Both are built here before anything is pushed. A broken PKGBUILD in the AUR
+  # fails for every user who tries to install it, and the AUR expects the
+  # maintainer to have built what they upload.
+  aur:
+    name: AUR
+    needs: publish
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Arch toolchain
+        run: |
+          pacman -Syu --noconfirm --needed \
+            base-devel git openssh pacman-contrib namcap
+          # makepkg refuses to run as root, and needs root to install
+          # dependencies, so it runs as `build` with passwordless sudo.
+          useradd -m -s /bin/bash build
+          echo 'build ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/build
+          git config --global --add safe.directory '*'
+
+      - uses: actions/checkout@v4
+
+      - name: Stage the PKGBUILDs at this tag
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          ver="${TAG#v}"
+          echo "version $ver"
+          for p in sharkfin-keyboard sharkfin-keyboard-bin; do
+            mkdir -p "/home/build/$p"
+            cp "packaging/arch/$p/PKGBUILD" "/home/build/$p/PKGBUILD"
+            sed -i "s/^pkgver=.*/pkgver=$ver/" "/home/build/$p/PKGBUILD"
+            sed -i "s/^pkgrel=.*/pkgrel=1/" "/home/build/$p/PKGBUILD"
+          done
+          chown -R build /home/build
+
+      # updpkgsums downloads each source and rewrites the checksum, so the
+      # published PKGBUILD always matches the artifacts this tag produced
+      # rather than a value copied in by hand afterwards.
+      - name: Checksums, build and test
+        run: |
+          for p in sharkfin-keyboard sharkfin-keyboard-bin; do
+            echo "::group::$p"
+            sudo -u build bash -lc "cd /home/build/$p && updpkgsums"
+            sudo -u build bash -lc "cd /home/build/$p && makepkg -s --noconfirm --check"
+            sudo -u build bash -lc "cd /home/build/$p && makepkg --printsrcinfo > .SRCINFO"
+            # Advisory: namcap flags packaging smells but is noisy enough that
+            # a release should not hinge on it.
+            namcap /home/build/$p/*.pkg.tar.zst || true
+            echo "::endgroup::"
+          done
+
+      - name: Push to the AUR
+        env:
+          AUR_SSH_KEY: ${{ secrets.AUR_SSH_KEY }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          ver="${TAG#v}"
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$AUR_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H aur.archlinux.org >> ~/.ssh/known_hosts 2>/dev/null
+          git config --global user.name 'dniminenn'
+          git config --global user.email 'root@dnim.dev'
+
+          for p in sharkfin-keyboard sharkfin-keyboard-bin; do
+            git clone -q "ssh://aur@aur.archlinux.org/$p.git" "/tmp/aur-$p"
+            cp "/home/build/$p/PKGBUILD" "/home/build/$p/.SRCINFO" "/tmp/aur-$p/"
+            cd "/tmp/aur-$p"
+            git add -A
+            if git diff --cached --quiet; then
+              echo "$p already at $ver"
+            else
+              git commit -q -m "$ver"
+              git push -q origin master
+              echo "$p pushed $ver"
+            fi
+            cd "$GITHUB_WORKSPACE"
+          done
