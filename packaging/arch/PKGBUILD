@@ -19,7 +19,7 @@ conflicts=('sharkfin')
 # The hidapi crate compiles vendored C; makepkg's LTO makes ld drop its symbols.
 options=('!lto')
 source=("$_pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
-b2sums=('1db587135aa8d1632148d352a5504b224034d25752281947b70f016efa437b37063ed02435fa6a17b9b17e937369227cf74d55a332e710d7d64ec966a025ce19')
+b2sums=('644b4d83d83a5cbd5793b809234abaea10491514d01cc026f0b33f25ad09342301c1bfb9c338ddee92466f2834370f33ba3329a6d58980af917cd7d3b0dc571e')
 
 prepare() {
   cd "$_pkgname-$pkgver/app"
