@@ -106,7 +106,7 @@
   {"code":"AudioVolumeUp","type":"key","x":851,"y":1,"w":40,"h":40,"text":"U+","matrixIndex":null,"matrixEntry":[3,0,233,0],"hidUsage":null,"consumerUsage":233},
   {"code":"AudioVolumeDown","type":"key","x":897,"y":1,"w":40,"h":40,"text":"U-","matrixIndex":null,"matrixEntry":[3,0,234,0],"hidUsage":null,"consumerUsage":234},
   {"code":"AudioVolumeMute","type":"key","x":943,"y":1,"w":40,"h":40,"text":"Mute","matrixIndex":null,"matrixEntry":[3,0,226,0],"hidUsage":null,"consumerUsage":226},
-  {"code":"Music","type":"key","x":989,"y":1,"w":40,"h":40,"text":"Music","matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null},
+  {"code":"Music","type":"key","x":989,"y":1,"w":40,"h":40,"text":"Music","matrixIndex":null,"matrixEntry":[3,0,131,1],"hidUsage":null,"consumerUsage":387},
   {"code":"End","type":"key","x":751,"y":102,"w":40,"h":40,"text":"End","matrixIndex":null,"matrixEntry":[0,0,77,0],"hidUsage":77,"consumerUsage":null},
   {"code":"Home","type":"key","x":751,"y":56,"w":40,"h":40,"text":"Home","matrixIndex":null,"matrixEntry":[0,0,74,0],"hidUsage":74,"consumerUsage":null}
  ]

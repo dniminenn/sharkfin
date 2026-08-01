@@ -1,9 +1,9 @@
 {
  "canvas": {"width":1037,"height":345},
  "keys": [
-  {"code":"AudioVolumeUp","type":"knob","x":0,"y":0,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,233,0],"hidUsage":null,"consumerUsage":233},
-  {"code":"AudioVolumeMute","type":"knob","x":0,"y":0,"w":18,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,226,0],"hidUsage":null,"consumerUsage":226},
-  {"code":"AudioVolumeDown","type":"knob","x":0,"y":0,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,234,0],"hidUsage":null,"consumerUsage":234},
+  {"code":"AudioVolumeUp","type":"knob","x":960,"y":32,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,233,0],"hidUsage":null,"consumerUsage":233},
+  {"code":"AudioVolumeMute","type":"knob","x":977,"y":32,"w":18,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,226,0],"hidUsage":null,"consumerUsage":226},
+  {"code":"AudioVolumeDown","type":"knob","x":995,"y":32,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,234,0],"hidUsage":null,"consumerUsage":234},
   {"code":"Escape","type":"key","x":28,"y":43,"w":40,"h":40,"text":"Esc","matrixIndex":null,"matrixEntry":[0,0,41,0],"hidUsage":41,"consumerUsage":null},
   {"code":"Backquote","type":"key","x":28,"y":98,"w":40,"h":40,"text":"`~","matrixIndex":null,"matrixEntry":[0,0,53,0],"hidUsage":53,"consumerUsage":null},
   {"code":"Digit1","type":"key","x":74,"y":98,"w":40,"h":40,"text":"1!","matrixIndex":null,"matrixEntry":[0,0,30,0],"hidUsage":30,"consumerUsage":null},

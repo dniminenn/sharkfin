@@ -2,7 +2,7 @@
  "canvas": {"width":742,"height":282},
  "keys": [
   {"code":"AudioVolumeDown","type":"knob","x":690,"y":0,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,234,0],"hidUsage":null,"consumerUsage":234},
-  {"code":"LEDONOFF","type":"knob","x":707,"y":0,"w":18,"h":52,"text":null,"matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null},
+  {"code":"LEDONOFF","type":"knob","x":707,"y":0,"w":18,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[10,9,0,0],"hidUsage":null,"consumerUsage":null},
   {"code":"AudioVolumeUp","type":"knob","x":725,"y":0,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,233,0],"hidUsage":null,"consumerUsage":233},
   {"code":"Backspace","type":"key","x":599,"y":57,"w":86,"h":40,"text":"BackSpace","matrixIndex":null,"matrixEntry":[0,0,42,0],"hidUsage":42,"consumerUsage":null},
   {"code":"Tab","type":"key","x":1,"y":103,"w":66,"h":40,"text":"Tab","matrixIndex":null,"matrixEntry":[0,0,43,0],"hidUsage":43,"consumerUsage":null},

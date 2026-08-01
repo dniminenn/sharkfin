@@ -13,12 +13,12 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 943 |
 | writable | 939 |
-| drawn | 96 |
-| drawn after confirmation | 778 |
+| drawn | 163 |
+| drawn after confirmation | 725 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
-| AAAMAZE Rival | 3056 | 3151:4015 | yc500 | yes | auto |
+| AAAMAZE Rival | 3056 | 3151:4015 | yc500 | yes | yes |
 | ABKO ACH105 | 3117 | 3151:5041 | gen2 | yes | auto |
 | ABKO AO98 | 2656 | 3151:4015 | yc500 | yes | yes |
 | ABKO AR108G | 2993 | 3151:5002 | gen2 | yes | auto |
@@ -166,16 +166,16 @@ blank is a plain grid of key slots. All three work the same.
 | BOYIH60 H60Pro | 2764 | 3151:5029 | gen2 | yes | auto |
 | BOYIH60 H60Pro | 2875 | 3151:5029 | gen2 | yes | auto |
 | BRONZTURQ MK1176 | 3862 | 3151:5025 | gen2 | yes | auto |
-| BS-Kitty-KB BGAM-KITTY | 3819 | 3151:4015 | yc500 | yes | auto |
+| BS-Kitty-KB BGAM-KITTY | 3819 | 3151:4015 | yc500 | yes | yes |
 | cherry K5 | 2626 | 046a:0141 | gen2 | yes |  |
 | cherry MX8.2 | 2494 | 046a:012d | gen2 | yes |  |
 | COLORFUL QY98 Ultra | 3257 | 3151:5030 | gen2 | yes | auto |
-| ColorReco CR-F81 | 3825 | 3151:5056 | gen2 | yes | auto |
+| ColorReco CR-F81 | 3825 | 3151:5056 | gen2 | yes | yes |
 | COOLKILLER CK75SE | 2395 | 3151:5025 | gen2 | yes | auto |
 | COOLKILLER CK75SE | 3720 | 3151:5056 | gen2 | yes | auto |
 | DAGK K21PRO-B | 3789 | 3151:5025 | gen2 | yes | auto |
 | DAGK K75PRO | 3847 | 3151:5056 | gen2 | yes | auto |
-| DAGK K75PRO V2 | 3942 | 3151:5002 | gen2 | yes | auto |
+| DAGK K75PRO V2 | 3942 | 3151:5002 | gen2 | yes | yes |
 | DAGK K98PRO | 3780 | 3151:5002 | gen2 | yes | auto |
 | DARKALIEN R83 | 3506 | 3151:5025 | gen2 | yes | auto |
 | DARKFORCE Fib(68) | 3055 | 3151:5030 | gen2 | yes | auto |
@@ -190,7 +190,7 @@ blank is a plain grid of key slots. All three work the same.
 | DSPIXEL Magic 80 | 3714 | 3151:5030 | gen2 | yes | auto |
 | E7 E7 68 PRO V2 | 3383 | 3151:502d | gen2 | yes | auto |
 | EDRA EK368RT | 2835 | 3151:5030 | gen2 | yes | auto |
-| EDRAVN TKG82WD8 | 3482 | 3151:504c | gen2 | yes | auto |
+| EDRAVN TKG82WD8 | 3482 | 3151:504c | gen2 | yes | yes |
 | EPOMAKER Cypher 81 | 1748 | 3151:4015 | yc500 | yes |  |
 | EPOMAKER Dynatab75X-UK | 1723 | 3151:4015 | yc500 | yes | yes |
 | EPOMAKER Epomaker 65 | 2870 | 3151:502d | gen2 | yes | auto |
@@ -221,7 +221,7 @@ blank is a plain grid of key slots. All three work the same.
 | EPOMAKER HE75 V2 TMR | 3613 | 3151:5054 | gen2 | yes | auto |
 | EPOMAKER HE75 V2 TMR | 3883 | 3151:5030 | gen2 | yes | auto |
 | EPOMAKER KIIBOOM-68C | 2586 | 3151:502d | gen2 | yes | auto |
-| EPOMAKER RT100 | 1379 | 3151:4015 | yc500 | yes | auto |
+| EPOMAKER RT100 | 1379 | 3151:4015 | yc500 | yes | yes |
 | EPOMAKER RT100 PRO | 3152 | 3151:5002 | gen2 | yes | auto |
 | EPOMAKER RT75 | 3223 | 3151:5002 | gen2 | yes | auto |
 | EPOMAKER RT85 | 2895 | 3151:5002 | gen2 | yes | auto |
@@ -236,9 +236,9 @@ blank is a plain grid of key slots. All three work the same.
 | EvoFox EvoFox Ronin X75 Plus | 3648 | 3151:4015 | yc500 | yes | yes |
 | EvoFox Ronin HS65 | 3669 | 3151:5029 | gen2 | yes | auto |
 | EvoFox Ronin HS65 | 3934 | 3151:5029 | gen2 | yes | auto |
-| EWEADNV DEEP68 | 2578 | 3151:5025 | gen2 | yes |  |
-| EWEADNV DEEP68 | 2710 | 3151:5030 | gen2 | yes |  |
-| EWEADNV DEEP68 | 2711 | 3151:5029 | gen2 | yes |  |
+| EWEADNV DEEP68 | 2578 | 3151:5025 | gen2 | yes | auto |
+| EWEADNV DEEP68 | 2710 | 3151:5030 | gen2 | yes | auto |
+| EWEADNV DEEP68 | 2711 | 3151:5029 | gen2 | yes | auto |
 | EWEADNV Deep68 | 2955 | 3151:5029 | gen2 | yes | auto |
 | EWEADNV DEEP80 | 2574 | 3151:5030 | gen2 | yes | auto |
 | EWEADNV DEEP80 | 2652 | 3151:5030 | gen2 | yes | auto |
@@ -264,8 +264,8 @@ blank is a plain grid of key slots. All three work the same.
 | EWEADNV ZAP68Ultra | 2554 | 3151:5029 | gen2 | yes | auto |
 | EWEADNV ZAP87 | 2527 | 3151:5030 | gen2 | yes |  |
 | EWEADNV ZAP87 | 3011 | 3151:5030 | gen2 | yes | auto |
-| FREEWOLF F68 | 2634 | 3151:5030 | gen2 | yes |  |
-| FREEWOLF F68 PRO | 2594 | 3151:5030 | gen2 | yes |  |
+| FREEWOLF F68 | 2634 | 3151:5030 | gen2 | yes | auto |
+| FREEWOLF F68 PRO | 2594 | 3151:5030 | gen2 | yes | auto |
 | FREEWOLF K13 | 3733 | 3151:502c | gen2 | yes | auto |
 | Fuego FUEGO GKB904 | 3439 | 3151:502d | gen2 | yes | auto |
 | Funbey纷贝 AST V68 | 3292 | 3151:5029 | gen2 | yes | auto |
@@ -295,8 +295,8 @@ blank is a plain grid of key slots. All three work the same.
 | GAMEPOWER TIRUS HE80 | 3108 | 3151:5030 | gen2 | yes | auto |
 | GAMEPOWER TIRUS HE80 | 3725 | 3151:5029 | gen2 | yes | auto |
 | Gamepro MK160B MAX | 2930 | 3151:502d | gen2 | yes | yes |
-| GamingGenTR Force98 | 3649 | 3151:4015 | yc500 | yes | auto |
-| GamingKeyboard KB900L | 3570 | 3151:5029 | gen2 | yes |  |
+| GamingGenTR Force98 | 3649 | 3151:4015 | yc500 | yes | yes |
+| GamingKeyboard KB900L | 3570 | 3151:5029 | gen2 | yes | auto |
 | GamingKeyboard KB904L | 3588 | 3151:5029 | gen2 | yes | auto |
 | GamingKeyboard3 VELOX 6701 | 3697 | 3151:502d | gen2 | yes | auto |
 | GANSS Driver G68T G68 | 3998 | 3151:504c | gen2 | yes | auto |
@@ -308,7 +308,7 @@ blank is a plain grid of key slots. All three work the same.
 | GenesisMagni MK10 | 3676 | 3151:5029 | gen2 | yes | auto |
 | GK505 Eon GK505 Eon | 3302 | 3151:502c | gen2 | yes | auto |
 | GKX68MAGNUM Gaming Keyboard | 2820 | 3151:5033 | gen2 | yes |  |
-| GKX68MAGNUM GKX68 | 2628 | 3151:5030 | gen2 | yes |  |
+| GKX68MAGNUM GKX68 | 2628 | 3151:5030 | gen2 | yes | auto |
 | GKX68MAGNUM GKX68 | 2790 | 3151:502c | gen2 | yes | auto |
 | GT60 GT60 | 2773 | 3151:5029 | gen2 | yes | auto |
 | GTUNE GMK82 | 2912 | 3151:5029 | gen2 | yes | auto |
@@ -413,8 +413,8 @@ blank is a plain grid of key slots. All three work the same.
 | Keydous NJ98-CP V4 | 3496 | 3151:5030 | gen2 | yes | auto |
 | Keydous NJ98-CP V4S | 3793 | 3151:5030 | gen2 | yes | auto |
 | KiiBoom Cybrix29 | 2886 | 3151:5029 | gen2 | yes | auto |
-| KiiBoom Kiboom phantom81 V4 | 3765 | 3151:5056 | gen2 | yes | auto |
-| KiiBoom Kiiboom phantom81 V4 | 3455 | 3151:4015 | yc500 | yes | auto |
+| KiiBoom Kiboom phantom81 V4 | 3765 | 3151:5056 | gen2 | yes | yes |
+| KiiBoom Kiiboom phantom81 V4 | 3455 | 3151:4015 | yc500 | yes | yes |
 | KiiBoom kiiboom81 | 2049 | 3151:4015 | yc500 | yes | auto |
 | KiiBoom kiiboom980X | 2029 | 3151:4015 | yc500 | yes | yes |
 | KMZKeyboardSoftware KOOMZE H71 | 3763 | 3151:4015 | yc500 | yes | auto |
@@ -446,7 +446,7 @@ blank is a plain grid of key slots. All three work the same.
 | MageGee MK25072 | 3419 | 3151:5056 | gen2 | yes | auto |
 | Mambasnake M82HE | 2335 | 3151:502d | gen2 | yes | auto |
 | Mambasnake X60HE | 2368 | 3151:502f | gen2 | yes |  |
-| Maorbeng M75pro | 3476 | 3151:5002 | gen2 | yes | auto |
+| Maorbeng M75pro | 3476 | 3151:5002 | gen2 | yes | yes |
 | MechLands Mechlands M75 | 2496 | 3151:502d | gen2 | yes |  |
 | MEETION Magic A68 | 3362 | 3151:502d | gen2 | yes | auto |
 | MEETION Magic A75 | 3367 | 3151:5029 | gen2 | yes | yes |
@@ -489,7 +489,7 @@ blank is a plain grid of key slots. All three work the same.
 | NOPPOO C98 | 853 | 3151:4015 | yc500 | yes | yes |
 | NOPPOO C98 Pro | 1220 | 3151:4015 | yc500 | yes | yes |
 | NOPPOO C98 Pro | 2694 | 3151:5025 | gen2 | yes | yes |
-| NOPPOO C98D | 3293 | 3151:5002 | gen2 | yes | auto |
+| NOPPOO C98D | 3293 | 3151:5002 | gen2 | yes | yes |
 | NOPPOO Choc 68 | 2231 | 3151:5025 | gen2 | yes | auto |
 | NOPPOO F108 | 888 | 3151:4015 | yc500 | yes | yes |
 | NOPPOO F108 | 2688 | 3151:5025 | gen2 | yes | yes |
@@ -522,11 +522,11 @@ blank is a plain grid of key slots. All three work the same.
 | PIIFOXDRIVER ER 75PRO | 3473 | 3151:5030 | gen2 | yes | auto |
 | PIIFOXDRIVER ER75 | 1618 | 3151:4015 | yc500 | yes | auto |
 | PIIFOXDRIVER ER95 | 1222 | 3151:4015 | yc500 | yes | yes |
-| PIIFOXDRIVER LUNA Grid98 | 4038 | 3151:4015 | yc500 | yes | auto |
+| PIIFOXDRIVER LUNA Grid98 | 4038 | 3151:4015 | yc500 | yes | yes |
 | PIIFOXDRIVER Muse65 Pro | 4045 | 3151:504c | gen2 | yes | auto |
 | PIIFOXDRIVER Muse75 Pro | 4044 | 3151:504c | gen2 | yes | auto |
 | PIIFOXDRIVER Swift68 HE Lite | 4035 | 3151:5029 | gen2 | yes | auto |
-| PIIFOXDRIVER Swift68 Knob | 4037 | 3151:4002 | yc500 | yes | auto |
+| PIIFOXDRIVER Swift68 Knob | 4037 | 3151:4002 | yc500 | yes | yes |
 | PIIFOXDRIVER WALKER 75 | 1848 | 3151:4015 | yc500 | yes | auto |
 | PIIFOXDRIVER WALKER 75 | 2053 | 3151:4015 | yc500 | yes | auto |
 | PIIFOXDRIVER WALKER 75 | 3529 | 3151:504c | gen2 | yes | auto |
@@ -537,7 +537,7 @@ blank is a plain grid of key slots. All three work the same.
 | QuikFingers Lethal-GK1 | 3469 | 3151:4015 | yc500 | yes | yes |
 | RAKKHANAN RAKK HANAN | 3002 | 3151:5030 | gen2 | yes | auto |
 | RampageKaisel Rampage Kaisel | 3114 | 3151:5029 | gen2 | yes | auto |
-| Redragon K736-PRO-M(PT) 3 Mode gaming keyboard Redragon K736-PRO-M(PT) 3 Mode gaming keyboard | 3706 | 3151:4015 | yc500 | yes | auto |
+| Redragon K736-PRO-M(PT) 3 Mode gaming keyboard Redragon K736-PRO-M(PT) 3 Mode gaming keyboard | 3706 | 3151:4015 | yc500 | yes | yes |
 | RedThunder2 K75 | 3004 | 3151:5002 | gen2 | yes | auto |
 | RedThunder2 K75-UK | 3797 | 3151:5002 | gen2 | yes | auto |
 | RKHEKeyboard RK A72HE | 3332 | 3151:5030 | gen2 | yes | yes |
@@ -550,7 +550,7 @@ blank is a plain grid of key slots. All three work the same.
 | rongyuan AK8752 | 3994 | 3151:5002 | gen2 | yes | auto |
 | rongyuan Beat65 | 3386 | 3151:5029 | gen2 | yes | auto |
 | rongyuan Beat75 | 2976 | 3151:5030 | gen2 | yes |  |
-| rongyuan BJ75 | 3384 | 3151:5002 | gen2 | yes | auto |
+| rongyuan BJ75 | 3384 | 3151:5002 | gen2 | yes | yes |
 | rongyuan BJ87 | 3716 | 3151:504c | gen2 | yes | auto |
 | rongyuan BJ87 | 3831 | 3151:5056 | gen2 | yes | auto |
 | rongyuan Ceres-Wired | 3020 | 3151:5002 | gen2 | yes | auto |
@@ -562,11 +562,11 @@ blank is a plain grid of key slots. All three work the same.
 | rongyuan DK82 HE | 2690 | 3151:502f | gen2 | yes | auto |
 | rongyuan DK82HE | 3734 | 3151:5029 | gen2 | yes | auto |
 | rongyuan DK968HE-UK | 3736 | 3151:502f | gen2 | yes | auto |
-| rongyuan EX75 | 3699 | 3151:4015 | yc500 | yes | auto |
+| rongyuan EX75 | 3699 | 3151:4015 | yc500 | yes | yes |
 | rongyuan FF101 | 2342 | 3151:5033 | gen2 | yes | auto |
 | rongyuan FK51D2 | 2991 | 3151:5029 | gen2 | yes | auto |
 | rongyuan FK51H0-B | 3063 | 3151:5029 | gen2 | yes | auto |
-| rongyuan FK51H4 HE | 3678 | 3151:5030 | gen2 | yes | auto |
+| rongyuan FK51H4 HE | 3678 | 3151:5030 | gen2 | yes | yes |
 | rongyuan G1011 | 3345 | 3151:5029 | gen2 | yes | auto |
 | rongyuan Gaming Keyboard | 2611 | 3151:5030 | gen2 | yes | auto |
 | rongyuan Gaming Keyboard | 2892 | 3151:502f | gen2 | yes | auto |
@@ -575,7 +575,7 @@ blank is a plain grid of key slots. All three work the same.
 | rongyuan Gaming Keyboard | 2998 | 3151:5029 | gen2 | yes |  |
 | rongyuan Gaming Keyboard | 3066 | 3151:5030 | gen2 | yes | auto |
 | rongyuan Gaming Keyboard | 3067 | 3151:5029 | gen2 | yes | auto |
-| rongyuan Gaming Keyboard | 3366 | 3151:502c | gen2 | yes |  |
+| rongyuan Gaming Keyboard | 3366 | 3151:502c | gen2 | yes | auto |
 | rongyuan GGDJ104 | 3418 | 3151:5056 | gen2 | yes | auto |
 | rongyuan GGDJ104 | 3685 | 3151:5056 | gen2 | yes | auto |
 | rongyuan GK06-61 | 2618 | 3151:5030 | gen2 | yes | auto |
@@ -617,7 +617,7 @@ blank is a plain grid of key slots. All three work the same.
 | rongyuan Krux Morr | 3576 | 3299:273f | gen2 | yes | yes |
 | rongyuan KY MK85 | 3638 | 3151:5002 | gen2 | yes | auto |
 | rongyuan KY-MK231 | 2384 | 3151:5029 | gen2 | yes | auto |
-| rongyuan Lomz 75S | 2737 | 3151:5029 | gen2 | yes | auto |
+| rongyuan Lomz 75S | 2737 | 3151:5029 | gen2 | yes | yes |
 | rongyuan MAG84 | 3838 | 3151:5030 | gen2 | yes | auto |
 | rongyuan Mage x ZM | 2969 | 3151:5029 | gen2 | yes | auto |
 | rongyuan MG108B | 3330 | 3151:5056 | gen2 | yes | auto |
@@ -631,13 +631,13 @@ blank is a plain grid of key slots. All three work the same.
 | rongyuan MK11 | 3222 | 3151:4015 | yc500 | yes | yes |
 | rongyuan MK132 | 3343 | 3151:5029 | gen2 | yes | auto |
 | rongyuan MK25001 | 3503 | 3151:5030 | gen2 | yes | auto |
-| rongyuan MK25075 | 3363 | 3151:5002 | gen2 | yes | auto |
-| rongyuan MK25076 | 3339 | 3151:5002 | gen2 | yes | auto |
+| rongyuan MK25075 | 3363 | 3151:5002 | gen2 | yes | yes |
+| rongyuan MK25076 | 3339 | 3151:5002 | gen2 | yes | yes |
 | rongyuan MK26013 | 3787 | 3151:504c | gen2 | yes | auto |
 | rongyuan MK658 | 3195 | 3151:5029 | gen2 | yes | auto |
 | rongyuan MK9010 | 3271 | 3151:5029 | gen2 | yes | auto |
 | rongyuan MK9060 | 3204 | 3151:5029 | gen2 | yes | auto |
-| rongyuan MKS82 | 3905 | 3151:5030 | gen2 | yes | auto |
+| rongyuan MKS82 | 3905 | 3151:5030 | gen2 | yes | yes |
 | rongyuan MOK84 | 3863 | 39ab:9007 | gen2 | yes | auto |
 | rongyuan N98 | 3511 | 3151:5025 | gen2 | yes | auto |
 | rongyuan Phantom X68PG | 3038 | 3151:502c | gen2 | yes | auto |
@@ -646,9 +646,9 @@ blank is a plain grid of key slots. All three work the same.
 | rongyuan Phantom X68RB | 3043 | 3151:5029 | gen2 | yes | auto |
 | rongyuan PL108W | 3211 | 3151:504f | gen2 | yes | auto |
 | rongyuan PV82-V9 | 3728 | 3151:502f | gen2 | yes | auto |
-| rongyuan R701 | 3388 | 3151:5030 | gen2 | yes | auto |
+| rongyuan R701 | 3388 | 3151:5030 | gen2 | yes | yes |
 | rongyuan Rampage Fushi | 2986 | 39ab:9016 | gen2 | yes | yes |
-| rongyuan RxD 60% HE | 1905 | 3151:4035 | yc500 | yes | auto |
+| rongyuan RxD 60% HE | 1905 | 3151:4035 | yc500 | yes | yes |
 | rongyuan S21 | 3803 | 3151:5056 | gen2 | yes | auto |
 | rongyuan SG8905 | 2776 | 3151:5030 | gen2 | yes | auto |
 | rongyuan SG8905 | 2972 | 3151:5030 | gen2 | yes | auto |
@@ -691,11 +691,11 @@ blank is a plain grid of key slots. All three work the same.
 | ROYALAXE XL98-V2 | 3721 | 3151:504c | gen2 | yes | auto |
 | ROYALAXE XS98 | 3351 | 3151:504c | gen2 | yes | auto |
 | SALPIDO SHOT209 | 2932 | 3151:502c | gen2 | yes | auto |
-| SARU KX69HE | 3166 | 3151:5029 | gen2 | yes |  |
+| SARU KX69HE | 3166 | 3151:5029 | gen2 | yes | auto |
 | SARU KX78HE | 3243 | 3151:5030 | gen2 | yes | auto |
 | SAVIO_ASTRAL ASTRAL | 3151 | 3151:5029 | gen2 | yes | yes |
-| SayRoseB67 B67 | 882 | 3151:4010 | yc500 | yes | auto |
-| SayRoseB67 SayRose B67 | 3612 | 3151:4010 | yc500 | yes | auto |
+| SayRoseB67 B67 | 882 | 3151:4010 | yc500 | yes | yes |
+| SayRoseB67 SayRose B67 | 3612 | 3151:4010 | yc500 | yes | yes |
 | ShadowApp ZEUS75 | 3118 | 3151:5002 | gen2 | yes | yes |
 | ShadowApp ZEUS75 PRO | 3620 | 3151:5002 | gen2 | yes | yes |
 | ShadowApp ZEUS87 | 3337 | 3151:4015 | yc500 | yes | auto |
@@ -735,7 +735,7 @@ blank is a plain grid of key slots. All three work the same.
 | VGN VGN Neon75 Turbo | 4132 | 391d:2017 | gen2 | yes | auto |
 | VGNNEON 8670 | 3376 | 3151:5030 | gen2 | yes | auto |
 | VGNNEON 8670 | 3421 | 391d:2001 | gen2 | yes | auto |
-| VGNNEON 8670 | 3566 | 391d:2001 | gen2 | yes |  |
+| VGNNEON 8670 | 3566 | 391d:2001 | gen2 | yes | auto |
 | VGNNEON GK8640GW PRO | 3371 | 374a:a236 | gen2 | yes | auto |
 | VGNNEON Neon75 | 2781 | 3151:502f | gen2 | yes | auto |
 | VGNNEON Neon75 | 2859 | 3151:502f | gen2 | yes | auto |
@@ -745,15 +745,15 @@ blank is a plain grid of key slots. All three work the same.
 | VGNNEON X128B | 3349 | 3151:504c | gen2 | yes | auto |
 | VKMS MAG75 Max | 2398 | 3151:5030 | gen2 | yes | auto |
 | VKMS Mecha 75 | 2700 | 374a:a242 | gen2 | yes |  |
-| VKMS NB68 | 2560 | 374a:a228 | gen2 | yes |  |
-| VKMS NB68 Max | 2757 | 374a:a236 | gen2 | yes |  |
+| VKMS NB68 | 2560 | 374a:a228 | gen2 | yes | auto |
+| VKMS NB68 Max | 2757 | 374a:a236 | gen2 | yes | auto |
 | VKMS VK 75 Max | 3247 | 374a:a250 | gen2 | yes | auto |
 | VKMS VK 75 PRO | 2963 | 374a:a250 | gen2 | yes |  |
 | VKMS VK 87 Max V2 | 3581 | 374a:a270 | gen2 | yes | auto |
 | VKMS VK 87 V2 | 3276 | 374a:a267 | gen2 | yes | auto |
 | VKMS VK 99 MAX | 3116 | 374a:a260 | gen2 | yes | auto |
-| VKMS VK Cyber 68 | 3250 | 374a:a264 | gen2 | yes |  |
-| VKMS VK Cyber 68PRO | 3289 | 374a:a264 | gen2 | yes |  |
+| VKMS VK Cyber 68 | 3250 | 374a:a264 | gen2 | yes | auto |
+| VKMS VK Cyber 68PRO | 3289 | 374a:a264 | gen2 | yes | auto |
 | VKMS VK MAG 68 | 3390 | 374a:a232 | gen2 | yes | auto |
 | VKMS VK MAG 68 Max | 3194 | 374a:a233 | gen2 | yes | auto |
 | VKMS VK MAG 75 | 2246 | 374a:a216 | gen2 | yes | auto |
@@ -769,13 +769,13 @@ blank is a plain grid of key slots. All three work the same.
 | WBLVD JRK108Pro Ultra | 3709 | 3151:504c | gen2 | yes | auto |
 | WINSTAR RK-X44-67 | 2796 | 3151:502d | gen2 | yes | auto |
 | WINSTAR RK-X44-68 | 3379 | 3151:5030 | gen2 | yes | auto |
-| WOMIER K75TMR | 3933 | 38a9:0000 | gen2 | yes | auto |
+| WOMIER K75TMR | 3933 | 38a9:0000 | gen2 | yes | yes |
 | WOMIER KF112 | 3097 | 3151:5002 | gen2 | yes | auto |
 | WOMIER KF305 | 3404 | 3151:5030 | gen2 | yes | auto |
 | WOMIER M68 HE PRO | 3719 | 39ab:9016 | gen2 | yes | auto |
-| WOMIER SK75 TMR | 2518 | 3151:5030 | gen2 | yes | auto |
+| WOMIER SK75 TMR | 2518 | 3151:5030 | gen2 | yes | yes |
 | WOMIER SK75 TMR | 3804 | 3151:5030 | gen2 | yes | auto |
-| WU06 Wu06 | 3498 | 3151:4015 | yc500 | yes | auto |
+| WU06 Wu06 | 3498 | 3151:4015 | yc500 | yes | yes |
 | WU06 Wu06 | 3499 | 3151:4015 | yc500 | yes | auto |
 | XC-1 XC-1 | 3236 | 3151:5029 | gen2 | yes | auto |
 | XciteGeneralTradingCo GK1 | 3501 | 3151:5002 | gen2 | yes | auto |
@@ -815,10 +815,10 @@ blank is a plain grid of key slots. All three work the same.
 | YINREN CHOC 68 | 3568 | 3151:5025 | gen2 | yes | auto |
 | YINREN F108 | 3564 | 3151:4015 | yc500 | yes | yes |
 | YINREN Y108 | 3422 | 3151:5025 | gen2 | yes | yes |
-| YUNZII AL21 | 4047 | 3151:5056 | gen2 | yes | auto |
+| YUNZII AL21 | 4047 | 3151:5056 | gen2 | yes | yes |
 | YUNZII AL66 | 2483 | 3151:5025 | gen2 | yes | auto |
 | YUNZII AL75 PRO | 2923 | 3151:5002 | gen2 | yes |  |
-| YUNZII AL75PRO | 1876 | 3151:4015 | yc500 | yes | auto |
+| YUNZII AL75PRO | 1876 | 3151:4015 | yc500 | yes | yes |
 | YUNZII B75 | 2591 | 3151:4010 | yc500 | yes | yes |
 | YUNZII B75 | 2687 | 3151:5002 | gen2 | yes | yes |
 | YUNZII B75pro | 2555 | 3151:5030 | gen2 | yes | yes |
@@ -832,52 +832,52 @@ blank is a plain grid of key slots. All three work the same.
 | YUNZII RT75 PRO | 3100 | 3151:5030 | gen2 | yes | auto |
 | YUNZII RT75PRO | 2865 | 3151:5030 | gen2 | yes | auto |
 | YUNZII RT75PRO | 3755 | 3151:5030 | gen2 | yes | auto |
-| YUNZII RT80 | 2068 | 3151:4035 | yc500 | yes | auto |
+| YUNZII RT80 | 2068 | 3151:4035 | yc500 | yes | yes |
 | YUNZII Wood 98 Keyboard | 4015 | 3151:504c | gen2 | yes | auto |
 | YUNZII YUNZII B75 PRO | 1882 | 3151:4015 | yc500 | yes | yes |
 | YUNZII YUNZII B75 PRO | 1887 | 3151:4015 | yc500 | yes | yes |
 | YUNZII YUNZII B75 PRO | 1888 | 3151:4015 | yc500 | yes | yes |
 | YUNZII YUNZII E87 | 3104 | 3151:5002 | gen2 | yes | auto |
-| YUNZII YUNZII L75 | 1981 | 3151:4015 | yc500 | yes | auto |
+| YUNZII YUNZII L75 | 1981 | 3151:4015 | yc500 | yes | yes |
 | YUNZII YUNZII QL108 | 2644 | 3151:5002 | gen2 | yes | auto |
 | YUNZII YUNZII Wood 21 Keyboard | 4024 | 3151:5056 | gen2 | yes | auto |
 | YUNZII YUNZII WOOD68 | 3001 | 3151:5002 | gen2 | yes | auto |
-| YUNZII YZ-21 | 478 | 3151:4003 | yc500 | yes | auto |
-| YUNZII YZ-21 | 790 | 3151:4010 | yc500 | yes | auto |
-| YUNZII YZ-21 | 1123 | 3151:4018 | yc500 | yes | auto |
-| YUNZII YZ-21 | 1154 | 3151:4010 | yc500 | yes | auto |
+| YUNZII YZ-21 | 478 | 3151:4003 | yc500 | yes | yes |
+| YUNZII YZ-21 | 790 | 3151:4010 | yc500 | yes | yes |
+| YUNZII YZ-21 | 1123 | 3151:4018 | yc500 | yes | yes |
+| YUNZII YZ-21 | 1154 | 3151:4010 | yc500 | yes | yes |
 | YUNZII YZ1 | 431 | 3151:4002 | yc500 | yes | auto |
 | YUNZII YZ1108 | 660 | 3151:4003 | yc500 | yes | yes |
 | YUNZII YZ1108 | 1318 | 3151:4003 | yc500 | yes | yes |
 | YUNZII YZ166 | 799 | 3151:4010 | yc500 | yes | auto |
 | YUNZII YZ166 | 847 | 3151:4003 | yc500 | yes | auto |
-| YUNZII YZ184 | 484 | 3151:4002 | yc500 | yes | auto |
-| YUNZII YZ19 | 1591 | 3151:4015 | yc500 | yes | auto |
+| YUNZII YZ184 | 484 | 3151:4002 | yc500 | yes | yes |
+| YUNZII YZ19 | 1591 | 3151:4015 | yc500 | yes | yes |
 | YUNZII YZ19 | 2598 | 3151:5025 | gen2 | yes | auto |
 | YUNZII YZ68 | 244 | 0461:4002 | yc500 | yes | auto |
 | YUNZII YZ68 | 1104 | 3151:4015 | yc500 | yes | auto |
 | YUNZII YZ68 | 1105 | 3151:4018 | yc500 | yes | auto |
 | YUNZII YZ75 MAX | 2931 | 3151:5002 | gen2 | yes | auto |
 | YUNZII YZ75 Pro | 1181 | 3151:4015 | yc500 | yes | yes |
-| YUNZII YZ75CZ | 2339 | 3151:5025 | gen2 | yes | auto |
-| YUNZII YZ84 | 243 | 0461:4002 | yc500 | yes | auto |
-| YUNZII YZ84 | 1106 | 3151:4015 | yc500 | yes | auto |
-| YUNZII YZ84 pro | 1184 | 3151:4015 | yc500 | yes | auto |
+| YUNZII YZ75CZ | 2339 | 3151:5025 | gen2 | yes | yes |
+| YUNZII YZ84 | 243 | 0461:4002 | yc500 | yes | yes |
+| YUNZII YZ84 | 1106 | 3151:4015 | yc500 | yes | yes |
+| YUNZII YZ84 pro | 1184 | 3151:4015 | yc500 | yes | yes |
 | ZADEZTECHNOLOGY GK-98N | 3575 | 3151:5025 | gen2 | yes | auto |
 | ZENITHPROSoftware ZENITH PRO | 2310 | 3151:502d | gen2 | yes | yes |
-| 凯酷 K19 | 1326 | 3151:4015 | yc500 | yes | auto |
-| 凯酷 K19 | 2382 | 3151:5025 | gen2 | yes | auto |
-| 凯酷 K19-1K | 3844 | 3151:5056 | gen2 | yes | auto |
-| 凯酷 K19-8K | 3775 | 3151:504c | gen2 | yes | auto |
+| 凯酷 K19 | 1326 | 3151:4015 | yc500 | yes | yes |
+| 凯酷 K19 | 2382 | 3151:5025 | gen2 | yes | yes |
+| 凯酷 K19-1K | 3844 | 3151:5056 | gen2 | yes | yes |
+| 凯酷 K19-8K | 3775 | 3151:504c | gen2 | yes | yes |
 | 凯酷 K21 | 2469 | 3151:5025 | gen2 | yes | auto |
-| 凯酷 K21 | 3816 | 3151:5056 | gen2 | yes | auto |
+| 凯酷 K21 | 3816 | 3151:5056 | gen2 | yes | yes |
 | 凯酷 K21 PRO | 3311 | 3151:5002 | gen2 | yes | auto |
 | 凯酷 KC68 | 2344 | 3151:5029 | gen2 | yes | auto |
 | 凯酷 KC84 PRO | 2900 | 3151:5002 | gen2 | yes | auto |
 | 凯酷 QK75 | 3447 | 3151:5056 | gen2 | yes | auto |
 | 凯酷 RT68 | 3219 | 3151:5030 | gen2 | yes | auto |
 | 凯酷 Y21 | 3835 | 39ab:9008 | gen2 | yes | auto |
-| 凯酷 Y75 PRO | 3212 | 3151:5002 | gen2 | yes | auto |
+| 凯酷 Y75 PRO | 3212 | 3151:5002 | gen2 | yes | yes |
 | 凯酷 Y87 | 3523 | 3151:504c | gen2 | yes | auto |
 | 凯酷 Y98 | 2922 | 3151:5002 | gen2 | yes | auto |
 | 凯酷 Y98 | 2983 | 3151:5002 | gen2 | yes | auto |
@@ -887,7 +887,7 @@ blank is a plain grid of key slots. All three work the same.
 | 凯酷 Yumi68 | 2855 | 3151:5025 | gen2 | yes | auto |
 | 凯酷 yumi68 | 3246 | 3151:5029 | gen2 | yes | auto |
 | 凯酷 yumi68 | 3508 | 3151:5030 | gen2 | yes | auto |
-| 凯酷 YZ75 PRO-CZ | 3226 | 3151:5030 | gen2 | yes | auto |
+| 凯酷 YZ75 PRO-CZ | 3226 | 3151:5030 | gen2 | yes | yes |
 | 击发 T100 | 4001 | 3151:5056 | gen2 | yes | auto |
 | 叠韵创新 CK100 | 2623 | 3151:5025 | gen2 | yes |  |
 | 咪星人 C84 | 3264 | 3151:5029 | gen2 | yes | auto |
@@ -910,9 +910,9 @@ blank is a plain grid of key slots. All three work the same.
 | 腹灵 Alpha75HE | 3756 | 3151:502c | gen2 | yes | auto |
 | 腹灵 APEX75 | 3248 | 38a9:0000 | gen2 | yes | auto |
 | 腹灵 Blend HE | 2699 | 3151:5029 | gen2 | yes | auto |
-| 腹灵 CMK75 | 3344 | 38a9:0000 | gen2 | yes | auto |
-| 腹灵 CMK75 | 3411 | 3151:4015 | yc500 | yes | auto |
-| 腹灵 D75HE | 3542 | 3151:502c | gen2 | yes | auto |
+| 腹灵 CMK75 | 3344 | 38a9:0000 | gen2 | yes | yes |
+| 腹灵 CMK75 | 3411 | 3151:4015 | yc500 | yes | yes |
+| 腹灵 D75HE | 3542 | 3151:502c | gen2 | yes | yes |
 | 腹灵 D98HE | 3556 | 3151:502c | gen2 | yes | auto |
 | 腹灵 FL750 | 3003 | 3151:502c | gen2 | yes | auto |
 | 腹灵 FL750 | 3524 | 3151:502c | gen2 | yes | auto |
@@ -923,10 +923,10 @@ blank is a plain grid of key slots. All three work the same.
 | 腹灵 GP87HE | 3007 | 3151:502c | gen2 | yes | auto |
 | 腹灵 GP87HE | 3539 | 3151:502c | gen2 | yes | auto |
 | 腹灵 K239 UK | 2708 | 3151:5029 | gen2 | yes | auto |
-| 腹灵 K239 US | 2749 | 3151:5029 | gen2 | yes | auto |
+| 腹灵 K239 US | 2749 | 3151:5029 | gen2 | yes | yes |
 | 腹灵 K2516 | 3350 | 38a9:0006 | gen2 | yes | auto |
 | 腹灵 K268 | 2664 | 3151:5029 | gen2 | yes | auto |
-| 腹灵 MK100T | 3430 | 3151:4015 | yc500 | yes | auto |
+| 腹灵 MK100T | 3430 | 3151:4015 | yc500 | yes | yes |
 | 腹灵 MK870 HE | 2703 | 3151:5030 | gen2 | yes | auto |
 | 腹灵 MK980 | 3516 | 3151:5002 | gen2 | yes | auto |
 | 腹灵 NX108 | 3012 | 3151:5030 | gen2 | yes | auto |
@@ -936,26 +936,26 @@ blank is a plain grid of key slots. All three work the same.
 | 腹灵 NX87PRO | 2943 | 3151:5002 | gen2 | yes |  |
 | 腹灵 NX87PRO | 3085 | 3151:5033 | gen2 | yes | auto |
 | 腹灵 NX87PRO | 3731 | 38a9:0015 | gen2 | yes | auto |
-| 腹灵 NX98PRO | 3528 | 38a9:0015 | gen2 | yes | auto |
+| 腹灵 NX98PRO | 3528 | 38a9:0015 | gen2 | yes | yes |
 | 腹灵 Q75HE | 3155 | 38a9:0000 | gen2 | yes | auto |
 | 腹灵 Q75HE | 3157 | 38a9:0000 | gen2 | yes | auto |
-| 腹灵 T80HE | 3679 | 38a9:0000 | gen2 | yes | auto |
+| 腹灵 T80HE | 3679 | 38a9:0000 | gen2 | yes | yes |
 | 腹灵 TX108PRO | 3672 | 38a9:0015 | gen2 | yes | auto |
 | 腹灵 TX87 | 3654 | 3151:5056 | gen2 | yes | auto |
 | 腹灵 TX87PRO | 3655 | 3151:504c | gen2 | yes | auto |
 | 腹灵 X80HE | 2988 | 3151:5030 | gen2 | yes | auto |
 | 腹灵 X80HE | 3335 | 3151:5029 | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 | 1846 | 3151:5009 | yc500 | yes | auto |
-| 蚂蚁电竞 AGK75 | 2516 | 3151:4035 | yc500 | yes | auto |
-| 蚂蚁电竞 AGK75 PRO | 2328 | 3151:5030 | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 PRO | 2425 | 3151:502f | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 PRO | 2629 | 3151:502f | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 PRO | 2651 | 3151:502f | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 U2 | 2281 | 3151:502f | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 U2 | 2642 | 3151:5030 | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 U2 | 3005 | 3151:5030 | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 U2 | 3064 | 3151:502f | gen2 | yes | auto |
-| 蚂蚁电竞 AGK75 U2 | 3512 | 3151:5030 | gen2 | yes | auto |
+| 蚂蚁电竞 AGK75 | 1846 | 3151:5009 | yc500 | yes | yes |
+| 蚂蚁电竞 AGK75 | 2516 | 3151:4035 | yc500 | yes | yes |
+| 蚂蚁电竞 AGK75 PRO | 2328 | 3151:5030 | gen2 | yes | yes |
+| 蚂蚁电竞 AGK75 PRO | 2425 | 3151:502f | gen2 | yes | yes |
+| 蚂蚁电竞 AGK75 PRO | 2629 | 3151:502f | gen2 | yes | yes |
+| 蚂蚁电竞 AGK75 PRO | 2651 | 3151:502f | gen2 | yes | yes |
+| 蚂蚁电竞 AGK75 U2 | 2281 | 3151:502f | gen2 | yes | yes |
+| 蚂蚁电竞 AGK75 U2 | 2642 | 3151:5030 | gen2 | yes | yes |
+| 蚂蚁电竞 AGK75 U2 | 3005 | 3151:5030 | gen2 | yes | yes |
+| 蚂蚁电竞 AGK75 U2 | 3064 | 3151:502f | gen2 | yes | yes |
+| 蚂蚁电竞 AGK75 U2 | 3512 | 3151:5030 | gen2 | yes | yes |
 | 蚂蚁电竞 AGK87 | 2114 | 3151:5029 | gen2 | yes | auto |
 | 蚂蚁电竞 AGK87 | 2330 | 3151:5029 | gen2 | yes | auto |
 | 蝴蝶 B75 | 2928 | 3151:502d | gen2 | yes |  |

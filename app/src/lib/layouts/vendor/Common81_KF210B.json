@@ -78,7 +78,7 @@
   {"code":"F10","type":"key","x":503,"y":1,"w":40,"h":40,"text":"F10","matrixIndex":null,"matrixEntry":[0,0,67,0],"hidUsage":67,"consumerUsage":null},
   {"code":"F11","type":"key","x":549,"y":1,"w":40,"h":40,"text":"F11","matrixIndex":null,"matrixEntry":[0,0,68,0],"hidUsage":68,"consumerUsage":null},
   {"code":"F12","type":"key","x":595,"y":1,"w":40,"h":40,"text":"F12","matrixIndex":null,"matrixEntry":[0,0,69,0],"hidUsage":69,"consumerUsage":null},
-  {"code":"profile_loop","type":"key","x":691,"y":1,"w":40,"h":40,"text":"Rt","matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null},
+  {"code":"profile_loop","type":"key","x":691,"y":1,"w":40,"h":40,"text":"Rt","matrixIndex":null,"matrixEntry":[8,0,3,0],"hidUsage":null,"consumerUsage":null},
   {"code":"Delete","type":"key","x":691,"y":56,"w":40,"h":40,"text":"Del","matrixIndex":null,"matrixEntry":[0,0,76,0],"hidUsage":76,"consumerUsage":null},
   {"code":"PageUp","type":"key","x":691,"y":102,"w":40,"h":40,"text":"PgUp","matrixIndex":null,"matrixEntry":[0,0,75,0],"hidUsage":75,"consumerUsage":null},
   {"code":"PageDown","type":"key","x":691,"y":148,"w":40,"h":40,"text":"PgDn","matrixIndex":null,"matrixEntry":[0,0,78,0],"hidUsage":78,"consumerUsage":null}

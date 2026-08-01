@@ -567,7 +567,18 @@ def convention_ui_name(enum_key, ui_defs):
     if not m:
         return None
     cand = f"keyboard_{m.group(1)}_{m.group(2).lower()}_keymappings_ui_info"
-    return cand if cand in ui_defs else None
+    if cand in ui_defs:
+        return cand
+    # The vendor snake_cases enum keys inconsistently (FreeWolfF68 becomes
+    # freewolf_f68, not free_wolf_f68), so compare with separators stripped.
+    # Only a unique collision is trusted.
+    want = f"{m.group(1)}{m.group(2)}".replace("_", "").lower()
+    hits = [
+        n
+        for n in ui_defs
+        if re.sub(r"^keyboard_|_keymappings_ui_info$", "", n).replace("_", "") == want
+    ]
+    return hits[0] if len(hits) == 1 else None
 
 
 def load_extras(path):

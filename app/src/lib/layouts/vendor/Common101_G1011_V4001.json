@@ -102,7 +102,7 @@
   {"code":"NumpadDecimal","type":"key","x":844,"y":268,"w":40,"h":40,"text":".","matrixIndex":null,"matrixEntry":[0,0,99,0],"hidUsage":99,"consumerUsage":null},
   {"code":"NumpadSubtract","type":"key","x":890,"y":84,"w":40,"h":40,"text":"-","matrixIndex":null,"matrixEntry":[0,0,86,0],"hidUsage":86,"consumerUsage":null},
   {"code":"AudioVolumeDown","type":"knob","x":936,"y":20,"w":16,"h":50,"text":"Vol-","matrixIndex":null,"matrixEntry":[3,0,234,0],"hidUsage":null,"consumerUsage":234},
-  {"code":"MediaPlayPause_index1","type":"knob","x":952,"y":20,"w":18,"h":50,"text":"Play","matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null},
+  {"code":"MediaPlayPause_index1","type":"knob","x":952,"y":20,"w":18,"h":50,"text":"Play","matrixIndex":null,"matrixEntry":[3,0,205,0],"hidUsage":null,"consumerUsage":205},
   {"code":"AudioVolumeUp","type":"knob","x":970,"y":20,"w":16,"h":50,"text":"Vol+","matrixIndex":null,"matrixEntry":[3,0,233,0],"hidUsage":null,"consumerUsage":233},
   {"code":"Backspace","type":"key","x":598,"y":84,"w":85,"h":40,"text":"Back\nSpace","matrixIndex":null,"matrixEntry":[0,0,42,0],"hidUsage":42,"consumerUsage":null}
  ]

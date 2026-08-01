@@ -77,7 +77,7 @@
   {"code":"Slash","type":"key","x":513,"y":193,"w":40,"h":40,"text":"/","matrixIndex":null,"matrixEntry":[0,0,56,0],"hidUsage":56,"consumerUsage":null},
   {"code":"ShiftRight","type":"key","x":559,"y":193,"w":131,"h":40,"text":"R-Shift","matrixIndex":null,"matrixEntry":[0,0,229,0],"hidUsage":229,"consumerUsage":null},
   {"code":"ArrowUp","type":"key","x":696,"y":193,"w":40,"h":40,"text":"↑","matrixIndex":null,"matrixEntry":[0,0,82,0],"hidUsage":82,"consumerUsage":null},
-  {"code":"PrintScreen_index1","type":"key","x":742,"y":193,"w":40,"h":40,"text":"PrtSc","matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null},
+  {"code":"PrintScreen_index1","type":"key","x":742,"y":193,"w":40,"h":40,"text":"PrtSc","matrixIndex":null,"matrixEntry":[0,0,70,0],"hidUsage":70,"consumerUsage":null},
   {"code":"ControlLeft","type":"key","x":0,"y":239,"w":48,"h":40,"text":"L-Ctrl","matrixIndex":null,"matrixEntry":[0,0,224,0],"hidUsage":224,"consumerUsage":null},
   {"code":"MetaLeft","type":"key","x":54,"y":239,"w":48,"h":40,"text":"Win","matrixIndex":null,"matrixEntry":[0,0,227,0],"hidUsage":227,"consumerUsage":null},
   {"code":"AltLeft","type":"key","x":108,"y":239,"w":48,"h":40,"text":"L-Alt","matrixIndex":null,"matrixEntry":[0,0,226,0],"hidUsage":226,"consumerUsage":null},

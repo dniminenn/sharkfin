@@ -100,6 +100,8 @@
   {"code":"Numpad3","type":"key","x":845,"y":204,"w":40,"h":40,"text":"3\nPgDn","matrixIndex":null,"matrixEntry":[0,0,91,0],"hidUsage":91,"consumerUsage":null},
   {"code":"NumpadDecimal","type":"key","x":845,"y":250,"w":40,"h":40,"text":".\nDel","matrixIndex":null,"matrixEntry":[0,0,99,0],"hidUsage":99,"consumerUsage":null},
   {"code":"NumpadSubtract","type":"key","x":891,"y":66,"w":40,"h":40,"text":"-","matrixIndex":null,"matrixEntry":[0,0,86,0],"hidUsage":86,"consumerUsage":null},
-  {"code":"Delete","type":"key","x":699,"y":11,"w":40,"h":40,"text":"Del","matrixIndex":null,"matrixEntry":[0,0,76,0],"hidUsage":76,"consumerUsage":null}
+  {"code":"Delete","type":"key","x":699,"y":11,"w":40,"h":40,"text":"Del","matrixIndex":null,"matrixEntry":[0,0,76,0],"hidUsage":76,"consumerUsage":null},
+  {"code":"Home","type":"key","x":753,"y":11,"w":40,"h":40,"text":"Home","matrixIndex":null,"matrixEntry":[0,0,74,0],"hidUsage":74,"consumerUsage":null},
+  {"code":"PrintScreen","type":"key","x":799,"y":11,"w":40,"h":40,"text":"PrtSc","matrixIndex":null,"matrixEntry":[0,0,70,0],"hidUsage":70,"consumerUsage":null}
  ]
 }
