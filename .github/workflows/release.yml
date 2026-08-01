@@ -215,7 +215,8 @@ jobs:
           install -d -m 700 ~/.ssh
           printf '%s\n' "$AUR_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H aur.archlinux.org >> ~/.ssh/known_hosts 2>/dev/null
+          # keyscan proved flaky in the container; pin acceptance instead.
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new"
           git config --global user.name 'dniminenn'
           git config --global user.email 'root@dnim.dev'
 
