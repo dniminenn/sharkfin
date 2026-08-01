@@ -49,7 +49,7 @@ function toBlob(pattern: string[]): number[] {
 
 export default function PaintPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
-  const layout = useBoardLayout(device);
+  const { layout } = useBoardLayout(device);
   const paintKeys = useMemo(
     () => layout.keys.filter((k) => k.matrixIndex !== null && k.type !== "knob"),
     [layout],

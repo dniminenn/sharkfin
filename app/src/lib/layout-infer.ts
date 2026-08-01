@@ -1,0 +1,60 @@
+// SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Resolve layout keys to matrix slots by matching each key's factory
+// matrixEntry against a keymap read from the board. Extraction does the same
+// against the vendor bundle's defaultMatrix; when the bundle carried none,
+// the board itself is the only remaining source. The match is only
+// trustworthy on a board that still has its factory keymap, so callers gate
+// on matchRate and the user confirms the picture before writes are allowed.
+import type { BoardLayout, LayoutKey } from "@/lib/layout-loader";
+
+export interface Inference {
+  layout: BoardLayout;
+  /** Keys resolved to a slot. */
+  matched: number;
+  /** Keys that have a factory entry to match with. */
+  total: number;
+  matchRate: number;
+  /** Slots whose entry appears more than once; their pairing is a guess. */
+  ambiguous: number[];
+  /** The keymap the match ran against, for a contribution bundle. */
+  matrix: number[];
+  /** Which profile that keymap came from; set by the caller. */
+  profile: number;
+}
+
+export function inferSlots(base: BoardLayout, matrix: number[]): Inference {
+  const bySlot = new Map<string, number[]>();
+  for (let s = 0; s * 4 + 3 < matrix.length; s++) {
+    const et = matrix.slice(s * 4, s * 4 + 4).join(",");
+    if (et === "0,0,0,0") continue;
+    const list = bySlot.get(et);
+    if (list) list.push(s);
+    else bySlot.set(et, [s]);
+  }
+  const counts = new Map<string, number>();
+  const ambiguous: number[] = [];
+  let matched = 0;
+  let total = 0;
+  const keys: LayoutKey[] = base.keys.map((k) => {
+    if (!k.matrixEntry) return { ...k };
+    total++;
+    const et = k.matrixEntry.join(",");
+    const nth = counts.get(et) ?? 0;
+    counts.set(et, nth + 1);
+    const hits = bySlot.get(et);
+    if (!hits || nth >= hits.length) return { ...k };
+    matched++;
+    if (hits.length > 1) ambiguous.push(hits[nth]);
+    return { ...k, matrixIndex: hits[nth] };
+  });
+  return {
+    layout: { ...base, keys, inferred: true },
+    matched,
+    total,
+    matchRate: total ? matched / total : 0,
+    ambiguous,
+    matrix,
+    profile: 0,
+  };
+}

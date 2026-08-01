@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { openUrl } from "@tauri-apps/plugin-opener";
+import { Check, Copy, Keyboard } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,8 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
+import type { Inference } from "@/lib/layout-infer";
 import {
   DISABLED_GLYPH,
   GROUPS,
@@ -35,6 +39,38 @@ const COMBO_KEYS: { label: string; usage: number }[] = GROUPS.flatMap((g) =>
     .map((i) => ({ label: i.label, usage: i.entry[2] })),
 );
 
+const REPO = "https://github.com/dniminenn/sharkfin";
+
+// Everything needed to bake the matched slots into the layout file: the
+// board, the layout it was matched to, and the keymap the match ran against.
+function layoutBundle(
+  device: ConnectedDevice,
+  inf: Inference,
+  verdict: "right" | "wrong",
+): string {
+  const hex: string[] = [];
+  for (let i = 0; i < inf.matrix.length; i += 16) {
+    hex.push(
+      inf.matrix
+        .slice(i, i + 16)
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join(" "),
+    );
+  }
+  return [
+    "```",
+    "sharkfin layout bundle",
+    `board   : ${deviceLabel(device.spec)} (device id ${device.spec.id})`,
+    `layout  : ${device.spec.keyLayout}`,
+    `matched : ${inf.matched}/${inf.total} keys` +
+      (inf.ambiguous.length ? `, ${inf.ambiguous.length} ambiguous` : ""),
+    `verdict : ${verdict === "right" ? "looks right" : "does not match"}`,
+    `keymap, profile ${inf.profile + 1}, base layer:`,
+    ...hex,
+    "```",
+  ].join("\n");
+}
+
 function sliceEntries(matrix: number[]): Map<number, number[]> {
   const m = new Map<number, number[]>();
   for (let slot = 0; slot < 128; slot++) {
@@ -45,7 +81,9 @@ function sliceEntries(matrix: number[]): Map<number, number[]> {
 
 export default function KeymapPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
-  const layout = useBoardLayout(device);
+  const { layout, pending, inference, confirm, reject } = useBoardLayout(device);
+  const [verdict, setVerdict] = useState<"right" | "wrong" | null>(null);
+  const [copied, setCopied] = useState(false);
   const [profile, setProfile] = useState(0);
   const [layer, setLayer] = useState<"base" | "fn">("base");
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
@@ -63,7 +101,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     const m = new Map<number, number[]>();
     if (layout.grid || layer === "fn") return m;
     for (const k of layout.keys) {
-      if (k.matrixIndex !== null) m.set(k.matrixIndex, k.matrixEntry);
+      if (k.matrixIndex !== null && k.matrixEntry) m.set(k.matrixIndex, k.matrixEntry);
     }
     return m;
   }, [layout, layer]);
@@ -94,7 +132,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   }, [entries, defaults]);
 
   const assign = async (a: Assignable) => {
-    if (!selected || !entries) return;
+    if (!selected || !entries || pending) return;
     const slot = selected.matrixIndex!;
     setBusy(true);
     try {
@@ -120,6 +158,27 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       .map(usageLabel)
       .join("+");
     return assign({ label, entry });
+  };
+
+  const answer = (v: "right" | "wrong") => {
+    setVerdict(v);
+    setCopied(false);
+    if (v === "right") confirm();
+    else reject();
+  };
+
+  // A confirmed layout stays contributable in later sessions: inference
+  // reruns on every connect until the layout ships with slot data, and a
+  // shown, unrejected layout means the stored answer was "looks right".
+  const effectiveVerdict = verdict ?? (inference && !pending ? "right" : null);
+
+  const copyBundle = async () => {
+    if (!device || !inference || !effectiveVerdict) return;
+    await navigator.clipboard.writeText(
+      layoutBundle(device, inference, effectiveVerdict),
+    );
+    setCopied(true);
+    toast.success("Copied. Paste it into the report.");
   };
 
   const resetKey = async () => {
@@ -212,6 +271,77 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         </p>
       )}
 
+      {pending && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Does this match your keyboard?</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <p>
+              This picture was matched against your board's current keymap.
+              Compare it with the physical keys: same shape, same legends in
+              the same places. Keys stay read-only until you answer.
+            </p>
+            {inference && inference.ambiguous.length > 0 && (
+              <p className="text-muted-foreground">
+                {inference.ambiguous.length} keys share a factory function
+                with another key, so each pair may be swapped. Check those
+                first.
+              </p>
+            )}
+            <div className="flex gap-2">
+              <Button size="sm" onClick={() => answer("right")}>
+                Looks right
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => answer("wrong")}>
+                Something is wrong
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {device && inference && (verdict !== null || !pending) && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">
+              {effectiveVerdict === "right" ? "Make it built-in" : "Help fix it"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <p>
+              {effectiveVerdict === "right"
+                ? "This layout is matched on your board every time it connects. Paste this bundle into a board report and it ships built in for everyone with this board."
+                : "You get the slot grid instead. Paste this bundle into a board report so the layout can be fixed for everyone with this board."}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" variant="outline" onClick={copyBundle}>
+                {copied ? (
+                  <Check className="mr-1 h-3.5 w-3.5" />
+                ) : (
+                  <Copy className="mr-1 h-3.5 w-3.5" />
+                )}
+                {copied ? "Copied" : "Copy bundle"}
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() =>
+                  openUrl(
+                    `${REPO}/issues/new?template=board-report.yml&title=${encodeURIComponent(
+                      `[layout] ${deviceLabel(device.spec)}`,
+                    )}`,
+                  )
+                }
+              >
+                <Keyboard className="mr-1 h-3.5 w-3.5" /> Open a board report
+              </Button>
+              <span className="text-muted-foreground">then paste</span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {!entries ? (
         <div className="flex h-64 items-center justify-center text-muted-foreground">
           Reading keymap…
@@ -254,7 +384,12 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                 )}
               </CardTitle>
               {selected && defaults.size > 0 && (
-                <Button size="sm" variant="outline" onClick={resetKey} disabled={busy}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={resetKey}
+                  disabled={busy || pending}
+                >
                   Reset to default
                 </Button>
               )}
@@ -272,7 +407,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                           {g.items.map((item) => (
                             <button
                               key={g.name + item.label}
-                              disabled={busy}
+                              disabled={busy || pending}
                               onClick={() => assign(item)}
                               className="rounded-md border px-2 py-1 text-xs transition-colors hover:bg-accent disabled:opacity-50"
                             >
@@ -294,7 +429,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                         {comboSelect("extraB", "third", true)}
                         <Button
                           size="sm"
-                          disabled={busy || !combo.main}
+                          disabled={busy || pending || !combo.main}
                           onClick={assignCombo}
                         >
                           Apply combo

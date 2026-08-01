@@ -64,7 +64,7 @@ function eventLabel(e: MacroEvent): string {
 
 export default function MacrosPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
-  const layout = useBoardLayout(device);
+  const { layout, pending } = useBoardLayout(device);
   const [slot, setSlot] = useState(0);
   const [events, setEvents] = useState<MacroEvent[]>([]);
   const [repeat, setRepeat] = useState(1);
@@ -429,8 +429,9 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
           ) : (
             <>
               <p className="mb-3 text-sm text-muted-foreground">
-                Click a key to bind it. Keys already running this macro are
-                dotted; unbind from the Keys page.
+                {pending
+                  ? "This keyboard picture is not confirmed yet. Confirm it on the Keys page before binding macros."
+                  : "Click a key to bind it. Keys already running this macro are dotted; unbind from the Keys page."}
               </p>
               <KeyboardView
                 layout={layout}
@@ -440,7 +441,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                 labelFor={(k, entry) =>
                   entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
                 }
-                onSelect={(k) => !busy && bind(k.matrixIndex!, k.text ?? k.code)}
+                onSelect={(k) => !busy && !pending && bind(k.matrixIndex!, k.text ?? k.code)}
               />
             </>
           )}

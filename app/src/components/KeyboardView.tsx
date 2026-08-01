@@ -27,7 +27,7 @@ const MOD_USAGES = new Set([42, 43, 57, 74, 75, 76, 78, 79, 80, 81, 82]);
 
 function role(k: LayoutKey): "accent" | "mod" | "base" {
   if (ACCENT.has(k.code)) return "accent";
-  if (k.matrixEntry[0] !== 0) return "mod";
+  if ((k.matrixEntry?.[0] ?? 0) !== 0) return "mod";
   const u = k.hidUsage ?? 0;
   if ((u >= 224 && u <= 231) || MOD_USAGES.has(u)) return "mod";
   return "base";
@@ -126,8 +126,10 @@ export default function KeyboardView({
   labelFor,
   onSelect,
 }: Props) {
+  // Geometry is enough to draw a key; a matrix slot is only needed to edit
+  // it. Keys without one render dimmed and inert so the picture is complete.
   const plainKeys = useMemo(
-    () => layout.keys.filter((k) => k.matrixIndex !== null && k.type !== "knob"),
+    () => layout.keys.filter((k) => k.type !== "knob"),
     [layout],
   );
   return (
@@ -137,16 +139,22 @@ export default function KeyboardView({
           className="relative"
           style={{ aspectRatio: `${layout.canvas.width} / ${layout.canvas.height}` }}
         >
-          {plainKeys.map((k) => {
-            const entry = entries.get(k.matrixIndex!);
-            const isMod = modified.has(k.matrixIndex!);
+          {plainKeys.map((k, i) => {
+            const dead = k.matrixIndex === null;
+            const entry = dead ? undefined : entries.get(k.matrixIndex!);
+            const isMod = !dead && modified.has(k.matrixIndex!);
             return (
               <button
-                key={`${k.code}-${k.matrixIndex}`}
+                key={`${k.code}-${k.matrixIndex ?? `dead-${i}`}`}
+                disabled={dead}
                 onClick={() => onSelect(k)}
-                title={`${k.text ?? k.code}: ${describe(labelFor(k, entry))}`}
-                data-selected={selected === k.matrixIndex}
-                className="keycap absolute flex items-center justify-center overflow-hidden rounded-[8%] text-[1.15cqw] font-medium leading-none tracking-tight"
+                title={
+                  dead
+                    ? `${k.text ?? k.code}: not matched to this board`
+                    : `${k.text ?? k.code}: ${describe(labelFor(k, entry))}`
+                }
+                data-selected={!dead && selected === k.matrixIndex}
+                className={`keycap absolute flex items-center justify-center overflow-hidden rounded-[8%] text-[1.15cqw] font-medium leading-none tracking-tight${dead ? " opacity-40" : ""}`}
                 style={{
                   ...ROLE_VARS[role(k)],
                   left: pct(k.x, layout.canvas.width),
