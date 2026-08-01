@@ -4,6 +4,12 @@ Reporting a bug or a board? You don't need any of this. Open the app's
 **Contribute** tab, collect a bundle, and paste it into an
 [issue](https://github.com/dniminenn/sharkfin/issues/new/choose).
 
+Did the Keys page show a picture of your keyboard and ask whether it
+looks right? Answering it is a contribution too. Say yes and the page
+offers a bundle; paste it into a board report and the picture ships
+built in, for you and everyone else with your board. Say no and the same
+bundle tells us what to fix.
+
 ## Development
 
 ```sh
@@ -111,6 +117,24 @@ layout output before copying it in.
 
 `tools/coverage.py` reports how many boards have a rendered layout and
 which layouts the writable boards still need.
+
+### Baking a layout bundle
+
+For a geometry-only layout, the app matches the picture against the
+connected board's keymap and asks the owner to confirm it; the Keys page
+then produces a layout bundle carrying that keymap, which is the
+`defaultMatrix` the vendor build was missing. To bake it in:
+
+```sh
+python3 tools/bake_layout.py bundle.txt
+python3 tools/coverage.py --markdown
+```
+
+The tool refuses a bundle the owner did not confirm, a layout that
+already has slot data, the Unknown placeholder, and any ambiguous key
+pairing (twin keys, or a contributor whose board was remapped); `--force`
+overrides after inspection. It prints every board that shares the layout,
+since the bake reaches all of them.
 
 ### Vendor builds stay out of this repo
 
