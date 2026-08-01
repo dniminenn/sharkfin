@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { deviceLabel } from "@/lib/brands";
+import { useBoardLayout } from "@/lib/layout-loader";
+import { layoutBundle } from "@/lib/layout-infer";
 import {
   contributionBundle,
   type ConnectedDevice,
@@ -40,6 +42,15 @@ export default function ContributePage({
   const [bundle, setBundle] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { pending, inference } = useBoardLayout(device);
+  const [layoutCopied, setLayoutCopied] = useState(false);
+
+  const copyLayout = async () => {
+    if (!device || !inference) return;
+    await navigator.clipboard.writeText(layoutBundle(device, inference, "right"));
+    setLayoutCopied(true);
+    toast.success("Copied. Paste it into a board report.");
+  };
 
   const collect = async () => {
     setBusy(true);
@@ -154,6 +165,49 @@ export default function ContributePage({
           </ol>
         </CardContent>
       </Card>
+
+      {device && inference && (
+        <Card>
+          <CardHeader className="flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-base">Keyboard picture</CardTitle>
+            <Badge variant="outline">{pending ? "unconfirmed" : "confirmed"}</Badge>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            {pending ? (
+              <p className="text-muted-foreground">
+                The Keys page is asking whether the keyboard picture matches
+                your board. Answer there first; the picture then has its own
+                bundle you can send from here.
+              </p>
+            ) : (
+              <>
+                <p className="text-muted-foreground">
+                  You confirmed the keyboard picture for this board. Send it
+                  in and it ships built in for everyone with this board:
+                  copy, open a board report, paste.
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button size="sm" variant="outline" onClick={copyLayout}>
+                    {layoutCopied ? (
+                      <Check className="mr-1 h-3.5 w-3.5" />
+                    ) : (
+                      <Copy className="mr-1 h-3.5 w-3.5" />
+                    )}
+                    {layoutCopied ? "Copied" : "Copy picture bundle"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
+                  >
+                    <Keyboard className="mr-1 h-3.5 w-3.5" /> Report this board
+                  </Button>
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {bundle && (
         <Card>

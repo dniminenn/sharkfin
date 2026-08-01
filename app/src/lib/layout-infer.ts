@@ -7,6 +7,8 @@
 // trustworthy on a board that still has its factory keymap, so callers gate
 // on matchRate and the user confirms the picture before writes are allowed.
 import type { BoardLayout, LayoutKey } from "@/lib/layout-loader";
+import type { ConnectedDevice } from "@/lib/backend";
+import { deviceLabel } from "@/lib/brands";
 
 export interface Inference {
   layout: BoardLayout;
@@ -21,6 +23,36 @@ export interface Inference {
   matrix: number[];
   /** Which profile that keymap came from; set by the caller. */
   profile: number;
+}
+
+// Everything needed to bake the matched slots into the layout file: the
+// board, the layout it was matched to, and the keymap the match ran against.
+export function layoutBundle(
+  device: ConnectedDevice,
+  inf: Inference,
+  verdict: "right" | "wrong",
+): string {
+  const hex: string[] = [];
+  for (let i = 0; i < inf.matrix.length; i += 16) {
+    hex.push(
+      inf.matrix
+        .slice(i, i + 16)
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join(" "),
+    );
+  }
+  return [
+    "```",
+    "sharkfin layout bundle",
+    `board   : ${deviceLabel(device.spec)} (device id ${device.spec.id})`,
+    `layout  : ${device.spec.keyLayout}`,
+    `matched : ${inf.matched}/${inf.total} keys` +
+      (inf.ambiguous.length ? `, ${inf.ambiguous.length} ambiguous` : ""),
+    `verdict : ${verdict === "right" ? "looks right" : "does not match"}`,
+    `keymap, profile ${inf.profile + 1}, base layer:`,
+    ...hex,
+    "```",
+  ].join("\n");
 }
 
 export function inferSlots(base: BoardLayout, matrix: number[]): Inference {

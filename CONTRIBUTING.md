@@ -5,10 +5,10 @@ Reporting a bug or a board? You don't need any of this. Open the app's
 [issue](https://github.com/dniminenn/sharkfin/issues/new/choose).
 
 Did the Keys page show a picture of your keyboard and ask whether it
-looks right? Answering it is a contribution too. Say yes and the page
-offers a bundle; paste it into a board report and the picture ships
-built in, for you and everyone else with your board. Say no and the same
-bundle tells us what to fix.
+looks right? Answering it is a contribution too. Say yes and the Keys
+page and the Contribute tab both offer the picture's bundle; paste it
+into a board report and the picture ships built in, for you and everyone
+else with your board. Say no and the same bundle tells us what to fix.
 
 ## Development
 
