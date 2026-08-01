@@ -562,6 +562,71 @@ def dump_layout(layout):
     return "\n".join(lines) + "\n"
 
 
+SVG_MAPPING_RE = re.compile(
+    r'Keyboard_([A-Za-z0-9_]+?)_KeyMappings:\{type:"svg",'
+    r'str:await [\w$]+\(\(\)=>import\("\./([0-9a-f]{8}\.js)"\)'
+)
+
+
+def svg_to_ui(js_text):
+    """Newer layouts ship as an SVG scene: one state layer per interaction
+    state, one <g id="#Code"> per key, the key's rect first in the group.
+    The pixel conventions match the old ui_info objects, so the result is
+    fed through build_layout unchanged."""
+    m = re.search(r"`(<svg .*)`", js_text, re.S)
+    if not m:
+        return None
+    svg = m.group(1)
+    default = re.search(r'<svg [^>]*id="default".*?</svg>', svg, re.S)
+    if not default:
+        return None
+    scene = default.group(0)
+    size = re.match(r'<svg [^>]*width="(\d+)" height="(\d+)"', svg)
+    if not size:
+        return None
+    layout = {}
+    for g in re.finditer(r'<g id="#([A-Za-z0-9]+)">(.*?)</g>', scene, re.S):
+        code, body = g.group(1), g.group(2)
+        rect = re.search(
+            r'<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"',
+            body,
+        )
+        if not rect or code in layout:
+            continue
+        text = re.findall(r"<tspan[^>]*>([^<]*)</tspan>", body)
+        layout[code] = {
+            "x": round(float(rect.group(1))),
+            "y": round(float(rect.group(2))),
+            "width": round(float(rect.group(3))),
+            "height": round(float(rect.group(4))),
+            "type": "key",
+            "displayText": text or None,
+        }
+    if not layout:
+        return None
+    return {"width": int(size.group(1)), "height": int(size.group(2)), "layout": layout}
+
+
+def extract_svg_ui_defs(dists):
+    defs = {}
+    for dist in dists or ():
+        for f in sorted(dist.glob("*.js")):
+            text = f.read_text(encoding="utf-8", errors="replace")
+            if '_KeyMappings:{type:"svg"' not in text:
+                continue
+            for m in SVG_MAPPING_RE.finditer(text):
+                name, chunk = m.groups()
+                if name in defs:
+                    continue
+                path = dist / chunk
+                if not path.is_file():
+                    continue
+                ui = svg_to_ui(path.read_text(encoding="utf-8", errors="replace"))
+                if ui:
+                    defs[name] = (ui, f.name)
+    return defs
+
+
 def convention_ui_name(enum_key, ui_defs):
     m = re.match(r"(?:Common|Special)(\d+)_(.+)", enum_key)
     if not m:
@@ -718,11 +783,90 @@ def main():
     hid_table = extract_hid_table(bundle)
     enum_keys = extract_enum_keys(bundle)
 
+    # Newer layouts ship as SVG scenes instead of ui_info objects, and a
+    # revision-suffixed enum (beat75_v2) renders its base revision's scene,
+    # so unmapped enums retry with the suffix stripped.
+    svg_defs = extract_svg_ui_defs(args.dist_js)
+
+    def norm(s):
+        return re.sub(r"[^a-z0-9]", "", s.lower())
+
+    svg_by_norm = {}
+    for n in svg_defs:
+        svg_by_norm.setdefault(norm(n), []).append(n)
+
+    def resolve(key):
+        cand = convention_ui_name(key, ui_defs)
+        if cand:
+            return cand
+        m = re.match(r"(?:Common|Special)(\d+)(?:_(.+))?$", key)
+        want = norm(f"{m.group(1)}_{m.group(2) or ''}") if m else norm(key)
+        hits = svg_by_norm.get(want, [])
+        if len(hits) != 1:
+            return None
+        pseudo = f"svg:{hits[0]}"
+        ui_defs[pseudo] = svg_defs[hits[0]]
+        return pseudo
+
+    svg_used, rev_used = [], []
     for k in enum_keys:
-        if k not in ui_map:
-            cand = convention_ui_name(k, ui_defs)
-            if cand:
-                ui_map[k] = cand
+        if k in ui_map:
+            continue
+        tried = [k]
+        stripped = re.sub(r"_(?:[vV]\d+|\d+)$", "", k)
+        while stripped not in tried:
+            tried.append(stripped)
+            stripped = re.sub(r"_(?:[vV]\d+|\d+)$", "", stripped)
+        for key_try in tried:
+            r = resolve(key_try)
+            if r:
+                ui_map[k] = r
+                if r.startswith("svg:"):
+                    svg_used.append(k)
+                if key_try != k:
+                    rev_used.append(f"{k}<-{key_try}")
+                break
+    if svg_defs:
+        print(f"  svg scenes found: {len(svg_defs)}, used for: {sorted(svg_used)}")
+    if rev_used:
+        print(f"  revision enums mapped to their base geometry: {sorted(rev_used)}")
+
+    # Last resort: an unmapped enum whose board's own name appears in exactly
+    # one same-key-count ui name (device CK100 with layout Common100 pairs
+    # with keyboard_100_ck100_keymappings_ui_info).
+    def core(n):
+        return norm(re.sub(r"^(svg:|keyboard_)|_keymappings_ui_info$", "", n))
+
+    byname_used = []
+    for k in enum_keys:
+        if k in ui_map:
+            continue
+        m = re.match(r"(?:Common|Special)(\d+)", k)
+        if not m:
+            continue
+        num = m.group(1)
+        boards = {
+            norm(str(d.get(f) or ""))
+            for d in devices
+            if d["keyLayout"] == k
+            for f in ("internalName", "displayName", "name")
+        }
+        boards = {b for b in boards if len(b) >= 4}
+        pool = {n for n in ui_defs if core(n).startswith(num)} | {
+            f"svg:{n}" for n in svg_defs if core(f"svg:{n}").startswith(num)
+        }
+        hits = {n for n in pool for b in boards if b in core(n)}
+        # The same scene can exist in both worlds; that is one candidate,
+        # and the ui_info form wins.
+        if len({core(n) for n in hits}) != 1:
+            continue
+        hit = min(hits, key=lambda n: n.startswith("svg:"))
+        if hit.startswith("svg:") and hit not in ui_defs:
+            ui_defs[hit] = svg_defs[hit[4:]]
+        ui_map[k] = hit
+        byname_used.append(f"{k}<-{hit}")
+    if byname_used:
+        print(f"  enums mapped by board name: {sorted(byname_used)}")
 
     matrices_by_layout = {}
     for d in devices:
