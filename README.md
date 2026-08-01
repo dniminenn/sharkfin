@@ -35,8 +35,9 @@ sharkfin never flashes firmware.
 
 **Alpha, so back up first.**
 
-939 of 943 accept changes, 4 are read-only. 881 have a drawn layout; the
-rest show a slot grid.
+939 of 943 accept changes, 4 are read-only. 96 are drawn out of the box
+and 778 more after a one-time check against your board; the rest show a
+slot grid.
 
 ## Features
 

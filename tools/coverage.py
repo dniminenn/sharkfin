@@ -25,11 +25,24 @@ CANONICAL = {"Common80_k72x86"}
 WRITABLE_FAMILIES = ("yc500", "gen2")
 
 
-def layouts_present() -> set[str]:
-    have = set(CANONICAL)
+def layouts_present() -> tuple[set[str], set[str]]:
+    """Layouts that draw out of the box, and geometry-only layouts.
+
+    A file whose keys carry matrix slots renders as-is. A file with geometry
+    but no slots renders only after the app matches it against the connected
+    board's keymap and the owner confirms the picture; the Unknown
+    placeholder is excluded because it describes no particular board.
+    """
+    baked = set(CANONICAL)
+    geometry = set()
     if VENDOR_LAYOUTS.is_dir():
-        have |= {p.stem for p in VENDOR_LAYOUTS.glob("*.json")}
-    return have
+        for p in VENDOR_LAYOUTS.glob("*.json"):
+            keys = json.loads(p.read_text("utf-8")).get("keys", [])
+            if any(k.get("matrixIndex") is not None for k in keys):
+                baked.add(p.stem)
+            elif p.stem != "Unknown":
+                geometry.add(p.stem)
+    return baked, geometry
 
 
 def label(d: dict) -> str:
@@ -38,10 +51,13 @@ def label(d: dict) -> str:
     return f"{brand} {name}".strip()
 
 
-def write_markdown(devices: list[dict], have: set[str], path: Path) -> None:
+def write_markdown(
+    devices: list[dict], baked: set[str], geometry: set[str], path: Path
+) -> None:
     rows = sorted(devices, key=lambda d: (label(d).lower(), d["id"]))
     total = len(rows)
-    drawn = sum(1 for d in rows if d["keyLayout"] in have)
+    drawn = sum(1 for d in rows if d["keyLayout"] in baked)
+    auto = sum(1 for d in rows if d["keyLayout"] in geometry)
     writable = sum(1 for d in rows if d.get("family") in WRITABLE_FAMILIES)
 
     out = [
@@ -51,14 +67,17 @@ def write_markdown(devices: list[dict], have: set[str], path: Path) -> None:
         "registry — do not edit by hand.",
         "",
         f"{total} boards. **Write** means sharkfin can change settings on it;",
-        "blank means read-only. **Draw** means sharkfin has layout data to",
-        "render the board; the rest show a slot grid and work the same.",
+        "blank means read-only. **Draw** says how the board is pictured:",
+        "**yes** is drawn out of the box, **auto** is drawn once sharkfin has",
+        "matched the picture against your board and you have confirmed it,",
+        "blank is a plain grid of key slots. All three work the same.",
         "",
         f"| | count |",
         f"|---|---:|",
         f"| total | {total} |",
         f"| writable | {writable} |",
-        f"| drawable | {drawn} |",
+        f"| drawn | {drawn} |",
+        f"| drawn after confirmation | {auto} |",
         "",
         "| board | id | usb | family | write | draw |",
         "|---|---|---|---|---|---|",
@@ -73,7 +92,7 @@ def write_markdown(devices: list[dict], have: set[str], path: Path) -> None:
                 d["productId"],
                 fam,
                 "yes" if fam in WRITABLE_FAMILIES else "",
-                "yes" if d["keyLayout"] in have else "",
+                "yes" if d["keyLayout"] in baked else "auto" if d["keyLayout"] in geometry else "",
             )
         )
     out.append("")
@@ -93,16 +112,17 @@ def main() -> None:
     args = ap.parse_args()
 
     devices = json.loads(DEVICES.read_text("utf-8"))
-    have = layouts_present()
+    baked, geometry = layouts_present()
 
     if args.markdown:
-        write_markdown(devices, have, Path(args.markdown))
+        write_markdown(devices, baked, geometry, Path(args.markdown))
         return
 
     writable = [d for d in devices if d.get("family") in WRITABLE_FAMILIES]
+    have = baked | geometry
 
-    def covered(ds):
-        return sum(1 for d in ds if d["keyLayout"] in have)
+    def covered(ds, names):
+        return sum(1 for d in ds if d["keyLayout"] in names)
 
     missing_by_layout = Counter(
         d["keyLayout"]
@@ -112,10 +132,12 @@ def main() -> None:
 
     report = {
         "boards": len(devices),
-        "boardsWithLayout": covered(devices),
+        "boardsDrawn": covered(devices, baked),
+        "boardsDrawnAfterConfirmation": covered(devices, geometry),
         "writable": len(writable),
-        "writableWithLayout": covered(writable),
+        "writableDrawn": covered(writable, baked),
         "layoutFiles": len(have),
+        "slotlessLayouts": len(geometry),
         "missingWritableLayouts": dict(missing_by_layout.most_common()),
     }
 
@@ -124,13 +146,15 @@ def main() -> None:
         return
 
     n = report["boards"]
+    undrawn = n - report["boardsDrawn"] - report["boardsDrawnAfterConfirmation"]
     print(f"boards in the registry       {n}")
-    print(f"  can be drawn                 {report['boardsWithLayout']}"
-          f"  ({n - report['boardsWithLayout']} lack layout data)")
+    print(f"  drawn out of the box         {report['boardsDrawn']}")
+    print(f"  drawn after confirmation     {report['boardsDrawnAfterConfirmation']}"
+          f"  ({undrawn} grid only)")
     print(f"  writable (verified family)   {report['writable']}"
           f"  ({n - report['writable']} read-only)")
-    print(f"  both                         {report['writableWithLayout']}")
-    print(f"layout files on disk         {report['layoutFiles']}")
+    print(f"layout files on disk         {report['layoutFiles']}"
+          f"  ({report['slotlessLayouts']} without slot data)")
     if missing_by_layout:
         print(f"\nlayouts still needed for writable boards ({len(missing_by_layout)}):")
         for name, n in missing_by_layout.most_common():
