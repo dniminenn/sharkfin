@@ -8,7 +8,9 @@ Did the Keys page show a picture of your keyboard and ask whether it
 looks right? Answering it is a contribution too. Say yes and the Keys
 page and the Contribute tab both offer the picture's bundle; paste it
 into a board report and the picture ships built in, for you and everyone
-else with your board. Say no and the same bundle tells us what to fix.
+else with your board. Say no and the next closest picture is shown. If
+none of them fit, you can draw the board on keyboard-layout-editor.com,
+paste the drawing into the Keys page, and send that in the same way.
 
 ## Development
 
@@ -120,21 +122,29 @@ which layouts the writable boards still need.
 
 ### Baking a layout bundle
 
-For a geometry-only layout, the app matches the picture against the
-connected board's keymap and asks the owner to confirm it; the Keys page
-then produces a layout bundle carrying that keymap, which is the
-`defaultMatrix` the vendor build was missing. To bake it in:
+For a board without a usable layout, the app searches every stored
+picture for the best match against the board's keymap and asks the owner
+to confirm one; owners can also paste a keyboard-layout-editor drawing.
+The Keys page then produces a layout bundle carrying the confirmed
+geometry's name (`picture :`, or the drawing itself under
+`picture json:`) and the keymap it matched, which is the `defaultMatrix`
+the vendor build was missing. To bake it in:
 
 ```sh
 python3 tools/bake_layout.py bundle.txt
 python3 tools/coverage.py --markdown
 ```
 
+The file written is the bundle's `layout :` name, with geometry taken
+from the confirmed picture when the two differ. When the registry says
+`Unknown`, pass `--name` to choose the new file and point the board's
+registry entry at it.
+
 The tool refuses a bundle the owner did not confirm, a layout that
-already has slot data, the Unknown placeholder, and any ambiguous key
-pairing (twin keys, or a contributor whose board was remapped); `--force`
-overrides after inspection. It prints every board that shares the layout,
-since the bake reaches all of them.
+already has slot data, an Unknown target without `--name`, and any
+ambiguous key pairing (twin keys, or a contributor whose board was
+remapped); `--force` overrides after inspection. It prints every board
+that shares the layout, since the bake reaches all of them.
 
 ### Vendor builds stay out of this repo
 

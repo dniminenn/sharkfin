@@ -34,6 +34,8 @@ def parse_bundle(text):
     if not m:
         raise SystemExit("no `layout :` line in the bundle")
     layout = m.group(1)
+    p = re.search(r"^picture\s*:\s*(\S+)", text, re.M)
+    picture = p.group(1) if p else layout
     verdict = None
     v = re.search(r"^verdict\s*:\s*(.+)$", text, re.M)
     if v:
@@ -42,7 +44,11 @@ def parse_bundle(text):
     matrix = [int(b, 16) for line in hex_lines for b in line.split()]
     if not matrix or len(matrix) % 4:
         raise SystemExit(f"keymap is {len(matrix)} bytes, expected a multiple of 4")
-    return layout, verdict, matrix
+    drawing = None
+    j = re.search(r"^picture json:\s*\n(\{.*\})\s*$", text, re.M)
+    if j:
+        drawing = json.loads(j.group(1))
+    return layout, picture, drawing, verdict, matrix
 
 
 def bake(layout, matrix):
@@ -80,25 +86,50 @@ def main():
     here = Path(__file__).resolve().parent
     ap.add_argument("--layouts", type=Path, default=here.parent / "app/src/lib/layouts/vendor")
     ap.add_argument("--force", action="store_true", help="bake despite a rejected verdict")
+    ap.add_argument(
+        "--name",
+        help="file to write, without .json; needed when the registry says Unknown",
+    )
     args = ap.parse_args()
 
-    name, verdict, matrix = parse_bundle(args.bundle.read_text(encoding="utf-8"))
-    if name == "Unknown":
+    name, picture, drawing, verdict, matrix = parse_bundle(
+        args.bundle.read_text(encoding="utf-8")
+    )
+    target = args.name or name
+    if target == "Unknown":
         raise SystemExit(
-            "layout is the Unknown placeholder shared by every board without "
-            "layout data; there is nothing board-specific to bake into"
+            "the registry calls this board's layout Unknown; pick a real "
+            "file name with --name and point the board's registry entry at it"
         )
     if verdict != "looks right" and not args.force:
         raise SystemExit(
             f"bundle verdict is {verdict!r}; the owner did not confirm the "
             "picture, so this keymap fixes nothing on its own (--force overrides)"
         )
-    path = args.layouts / f"{name}.json"
-    if not path.is_file():
-        raise SystemExit(f"{path}: no such layout")
-    layout = json.loads(path.read_text(encoding="utf-8"))
-    if any(k.get("matrixIndex") is not None for k in layout["keys"]):
-        raise SystemExit(f"{path}: already has slot data; refusing to overwrite")
+    path = args.layouts / f"{target}.json"
+
+    # Geometry comes from the drawing the owner pasted, the vendor file
+    # whose picture they confirmed, or the target file itself.
+    if drawing is not None:
+        layout = drawing
+    elif picture != target:
+        src = args.layouts / f"{picture}.json"
+        if not src.is_file():
+            raise SystemExit(f"{src}: no such layout to copy geometry from")
+        layout = json.loads(src.read_text(encoding="utf-8"))
+    elif path.is_file():
+        layout = json.loads(path.read_text(encoding="utf-8"))
+    else:
+        raise SystemExit(f"{path}: no such layout and the bundle carries no picture")
+
+    if path.is_file():
+        existing = json.loads(path.read_text(encoding="utf-8"))
+        if any(k.get("matrixIndex") is not None for k in existing["keys"]):
+            raise SystemExit(f"{path}: already has slot data; refusing to overwrite")
+    for k in layout["keys"]:
+        k["matrixIndex"] = None
+    layout.pop("matrixEntriesWithoutUIKey", None)
+    layout.pop("inferred", None)
 
     matched, total, ambiguous = bake(layout, matrix)
     rate = matched / total if total else 0

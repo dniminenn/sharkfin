@@ -20,6 +20,7 @@ import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
 import { layoutBundle } from "@/lib/layout-infer";
+import { kleToLayout } from "@/lib/kle";
 import {
   DISABLED_GLYPH,
   GROUPS,
@@ -51,9 +52,11 @@ function sliceEntries(matrix: number[]): Map<number, number[]> {
 
 export default function KeymapPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
-  const { layout, pending, inference, confirm, reject } = useBoardLayout(device);
+  const { layout, pending, inference, remaining, confirm, reject, tryCustom } =
+    useBoardLayout(device);
   const [verdict, setVerdict] = useState<"right" | "wrong" | null>(null);
   const [copied, setCopied] = useState(false);
+  const [kleText, setKleText] = useState("");
   const [profile, setProfile] = useState(0);
   const [layer, setLayer] = useState<"base" | "fn">("base");
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
@@ -131,10 +134,34 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   };
 
   const answer = (v: "right" | "wrong") => {
-    setVerdict(v);
+    // "Wrong" pages to the next candidate picture; the verdict only lands
+    // once there is nothing left to try.
     setCopied(false);
-    if (v === "right") confirm();
-    else reject();
+    if (v === "right") {
+      setVerdict("right");
+      confirm();
+    } else {
+      if (remaining === 0) setVerdict("wrong");
+      reject();
+    }
+  };
+
+  const tryKle = async () => {
+    try {
+      const rate = await tryCustom(kleToLayout(kleText));
+      if (rate < 0.9) {
+        toast.error(
+          rate === 0
+            ? "Could not read the board's keymap to match against."
+            : `Only ${Math.round(rate * 100)}% of the drawn keys match this board.`,
+        );
+      } else {
+        setVerdict(null);
+        setKleText("");
+      }
+    } catch (e) {
+      toast.error(`${e instanceof Error ? e.message : e}`);
+    }
   };
 
   // A confirmed layout stays contributable in later sessions: inference
@@ -259,13 +286,18 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                 first.
               </p>
             )}
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <Button size="sm" onClick={() => answer("right")}>
                 Looks right
               </Button>
               <Button size="sm" variant="outline" onClick={() => answer("wrong")}>
                 Something is wrong
               </Button>
+              {remaining > 0 && (
+                <span className="text-xs text-muted-foreground">
+                  no shows the next closest picture, {remaining} left
+                </span>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -308,6 +340,37 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
               </Button>
               <span className="text-muted-foreground">then paste</span>
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {connected && layout.grid && !pending && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Draw your board</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <p className="text-muted-foreground">
+              No stored picture matches this keyboard. If you can draw it on{" "}
+              <button
+                className="underline"
+                onClick={() => openUrl("http://www.keyboard-layout-editor.com")}
+              >
+                keyboard-layout-editor.com
+              </button>
+              , paste the raw data here and sharkfin will try to match it to
+              your keys.
+            </p>
+            <textarea
+              value={kleText}
+              onChange={(e) => setKleText(e.target.value)}
+              spellCheck={false}
+              placeholder='["Esc","Q","W","E", …'
+              className="h-24 w-full rounded-md border bg-transparent p-2 font-mono text-xs"
+            />
+            <Button size="sm" disabled={!kleText.trim()} onClick={tryKle}>
+              Try it
+            </Button>
           </CardContent>
         </Card>
       )}

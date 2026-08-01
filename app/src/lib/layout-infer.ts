@@ -17,16 +17,23 @@ export interface Inference {
   /** Keys that have a factory entry to match with. */
   total: number;
   matchRate: number;
+  /** Symmetric score: penalizes keymap entries the layout does not explain,
+   *  so a small pad cannot outrank a full board it is a subset of. */
+  f1: number;
   /** Slots whose entry appears more than once; their pairing is a guess. */
   ambiguous: number[];
   /** The keymap the match ran against, for a contribution bundle. */
   matrix: number[];
   /** Which profile that keymap came from; set by the caller. */
   profile: number;
+  /** Where the geometry came from: a vendor file's stem, or "kle" for a
+   *  drawing the owner pasted. Set by the caller. */
+  layoutName: string;
 }
 
 // Everything needed to bake the matched slots into the layout file: the
-// board, the layout it was matched to, and the keymap the match ran against.
+// board, the geometry the owner confirmed, and the keymap the match ran
+// against. A drawing that exists in no vendor file rides along as JSON.
 export function layoutBundle(
   device: ConnectedDevice,
   inf: Inference,
@@ -41,18 +48,30 @@ export function layoutBundle(
         .join(" "),
     );
   }
-  return [
+  const lines = [
     "```",
     "sharkfin layout bundle",
     `board   : ${deviceLabel(device.spec)} (device id ${device.spec.id})`,
     `layout  : ${device.spec.keyLayout}`,
+  ];
+  if (inf.layoutName && inf.layoutName !== device.spec.keyLayout)
+    lines.push(`picture : ${inf.layoutName}`);
+  lines.push(
     `matched : ${inf.matched}/${inf.total} keys` +
       (inf.ambiguous.length ? `, ${inf.ambiguous.length} ambiguous` : ""),
     `verdict : ${verdict === "right" ? "looks right" : "does not match"}`,
     `keymap, profile ${inf.profile + 1}, base layer:`,
     ...hex,
-    "```",
-  ].join("\n");
+  );
+  if (inf.layoutName === "kle") {
+    const geometry = {
+      canvas: inf.layout.canvas,
+      keys: inf.layout.keys.map((k) => ({ ...k, matrixIndex: null })),
+    };
+    lines.push("picture json:", JSON.stringify(geometry));
+  }
+  lines.push("```");
+  return lines.join("\n");
 }
 
 export function inferSlots(base: BoardLayout, matrix: number[]): Inference {
@@ -80,13 +99,17 @@ export function inferSlots(base: BoardLayout, matrix: number[]): Inference {
     if (hits.length > 1) ambiguous.push(hits[nth]);
     return { ...k, matrixIndex: hits[nth] };
   });
+  let nonzero = 0;
+  for (const hits of bySlot.values()) nonzero += hits.length;
   return {
     layout: { ...base, keys, inferred: true },
     matched,
     total,
     matchRate: total ? matched / total : 0,
+    f1: total + nonzero ? (2 * matched) / (total + nonzero) : 0,
     ambiguous,
     matrix,
     profile: 0,
+    layoutName: "",
   };
 }

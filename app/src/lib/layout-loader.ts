@@ -3,7 +3,7 @@
 // Per-device board layouts. Vendor layouts share x86.json's schema and are
 // code-split; boards with no layout file get a plain 16×8 grid of the 128
 // matrix slots so they are still fully editable.
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import x86 from "@/lib/layouts/x86.json";
 import { readKeymap, type ConnectedDevice } from "@/lib/backend";
 import { inferSlots, type Inference } from "@/lib/layout-infer";
@@ -36,8 +36,13 @@ export interface BoardLayoutState {
   /** Inferred and not yet confirmed by the user; keymap writes stay gated. */
   pending: boolean;
   inference: Inference | null;
+  /** Candidate pictures left to try after the current one. */
+  remaining: number;
   confirm: () => void;
   reject: () => void;
+  /** Match a pasted drawing against the board; returns the match rate and,
+   *  when it clears the bar, makes it the pending picture. */
+  tryCustom: (layout: BoardLayout) => Promise<number>;
 }
 
 const VENDOR = import.meta.glob("./layouts/vendor/*.json");
@@ -60,6 +65,40 @@ function usable(layout: BoardLayout): boolean {
 
 const confirmedKey = (id: number) => `sharkfin.layout-confirmed.${id}`;
 const rejectedKey = (id: number) => `sharkfin.layout-rejected.${id}`;
+const customKey = (id: number) => `sharkfin.layout-custom.${id}`;
+
+/** A picture needs at least this fraction of its keys tied to slots before
+ *  it is offered at all. */
+const MATCH_BAR = 0.9;
+/** Candidate pictures offered before giving up on the collection. */
+const MAX_CANDIDATES = 8;
+
+async function loadVendor(name: string): Promise<BoardLayout | null> {
+  const load = VENDOR[`./layouts/vendor/${name}.json`];
+  if (!load) return null;
+  try {
+    const m = (await load()) as { default?: BoardLayout };
+    return m.default ?? (m as BoardLayout);
+  } catch {
+    return null;
+  }
+}
+
+/** Best match for one geometry across every profile's keymap. */
+function bestMatch(
+  geometry: BoardLayout,
+  name: string,
+  matrices: number[][],
+): Inference | null {
+  let best: Inference | null = null;
+  for (let p = 0; p < matrices.length; p++) {
+    const inf = inferSlots(geometry, matrices[p]);
+    inf.profile = p;
+    inf.layoutName = name;
+    if (!best || inf.f1 > best.f1) best = inf;
+  }
+  return best;
+}
 
 export function gridLayout(): BoardLayout {
   const keys: LayoutKey[] = Array.from({ length: 128 }, (_, i) => ({
@@ -89,73 +128,160 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const [layout, setLayout] = useState<BoardLayout>(X86_LAYOUT);
   const [pending, setPending] = useState(false);
   const [inference, setInference] = useState<Inference | null>(null);
+  const [remaining, setRemaining] = useState(0);
+  const matricesRef = useRef<number[][]>([]);
+  const candidatesRef = useRef<Inference[]>([]);
+  const indexRef = useRef(0);
+
+  const readMatrices = useCallback(async () => {
+    if (matricesRef.current.length) return matricesRef.current;
+    const out: number[][] = [];
+    for (let p = 0; p < Math.max(1, profiles); p++) {
+      try {
+        out.push(await readKeymap(p));
+      } catch {
+        break;
+      }
+    }
+    matricesRef.current = out;
+    return out;
+  }, [profiles]);
 
   useEffect(() => {
     let live = true;
     setPending(false);
     setInference(null);
+    setRemaining(0);
+    matricesRef.current = [];
+    candidatesRef.current = [];
+    indexRef.current = 0;
     if (!name || name === X86_NAME) {
       setLayout(X86_LAYOUT);
       return;
     }
-    const load = VENDOR[`./layouts/vendor/${name}.json`];
-    if (!load) {
-      setLayout(gridLayout());
-      return;
-    }
     (async () => {
-      let loaded: BoardLayout;
-      try {
-        const m = await load();
-        const mod = m as { default?: BoardLayout };
-        loaded = mod.default ?? (m as BoardLayout);
-      } catch {
-        if (live) setLayout(gridLayout());
-        return;
-      }
+      const named = name === UNKNOWN_NAME ? null : await loadVendor(name);
       if (!live) return;
-      if (usable(loaded)) {
-        setLayout(loaded);
+      if (named && usable(named)) {
+        setLayout(named);
         return;
       }
-      // No slot data in the file. The board's own keymap is the only
-      // remaining source; trust nothing short of a near-total match, and
-      // a user who already said the picture is wrong keeps the grid. A
-      // remapped profile misses the bar, so every profile gets a try.
+      // No slot data anywhere for this board. The board's own keymap is
+      // the only remaining source; trust nothing short of a near-total
+      // match, and a user who already said no keeps the grid. A remapped
+      // profile misses the bar, so every profile gets a try.
       setLayout(gridLayout());
-      if (id === undefined || name === UNKNOWN_NAME) return;
-      if (localStorage.getItem(rejectedKey(id))) return;
-      try {
-        for (let p = 0; p < Math.max(1, profiles); p++) {
-          const matrix = await readKeymap(p);
-          if (!live) return;
-          const inf = inferSlots(loaded, matrix);
-          if (inf.matchRate < 0.9) continue;
-          inf.profile = p;
+      if (id === undefined || localStorage.getItem(rejectedKey(id))) return;
+      const matrices = await readMatrices();
+      if (!live || !matrices.length) return;
+
+      // A picture confirmed earlier is re-matched and used silently.
+      const stored = localStorage.getItem(confirmedKey(id));
+      if (stored) {
+        let geometry: BoardLayout | null = null;
+        if (stored === "kle") {
+          const raw = localStorage.getItem(customKey(id));
+          if (raw) geometry = JSON.parse(raw) as BoardLayout;
+        } else {
+          geometry = await loadVendor(stored === "1" ? name : stored);
+        }
+        if (!live) return;
+        const inf = geometry
+          ? bestMatch(geometry, stored === "kle" ? "kle" : stored === "1" ? name : stored, matrices)
+          : null;
+        if (inf && inf.matchRate >= MATCH_BAR) {
           setInference(inf);
           setLayout(inf.layout);
-          setPending(!localStorage.getItem(confirmedKey(id)));
-          return;
         }
-      } catch {
-        // The grid is already up.
+        return;
       }
+
+      // Nothing confirmed yet: sweep the whole collection and offer the
+      // closest pictures, the registry's own suggestion first.
+      const candidates: Inference[] = [];
+      for (const path of Object.keys(VENDOR)) {
+        const stem = path.slice("./layouts/vendor/".length, -".json".length);
+        if (stem === UNKNOWN_NAME) continue;
+        const geometry = await loadVendor(stem);
+        if (!live) return;
+        if (!geometry) continue;
+        const inf = bestMatch(geometry, stem, matrices);
+        if (inf && inf.matchRate >= MATCH_BAR) candidates.push(inf);
+      }
+      candidates.sort(
+        (a, b) =>
+          Number(b.layoutName === name) - Number(a.layoutName === name) ||
+          b.f1 - a.f1 ||
+          a.ambiguous.length - b.ambiguous.length,
+      );
+      candidates.splice(MAX_CANDIDATES);
+      if (!candidates.length) return;
+      candidatesRef.current = candidates;
+      indexRef.current = 0;
+      setInference(candidates[0]);
+      setLayout(candidates[0].layout);
+      setRemaining(candidates.length - 1);
+      setPending(true);
     })();
     return () => {
       live = false;
     };
-  }, [name, id, profiles]);
+  }, [name, id, readMatrices]);
 
   const confirm = useCallback(() => {
-    if (id !== undefined) localStorage.setItem(confirmedKey(id), "1");
+    setInference((inf) => {
+      if (id !== undefined && inf) {
+        localStorage.setItem(confirmedKey(id), inf.layoutName || "1");
+        if (inf.layoutName === "kle")
+          localStorage.setItem(
+            customKey(id),
+            JSON.stringify({
+              canvas: inf.layout.canvas,
+              keys: inf.layout.keys.map((k) => ({ ...k, matrixIndex: null })),
+            }),
+          );
+      }
+      return inf;
+    });
     setPending(false);
   }, [id]);
 
   const reject = useCallback(() => {
+    const next = indexRef.current + 1;
+    if (next < candidatesRef.current.length) {
+      indexRef.current = next;
+      const inf = candidatesRef.current[next];
+      setInference(inf);
+      setLayout(inf.layout);
+      setRemaining(candidatesRef.current.length - next - 1);
+      return;
+    }
     if (id !== undefined) localStorage.setItem(rejectedKey(id), "1");
     setPending(false);
+    setRemaining(0);
+    setInference(null);
     setLayout(gridLayout());
   }, [id]);
 
-  return { layout, pending, inference, confirm, reject };
+  const tryCustom = useCallback(
+    async (geometry: BoardLayout) => {
+      const matrices = await readMatrices();
+      if (!matrices.length) return 0;
+      const inf = bestMatch(geometry, "kle", matrices);
+      if (!inf) return 0;
+      if (inf.matchRate >= MATCH_BAR) {
+        candidatesRef.current = [inf];
+        indexRef.current = 0;
+        setInference(inf);
+        setLayout(inf.layout);
+        setRemaining(0);
+        setPending(true);
+        if (id !== undefined) localStorage.removeItem(rejectedKey(id));
+      }
+      return inf.matchRate;
+    },
+    [id, readMatrices],
+  );
+
+  return { layout, pending, inference, remaining, confirm, reject, tryCustom };
 }
