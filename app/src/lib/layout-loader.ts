@@ -35,6 +35,13 @@ export const X86_LAYOUT = x86 as unknown as BoardLayout;
 
 const CELL = 41;
 
+// Extraction fills matrixIndex only when the vendor bundle carries a
+// defaultMatrix for the layout; many files have none. A key without a slot
+// cannot be rendered or edited, so such a layout is no better than no file.
+function usable(layout: BoardLayout): boolean {
+  return layout.keys.some((k) => k.matrixIndex !== null);
+}
+
 export function gridLayout(): BoardLayout {
   const keys: LayoutKey[] = Array.from({ length: 128 }, (_, i) => ({
     code: `Slot${i}`,
@@ -75,7 +82,8 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayout {
       .then((m) => {
         if (!live) return;
         const mod = m as { default?: BoardLayout };
-        setLayout(mod.default ?? (m as BoardLayout));
+        const loaded = mod.default ?? (m as BoardLayout);
+        setLayout(usable(loaded) ? loaded : gridLayout());
       })
       .catch(() => live && setLayout(gridLayout()));
     return () => {
