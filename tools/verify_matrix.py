@@ -24,6 +24,7 @@ can check the claim.
 """
 import argparse
 import concurrent.futures
+import io
 import json
 import pathlib
 import sys
@@ -31,6 +32,7 @@ import threading
 import time
 import urllib.error
 import urllib.request
+import zipfile
 import zlib
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
@@ -45,15 +47,30 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DEVICES = ROOT / "app/src-tauri/data/devices.json"
 
 
-def firmware(dev_id, tries=3):
-    """The board's current firmware image, or None.
+def images(package):
+    """Every firmware image in a downloaded package.
 
-    Single-version packages are raw DEFLATE; multi-part ones are a zip of
-    several images and are skipped, since the keyboard image inside is not
-    identified without unpacking the vendor's own naming.
+    A board with one image ships it raw DEFLATE; a board with a screen or
+    a radio ships a zip holding one image per chip. Which member is the
+    keyboard's is not worth guessing: the keymap is searched for in all of
+    them, and it only exists in the one that has it.
+    """
+    try:
+        return [zlib.decompress(package, -15)]
+    except zlib.error:
+        pass
+    try:
+        z = zipfile.ZipFile(io.BytesIO(package))
+        return [z.read(n) for n in z.namelist()]
+    except (zipfile.BadZipFile, OSError, EOFError):
+        return []
+
+
+def firmware(dev_id, tries=3):
+    """The board's published firmware images, or an empty list.
 
     A dropped connection is retried, since a silent skip there reads as
-    "this board disproves the matrix" when it only means nobody asked
+    "this board disproves the keymap" when it only means nobody asked
     successfully. An HTTP status is the server's answer and is final: the
     endpoint returns 500, not an empty result, for a board it has no
     firmware for, and retrying that only slows the sweep.
@@ -67,18 +84,16 @@ def firmware(dev_id, tries=3):
             )
             meta = json.loads(urllib.request.urlopen(req, timeout=25).read())["data"]
             if not meta:
-                return None, None
+                return [], None
             raw = urllib.request.urlopen(DOWNLOAD + meta["file_path"], timeout=120).read()
-            return zlib.decompress(raw, -15), meta["version_str"]
-        except zlib.error:
-            return None, None  # multi-part package, not a plain image
+            return images(raw), meta["version_str"]
         except urllib.error.HTTPError:
-            return None, None  # no firmware record for this board
+            return [], None  # no firmware record for this board
         except (OSError, ValueError, KeyError):
             if attempt == tries - 1:
-                return None, None
+                return [], None
             time.sleep(2 * (attempt + 1))
-    return None, None
+    return [], None
 
 
 def main():
@@ -146,12 +161,14 @@ def main():
         with lock:
             if name in done:
                 return None
-        fw, version = firmware(d["id"])
+        imgs, version = firmware(d["id"])
         with lock:
             checked.add(name)
-        if not fw:
-            return None
-        at = fw.find(bytes(mat))
+        at, blob = -1, bytes(mat)
+        for img in imgs:
+            at = img.find(blob)
+            if at >= 0:
+                break
         if at < 0:
             return None
         with lock:

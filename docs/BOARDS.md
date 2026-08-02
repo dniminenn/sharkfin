@@ -13,8 +13,8 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 943 |
 | writable | 939 |
-| drawn | 181 |
-| drawn after confirmation | 741 |
+| drawn | 184 |
+| drawn after confirmation | 738 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -347,7 +347,7 @@ blank is a plain grid of key slots. All three work the same.
 | Hator HTK3880EU | 2858 | 379a:1803 | gen2 | yes | auto |
 | Hator HTK3880UA | 2800 | 379a:1803 | gen2 | yes | auto |
 | Hator HTK4100 | 3320 | 379a:1806 | gen2 | yes | auto |
-| Hator HTK4100UA | 2936 | 3151:5002 | gen2 | yes | auto |
+| Hator HTK4100UA | 2936 | 3151:5002 | gen2 | yes | yes |
 | Hator HTK4100UA | 3205 | 379a:1806 | gen2 | yes | auto |
 | Hator HTK4160 | 3047 | 3151:5002 | gen2 | yes | auto |
 | Hator HTK4160EU | 3217 | 379a:1806 | gen2 | yes | auto |
@@ -409,7 +409,7 @@ blank is a plain grid of key slots. All three work the same.
 | Keydous NJ80-CP V3 | 3466 | 3151:5030 | gen2 | yes | yes |
 | Keydous NJ81-CP | 2454 | 3151:5030 | gen2 | yes | auto |
 | Keydous NJ81-CP V3 | 3459 | 3151:5030 | gen2 | yes | auto |
-| Keydous NJ98-CP | 2576 | 3151:502f | gen2 | yes | auto |
+| Keydous NJ98-CP | 2576 | 3151:502f | gen2 | yes | yes |
 | Keydous NJ98-CP V4 | 3496 | 3151:5030 | gen2 | yes | auto |
 | Keydous NJ98-CP V4S | 3793 | 3151:5030 | gen2 | yes | auto |
 | KiiBoom Cybrix29 | 2886 | 3151:5029 | gen2 | yes | auto |
@@ -762,7 +762,7 @@ blank is a plain grid of key slots. All three work the same.
 | VKMS VK MAG75 Pro | 2227 | 374a:a216 | gen2 | yes | auto |
 | VKMS VK NB 68 Max | 3111 | 374a:a236 | gen2 | yes | auto |
 | VKMS VK99 | 2410 | 3151:5030 | gen2 | yes |  |
-| VKMS VK99 Gaming | 2831 | 374a:a219 | gen2 | yes | auto |
+| VKMS VK99 Gaming | 2831 | 374a:a219 | gen2 | yes | yes |
 | VKMS VK99 Ultra | 3165 | 374a:a262 | gen2 | yes | auto |
 | VolkanoGaming VG-209-BK | 3450 | 3151:4015 | yc500 | yes | yes |
 | VortechPrestige 971643 | 3413 | 3151:5002 | gen2 | yes | yes |
