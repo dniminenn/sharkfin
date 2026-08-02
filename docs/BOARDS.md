@@ -13,8 +13,8 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 943 |
 | writable | 939 |
-| drawn | 168 |
-| drawn after confirmation | 754 |
+| drawn | 181 |
+| drawn after confirmation | 741 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -72,11 +72,11 @@ blank is a plain grid of key slots. All three work the same.
 | akko Mineral02 | 2581 | 3151:5030 | gen2 | yes | auto |
 | akko Mineral02 | 2885 | 3151:5030 | gen2 | yes | auto |
 | akko MOD007 V5 HE | 2453 | 3151:5030 | gen2 | yes | auto |
-| akko MOD007B V3-HE(UK) | 2872 | 3151:5030 | gen2 | yes | auto |
-| akko MOD007B V3-HE(UK) | 4030 | 3151:5030 | gen2 | yes | auto |
+| akko MOD007B V3-HE(UK) | 2872 | 3151:5030 | gen2 | yes | yes |
+| akko MOD007B V3-HE(UK) | 4030 | 3151:5030 | gen2 | yes | yes |
 | akko MOD007B V3-HE(US) | 2871 | 3151:5030 | gen2 | yes | yes |
 | akko MOD007S V3-HE | 2683 | 3151:5029 | gen2 | yes | yes |
-| akko MOD007S V3-HE UK | 2704 | 3151:5029 | gen2 | yes | auto |
+| akko MOD007S V3-HE UK | 2704 | 3151:5029 | gen2 | yes | yes |
 | akko RAY68 | 2743 | 3151:5030 | gen2 | yes | auto |
 | akko RAY68 | 2924 | 3151:5030 | gen2 | yes | auto |
 | akko TAC75 HE | 2782 | 3151:502d | gen2 | yes | auto |
@@ -311,7 +311,7 @@ blank is a plain grid of key slots. All three work the same.
 | GKX68MAGNUM GKX68 | 2628 | 3151:5030 | gen2 | yes | auto |
 | GKX68MAGNUM GKX68 | 2790 | 3151:502c | gen2 | yes | auto |
 | GT60 GT60 | 2773 | 3151:5029 | gen2 | yes | auto |
-| GTUNE GMK82 | 2912 | 3151:5029 | gen2 | yes | auto |
+| GTUNE GMK82 | 2912 | 3151:5029 | gen2 | yes | yes |
 | GVSTONE GV10M-8K | 2727 | 3151:5033 | gen2 | yes | auto |
 | GVSTONE GV10M-8K | 3624 | 3151:504c | gen2 | yes | auto |
 | GVSTONE GV8M-8K | 2801 | 3151:5033 | gen2 | yes | auto |
@@ -383,7 +383,7 @@ blank is a plain grid of key slots. All three work the same.
 | ikbc MK25070 | 3224 | 3151:5033 | gen2 | yes | auto |
 | ikbc 苏咚坡键盘10 | 2233 | 3151:4015 | yc500 | yes | yes |
 | ilovbee 777 | 3794 | 3151:504c | gen2 | yes | yes |
-| ilovbee VK87 | 3412 | 3151:504c | gen2 | yes | auto |
+| ilovbee VK87 | 3412 | 3151:504c | gen2 | yes | yes |
 | JEDEL JEDEL KL166 | 2729 | 3151:502c | gen2 | yes | auto |
 | JEDEL JEDELWKL100 | 2771 | 3151:5002 | gen2 | yes | auto |
 | JINGSU KA67 | 3106 | 3151:5030 | gen2 | yes |  |
@@ -405,8 +405,8 @@ blank is a plain grid of key slots. All three work the same.
 | Keydous AJ100 | 3583 | 3151:504c | gen2 | yes | auto |
 | Keydous AJ68 | 3522 | 3151:504c | gen2 | yes | auto |
 | Keydous NJ68 PRO-CP | 2515 | 3151:502f | gen2 | yes | auto |
-| Keydous NJ80-AP800 | 3521 | 3151:504c | gen2 | yes | auto |
-| Keydous NJ80-CP V3 | 3466 | 3151:5030 | gen2 | yes | auto |
+| Keydous NJ80-AP800 | 3521 | 3151:504c | gen2 | yes | yes |
+| Keydous NJ80-CP V3 | 3466 | 3151:5030 | gen2 | yes | yes |
 | Keydous NJ81-CP | 2454 | 3151:5030 | gen2 | yes | auto |
 | Keydous NJ81-CP V3 | 3459 | 3151:5030 | gen2 | yes | auto |
 | Keydous NJ98-CP | 2576 | 3151:502f | gen2 | yes | auto |
@@ -474,7 +474,7 @@ blank is a plain grid of key slots. All three work the same.
 | MonsGeek M2 V5 HE | 2845 | 3151:5030 | gen2 | yes | auto |
 | MonsGeek M3 V5 | 2585 | 3151:5030 | gen2 | yes | auto |
 | MonsGeek M3 V5 HE | 2874 | 3151:5030 | gen2 | yes | auto |
-| MonsGeek MG108B | 2739 | 3151:5002 | gen2 | yes | auto |
+| MonsGeek MG108B | 2739 | 3151:5002 | gen2 | yes | yes |
 | MONSTAR X500PRO | 3135 | 3151:5025 | gen2 | yes | auto |
 | MSI STRIKE 700 HE | 3409 | 0db0:32c0 | gen2 | yes | auto |
 | MSI STRIKE 700 HE | 3595 | 0db0:ebbe | gen2 | yes | auto |
@@ -620,7 +620,7 @@ blank is a plain grid of key slots. All three work the same.
 | rongyuan Lomz 75S | 2737 | 3151:5029 | gen2 | yes | yes |
 | rongyuan MAG84 | 3838 | 3151:5030 | gen2 | yes | auto |
 | rongyuan Mage x ZM | 2969 | 3151:5029 | gen2 | yes | auto |
-| rongyuan MG108B | 3330 | 3151:5056 | gen2 | yes | auto |
+| rongyuan MG108B | 3330 | 3151:5056 | gen2 | yes | yes |
 | rongyuan MG75 | 3203 | 374a:a236 | gen2 | yes | auto |
 | rongyuan MK-23 | 2766 | 3151:5030 | gen2 | yes | yes |
 | rongyuan MK10 | 3675 | 3151:5030 | gen2 | yes | auto |
@@ -706,14 +706,14 @@ blank is a plain grid of key slots. All three work the same.
 | Skyloong GK61 | 2999 | 3151:5030 | gen2 | yes | auto |
 | Skyloong GK68 | 2681 | 3151:5029 | gen2 | yes | auto |
 | Skyloong GK68 | 2967 | 3151:5030 | gen2 | yes | auto |
-| Skyloong GK75 | 2450 | 3151:502d | gen2 | yes | auto |
-| Skyloong GK75 | 2507 | 3151:502d | gen2 | yes | auto |
+| Skyloong GK75 | 2450 | 3151:502d | gen2 | yes | yes |
+| Skyloong GK75 | 2507 | 3151:502d | gen2 | yes | yes |
 | SPMControls PL108W | 2367 | 3151:5041 | gen2 | yes | auto |
 | SPMControls PL108W | 2873 | 3151:5041 | gen2 | yes | auto |
 | SPMControls SPM PL87WA | 2953 | 3151:5041 | gen2 | yes | auto |
 | SPYSELF H60 | 2866 | 3151:5029 | gen2 | yes | auto |
-| strayfe 75% HE Pro | 3144 | 3984:03e9 | gen2 | yes | auto |
-| strayfe 75% HE Pro | 3474 | 3984:03ea | gen2 | yes | auto |
+| strayfe 75% HE Pro | 3144 | 3984:03e9 | gen2 | yes | yes |
+| strayfe 75% HE Pro | 3474 | 3984:03ea | gen2 | yes | yes |
 | SUNROSE JK82-1 | 2916 | 3151:5030 | gen2 | yes | auto |
 | SUNROSE JK82-2 | 3062 | 3151:5002 | gen2 | yes | auto |
 | sunsonny N-J100 | 2780 | 3151:502d | gen2 | yes | yes |

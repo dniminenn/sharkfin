@@ -682,6 +682,12 @@ def main():
         default=here.parent / "app/src-tauri/data/devices.extra.json",
         help="hand-maintained entries for boards the bundle does not carry",
     )
+    ap.add_argument(
+        "--matrix-evidence",
+        type=Path,
+        default=here.parent / "app/src-tauri/data/matrix-evidence.json",
+        help="firmware confirmations from tools/verify_matrix.py",
+    )
     ap.add_argument("--devices-out", type=Path, default=here.parent / "app/src-tauri/data/devices.json")
     ap.add_argument("--layouts-out", type=Path, default=here.parent / "app/src/lib/layouts/vendor")
     args = ap.parse_args()
@@ -868,13 +874,31 @@ def main():
     if byname_used:
         print(f"  enums mapped by board name: {sorted(byname_used)}")
 
+    # A slot index decides which physical key a write lands on, so the
+    # matrix behind it needs evidence, not just the vendor's JavaScript.
+    # yc500's tables are round-tripped on hardware; every other family
+    # needs its layout confirmed byte for byte inside a board's own
+    # firmware image, which tools/verify_matrix.py records.
+    evidence = {}
+    if args.matrix_evidence and args.matrix_evidence.is_file():
+        evidence = json.loads(args.matrix_evidence.read_text(encoding="utf-8"))
+
     matrices_by_layout = {}
     for d in devices:
-        if d["family"] != "yc500" or d["name"] not in loaders:
+        if d["name"] not in loaders:
+            continue
+        if d["family"] != "yc500" and d["keyLayout"] not in evidence:
             continue
         mat = first_default_matrix(loaders[d["name"]]["chunks"])
         if mat:
             matrices_by_layout.setdefault(d["keyLayout"], set()).add(tuple(mat))
+
+    # A confirmed matrix is the one the firmware carries, so it settles any
+    # disagreement between sibling devices rather than joining it.
+    for name, rec in evidence.items():
+        matrices_by_layout[name] = {tuple(rec["matrix"])}
+    if evidence:
+        print(f"  firmware-confirmed matrices applied: {len(evidence)}")
 
     # Clear stale output: layouts accumulate across runs otherwise, and the
     # committed set must be exactly what the current sources reproduce.

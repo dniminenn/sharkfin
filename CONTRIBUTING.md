@@ -105,10 +105,13 @@ The script:
   removed from its catalogue, and boards it never listed. Each entry
   records its own evidence in `_` keys, which are stripped on merge.
   `hand_added_boards_survive_a_regeneration` fails if a run drops one.
-- Extracts every bundled `*_keymappings_ui_info` layout object. Matrix
-  slot indices are computed against the `defaultMatrix` of yc500-family
-  devices only, and omitted when no yc500 device resolves or when the
-  devices disagree.
+- Extracts every bundled `*_keymappings_ui_info` layout object, and the
+  SVG scenes newer builds ship instead. A layout named for a revision
+  (`_v2`) falls back to the base revision's drawing, which is what the
+  vendor's own component does.
+- Fills in slot indices from a layout's `defaultMatrix`, for yc500
+  devices and for layouts confirmed against firmware (below). Omitted
+  when nothing resolves or the devices disagree.
 
 A build with no `defaultMatrix` yields geometry-only layouts. Copying
 those over layouts that have `matrixIndex` loses it silently, so diff the
@@ -116,6 +119,28 @@ layout output before copying it in.
 
 `app/src/lib/layouts/x86.json` is hand-maintained as the canonical layout for
 `Common80_k72x86` and is never regenerated.
+
+### Confirming a keymap against firmware
+
+Which physical key a write lands on comes from the layout's factory
+keymap, so that keymap needs better evidence than the vendor's
+JavaScript. The vendor publishes each board's firmware, and the same
+keymap sits inside it. Finding it there is the evidence.
+
+```sh
+python3 tools/verify_matrix.py --dist-js <build>/dist/js
+```
+
+It records the board, its firmware version and where the keymap was found
+in `app/src-tauri/data/matrix-evidence.json`, which is committed, so
+regenerating the registry downloads nothing. Delete an entry to retire a
+claim.
+
+Two rules keep it honest. A board that publishes no firmware confirms
+nothing. And when boards sharing a layout ship different factory keymaps,
+no single board's firmware settles it, so the layout is left alone: the
+Keys page matches each board's own keymap instead, which is right per
+board where one file cannot be.
 
 `tools/coverage.py` reports how many boards have a rendered layout and
 which layouts the writable boards still need.
