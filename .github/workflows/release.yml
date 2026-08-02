@@ -61,6 +61,36 @@ jobs:
           releaseBody: |
             Alpha. Back up from the Device tab before you rely on it.
 
+            ## What changed in 0.1.15
+
+            **If you have remapped a knob press, check it.** The knob's
+            centre wrote to a fixed matrix slot, which on most boards with a
+            knob is an ordinary key: Delete, Page Up or Print Screen
+            depending on the board. Remapping the knob press changed that
+            key instead and left the knob alone. It now uses the slot your
+            board actually reports, and where the board reports none the
+            zone is inert rather than guessing. If a key of yours stopped
+            behaving, reset it from the Keys page.
+
+            **The keyboard picture is now checked against your keyboard.**
+            One layout is shared by many boards, and boards sharing one do
+            not always agree on which key sits where. sharkfin compares the
+            picture with what your board reports and, when they disagree,
+            fixes the picture and asks you to confirm it before any key can
+            be written. 133 boards were being drawn from a layout that did
+            not match them.
+
+            **19 more boards are drawn without being asked anything**, from
+            keymaps confirmed against the manufacturer's own firmware. 184
+            are drawn out of the box, 738 after a one-time check, and 21
+            show a slot grid.
+
+            **No more flash of the wrong keyboard.** Every page waited on a
+            picture of a different board while it worked out yours.
+
+            Boards without a picture, or with a wrong one, can be drawn on
+            keyboard-layout-editor.com and pasted into the Keys page.
+
             You can also use sharkfin without installing anything, at
             [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
             Edge or another Chromium browser. Same app, same keyboard.
