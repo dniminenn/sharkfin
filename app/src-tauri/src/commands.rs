@@ -65,10 +65,15 @@ const FLASH_SETTLE: Duration = Duration::from_secs(2);
 /// control endpoint. One per click is fine; anything in a loop is not.
 const KEY_GAP: Duration = Duration::from_millis(400);
 
-/// Lighting is the one thing a UI drags, and sustained feature reports stall
-/// the control endpoint even when nothing touches flash. The frontend
-/// coalesces, but the floor lives here so no caller can flood the board.
-const LIGHT_GAP: Duration = Duration::from_millis(250);
+/// Lighting is onboard state: `factory_reset` wipes it alongside profiles,
+/// keymaps and macros, so every one of these writes lands in flash. It was
+/// paced as though it were a volatile register, and an X86 wedged after 39
+/// writes a second apart without once breaching that floor. Flash is
+/// documented above as surviving indefinitely only at 3 s.
+///
+/// The frontend now writes on release rather than per drag event, so a
+/// gesture costs one write and this floor is rarely reached at all.
+const LIGHT_GAP: Duration = Duration::from_millis(1000);
 
 /// Everything else a user can hold down or click repeatedly: profile
 /// switches, debounce and sleep sliders, auto-OS, reset. None of these was

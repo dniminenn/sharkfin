@@ -218,7 +218,9 @@ const FLASH_COOLDOWN_MS: f64 = 10_000.0;
 const FLASH_PAGE_GAP_MS: f64 = 100.0;
 const FLASH_SETTLE_MS: f64 = 2_000.0;
 const KEY_GAP_MS: f64 = 400.0;
-const LIGHT_GAP_MS: f64 = 250.0;
+/// Lighting is onboard state, so every write lands in flash; see the note
+/// on the desktop constant.
+const LIGHT_GAP_MS: f64 = 1000.0;
 /// Everything else a user can hold down or click repeatedly: profile
 /// switches, debounce and sleep sliders, auto-OS, reset.
 const SETTING_GAP_MS: f64 = 200.0;

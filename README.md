@@ -52,8 +52,9 @@ everyone who owns one.
   go to the keyboard immediately. The picture is checked against your own
   keyboard first, and stays read-only until you say it matches.
 - **Lighting.** 18 effects with direction options, full RGB, brightness and
-  speed, live as you drag. Edge-light controls appear on boards that have
-  edge LEDs.
+  speed. Sliders preview as you drag and write when you let go, because the
+  keyboard keeps its lighting in flash. Edge-light controls appear on boards
+  that have edge LEDs.
 - **Paint.** Colour individual keys, then send. Sending is manual and
   rate-limited, because the pattern goes into the keyboard's flash.
 - **Macros.** Record key and mouse sequences with per-event delays into the

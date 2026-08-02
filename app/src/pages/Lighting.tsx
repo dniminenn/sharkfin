@@ -54,10 +54,12 @@ function rgbToHex(r: number, g: number, b: number) {
 const isNearBlack = (c: { r: number; g: number; b: number }) =>
   Math.max(c.r, c.g, c.b) < 8;
 
-// The board stalls its control endpoint under sustained feature reports, so
-// a drag must coalesce into one write per gap rather than one per event.
-// Kept above the backend's own floor: coalescing faster than the floor only
-// queues writes the board has not asked for, and the lag outlives the drag.
+// Lighting is onboard state: every write lands in flash, the same as a key
+// or a macro. Measured on an X86, 39 of them a second apart wedged the
+// firmware even though nothing exceeded its rate limit, because the limit
+// was never the problem. So a drag changes nothing on the board: the
+// picture follows your finger, and the keyboard is written once, when you
+// let go.
 const WRITE_GAP = 300;
 
 export default function LightingPage({ connected }: { connected: boolean }) {
@@ -68,6 +70,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
   const sideRef = useRef<SledParam | null>(null);
   const pushTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const sideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const lastSent = useRef(0);
   const lastSideSent = useRef(0);
 
@@ -101,12 +104,19 @@ export default function LightingPage({ connected }: { connected: boolean }) {
     setOptions(next).catch((e) => toast.error(`Write failed: ${e}`));
   };
 
+  /// Preview only. Nothing reaches the keyboard until commitSide.
   const updateSide = (patch: Partial<SledParam>) => {
     const base = sideRef.current;
     if (!base) return;
     const next = { ...base, ...patch };
     sideRef.current = next;
     setSide(next);
+  };
+
+  const commitSide = (patch?: Partial<SledParam>) => {
+    if (patch) updateSide(patch);
+    const next = sideRef.current;
+    if (!next) return;
     clearTimeout(sideTimer.current);
     sideTimer.current = setTimeout(
       () => {
@@ -117,12 +127,27 @@ export default function LightingPage({ connected }: { connected: boolean }) {
     );
   };
 
+  /// Preview only. Nothing reaches the keyboard until commit.
   const update = (patch: Partial<LedParam>) => {
     const base = paramRef.current;
     if (!base) return;
     const next = { ...base, ...patch };
     paramRef.current = next;
     setParam(next);
+  };
+
+  /// For controls that stream while in use, like the OS colour dialog:
+  /// preview every step, write once the user stops moving.
+  const commitIdle = (patch: Partial<LedParam>) => {
+    update(patch);
+    clearTimeout(idleTimer.current);
+    idleTimer.current = setTimeout(() => commit(), 800);
+  };
+
+  const commit = (patch?: Partial<LedParam>) => {
+    if (patch) update(patch);
+    const next = paramRef.current;
+    if (!next) return;
     clearTimeout(pushTimer.current);
     pushTimer.current = setTimeout(
       () => {
@@ -142,7 +167,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
       return;
     }
     setLedOff(false);
-    update({ ...rgb, dazzle: false });
+    commit({ ...rgb, dazzle: false });
   };
 
   if (!connected) {
@@ -182,7 +207,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
             {BE_MODES.map((m) => (
               <button
                 key={m.value}
-                onClick={() => update({ mode: m.value, option: 0 })}
+                onClick={() => commit({ mode: m.value, option: 0 })}
                 className={cn(
                   "rounded-md border px-2 py-2 text-xs transition-colors sm:text-sm",
                   param.mode === m.value
@@ -201,7 +226,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
                 {mode.options.map((opt, i) => (
                   <button
                     key={opt}
-                    onClick={() => update({ option: i })}
+                    onClick={() => commit({ option: i })}
                     className={cn(
                       "rounded-md border px-3 py-1 text-xs transition-colors",
                       param.option === i
@@ -249,7 +274,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               type="color"
               value={hex}
               disabled={colorless}
-              onChange={(e) => update({ ...hexToRgb(e.target.value), dazzle: false })}
+              onChange={(e) => commitIdle({ ...hexToRgb(e.target.value), dazzle: false })}
               className="h-8 w-8 cursor-pointer rounded-full border bg-transparent"
               aria-label="Custom color"
             />
@@ -264,7 +289,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               checked={colorless ? true : param.dazzle}
               onCheckedChange={(v) => {
                 if (v) setLedOff(false);
-                update({ dazzle: v });
+                commit({ dazzle: v });
               }}
             />
           </div>
@@ -281,7 +306,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               {SIDE_MODES.map((m) => (
                 <button
                   key={m.value}
-                  onClick={() => updateSide({ mode: m.value })}
+                  onClick={() => commitSide({ mode: m.value })}
                   className={cn(
                     "rounded-md border px-2 py-2 text-xs transition-colors sm:text-sm",
                     side.mode === m.value
@@ -297,7 +322,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               {SWATCHES.map((c) => (
                 <button
                   key={c}
-                  onClick={() => updateSide({ ...hexToRgb(c), dazzle: false })}
+                  onClick={() => commitSide({ ...hexToRgb(c), dazzle: false })}
                   className={cn(
                     "h-7 w-7 rounded-full border-2 transition-transform hover:scale-110",
                     !side.dazzle && rgbToHex(side.r, side.g, side.b) === c
@@ -315,7 +340,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
                 <Switch
                   id="side-dazzle"
                   checked={side.dazzle}
-                  onCheckedChange={(v) => updateSide({ dazzle: v })}
+                  onCheckedChange={(v) => commitSide({ dazzle: v })}
                 />
               </div>
             </div>
@@ -333,6 +358,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
                   step={1}
                   value={[side.brightness]}
                   onValueChange={([v]) => updateSide({ brightness: v })}
+                  onValueCommit={([v]) => commitSide({ brightness: v })}
                 />
               </div>
               <div className="space-y-2">
@@ -346,6 +372,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
                   step={1}
                   value={[side.speed]}
                   onValueChange={([v]) => updateSide({ speed: v })}
+                  onValueCommit={([v]) => commitSide({ speed: v })}
                 />
               </div>
             </div>
@@ -369,6 +396,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               step={1}
               value={[param.brightness]}
               onValueChange={([v]) => update({ brightness: v })}
+              onValueCommit={([v]) => commit({ brightness: v })}
             />
           </div>
           <div
@@ -384,6 +412,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               step={1}
               value={[param.speed]}
               onValueChange={([v]) => update({ speed: v })}
+              onValueCommit={([v]) => commit({ speed: v })}
             />
           </div>
         </CardContent>
