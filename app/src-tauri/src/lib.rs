@@ -32,6 +32,7 @@ pub fn run() {
         .manage(AppState::default())
         .invoke_handler(tauri::generate_handler![
             commands::scan,
+            commands::build_id,
             commands::get_led_param,
             commands::set_led_param,
             commands::get_profile,

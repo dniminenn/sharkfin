@@ -388,6 +388,12 @@ fn key_write_packet(
     Ok(pkt)
 }
 
+/// Which build this is, for the UI to show and a reporter to quote.
+#[tauri::command]
+pub fn build_id() -> String {
+    registry::build_id()
+}
+
 #[tauri::command]
 pub fn read_keymap(state: tauri::State<AppState>, profile: u8) -> Result<Vec<u8>, String> {
     with_open(&state, |t, fc| read_matrix(t, need(fc)?, profile, false))

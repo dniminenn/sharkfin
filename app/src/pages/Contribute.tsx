@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { Bug, Check, Copy, FileDown, Keyboard } from "lucide-react";
@@ -12,6 +12,7 @@ import { deviceLabel } from "@/lib/brands";
 import { useBoardLayout } from "@/lib/layout-loader";
 import { layoutBundle } from "@/lib/layout-infer";
 import {
+  buildId,
   contributionBundle,
   type ConnectedDevice,
   type DiscoveredUnknown,
@@ -39,6 +40,7 @@ export default function ContributePage({
   device: ConnectedDevice | null;
   unknown: DiscoveredUnknown | null;
 }) {
+  const [version, setVersion] = useState<string | null>(null);
   const [bundle, setBundle] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -51,6 +53,12 @@ export default function ContributePage({
     setLayoutCopied(true);
     toast.success("Copied. Paste it into a board report.");
   };
+
+  useEffect(() => {
+    buildId()
+      .then(setVersion)
+      .catch(() => setVersion(null));
+  }, []);
 
   const collect = async () => {
     setBusy(true);
@@ -81,6 +89,11 @@ export default function ContributePage({
           same way: collect a bundle, copy it, paste it into an issue. The
           bundle is read-only and never writes to the keyboard.
         </p>
+        {version && (
+          <p className="mt-1 font-mono text-xs text-muted-foreground">
+            sharkfin {version}
+          </p>
+        )}
       </div>
 
       <Card>

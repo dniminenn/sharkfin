@@ -214,6 +214,9 @@ const withCore = async <T>(f: () => Promise<T>): Promise<T> => {
   return f();
 };
 
+/** Version and commit of this build. */
+export const buildId = (): Promise<string> =>
+  withCore(async () => core.build_id());
 export const getSettings = (): Promise<DeviceSettings> =>
   withCore(async () => JSON.parse((await core.get_settings()) as string));
 export const setDebounce = (value: number) => withCore(() => core.set_debounce(value));

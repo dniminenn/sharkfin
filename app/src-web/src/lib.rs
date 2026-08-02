@@ -417,6 +417,11 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
 /// build WebHID filters; hardcoding `0x3151` there would hide every board
 /// that ships under its brand's own ID.
 #[wasm_bindgen]
+pub fn build_id() -> String {
+    registry::build_id()
+}
+
+#[wasm_bindgen]
 pub fn vendor_ids() -> Vec<u16> {
     registry::vendor_ids().to_vec()
 }

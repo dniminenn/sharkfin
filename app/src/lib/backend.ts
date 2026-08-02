@@ -102,6 +102,8 @@ export interface DeviceSettings {
 }
 
 export const scan = () => invoke<ScanResult>("scan");
+/** Version and commit of this build. */
+export const buildId = () => invoke<string>("build_id");
 export const getSettings = () => invoke<DeviceSettings>("get_settings");
 export const setDebounce = (value: number) =>
   invoke<void>("set_debounce", { value });
