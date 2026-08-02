@@ -177,7 +177,6 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       if (!live) return;
       if (named && usable(named)) {
         setLayout(named);
-        setResolving(false);
         // Layout files are shared between boards, and boards sharing one
         // do not always ship the same factory keymap, so the slots can be
         // right for a sibling and wrong here. Keep them only while the
@@ -185,15 +184,23 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         // markedly better gets that one, and the user confirms it before
         // anything is written. A board that fits neither has been
         // remapped, which is not a reason to doubt the file.
-        if (id === undefined || localStorage.getItem(rejectedKey(id))) return;
-        const matrices = await readMatrices();
-        if (!live || !matrices.length) return;
-        const fit = Math.max(...matrices.map((m) => agreement(named, m)));
-        const alt = bestMatch(named, name, matrices);
-        if (!alt || alt.f1 < fit + RETHINK_MARGIN || alt.matchRate < MATCH_BAR) return;
-        setInference(alt);
-        setLayout(alt.layout);
-        setPending(!localStorage.getItem(confirmedKey(id)));
+        //
+        // This settles before the picture is shown. Drawing the shipped
+        // one first would show the board a keyboard it then swaps out.
+        if (id !== undefined && !localStorage.getItem(rejectedKey(id))) {
+          const matrices = await readMatrices();
+          if (!live) return;
+          if (matrices.length) {
+            const fit = Math.max(...matrices.map((m) => agreement(named, m)));
+            const alt = bestMatch(named, name, matrices);
+            if (alt && alt.f1 >= fit + RETHINK_MARGIN && alt.matchRate >= MATCH_BAR) {
+              setInference(alt);
+              setLayout(alt.layout);
+              setPending(!localStorage.getItem(confirmedKey(id)));
+            }
+          }
+        }
+        setResolving(false);
         return;
       }
       // No slot data anywhere for this board. The board's own keymap is
