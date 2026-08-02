@@ -39,11 +39,18 @@ sharkfin never flashes firmware.
 and 738 more after a one-time check against your board; the rest show a
 slot grid.
 
+If your board is one of those, or the picture is wrong, draw it on
+[keyboard-layout-editor.com](http://www.keyboard-layout-editor.com) and
+paste the drawing into the Keys page. sharkfin matches it against your
+keys, and sending the result back means the board ships drawn for
+everyone who owns one.
+
 ## Features
 
 - **Keys.** Remap any key, on a picture of your board, per profile. Base
   and Fn layers, combos, and the knob (turn left, turn right, press). Writes
-  go to the keyboard immediately.
+  go to the keyboard immediately. The picture is checked against your own
+  keyboard first, and stays read-only until you say it matches.
 - **Lighting.** 18 effects with direction options, full RGB, brightness and
   speed, live as you drag. Edge-light controls appear on boards that have
   edge LEDs.

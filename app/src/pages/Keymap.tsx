@@ -52,7 +52,7 @@ function sliceEntries(matrix: number[]): Map<number, number[]> {
 
 export default function KeymapPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
-  const { layout, pending, inference, remaining, confirm, reject, tryCustom } =
+  const { layout, resolving, pending, inference, remaining, confirm, reject, tryCustom } =
     useBoardLayout(device);
   const [verdict, setVerdict] = useState<"right" | "wrong" | null>(null);
   const [copied, setCopied] = useState(false);
@@ -375,9 +375,9 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         </Card>
       )}
 
-      {!entries ? (
+      {!entries || resolving ? (
         <div className="flex h-64 items-center justify-center text-muted-foreground">
-          Reading keymap…
+          {resolving ? "Finding your keyboard…" : "Reading keymap…"}
         </div>
       ) : (
         <>

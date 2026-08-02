@@ -64,7 +64,7 @@ function eventLabel(e: MacroEvent): string {
 
 export default function MacrosPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
-  const { layout, pending } = useBoardLayout(device);
+  const { layout, resolving, pending } = useBoardLayout(device);
   const [slot, setSlot] = useState(0);
   const [events, setEvents] = useState<MacroEvent[]>([]);
   const [repeat, setRepeat] = useState(1);
@@ -422,9 +422,9 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
           </div>
         </CardHeader>
         <CardContent>
-          {!entries ? (
+          {!entries || resolving ? (
             <div className="py-6 text-center text-sm text-muted-foreground">
-              Reading keymap…
+              {resolving ? "Finding your keyboard…" : "Reading keymap…"}
             </div>
           ) : (
             <>

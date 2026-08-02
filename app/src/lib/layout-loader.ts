@@ -33,6 +33,9 @@ export interface BoardLayout {
 
 export interface BoardLayoutState {
   layout: BoardLayout;
+  /** Still working out which picture this board gets. Until it settles,
+   *  `layout` is a placeholder and drawing it shows the wrong keyboard. */
+  resolving: boolean;
   /** Inferred and not yet confirmed by the user; keymap writes stay gated. */
   pending: boolean;
   inference: Inference | null;
@@ -133,6 +136,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const id = device?.spec.id;
   const profiles = device?.spec.profiles ?? 1;
   const [layout, setLayout] = useState<BoardLayout>(X86_LAYOUT);
+  const [resolving, setResolving] = useState(true);
   const [pending, setPending] = useState(false);
   const [inference, setInference] = useState<Inference | null>(null);
   const [remaining, setRemaining] = useState(0);
@@ -156,6 +160,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
 
   useEffect(() => {
     let live = true;
+    setResolving(true);
     setPending(false);
     setInference(null);
     setRemaining(0);
@@ -164,6 +169,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     indexRef.current = 0;
     if (!name || name === X86_NAME) {
       setLayout(X86_LAYOUT);
+      setResolving(false);
       return;
     }
     (async () => {
@@ -171,6 +177,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       if (!live) return;
       if (named && usable(named)) {
         setLayout(named);
+        setResolving(false);
         // Layout files are shared between boards, and boards sharing one
         // do not always ship the same factory keymap, so the slots can be
         // right for a sibling and wrong here. Keep them only while the
@@ -194,6 +201,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       // match, and a user who already said no keeps the grid. A remapped
       // profile misses the bar, so every profile gets a try.
       setLayout(gridLayout());
+      setResolving(false);
       if (id === undefined || localStorage.getItem(rejectedKey(id))) return;
       const matrices = await readMatrices();
       if (!live || !matrices.length) return;
@@ -306,5 +314,5 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     [id, readMatrices],
   );
 
-  return { layout, pending, inference, remaining, confirm, reject, tryCustom };
+  return { layout, resolving, pending, inference, remaining, confirm, reject, tryCustom };
 }

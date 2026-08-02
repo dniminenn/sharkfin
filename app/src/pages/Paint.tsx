@@ -49,7 +49,7 @@ function toBlob(pattern: string[]): number[] {
 
 export default function PaintPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
-  const { layout } = useBoardLayout(device);
+  const { layout, resolving } = useBoardLayout(device);
   const paintKeys = useMemo(
     () => layout.keys.filter((k) => k.matrixIndex !== null && k.type !== "knob"),
     [layout],
@@ -112,7 +112,12 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
             onPointerUp={() => (painting.current = false)}
             onPointerLeave={() => (painting.current = false)}
           >
-            {paintKeys.map((k) => {
+            {resolving && (
+              <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">
+                Finding your keyboard…
+              </div>
+            )}
+            {!resolving && paintKeys.map((k) => {
               const color = pattern[k.matrixIndex!] ?? "#000000";
               return (
                 <button
