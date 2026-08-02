@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
-import { layoutBundle } from "@/lib/layout-infer";
+import { layoutBundle, type Inference } from "@/lib/layout-infer";
 import { kleToLayout } from "@/lib/kle";
 import {
   DISABLED_GLYPH,
@@ -55,6 +55,9 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   const { layout, resolving, pending, inference, remaining, confirm, reject, tryCustom } =
     useBoardLayout(device);
   const [verdict, setVerdict] = useState<"right" | "wrong" | null>(null);
+  // Kept past rejection: the loader drops its inference then, and a "does
+  // not match" report needs the picture that was turned down.
+  const [reported, setReported] = useState<Inference | null>(null);
   const [copied, setCopied] = useState(false);
   const [kleText, setKleText] = useState("");
   const [profile, setProfile] = useState(0);
@@ -67,6 +70,13 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     extraA: 0,
     extraB: 0,
   });
+
+  // A selection belongs to the picture it was made on. When the picture
+  // changes underneath it, its slot means a different physical key, so
+  // writing it would remap something the user never clicked.
+  useEffect(() => {
+    setSelected(null);
+  }, [layout]);
 
   // Defaults come from the layout; a synthesized grid has none, and the Fn
   // layer's factory state isn't in the layout files either.
@@ -141,7 +151,10 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       setVerdict("right");
       confirm();
     } else {
-      if (remaining === 0) setVerdict("wrong");
+      if (remaining === 0) {
+        setVerdict("wrong");
+        setReported(inference);
+      }
       reject();
     }
   };
@@ -168,11 +181,12 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   // reruns on every connect until the layout ships with slot data, and a
   // shown, unrejected layout means the stored answer was "looks right".
   const effectiveVerdict = verdict ?? (inference && !pending ? "right" : null);
+  const bundleFor = inference ?? reported;
 
   const copyBundle = async () => {
-    if (!device || !inference || !effectiveVerdict) return;
+    if (!device || !bundleFor || !effectiveVerdict) return;
     await navigator.clipboard.writeText(
-      layoutBundle(device, inference, effectiveVerdict),
+      layoutBundle(device, bundleFor, effectiveVerdict),
     );
     setCopied(true);
     toast.success("Copied. Paste it into the report.");
@@ -303,7 +317,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         </Card>
       )}
 
-      {device && inference && (verdict !== null || !pending) && (
+      {device && bundleFor && (verdict !== null || !pending) && (
         <Card>
           <CardHeader>
             <CardTitle className="text-base">

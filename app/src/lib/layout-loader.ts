@@ -62,8 +62,34 @@ const CELL = 41;
 // Extraction fills matrixIndex only when the vendor bundle carries a
 // defaultMatrix for the layout; many files have none. A key without a slot
 // cannot be rendered or edited, so such a layout is no better than no file.
-function usable(layout: BoardLayout): boolean {
-  return layout.keys.some((k) => k.matrixIndex !== null);
+function usable(layout: BoardLayout | null): boolean {
+  return !!layout?.keys?.some?.((k) => k.matrixIndex !== null);
+}
+
+// Site data can be blocked or full; storage is a convenience here, never a
+// reason to fail. A throw from it used to leave the app resolving forever.
+function readStore(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function writeStore(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // Nothing to do: the choice simply is not remembered next time.
+  }
+}
+
+function clearStore(key: string) {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // As above.
+  }
 }
 
 const confirmedKey = (id: number) => `sharkfin.layout-confirmed.${id}`;
@@ -143,6 +169,8 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const matricesRef = useRef<number[][]>([]);
   const candidatesRef = useRef<Inference[]>([]);
   const indexRef = useRef(0);
+  /** The shipped picture, when there is one to go back to. */
+  const fallbackRef = useRef<BoardLayout | null>(null);
 
   const readMatrices = useCallback(async () => {
     if (matricesRef.current.length) return matricesRef.current;
@@ -167,6 +195,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     matricesRef.current = [];
     candidatesRef.current = [];
     indexRef.current = 0;
+    fallbackRef.current = null;
     if (!name || name === X86_NAME) {
       setLayout(X86_LAYOUT);
       setResolving(false);
@@ -187,7 +216,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         //
         // This settles before the picture is shown. Drawing the shipped
         // one first would show the board a keyboard it then swaps out.
-        if (id !== undefined && !localStorage.getItem(rejectedKey(id))) {
+        if (id !== undefined && !readStore(rejectedKey(id))) {
           const matrices = await readMatrices();
           if (!live) return;
           if (matrices.length) {
@@ -196,7 +225,13 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
             if (alt && alt.f1 >= fit + RETHINK_MARGIN && alt.matchRate >= MATCH_BAR) {
               setInference(alt);
               setLayout(alt.layout);
-              setPending(!localStorage.getItem(confirmedKey(id)));
+              candidatesRef.current = [alt];
+              indexRef.current = 0;
+              fallbackRef.current = named;
+              // Only a confirmation of THIS picture counts. Treating any
+              // stored answer as a yes would adopt an unreviewed
+              // assignment on a board whose file changed under it.
+              setPending(readStore(confirmedKey(id)) !== alt.layoutName);
             }
           }
         }
@@ -209,16 +244,16 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       // profile misses the bar, so every profile gets a try.
       setLayout(gridLayout());
       setResolving(false);
-      if (id === undefined || localStorage.getItem(rejectedKey(id))) return;
+      if (id === undefined || readStore(rejectedKey(id))) return;
       const matrices = await readMatrices();
       if (!live || !matrices.length) return;
 
       // A picture confirmed earlier is re-matched and used silently.
-      const stored = localStorage.getItem(confirmedKey(id));
+      const stored = readStore(confirmedKey(id));
       if (stored) {
         let geometry: BoardLayout | null = null;
         if (stored === "kle") {
-          const raw = localStorage.getItem(customKey(id));
+          const raw = readStore(customKey(id));
           if (raw) geometry = JSON.parse(raw) as BoardLayout;
         } else {
           geometry = await loadVendor(stored === "1" ? name : stored);
@@ -269,9 +304,9 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const confirm = useCallback(() => {
     setInference((inf) => {
       if (id !== undefined && inf) {
-        localStorage.setItem(confirmedKey(id), inf.layoutName || "1");
+        writeStore(confirmedKey(id), inf.layoutName || "1");
         if (inf.layoutName === "kle")
-          localStorage.setItem(
+          writeStore(
             customKey(id),
             JSON.stringify({
               canvas: inf.layout.canvas,
@@ -294,11 +329,14 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       setRemaining(candidatesRef.current.length - next - 1);
       return;
     }
-    if (id !== undefined) localStorage.setItem(rejectedKey(id), "1");
+    if (id !== undefined) writeStore(rejectedKey(id), "1");
     setPending(false);
     setRemaining(0);
     setInference(null);
-    setLayout(gridLayout());
+    // Saying "wrong" to a rival assignment restores the shipped picture,
+    // which is still the best thing known about the board. Only a board
+    // that never had one falls back to the slot grid.
+    setLayout(fallbackRef.current ?? gridLayout());
   }, [id]);
 
   const tryCustom = useCallback(
@@ -314,7 +352,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         setLayout(inf.layout);
         setRemaining(0);
         setPending(true);
-        if (id !== undefined) localStorage.removeItem(rejectedKey(id));
+        if (id !== undefined) clearStore(rejectedKey(id));
       }
       return inf.matchRate;
     },

@@ -7,20 +7,15 @@ import { DISABLED_GLYPH, PASSTHRU_GLYPH } from "@/lib/hid-usages";
 
 export type { BoardLayout, LayoutKey };
 
-export const KNOB_PRESS_SLOT = 84;
-const KNOB_PRESS_KEY: LayoutKey = {
-  code: "KnobPress",
-  type: "knob",
-  x: 0,
-  y: 0,
-  w: 0,
-  h: 0,
-  text: "Knob press",
-  matrixIndex: KNOB_PRESS_SLOT,
-  matrixEntry: [10, 12, 0, 0],
-  hidUsage: null,
-  consumerUsage: null,
-};
+// The knob's two rotations are named; whatever third knob key a board has
+// is its press. Boards disagree on which slot that is, so it comes from
+// the layout: a fixed slot number addresses an ordinary key on almost
+// every board, and writing there remaps whatever happens to live at it.
+const ROTATE_CODES = ["AudioVolumeDown", "AudioVolumeUp"];
+
+function pressKey(knobKeys: LayoutKey[]): LayoutKey | undefined {
+  return knobKeys.find((k) => !ROTATE_CODES.includes(k.code));
+}
 
 const ACCENT = new Set(["Escape", "Enter"]);
 const MOD_USAGES = new Set([42, 43, 57, 74, 75, 76, 78, 79, 80, 81, 82]);
@@ -73,6 +68,11 @@ function Knob({
   };
   const down = knobKeys.find((k) => k.code === "AudioVolumeDown");
   const up = knobKeys.find((k) => k.code === "AudioVolumeUp");
+  const press = pressKey(knobKeys);
+  // A zone with no slot behind it cannot be written to, so it must not be
+  // selectable: the assign panel would open on it and send the write to
+  // whatever slot the code fell back to.
+  const live = (k: LayoutKey | undefined) => !!k && k.matrixIndex !== null;
   return (
     <div
       className="absolute"
@@ -86,8 +86,9 @@ function Knob({
       <div className="knob-ring absolute inset-0" />
       <button
         title="Knob · rotate left"
-        data-selected={selected === down?.matrixIndex}
-        onClick={() => down && onSelect(down)}
+        disabled={!live(down)}
+        data-selected={live(down) && selected === down!.matrixIndex}
+        onClick={() => live(down) && onSelect(down!)}
         className="knob-zone absolute inset-y-0 left-0 z-10 flex w-[38%] items-center justify-start"
       >
         <span className="knob-target knob-arc flex h-[45%] w-[70%] items-center justify-center">
@@ -96,8 +97,9 @@ function Knob({
       </button>
       <button
         title="Knob · rotate right"
-        data-selected={selected === up?.matrixIndex}
-        onClick={() => up && onSelect(up)}
+        disabled={!live(up)}
+        data-selected={live(up) && selected === up!.matrixIndex}
+        onClick={() => live(up) && onSelect(up!)}
         className="knob-zone absolute inset-y-0 right-0 z-10 flex w-[38%] items-center justify-end"
       >
         <span className="knob-target knob-arc flex h-[45%] w-[70%] items-center justify-center">
@@ -106,8 +108,9 @@ function Knob({
       </button>
       <button
         title="Knob · press"
-        data-selected={selected === KNOB_PRESS_SLOT}
-        onClick={() => onSelect(KNOB_PRESS_KEY)}
+        disabled={!live(press)}
+        data-selected={live(press) && selected === press!.matrixIndex}
+        onClick={() => live(press) && onSelect(press!)}
         className="knob-zone absolute left-1/2 top-1/2 z-20 h-[52%] w-[52%] -translate-x-1/2 -translate-y-1/2"
       >
         <span className="knob-target knob-cap absolute inset-0 flex items-center justify-center">

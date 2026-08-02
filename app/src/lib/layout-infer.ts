@@ -103,14 +103,17 @@ export function inferSlots(base: BoardLayout, matrix: number[]): Inference {
   const ambiguous: number[] = [];
   let matched = 0;
   let total = 0;
+  // An unmatched key must lose whatever slot the file gave it. Keeping it
+  // would mix the assignment being replaced into the one replacing it, and
+  // two keys can then claim the same slot.
   const keys: LayoutKey[] = base.keys.map((k) => {
-    if (!k.matrixEntry) return { ...k };
+    if (!k.matrixEntry) return { ...k, matrixIndex: null };
     total++;
     const et = k.matrixEntry.join(",");
     const nth = counts.get(et) ?? 0;
     counts.set(et, nth + 1);
     const hits = bySlot.get(et);
-    if (!hits || nth >= hits.length) return { ...k };
+    if (!hits || nth >= hits.length) return { ...k, matrixIndex: null };
     matched++;
     if (hits.length > 1) ambiguous.push(hits[nth]);
     return { ...k, matrixIndex: hits[nth] };
