@@ -61,35 +61,39 @@ jobs:
           releaseBody: |
             Alpha. Back up from the Device tab before you rely on it.
 
-            ## What changed in 0.1.15
+            ## What changed in 0.2.0
+
+            **Lighting no longer wears out your keyboard.** Every lighting
+            change is stored in the keyboard's flash, and sharkfin was
+            writing one per slider step. Enough of them in a row wedged the
+            firmware until you unplugged it. Sliders now preview as you drag
+            and write once when you let go, which turns a minute of fiddling
+            from about forty writes into five.
 
             **If you have remapped a knob press, check it.** The knob's
-            centre wrote to a fixed matrix slot, which on most boards with a
-            knob is an ordinary key: Delete, Page Up or Print Screen
-            depending on the board. Remapping the knob press changed that
-            key instead and left the knob alone. It now uses the slot your
-            board actually reports, and where the board reports none the
-            zone is inert rather than guessing. If a key of yours stopped
-            behaving, reset it from the Keys page.
+            centre wrote to a fixed slot, which on most boards with a knob
+            is an ordinary key: Delete, Page Up or Print Screen depending on
+            the board. Remapping the knob press changed that key and left
+            the knob alone. It now uses the slot your board reports, and
+            where the board reports none the zone is inert. If a key of
+            yours stopped behaving, reset it from the Keys page.
 
-            **The keyboard picture is now checked against your keyboard.**
-            One layout is shared by many boards, and boards sharing one do
-            not always agree on which key sits where. sharkfin compares the
-            picture with what your board reports and, when they disagree,
-            fixes the picture and asks you to confirm it before any key can
-            be written. 133 boards were being drawn from a layout that did
-            not match them.
+            **The keyboard picture is checked against your keyboard.** One
+            layout file is shared by many boards, and boards sharing one do
+            not always agree on which key sits where. When the picture and
+            your board disagree, sharkfin fixes the picture and asks you to
+            confirm it before any key can be written.
 
-            **19 more boards are drawn without being asked anything**, from
-            keymaps confirmed against the manufacturer's own firmware. 184
-            are drawn out of the box, 738 after a one-time check, and 21
-            show a slot grid.
+            **More boards are drawn.** 184 out of the box and 738 after a
+            one-time check, from keymaps confirmed against the
+            manufacturer's own firmware. 21 still show a slot grid; those
+            can be drawn on keyboard-layout-editor.com and pasted into the
+            Keys page, which contributes the picture back for everyone.
 
-            **No more flash of the wrong keyboard.** Every page waited on a
-            picture of a different board while it worked out yours.
-
-            Boards without a picture, or with a wrong one, can be drawn on
-            keyboard-layout-editor.com and pasted into the Keys page.
+            **Also:** no flash of the wrong keyboard while a page loads,
+            `sharkfin --version` answers from a shell, the Contribute tab
+            shows the build, and a stall now records what was on the wire so
+            it can be diagnosed instead of guessed at.
 
             You can also use sharkfin without installing anything, at
             [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
