@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import x86 from "@/lib/layouts/x86.json";
 import { readKeymap, type ConnectedDevice } from "@/lib/backend";
-import { inferSlots, type Inference } from "@/lib/layout-infer";
+import { agreement, inferSlots, type Inference } from "@/lib/layout-infer";
 
 export interface LayoutKey {
   code: string;
@@ -70,6 +70,13 @@ const customKey = (id: number) => `sharkfin.layout-custom.${id}`;
 /** A picture needs at least this fraction of its keys tied to slots before
  *  it is offered at all. */
 const MATCH_BAR = 0.9;
+/** How much better a rival assignment must fit before it displaces the
+ *  shipped one. This margin is the whole test: a board that merely ships
+ *  different factory functions matches the same slots either way, so no
+ *  rival gains ground, and a remapped board makes every assignment fit
+ *  worse rather than one better. It also means a layout the board already
+ *  agrees with cannot be displaced, since no score exceeds 1. */
+const RETHINK_MARGIN = 0.15;
 /** Candidate pictures offered before giving up on the collection. */
 const MAX_CANDIDATES = 8;
 
@@ -164,6 +171,22 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       if (!live) return;
       if (named && usable(named)) {
         setLayout(named);
+        // Layout files are shared between boards, and boards sharing one
+        // do not always ship the same factory keymap, so the slots can be
+        // right for a sibling and wrong here. Keep them only while the
+        // board itself agrees; a board that fits a different assignment
+        // markedly better gets that one, and the user confirms it before
+        // anything is written. A board that fits neither has been
+        // remapped, which is not a reason to doubt the file.
+        if (id === undefined || localStorage.getItem(rejectedKey(id))) return;
+        const matrices = await readMatrices();
+        if (!live || !matrices.length) return;
+        const fit = Math.max(...matrices.map((m) => agreement(named, m)));
+        const alt = bestMatch(named, name, matrices);
+        if (!alt || alt.f1 < fit + RETHINK_MARGIN || alt.matchRate < MATCH_BAR) return;
+        setInference(alt);
+        setLayout(alt.layout);
+        setPending(!localStorage.getItem(confirmedKey(id)));
         return;
       }
       // No slot data anywhere for this board. The board's own keymap is

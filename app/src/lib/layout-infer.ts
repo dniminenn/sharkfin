@@ -74,6 +74,22 @@ export function layoutBundle(
   return lines.join("\n");
 }
 
+/** How much of a layout's shipped slot data the board itself agrees with.
+ *  1 means every key sits where the file says; a remapped board scores
+ *  lower, and so does a board the file was never right for. */
+export function agreement(layout: BoardLayout, matrix: number[]): number {
+  let hit = 0;
+  let total = 0;
+  for (const k of layout.keys) {
+    if (k.matrixIndex === null || !k.matrixEntry) continue;
+    const at = k.matrixIndex * 4;
+    if (at + 3 >= matrix.length) continue;
+    total++;
+    if (k.matrixEntry.every((b, i) => b === matrix[at + i])) hit++;
+  }
+  return total ? hit / total : 1;
+}
+
 export function inferSlots(base: BoardLayout, matrix: number[]): Inference {
   const bySlot = new Map<string, number[]>();
   for (let s = 0; s * 4 + 3 < matrix.length; s++) {
