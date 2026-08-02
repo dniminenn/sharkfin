@@ -313,7 +313,7 @@ pub fn get_led_param(state: tauri::State<AppState>) -> Result<LedParam, String> 
     })
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn set_led_param(state: tauri::State<AppState>, param: LedParam) -> Result<(), String> {
     light_gap(&state);
     with_writable(&state, |t, _| {
@@ -330,7 +330,7 @@ pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
     })
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), String> {
     write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
@@ -410,7 +410,7 @@ pub fn read_fn_keymap(state: tauri::State<AppState>, layer: u8) -> Result<Vec<u8
 }
 
 /// One slot: [op, profile, slot, 0.., ck7, value×4].
-#[tauri::command]
+#[tauri::command(async)]
 pub fn set_key(
     state: tauri::State<AppState>,
     profile: u8,
@@ -500,7 +500,7 @@ pub fn get_settings(state: tauri::State<AppState>) -> Result<DeviceSettings, Str
     })
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn set_debounce(state: tauri::State<AppState>, value: u8) -> Result<(), String> {
     write_gap(&state, SETTING_GAP);
     let value = value.clamp(1, 10);
@@ -517,7 +517,7 @@ pub fn set_debounce(state: tauri::State<AppState>, value: u8) -> Result<(), Stri
     })
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn set_sleep(state: tauri::State<AppState>, sleep: SleepTimes) -> Result<(), String> {
     write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
@@ -526,7 +526,7 @@ pub fn set_sleep(state: tauri::State<AppState>, sleep: SleepTimes) -> Result<(),
 }
 
 /// Read-modify-write so bits sharkfin doesn't model survive untouched.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn set_options(state: tauri::State<AppState>, options: KbOptions) -> Result<(), String> {
     // The Lighting page toggles these, and this one costs two reports, so
     // it belongs under the same floor as the sliders beside it.
@@ -542,7 +542,7 @@ pub fn set_options(state: tauri::State<AppState>, options: KbOptions) -> Result<
     })
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn set_side_light(state: tauri::State<AppState>, param: SledParam) -> Result<(), String> {
     light_gap(&state);
     {
@@ -564,7 +564,7 @@ pub fn set_side_light(state: tauri::State<AppState>, param: SledParam) -> Result
     })
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn set_auto_os(state: tauri::State<AppState>, enabled: bool) -> Result<(), String> {
     write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
@@ -578,7 +578,7 @@ pub fn set_auto_os(state: tauri::State<AppState>, enabled: bool) -> Result<(), S
 
 /// Wipes every onboard profile, keymap, macro and light setting. Firmware
 /// needs a few seconds; the frontend re-reads afterwards.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn factory_reset(state: tauri::State<AppState>) -> Result<(), String> {
     write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
@@ -592,23 +592,35 @@ fn key_gap(state: &tauri::State<AppState>) {
     write_gap(state, KEY_GAP)
 }
 
-/// Every write waits on one clock, so classes cannot interleave their way
-/// past their own floors: a lighting slider and a debounce slider moving
-/// together used to put both streams on the endpoint at once. The strictest
-/// recent write sets the pace for whatever follows it.
+/// Every write waits on one clock, so two callers cannot interleave their
+/// way past the floor: a lighting slider and a debounce slider moving
+/// together used to put both streams on the endpoint at once.
+///
+/// The slot is claimed before sleeping, not after waking. Waiters that only
+/// read the clock all compute the same deadline and then fire together,
+/// which is the flood this exists to prevent. Claiming first also means the
+/// clock only ever moves forward, so a thread delayed on the lock cannot
+/// stamp a stale instant over a newer one.
 fn write_gap(state: &tauri::State<AppState>, min: Duration) {
-    let mut inner = state.inner.lock();
-    if let Some(prev) = inner.last_write {
-        let since = prev.elapsed();
-        if since < min {
-            let wait = min - since;
-            drop(inner);
-            std::thread::sleep(wait);
-            state.inner.lock().last_write = Some(Instant::now());
-            return;
-        }
+    let now = Instant::now();
+    let next = {
+        let mut inner = state.inner.lock();
+        let next = match inner.last_write {
+            Some(prev) if prev + min > now => prev + min,
+            _ => now,
+        };
+        inner.last_write = Some(next);
+        next
+    };
+    if next > now {
+        std::thread::sleep(next - now);
     }
-    inner.last_write = Some(Instant::now());
+}
+
+/// Records a write that did its own pacing, so whatever follows is spaced
+/// from the end of it rather than from before it started.
+fn stamp_write(state: &tauri::State<AppState>) {
+    state.inner.lock().last_write = Some(Instant::now());
 }
 
 /// Spaces lighting writes by LIGHT_GAP.
@@ -619,19 +631,23 @@ fn light_gap(state: &tauri::State<AppState>) {
 /// Blocks until FLASH_COOLDOWN has passed since the last flash-backed upload,
 /// then stamps the clock for the next caller.
 fn flash_cooldown(state: &tauri::State<AppState>) {
-    write_gap(state, FLASH_PAGE_GAP);
-    let mut inner = state.inner.lock();
-    if let Some(prev) = inner.last_flash {
-        let since = prev.elapsed();
-        if since < FLASH_COOLDOWN {
-            let wait = FLASH_COOLDOWN - since;
-            drop(inner);
-            std::thread::sleep(wait);
-            state.inner.lock().last_flash = Some(Instant::now());
-            return;
-        }
+    let now = Instant::now();
+    let next = {
+        let mut inner = state.inner.lock();
+        let next = match inner.last_flash {
+            Some(prev) if prev + FLASH_COOLDOWN > now => prev + FLASH_COOLDOWN,
+            _ => now,
+        };
+        inner.last_flash = Some(next);
+        next
+    };
+    if next > now {
+        std::thread::sleep(next - now);
     }
-    inner.last_flash = Some(Instant::now());
+    // Claimed last, so the batch about to run is what the next write spaces
+    // itself from; claiming before a ten second sleep would leave the clock
+    // stale enough for anything racing in to skip its gap entirely.
+    write_gap(state, FLASH_PAGE_GAP);
 }
 
 /// Upload 384 bytes of per-key colour (128 slots × RGB, matrix order) and
@@ -640,7 +656,7 @@ fn flash_cooldown(state: &tauri::State<AppState>) {
 /// Write-only by design: `GET_USERPIC` returns stable data that does *not*
 /// reflect what was just written, so the board is not a source of truth here
 /// and the host keeps the pattern. Verified visually on an X86.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn write_per_key(
     state: tauri::State<AppState>,
     colors: Vec<u8>,
@@ -654,7 +670,7 @@ pub fn write_per_key(
         ));
     }
     flash_cooldown(&state);
-    with_writable(&state, |t, _| {
+    let out = with_writable(&state, |t, _| {
         // Decide about the mode switch before the upload: asking afterwards
         // means talking to a board that is still writing flash.
         let needs_mode = activate
@@ -686,7 +702,10 @@ pub fn write_per_key(
             )?;
         }
         Ok(())
-    })
+    });
+    // Spaced from the end of the batch, not from before it began.
+    stamp_write(&state);
+    out
 }
 
 fn check_macro_slot(slot: u8) -> Result<(), String> {
@@ -716,12 +735,12 @@ pub fn read_macro(state: tauri::State<AppState>, slot: u8) -> Result<Macro, Stri
 }
 
 /// Sends only the pages the blob occupies, last-page flag on the final one.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn write_macro(state: tauri::State<AppState>, slot: u8, data: Macro) -> Result<(), String> {
     check_macro_slot(slot)?;
     let blob = data.to_blob()?;
     flash_cooldown(&state);
-    with_writable(&state, |t, fc| {
+    let out = with_writable(&state, |t, fc| {
         let opcode = need(fc)?.set_macro;
         let pages = crate::protocol::macro_pages(&blob);
         for page in 0..pages {
@@ -734,7 +753,10 @@ pub fn write_macro(state: tauri::State<AppState>, slot: u8, data: Macro) -> Resu
             ))?;
         }
         Ok(())
-    })
+    });
+    // Spaced from the end of the batch, not from before it began.
+    stamp_write(&state);
+    out
 }
 
 /// Everything sharkfin can read back from a board, as one restorable file.
@@ -815,7 +837,7 @@ pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<Stri
 /// Applies a saved config: only slots that differ are written, then the
 /// settings and lighting. Refuses configs from a different board model,
 /// slot meanings follow the board's matrix.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<String, String> {
     let raw = std::fs::read_to_string(&path).map_err(err_str)?;
     let cfg: SavedConfig = serde_json::from_str(&raw).map_err(err_str)?;
@@ -836,7 +858,7 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             spec.id
         ));
     }
-    with_writable(&state, |t, fc| {
+    let out = with_writable(&state, |t, fc| {
         let fc = need(fc)?;
         let mut keys_written = 0usize;
         for (fn_layer, layers) in [(false, &cfg.profiles), (true, &cfg.fn_layers)] {
@@ -861,6 +883,7 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
         if let (Some(opts), Some((set, get))) = (cfg.options, fc.kboption) {
             let cur = t.roundtrip(get, &[0], Checksum::Bit7)?;
             t.send(&opts.to_packet_as(set, cur[2], cur[3], cur[4]))?;
+            std::thread::sleep(KEY_GAP);
         }
         let deb = cfg.debounce.clamp(1, 10);
         let deb_payload: &[u8] = if fc.debounce_at == 1 {
@@ -868,21 +891,30 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
         } else {
             &[0, deb]
         };
+        // Each of these is a settings write in its own right, and they land
+        // right after a batch of up to 1024 key writes, so they get the same
+        // spacing the command-level floors would have given them.
         t.send(&crate::protocol::packet(
             fc.set_debounce,
             deb_payload,
             Checksum::Bit7,
         ))?;
+        std::thread::sleep(KEY_GAP);
         t.send(&cfg.sleep.to_packet_as(fc.set_sleeptime))?;
+        std::thread::sleep(KEY_GAP);
         if let (Some(sled), true, Some(_)) = (cfg.side_light, spec.features.side_light, fc.sled) {
             t.send(&sled.to_packet())?;
+            std::thread::sleep(KEY_GAP);
         }
         t.send(&cfg.led.to_packet())?;
         Ok(format!(
             "restored {keys_written} keys, settings and lighting from {}",
             cfg.board
         ))
-    })
+    });
+    // Spaced from the end of the batch, not from before it began.
+    stamp_write(&state);
+    out
 }
 
 /// Every GET opcode from both family tables. All reads, all harmless; on a

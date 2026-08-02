@@ -64,13 +64,20 @@ function Row({
   );
 }
 
+// Kept above the backend's write floor; coalescing faster only queues
+// writes the board has not asked for.
+const WRITE_GAP = 300;
+
 export default function DevicePage({
   device,
 }: {
   device: ConnectedDevice | null;
 }) {
   const [s, setS] = useState<DeviceSettings | null>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  // One timer per control: sharing it let a debounce nudge cancel a pending
+  // sleep write, leaving the UI showing a value the board never got.
+  const sleepTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const load = useCallback(() => {
     getSettings()
@@ -87,10 +94,10 @@ export default function DevicePage({
     setS((prev) => {
       if (!prev) return prev;
       const sleep = { ...prev.sleep, ...patch };
-      clearTimeout(timer.current);
-      timer.current = setTimeout(() => {
+      clearTimeout(sleepTimer.current);
+      sleepTimer.current = setTimeout(() => {
         setSleep(sleep).catch((e) => toast.error(`Write failed: ${e}`));
-      }, 200);
+      }, WRITE_GAP);
       return { ...prev, sleep };
     });
   };
@@ -98,10 +105,10 @@ export default function DevicePage({
   const pushDebounce = (value: number) => {
     setS((prev) => {
       if (!prev) return prev;
-      clearTimeout(timer.current);
-      timer.current = setTimeout(() => {
+      clearTimeout(debounceTimer.current);
+      debounceTimer.current = setTimeout(() => {
         setDebounce(value).catch((e) => toast.error(`Write failed: ${e}`));
-      }, 200);
+      }, WRITE_GAP);
       return { ...prev, debounce: value };
     });
   };

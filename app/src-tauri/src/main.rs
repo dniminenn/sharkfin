@@ -6,7 +6,9 @@
 fn main() {
     // Answered before the window opens, so asking which build is installed
     // does not mean launching the app and reading the Contribute tab.
-    if std::env::args()
+    // args_os, not args: the latter panics on a non-UTF-8 argument, and a
+    // launcher passing one should still open the app.
+    if std::env::args_os()
         .skip(1)
         .any(|a| a == "--version" || a == "-V")
     {

@@ -56,7 +56,9 @@ const isNearBlack = (c: { r: number; g: number; b: number }) =>
 
 // The board stalls its control endpoint under sustained feature reports, so
 // a drag must coalesce into one write per gap rather than one per event.
-const WRITE_GAP = 200;
+// Kept above the backend's own floor: coalescing faster than the floor only
+// queues writes the board has not asked for, and the lag outlives the drag.
+const WRITE_GAP = 300;
 
 export default function LightingPage({ connected }: { connected: boolean }) {
   const [param, setParam] = useState<LedParam | null>(null);

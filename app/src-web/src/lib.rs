@@ -309,28 +309,24 @@ fn fail(e: HidErr) -> String {
     }
 }
 
+/// Claims the next slot on a clock and waits for it.
+///
+/// The slot is claimed before awaiting, not after waking: callers that only
+/// read the clock all compute the same deadline and then fire together,
+/// which is the flood this exists to prevent.
 async fn gap(last: impl Fn(&mut AppState) -> &mut Option<f64> + Copy, min_ms: f64) {
+    let now = js_now();
     let wait = STATE.with(|s| {
         let mut s = s.borrow_mut();
-        match *last(&mut s) {
-            Some(prev) => {
-                let since = js_now() - prev;
-                if since < min_ms {
-                    min_ms - since
-                } else {
-                    *last(&mut s) = Some(js_now());
-                    0.0
-                }
-            }
-            None => {
-                *last(&mut s) = Some(js_now());
-                0.0
-            }
-        }
+        let next = match *last(&mut s) {
+            Some(prev) if prev + min_ms > now => prev + min_ms,
+            _ => now,
+        };
+        *last(&mut s) = Some(next);
+        next - now
     });
     if wait > 0.0 {
         sleep_ms(wait).await;
-        STATE.with(|s| *last(&mut s.borrow_mut()) = Some(js_now()));
     }
 }
 
@@ -416,14 +412,15 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
     }
 }
 
-/// Every USB vendor ID the registry knows about. The JS side needs these to
-/// build WebHID filters; hardcoding `0x3151` there would hide every board
-/// that ships under its brand's own ID.
+/// Which build this is, for the UI to show and a reporter to quote.
 #[wasm_bindgen]
 pub fn build_id() -> String {
     registry::build_id()
 }
 
+/// Every USB vendor ID the registry knows about. The JS side needs these to
+/// build WebHID filters; hardcoding `0x3151` there would hide every board
+/// that ships under its brand's own ID.
 #[wasm_bindgen]
 pub fn vendor_ids() -> Vec<u16> {
     registry::vendor_ids().to_vec()
@@ -767,8 +764,10 @@ pub async fn factory_reset() -> Result<(), JsValue> {
 
 /// Blocks until FLASH_COOLDOWN has passed since the last flash-backed upload.
 async fn flash_cooldown() {
-    gap(|s| &mut s.last_cmd, FLASH_PAGE_GAP_MS).await;
     gap(|s| &mut s.last_flash, FLASH_COOLDOWN_MS).await;
+    // Claimed last: claiming before a ten second wait would leave the shared
+    // clock stale enough for anything racing in to skip its gap entirely.
+    gap(|s| &mut s.last_cmd, FLASH_PAGE_GAP_MS).await;
 }
 
 #[wasm_bindgen]
