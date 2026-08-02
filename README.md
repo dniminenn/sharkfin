@@ -35,8 +35,8 @@ sharkfin never flashes firmware.
 
 **Alpha, so back up first.**
 
-939 of 943 accept changes, 4 are read-only. 165 are drawn out of the box
-and 757 more after a one-time check against your board; the rest show a
+939 of 943 accept changes, 4 are read-only. 168 are drawn out of the box
+and 754 more after a one-time check against your board; the rest show a
 slot grid.
 
 ## Features

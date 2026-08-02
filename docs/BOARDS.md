@@ -13,8 +13,8 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 943 |
 | writable | 939 |
-| drawn | 165 |
-| drawn after confirmation | 757 |
+| drawn | 168 |
+| drawn after confirmation | 754 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -216,8 +216,8 @@ blank is a plain grid of key slots. All three work the same.
 | EPOMAKER HE68 Llte | 2883 | 3151:5029 | gen2 | yes | auto |
 | EPOMAKER HE68 Llte | 3664 | 3151:5029 | gen2 | yes | auto |
 | EPOMAKER HE68 Mag | 2465 | 3151:5029 | gen2 | yes | auto |
-| EPOMAKER HE75 Mag | 1955 | 3151:4015 | yc500 | yes | auto |
-| EPOMAKER HE75 Mag | 2520 | 3151:502f | gen2 | yes | auto |
+| EPOMAKER HE75 Mag | 1955 | 3151:4015 | yc500 | yes | yes |
+| EPOMAKER HE75 Mag | 2520 | 3151:502f | gen2 | yes | yes |
 | EPOMAKER HE75 V2 TMR | 3613 | 3151:5054 | gen2 | yes | auto |
 | EPOMAKER HE75 V2 TMR | 3883 | 3151:5030 | gen2 | yes | auto |
 | EPOMAKER KIIBOOM-68C | 2586 | 3151:502d | gen2 | yes | auto |
@@ -569,7 +569,7 @@ blank is a plain grid of key slots. All three work the same.
 | rongyuan FK51H4 HE | 3678 | 3151:5030 | gen2 | yes | yes |
 | rongyuan G1011 | 3345 | 3151:5029 | gen2 | yes | auto |
 | rongyuan Gaming Keyboard | 2611 | 3151:5030 | gen2 | yes | auto |
-| rongyuan Gaming Keyboard | 2892 | 3151:502f | gen2 | yes | auto |
+| rongyuan Gaming Keyboard | 2892 | 3151:502f | gen2 | yes | yes |
 | rongyuan Gaming Keyboard | 2899 | 3151:5029 | gen2 | yes | auto |
 | rongyuan Gaming Keyboard | 2996 | 3151:5029 | gen2 | yes | auto |
 | rongyuan Gaming Keyboard | 2998 | 3151:5029 | gen2 | yes | auto |
