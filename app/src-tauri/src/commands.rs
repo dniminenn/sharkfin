@@ -521,6 +521,9 @@ pub fn set_sleep(state: tauri::State<AppState>, sleep: SleepTimes) -> Result<(),
 /// Read-modify-write so bits sharkfin doesn't model survive untouched.
 #[tauri::command]
 pub fn set_options(state: tauri::State<AppState>, options: KbOptions) -> Result<(), String> {
+    // The Lighting page toggles these, and this one costs two reports, so
+    // it belongs under the same floor as the sliders beside it.
+    light_gap(&state);
     with_writable(&state, |t, fc| {
         let (set, get) = need(fc)?.kboption.ok_or_else(|| {
             HidError::Protocol(
@@ -534,6 +537,7 @@ pub fn set_options(state: tauri::State<AppState>, options: KbOptions) -> Result<
 
 #[tauri::command]
 pub fn set_side_light(state: tauri::State<AppState>, param: SledParam) -> Result<(), String> {
+    light_gap(&state);
     {
         let inner = state.inner.lock();
         let spec = inner

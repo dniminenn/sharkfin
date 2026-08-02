@@ -702,6 +702,9 @@ pub async fn set_sleep(sleep_json: String) -> Result<(), JsValue> {
 #[wasm_bindgen]
 pub async fn set_options(options_json: String) -> Result<(), JsValue> {
     let options: KbOptions = serde_json::from_str(&options_json).map_err(|e| e.to_string())?;
+    // The Lighting page toggles these, and this one costs two reports, so
+    // it belongs under the same floor as the sliders beside it.
+    gap(|s| &mut s.last_light, LIGHT_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
@@ -718,6 +721,7 @@ pub async fn set_options(options_json: String) -> Result<(), JsValue> {
 #[wasm_bindgen]
 pub async fn set_side_light(param_json: String) -> Result<(), JsValue> {
     let param: SledParam = serde_json::from_str(&param_json).map_err(|e| e.to_string())?;
+    gap(|s| &mut s.last_light, LIGHT_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     if !spec.features.side_light {
