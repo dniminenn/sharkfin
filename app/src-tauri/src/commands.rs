@@ -19,8 +19,8 @@ struct Inner {
     api: Option<hidapi::HidApi>,
     open: Option<OpenDevice>,
     last_flash: Option<Instant>,
-    last_light: Option<Instant>,
-    last_key: Option<Instant>,
+    /// One clock for every write, whatever its class.
+    last_write: Option<Instant>,
     /// Set when the firmware stalls. Reopening a stalled device does not
     /// recover it and the extra traffic keeps it pinned, so scanning stops
     /// until the hardware disappears from the bus, i.e. someone replugs.
@@ -66,7 +66,12 @@ const KEY_GAP: Duration = Duration::from_millis(400);
 /// Lighting is the one thing a UI drags, and sustained feature reports stall
 /// the control endpoint even when nothing touches flash. The frontend
 /// coalesces, but the floor lives here so no caller can flood the board.
-const LIGHT_GAP: Duration = Duration::from_millis(120);
+const LIGHT_GAP: Duration = Duration::from_millis(250);
+
+/// Everything else a user can hold down or click repeatedly: profile
+/// switches, debounce and sleep sliders, auto-OS, reset. None of these was
+/// spaced at all, and a slider drives them exactly like a lighting slider.
+const SETTING_GAP: Duration = Duration::from_millis(200);
 
 impl Default for AppState {
     fn default() -> Self {
@@ -75,8 +80,7 @@ impl Default for AppState {
                 api: None,
                 open: None,
                 last_flash: None,
-                last_light: None,
-                last_key: None,
+                last_write: None,
                 stalled: false,
             }),
         }
@@ -328,6 +332,7 @@ pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
 
 #[tauri::command]
 pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), String> {
+    write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
         let pkt = crate::protocol::packet(need(fc)?.set_profile, &[profile], Checksum::Bit7);
         t.send(&pkt)?;
@@ -497,6 +502,7 @@ pub fn get_settings(state: tauri::State<AppState>) -> Result<DeviceSettings, Str
 
 #[tauri::command]
 pub fn set_debounce(state: tauri::State<AppState>, value: u8) -> Result<(), String> {
+    write_gap(&state, SETTING_GAP);
     let value = value.clamp(1, 10);
     with_writable(&state, |t, fc| {
         let fc = need(fc)?;
@@ -513,6 +519,7 @@ pub fn set_debounce(state: tauri::State<AppState>, value: u8) -> Result<(), Stri
 
 #[tauri::command]
 pub fn set_sleep(state: tauri::State<AppState>, sleep: SleepTimes) -> Result<(), String> {
+    write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
         t.send(&sleep.to_packet_as(need(fc)?.set_sleeptime))
     })
@@ -559,6 +566,7 @@ pub fn set_side_light(state: tauri::State<AppState>, param: SledParam) -> Result
 
 #[tauri::command]
 pub fn set_auto_os(state: tauri::State<AppState>, enabled: bool) -> Result<(), String> {
+    write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
         let (set, _) = need(fc)?.auto_os.ok_or_else(|| {
             HidError::Protocol("host-OS auto-detect opcodes unknown for this family".into())
@@ -572,6 +580,7 @@ pub fn set_auto_os(state: tauri::State<AppState>, enabled: bool) -> Result<(), S
 /// needs a few seconds; the frontend re-reads afterwards.
 #[tauri::command]
 pub fn factory_reset(state: tauri::State<AppState>) -> Result<(), String> {
+    write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
         let pkt = crate::protocol::packet(need(fc)?.set_reset, &[], Checksum::Bit7);
         t.send(&pkt)
@@ -580,39 +589,37 @@ pub fn factory_reset(state: tauri::State<AppState>) -> Result<(), String> {
 
 /// Spaces key writes by KEY_GAP.
 fn key_gap(state: &tauri::State<AppState>) {
+    write_gap(state, KEY_GAP)
+}
+
+/// Every write waits on one clock, so classes cannot interleave their way
+/// past their own floors: a lighting slider and a debounce slider moving
+/// together used to put both streams on the endpoint at once. The strictest
+/// recent write sets the pace for whatever follows it.
+fn write_gap(state: &tauri::State<AppState>, min: Duration) {
     let mut inner = state.inner.lock();
-    if let Some(prev) = inner.last_key {
+    if let Some(prev) = inner.last_write {
         let since = prev.elapsed();
-        if since < KEY_GAP {
-            let wait = KEY_GAP - since;
+        if since < min {
+            let wait = min - since;
             drop(inner);
             std::thread::sleep(wait);
-            state.inner.lock().last_key = Some(Instant::now());
+            state.inner.lock().last_write = Some(Instant::now());
             return;
         }
     }
-    inner.last_key = Some(Instant::now());
+    inner.last_write = Some(Instant::now());
 }
 
 /// Spaces lighting writes by LIGHT_GAP.
 fn light_gap(state: &tauri::State<AppState>) {
-    let mut inner = state.inner.lock();
-    if let Some(prev) = inner.last_light {
-        let since = prev.elapsed();
-        if since < LIGHT_GAP {
-            let wait = LIGHT_GAP - since;
-            drop(inner);
-            std::thread::sleep(wait);
-            state.inner.lock().last_light = Some(Instant::now());
-            return;
-        }
-    }
-    inner.last_light = Some(Instant::now());
+    write_gap(state, LIGHT_GAP)
 }
 
 /// Blocks until FLASH_COOLDOWN has passed since the last flash-backed upload,
 /// then stamps the clock for the next caller.
 fn flash_cooldown(state: &tauri::State<AppState>) {
+    write_gap(state, FLASH_PAGE_GAP);
     let mut inner = state.inner.lock();
     if let Some(prev) = inner.last_flash {
         let since = prev.elapsed();

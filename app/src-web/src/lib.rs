@@ -218,7 +218,10 @@ const FLASH_COOLDOWN_MS: f64 = 10_000.0;
 const FLASH_PAGE_GAP_MS: f64 = 100.0;
 const FLASH_SETTLE_MS: f64 = 2_000.0;
 const KEY_GAP_MS: f64 = 400.0;
-const LIGHT_GAP_MS: f64 = 120.0;
+const LIGHT_GAP_MS: f64 = 250.0;
+/// Everything else a user can hold down or click repeatedly: profile
+/// switches, debounce and sleep sliders, auto-OS, reset.
+const SETTING_GAP_MS: f64 = 200.0;
 const PER_KEY_MODE: u8 = 13;
 
 pub const STALL_MESSAGE: &str =
@@ -235,8 +238,8 @@ struct AppState {
     stalled: bool,
     busy: bool,
     last_flash: Option<f64>,
-    last_light: Option<f64>,
-    last_key: Option<f64>,
+    /// One clock for every command write, whatever its class.
+    last_cmd: Option<f64>,
 }
 
 thread_local! {
@@ -481,7 +484,7 @@ pub async fn get_led_param() -> Result<JsValue, JsValue> {
 #[wasm_bindgen]
 pub async fn set_led_param(param_json: String) -> Result<(), JsValue> {
     let param: LedParam = serde_json::from_str(&param_json).map_err(|e| e.to_string())?;
-    gap(|s| &mut s.last_light, LIGHT_GAP_MS).await;
+    gap(|s| &mut s.last_cmd, LIGHT_GAP_MS).await;
     let _busy = acquire().await;
     let (t, _) = get_open(true)?;
     t.send(&param.to_packet()).await.map_err(fail)?;
@@ -502,6 +505,7 @@ pub async fn get_profile() -> Result<u8, JsValue> {
 
 #[wasm_bindgen]
 pub async fn set_profile(profile: u8) -> Result<(), JsValue> {
+    gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
@@ -591,7 +595,7 @@ pub async fn set_key(profile: u8, slot: u8, value: Vec<u8>, fn_layer: bool) -> R
         .as_slice()
         .try_into()
         .map_err(|_| "key value must be 4 bytes")?;
-    gap(|s| &mut s.last_key, KEY_GAP_MS).await;
+    gap(|s| &mut s.last_cmd, KEY_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
@@ -671,6 +675,7 @@ pub async fn get_settings() -> Result<JsValue, JsValue> {
 
 #[wasm_bindgen]
 pub async fn set_debounce(value: u8) -> Result<(), JsValue> {
+    gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
     let value = value.clamp(1, 10);
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
@@ -688,6 +693,7 @@ pub async fn set_debounce(value: u8) -> Result<(), JsValue> {
 
 #[wasm_bindgen]
 pub async fn set_sleep(sleep_json: String) -> Result<(), JsValue> {
+    gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
     let sleep: SleepTimes = serde_json::from_str(&sleep_json).map_err(|e| e.to_string())?;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
@@ -704,7 +710,7 @@ pub async fn set_options(options_json: String) -> Result<(), JsValue> {
     let options: KbOptions = serde_json::from_str(&options_json).map_err(|e| e.to_string())?;
     // The Lighting page toggles these, and this one costs two reports, so
     // it belongs under the same floor as the sliders beside it.
-    gap(|s| &mut s.last_light, LIGHT_GAP_MS).await;
+    gap(|s| &mut s.last_cmd, LIGHT_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
@@ -721,7 +727,7 @@ pub async fn set_options(options_json: String) -> Result<(), JsValue> {
 #[wasm_bindgen]
 pub async fn set_side_light(param_json: String) -> Result<(), JsValue> {
     let param: SledParam = serde_json::from_str(&param_json).map_err(|e| e.to_string())?;
-    gap(|s| &mut s.last_light, LIGHT_GAP_MS).await;
+    gap(|s| &mut s.last_cmd, LIGHT_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     if !spec.features.side_light {
@@ -736,6 +742,7 @@ pub async fn set_side_light(param_json: String) -> Result<(), JsValue> {
 
 #[wasm_bindgen]
 pub async fn set_auto_os(enabled: bool) -> Result<(), JsValue> {
+    gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
@@ -749,6 +756,7 @@ pub async fn set_auto_os(enabled: bool) -> Result<(), JsValue> {
 
 #[wasm_bindgen]
 pub async fn factory_reset() -> Result<(), JsValue> {
+    gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
@@ -759,6 +767,7 @@ pub async fn factory_reset() -> Result<(), JsValue> {
 
 /// Blocks until FLASH_COOLDOWN has passed since the last flash-backed upload.
 async fn flash_cooldown() {
+    gap(|s| &mut s.last_cmd, FLASH_PAGE_GAP_MS).await;
     gap(|s| &mut s.last_flash, FLASH_COOLDOWN_MS).await;
 }
 
