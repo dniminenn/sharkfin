@@ -280,6 +280,7 @@ fn run<T>(
         Err(e) => {
             if e.is_stall() {
                 log::warn!("device stalled, dropping handle: {e}");
+                log::warn!("wire before the stall: {}", crate::hid::wire_trace());
                 inner.open = None;
                 inner.stalled = true;
                 Err(STALL_MESSAGE.into())

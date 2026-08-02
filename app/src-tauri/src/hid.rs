@@ -77,6 +77,41 @@ pub struct Transport {
     last_write: Mutex<Option<Instant>>,
 }
 
+/// A rolling record of what actually reached the wire, so a stall can be
+/// read back instead of guessed at. Six stalls on one X86 produced no
+/// evidence beyond "it stopped answering"; this is that evidence.
+///
+/// Opcode and direction only: payloads can carry a keymap, and this ends up
+/// in a log a user pastes into an issue.
+const TRACE_LEN: usize = 48;
+
+static TRACE: std::sync::Mutex<std::collections::VecDeque<(std::time::Instant, char, u8)>> =
+    std::sync::Mutex::new(std::collections::VecDeque::new());
+
+fn trace_wire(dir: char, opcode: u8) {
+    if let Ok(mut t) = TRACE.lock() {
+        if t.len() == TRACE_LEN {
+            t.pop_front();
+        }
+        t.push_back((Instant::now(), dir, opcode));
+    }
+}
+
+/// The recent wire history, oldest first, as `+12ms W:0x07` entries.
+pub fn wire_trace() -> String {
+    let Ok(t) = TRACE.lock() else {
+        return String::new();
+    };
+    let mut out = String::new();
+    let mut prev: Option<Instant> = None;
+    for (at, dir, op) in t.iter() {
+        let delta = prev.map(|p| at.duration_since(p).as_millis()).unwrap_or(0);
+        out.push_str(&format!("+{delta}ms {dir}:0x{op:02X} "));
+        prev = Some(*at);
+    }
+    out
+}
+
 impl Transport {
     pub fn open(api: &HidApi, path: &str) -> Result<Self, HidError> {
         let cpath = std::ffi::CString::new(path).expect("hid path with NUL");
@@ -100,6 +135,7 @@ impl Transport {
     }
 
     pub fn send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidError> {
+        trace_wire('W', buf[0]);
         self.pace();
         let mut wire = [0u8; REPORT_LEN + 1];
         wire[1..].copy_from_slice(buf);
@@ -108,6 +144,7 @@ impl Transport {
     }
 
     pub fn read(&self) -> Result<[u8; REPORT_LEN], HidError> {
+        trace_wire('R', 0);
         let mut wire = [0u8; REPORT_LEN + 1];
         let n = self.dev.get_feature_report(&mut wire)?;
         if n < 8 {
