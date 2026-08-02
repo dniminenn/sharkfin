@@ -19,8 +19,10 @@ struct Inner {
     api: Option<hidapi::HidApi>,
     open: Option<OpenDevice>,
     last_flash: Option<Instant>,
-    /// One clock for every write, whatever its class.
-    last_write: Option<Instant>,
+    /// One clock for every write: when the last one was claimed, and the
+    /// floor its class asked for. Both halves matter, since the quiet a
+    /// write needs after it is a property of that write, not the next one.
+    last_write: Option<(Instant, Duration)>,
     /// Set when the firmware stalls. Reopening a stalled device does not
     /// recover it and the extra traffic keeps it pinned, so scanning stops
     /// until the hardware disappears from the bus, i.e. someone replugs.
@@ -601,15 +603,26 @@ fn key_gap(state: &tauri::State<AppState>) {
 /// which is the flood this exists to prevent. Claiming first also means the
 /// clock only ever moves forward, so a thread delayed on the lock cannot
 /// stamp a stale instant over a newer one.
+///
+/// The wait is the stricter of the two floors involved. A key write needs
+/// 400 ms of quiet after it whatever comes next, so following it with a
+/// lighting write must not shorten that to 250 ms.
 fn write_gap(state: &tauri::State<AppState>, min: Duration) {
     let now = Instant::now();
     let next = {
         let mut inner = state.inner.lock();
         let next = match inner.last_write {
-            Some(prev) if prev + min > now => prev + min,
-            _ => now,
+            Some((prev, prev_min)) => {
+                let gap = prev_min.max(min);
+                if prev + gap > now {
+                    prev + gap
+                } else {
+                    now
+                }
+            }
+            None => now,
         };
-        inner.last_write = Some(next);
+        inner.last_write = Some((next, min));
         next
     };
     if next > now {
@@ -620,7 +633,7 @@ fn write_gap(state: &tauri::State<AppState>, min: Duration) {
 /// Records a write that did its own pacing, so whatever follows is spaced
 /// from the end of it rather than from before it started.
 fn stamp_write(state: &tauri::State<AppState>) {
-    state.inner.lock().last_write = Some(Instant::now());
+    state.inner.lock().last_write = Some((Instant::now(), KEY_GAP));
 }
 
 /// Spaces lighting writes by LIGHT_GAP.

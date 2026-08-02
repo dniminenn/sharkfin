@@ -237,9 +237,11 @@ struct AppState {
     open: Option<Open>,
     stalled: bool,
     busy: bool,
-    last_flash: Option<f64>,
-    /// One clock for every command write, whatever its class.
-    last_cmd: Option<f64>,
+    last_flash: Option<(f64, f64)>,
+    /// One clock for every command write: when the last one was claimed,
+    /// and the floor its class asked for. Both halves matter, since the
+    /// quiet a write needs after it is a property of that write.
+    last_cmd: Option<(f64, f64)>,
 }
 
 thread_local! {
@@ -313,16 +315,25 @@ fn fail(e: HidErr) -> String {
 ///
 /// The slot is claimed before awaiting, not after waking: callers that only
 /// read the clock all compute the same deadline and then fire together,
-/// which is the flood this exists to prevent.
-async fn gap(last: impl Fn(&mut AppState) -> &mut Option<f64> + Copy, min_ms: f64) {
+/// which is the flood this exists to prevent. The wait is the stricter of
+/// the two floors involved, so a key write's 400 ms of quiet is not cut
+/// short by a lighting write following it.
+async fn gap(last: impl Fn(&mut AppState) -> &mut Option<(f64, f64)> + Copy, min_ms: f64) {
     let now = js_now();
     let wait = STATE.with(|s| {
         let mut s = s.borrow_mut();
         let next = match *last(&mut s) {
-            Some(prev) if prev + min_ms > now => prev + min_ms,
-            _ => now,
+            Some((prev, prev_min)) => {
+                let gap = prev_min.max(min_ms);
+                if prev + gap > now {
+                    prev + gap
+                } else {
+                    now
+                }
+            }
+            None => now,
         };
-        *last(&mut s) = Some(next);
+        *last(&mut s) = Some((next, min_ms));
         next - now
     });
     if wait > 0.0 {
