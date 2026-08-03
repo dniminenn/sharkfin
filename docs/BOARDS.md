@@ -13,8 +13,8 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 944 |
 | writable | 940 |
-| drawn | 185 |
-| drawn after confirmation | 737 |
+| drawn | 184 |
+| drawn after confirmation | 738 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -512,7 +512,7 @@ blank is a plain grid of key slots. All three work the same.
 | OUSAID HE68 Pro | 4113 | 3151:5030 | gen2 | yes | auto |
 | OUSAID HE968JP | 3871 | 3151:5029 | gen2 | yes | auto |
 | OUSAID HE986 UK | 3809 | 3151:5029 | gen2 | yes | auto |
-| OUSAID HG68 HE | 3316 | 3151:5030 | gen2 | yes | yes |
+| OUSAID HG68 HE | 3316 | 3151:5030 | gen2 | yes | auto |
 | OUSAID HG68HE | 3414 | 3151:5029 | gen2 | yes | auto |
 | OUSAID KY-MK231 | 3931 | 3151:5029 | gen2 | yes | auto |
 | OUSAID KY-MK231 | 3953 | 3151:5029 | gen2 | yes | yes |

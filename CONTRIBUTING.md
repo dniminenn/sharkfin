@@ -142,6 +142,14 @@ no single board's firmware settles it, so the layout is left alone: the
 Keys page matches each board's own keymap instead, which is right per
 board where one file cannot be.
 
+That second rule is not theoretical. `Common68_ZAP68` is shared by 33
+boards, and their own factory keymaps show 5 with a Right Ctrl and 26
+without. `Common68_DK68HE` is the same picture plus that key, and the two
+boards nearest it disagree further: Home and Delete are swapped, and one
+has a knob the other does not. A bundle from any one of them would have
+baked slot data that was wrong for the rest. Check what the other boards'
+keymaps say before baking a layout they share.
+
 `tools/coverage.py` reports how many boards have a rendered layout and
 which layouts the writable boards still need.
 
