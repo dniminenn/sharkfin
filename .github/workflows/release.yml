@@ -61,20 +61,21 @@ jobs:
           releaseBody: |
             Alpha. Back up from the Device tab before you rely on it.
 
-            ## What changed in 0.2.1
+            ## What changed in 0.2.2
 
-            **A confirmed keyboard picture can be changed again.** Answering
-            "looks right" was final, with no way back if you noticed a
-            problem afterwards. The Keys page now has "Check the picture
-            again" under the keyboard.
+            **A profile you picked on one keyboard no longer follows you to
+            another.** Swapping boards left the old profile number selected,
+            and the next key you remapped was written to a profile the new
+            board may not have. The profile list is also capped at three,
+            which is the count the hardware is known to have and the number a
+            backup can restore.
 
-            **Keys the picture leaves out are now editable.** Some layouts
-            omit a key the board really has: the one shared by 33 boards,
-            including the Syntech G68HE, has no Right Ctrl at all. Those keys
-            answer in the board's keymap, so the Keys page lists them under
-            "Keys this picture leaves out" and they can be remapped like any
-            other. Sending a board report from the Contribute tab is what
-            gets them drawn properly.
+            **New board:** ROYUAN Sky100Pro.
+
+            **The Syntech Chronos 68 is drawn correctly.** Its layout was a
+            67-key picture with no Right Ctrl; it now uses one with all 68,
+            matched against the owner's own keyboard and confirmed in the
+            board's firmware.
 
             You can also use sharkfin without installing anything, at
             [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
