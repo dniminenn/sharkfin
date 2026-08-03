@@ -52,8 +52,17 @@ function sliceEntries(matrix: number[]): Map<number, number[]> {
 
 export default function KeymapPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
-  const { layout, resolving, pending, inference, remaining, confirm, reject, tryCustom } =
-    useBoardLayout(device);
+  const {
+    layout,
+    resolving,
+    pending,
+    inference,
+    remaining,
+    confirm,
+    reject,
+    recheck,
+    tryCustom,
+  } = useBoardLayout(device);
   const [verdict, setVerdict] = useState<"right" | "wrong" | null>(null);
   // Kept past rejection: the loader drops its inference then, and a "does
   // not match" report needs the picture that was turned down.
@@ -70,6 +79,34 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     extraA: 0,
     extraB: 0,
   });
+
+  // Some vendor layouts simply leave keys out: Common68_ZAP68, shared by 33
+  // boards, has no Right Ctrl. Those keys exist on the board and answer in
+  // its keymap, so they are offered here rather than being unreachable.
+  const offPicture = useMemo(() => {
+    if (!entries || layout.grid) return [];
+    const drawn = new Set(
+      layout.keys.filter((k) => k.matrixIndex !== null).map((k) => k.matrixIndex),
+    );
+    const out: LayoutKey[] = [];
+    for (const [slot, entry] of entries) {
+      if (drawn.has(slot) || entry.every((b) => b === 0)) continue;
+      out.push({
+        code: `Slot${slot}`,
+        type: "key",
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0,
+        text: entryLabel(entry, layer === "fn"),
+        matrixIndex: slot,
+        matrixEntry: null,
+        hidUsage: null,
+        consumerUsage: null,
+      });
+    }
+    return out;
+  }, [entries, layout, layer]);
 
   // A selection belongs to the picture it was made on. When the picture
   // changes underneath it, its slot means a different physical key, so
@@ -417,6 +454,50 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
               ? `${PASSTHRU_GLYPH} means the key falls through to the base layer.`
               : `${DISABLED_GLYPH} means the key does nothing.`}
           </p>
+
+          {!pending && (
+            <p className="text-center text-xs text-muted-foreground">
+              Not your keyboard, or a key missing?{" "}
+              <button className="underline" onClick={recheck}>
+                Check the picture again
+              </button>
+            </p>
+          )}
+
+          {offPicture.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">
+                  Keys this picture leaves out
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                <p className="text-muted-foreground">
+                  Your board answers for these, but the picture does not draw
+                  them. Pick one to remap it. Sending a board report from the
+                  Contribute tab is what gets them drawn.
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {offPicture.map((k) => (
+                    <button
+                      key={k.matrixIndex}
+                      onClick={() => setSelected(k)}
+                      data-selected={selected?.matrixIndex === k.matrixIndex}
+                      className={cn(
+                        "rounded-md border px-2 py-1 text-xs transition-colors hover:bg-accent",
+                        selected?.matrixIndex === k.matrixIndex && "border-(--ring)",
+                      )}
+                    >
+                      {k.text}
+                      <span className="ml-1 text-muted-foreground">
+                        slot {k.matrixIndex}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <Card className={cn(!selected && "opacity-60")}>
             <CardHeader className="flex-row items-center justify-between space-y-0">

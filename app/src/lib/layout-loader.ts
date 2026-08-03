@@ -43,6 +43,10 @@ export interface BoardLayoutState {
   remaining: number;
   confirm: () => void;
   reject: () => void;
+  /** Forget the stored answer and work the picture out again. A confirmed
+   *  picture is otherwise final, and a key missing from it is only noticed
+   *  after confirming. */
+  recheck: () => void;
   /** Match a pasted drawing against the board; returns the match rate and,
    *  when it clears the bar, makes it the pending picture. */
   tryCustom: (layout: BoardLayout) => Promise<number>;
@@ -166,6 +170,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const [pending, setPending] = useState(false);
   const [inference, setInference] = useState<Inference | null>(null);
   const [remaining, setRemaining] = useState(0);
+  const [attempt, setAttempt] = useState(0);
   const matricesRef = useRef<number[][]>([]);
   const candidatesRef = useRef<Inference[]>([]);
   const indexRef = useRef(0);
@@ -299,7 +304,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     return () => {
       live = false;
     };
-  }, [name, id, readMatrices]);
+  }, [name, id, readMatrices, attempt]);
 
   const confirm = useCallback(() => {
     setInference((inf) => {
@@ -339,6 +344,16 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     setLayout(fallbackRef.current ?? gridLayout());
   }, [id]);
 
+  const recheck = useCallback(() => {
+    if (id !== undefined) {
+      clearStore(confirmedKey(id));
+      clearStore(rejectedKey(id));
+      clearStore(customKey(id));
+    }
+    matricesRef.current = [];
+    setAttempt((n) => n + 1);
+  }, [id]);
+
   const tryCustom = useCallback(
     async (geometry: BoardLayout) => {
       const matrices = await readMatrices();
@@ -359,5 +374,15 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     [id, readMatrices],
   );
 
-  return { layout, resolving, pending, inference, remaining, confirm, reject, tryCustom };
+  return {
+    layout,
+    resolving,
+    pending,
+    inference,
+    remaining,
+    confirm,
+    reject,
+    recheck,
+    tryCustom,
+  };
 }
