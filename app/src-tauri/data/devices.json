@@ -1415,6 +1415,31 @@
     }
   },
   {
+    "id": 1951,
+    "name": "royuan_sky100pro",
+    "displayName": "Sky100Pro",
+    "company": "ROYUAN",
+    "vendor": "ROYUAN",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "royuan_sky100pro",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1955,
     "name": "yc3121_x87_soc_hall",
     "displayName": "HE75 Mag",

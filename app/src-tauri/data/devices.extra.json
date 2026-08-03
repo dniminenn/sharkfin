@@ -53,5 +53,33 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #9. Not in any vendor catalogue, so an extraction alone will not add it.",
+    "_evidence": "Read sweep from the owner's board (0.2.1 web build). identify 0x8F returns 0x079F = 1951. GET_KEYMATRIX 0x89 returns a decodable yc500 keymap (Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0); the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 (120, 120, 1680, 1680) and auto-OS 0x97 answers 1. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86. Edge light 0x88 answers under its own opcode with plausible values, so the board appears to have one.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. Profile count was not observable either, so it is pinned to 1. The edge light's own layout name is not observable either, and the feature flag tracks that layout rather than the opcode, so sideLight stays false: better no control than one that cannot be drawn.",
+    "id": 1951,
+    "name": "royuan_sky100pro",
+    "displayName": "Sky100Pro",
+    "company": "ROYUAN",
+    "vendor": "ROYUAN",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "royuan_sky100pro",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

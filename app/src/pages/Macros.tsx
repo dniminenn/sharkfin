@@ -30,7 +30,10 @@ import {
 } from "@/lib/backend";
 
 const SLOTS = Array.from({ length: 50 }, (_, i) => i);
-const PROFILES = [0, 1, 2];
+// The board says how many it has; offering three to a board with one
+// writes to profiles that may not exist.
+const profileList = (n: number | undefined) =>
+  Array.from({ length: Math.max(1, n ?? 1) }, (_, i) => i);
 const DIRECTIONS = [
   ["left", -1, 0],
   ["right", 1, 0],
@@ -412,7 +415,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {PROFILES.map((p) => (
+                {profileList(device?.spec.profiles).map((p) => (
                   <SelectItem key={p} value={String(p)}>
                     {p + 1}
                   </SelectItem>

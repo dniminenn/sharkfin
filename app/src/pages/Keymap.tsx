@@ -31,7 +31,10 @@ import {
 } from "@/lib/hid-usages";
 import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
 
-const PROFILES = [0, 1, 2];
+// The board says how many it has; offering three to a board with one
+// writes to profiles that may not exist.
+const profileList = (n: number | undefined) =>
+  Array.from({ length: Math.max(1, n ?? 1) }, (_, i) => i);
 
 // Every plain-key usage, for the combo pickers.
 const COMBO_KEYS: { label: string; usage: number }[] = GROUPS.flatMap((g) =>
@@ -301,7 +304,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {PROFILES.map((p) => (
+              {profileList(device?.spec.profiles).map((p) => (
                 <SelectItem key={p} value={String(p)}>
                   {p + 1}
                 </SelectItem>
