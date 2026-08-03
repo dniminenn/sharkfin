@@ -30,10 +30,15 @@ import {
 } from "@/lib/backend";
 
 const SLOTS = Array.from({ length: 50 }, (_, i) => i);
-// The board says how many it has; offering three to a board with one
-// writes to profiles that may not exist.
+// The board says how many it has, and offering three to a board with one
+// writes to profiles that may not exist. Capped at three regardless: that
+// is the only count docs/PROTOCOL.md has hardware evidence for, the
+// registry claims up to eight on the vendor's word alone, and a backup
+// only carries three (commands.rs clamps it), so a fourth would be
+// editable but never restored.
+const PROFILE_CAP = 3;
 const profileList = (n: number | undefined) =>
-  Array.from({ length: Math.max(1, n ?? 1) }, (_, i) => i);
+  Array.from({ length: Math.min(PROFILE_CAP, Math.max(1, n ?? 1)) }, (_, i) => i);
 const DIRECTIONS = [
   ["left", -1, 0],
   ["right", 1, 0],
@@ -81,6 +86,14 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
   const lastTs = useRef<number | null>(null);
   const surface = useRef<HTMLDivElement>(null);
+
+  // A profile chosen on one board must not stay armed when another is
+  // plugged in: the pages do not remount on a swap, and the number goes
+  // straight into a write whose address scales with it.
+  useEffect(() => {
+    const max = profileList(device?.spec.profiles).length - 1;
+    setProfile((p) => Math.min(p, max));
+  }, [device?.spec.id, device?.spec.profiles]);
 
   useEffect(() => {
     if (!connected) return;

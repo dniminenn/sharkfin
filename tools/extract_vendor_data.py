@@ -544,7 +544,13 @@ def build_layout(ui, hid_table, matrix, report):
 
 
 def dump_layout(layout):
-    lines = ["{", ' "canvas": ' + json.dumps(layout["canvas"], separators=(",", ":")) + ",", ' "keys": [']
+    # `local` first and always preserved: it is what stops the next
+    # extraction deleting a hand-maintained layout, so a tool that rewrites
+    # one must not drop it.
+    lines = ["{"]
+    if layout.get("local"):
+        lines.append(' "local": true,')
+    lines += [' "canvas": ' + json.dumps(layout["canvas"], separators=(",", ":")) + ",", ' "keys": [']
     keylines = [
         "  " + json.dumps(k, separators=(",", ":"), ensure_ascii=False)
         for k in layout["keys"]
@@ -646,6 +652,15 @@ def convention_ui_name(enum_key, ui_defs):
     return hits[0] if len(hits) == 1 else None
 
 
+# Exactly the keys this script writes per device, so an override cannot
+# name a field the registry does not have (`keylayout`) and be ignored.
+KNOWN_DEVICE_FIELDS = {
+    "id", "name", "displayName", "company", "vendor", "vendorId", "productId",
+    "internalName", "keyLayout", "lightLayout", "sideLightLayout", "profiles",
+    "magnetic", "family", "features",
+}
+
+
 def load_extras(path):
     """Hand-maintained entries the bundle cannot supply.
 
@@ -662,14 +677,23 @@ def load_extras(path):
     if not path or not path.is_file():
         return [], {}
     raw = json.loads(path.read_text(encoding="utf-8"))
-    adds, overrides = [], {}
+    adds, overrides, seen = [], {}, []
     for e in raw:
         rec = {k: v for k, v in e.items() if not k.startswith("_")}
+        if "id" not in rec:
+            raise SystemExit(f"{path}: an entry has no id: {sorted(e)}")
+        seen.append(rec["id"])
         if e.get("_override"):
+            unknown = set(rec) - KNOWN_DEVICE_FIELDS
+            if unknown:
+                raise SystemExit(
+                    f"{path}: override {rec['id']} names fields the registry does not "
+                    f"have: {sorted(unknown)}"
+                )
             overrides[rec["id"]] = rec
         else:
             adds.append(rec)
-    ids = [e["id"] for e in adds] + list(overrides)
+    ids = seen
     dupes = {i for i in ids if ids.count(i) > 1}
     if dupes:
         raise SystemExit(f"{path}: duplicate ids {sorted(dupes)}")
@@ -937,14 +961,23 @@ def main():
     local = set()
     for old_layout in args.layouts_out.glob("*.json"):
         try:
-            if json.loads(old_layout.read_text(encoding="utf-8")).get("local"):
-                local.add(old_layout.stem)
-                continue
-        except (ValueError, OSError):
-            pass
+            parsed = json.loads(old_layout.read_text(encoding="utf-8"))
+        except (ValueError, OSError) as e:
+            # Deleting what cannot be read would throw away a hand-made
+            # layout over a stray comma.
+            raise SystemExit(f"{old_layout}: cannot read, refusing to clear the directory ({e})")
+        if isinstance(parsed, dict) and parsed.get("local") is True:
+            local.add(old_layout.stem)
+            continue
         old_layout.unlink()
     if local:
         print(f"  local layouts kept: {sorted(local)}")
+    clash = sorted(local & set(ui_map))
+    if clash:
+        raise SystemExit(
+            "local layouts share a name with a vendor layout, which would "
+            f"replace it for every board pointing there: {clash}"
+        )
     written, no_matrix, ambiguous = [], [], []
     for enum_key, ui_name in sorted(ui_map.items()):
         if enum_key == "Common80_k72x86" or enum_key in local:

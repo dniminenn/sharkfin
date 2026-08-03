@@ -210,6 +210,35 @@ mod tests {
         assert!(wholes > 0 && overrides > 0, "expected both kinds of entry");
     }
 
+    /// A layout named `Local*` is hand-maintained from hardware evidence for a
+    /// board no vendor layout fits. It survives regeneration only because the
+    /// file says `"local": true`; a tool that rewrites one and drops the flag
+    /// leaves a file the next extraction deletes, and the boards pointing at it
+    /// fall back to a bare slot grid with nothing failing in between.
+    #[test]
+    fn local_layouts_stay_local() {
+        static CHRONOS: &str = include_str!("../../src/lib/layouts/vendor/Local68_Chronos68.json");
+        let v: serde_json::Value = serde_json::from_str(CHRONOS).expect("parses");
+        assert_eq!(v["local"], serde_json::json!(true), "lost its local flag");
+
+        let named: Vec<u32> = all()
+            .iter()
+            .filter(|d| d.key_layout.starts_with("Local"))
+            .map(|d| d.id)
+            .collect();
+        assert!(
+            named.contains(&2446),
+            "no board points at a local layout, so nothing keeps it honest"
+        );
+        for id in named {
+            let d = by_id(id).unwrap();
+            assert_eq!(
+                d.key_layout, "Local68_Chronos68",
+                "device {id} names a local layout this test does not check exists"
+            );
+        }
+    }
+
     /// A bundle has to name the build it came from, or a report from between
     /// two releases cannot be placed. The commit is absent in a tarball build,
     /// so only the version prefix is guaranteed.

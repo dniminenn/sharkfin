@@ -109,7 +109,11 @@ The script:
   `hand_added_boards_survive_a_regeneration` fails if a run drops one.
 - Keeps any layout file marked `"local": true`. Those are hand-made from
   hardware evidence for boards no vendor layout fits, and regeneration
-  neither deletes nor overwrites them.
+  neither deletes nor overwrites them. The name must not match a vendor
+  layout, or it would replace that picture for every board pointing at it,
+  and the run stops if it does. `local_layouts_stay_local` fails if the
+  flag is ever dropped, which would leave the next run free to delete the
+  file.
 - Extracts every bundled `*_keymappings_ui_info` layout object, and the
   SVG scenes newer builds ship instead. A layout named for a revision
   (`_v2`) falls back to the base revision's drawing, which is what the

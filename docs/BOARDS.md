@@ -13,8 +13,8 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 944 |
 | writable | 940 |
-| drawn | 188 |
-| drawn after confirmation | 734 |
+| drawn | 185 |
+| drawn after confirmation | 737 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -49,9 +49,9 @@ blank is a plain grid of key slots. All three work the same.
 | AJAZZMOUSE AK680 MAX | 2336 | 3151:502f | gen2 | yes | auto |
 | AJAZZMOUSE AK680 MAX | 2343 | 3151:502f | gen2 | yes | auto |
 | AJAZZMOUSE AK680 MAX | 2371 | 3151:502f | gen2 | yes | auto |
-| AJAZZMOUSE AK680MC | 2605 | 3151:5030 | gen2 | yes | yes |
-| AJAZZMOUSE AK680MC | 2608 | 3151:5029 | gen2 | yes | yes |
-| AJAZZMOUSE AK680MC | 2609 | 3151:5030 | gen2 | yes | yes |
+| AJAZZMOUSE AK680MC | 2605 | 3151:5030 | gen2 | yes | auto |
+| AJAZZMOUSE AK680MC | 2608 | 3151:5029 | gen2 | yes | auto |
+| AJAZZMOUSE AK680MC | 2609 | 3151:5030 | gen2 | yes | auto |
 | AJAZZMOUSE ALUX60 | 2621 | 3151:502d | gen2 | yes | auto |
 | AJAZZMOUSE ALUX60 | 2622 | 3151:502d | gen2 | yes | auto |
 | AJAZZMOUSE ALUX60 | 3218 | 3151:5029 | gen2 | yes | auto |

@@ -31,10 +31,15 @@ import {
 } from "@/lib/hid-usages";
 import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
 
-// The board says how many it has; offering three to a board with one
-// writes to profiles that may not exist.
+// The board says how many it has, and offering three to a board with one
+// writes to profiles that may not exist. Capped at three regardless: that
+// is the only count docs/PROTOCOL.md has hardware evidence for, the
+// registry claims up to eight on the vendor's word alone, and a backup
+// only carries three (commands.rs clamps it), so a fourth would be
+// editable but never restored.
+const PROFILE_CAP = 3;
 const profileList = (n: number | undefined) =>
-  Array.from({ length: Math.max(1, n ?? 1) }, (_, i) => i);
+  Array.from({ length: Math.min(PROFILE_CAP, Math.max(1, n ?? 1)) }, (_, i) => i);
 
 // Every plain-key usage, for the combo pickers.
 const COMBO_KEYS: { label: string; usage: number }[] = GROUPS.flatMap((g) =>
@@ -114,6 +119,14 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   // A selection belongs to the picture it was made on. When the picture
   // changes underneath it, its slot means a different physical key, so
   // writing it would remap something the user never clicked.
+  // A profile chosen on one board must not stay armed when another is
+  // plugged in: the pages do not remount on a swap, and the number goes
+  // straight into a write whose address scales with it.
+  useEffect(() => {
+    const max = profileList(device?.spec.profiles).length - 1;
+    setProfile((p) => Math.min(p, max));
+  }, [device?.spec.id, device?.spec.profiles]);
+
   useEffect(() => {
     setSelected(null);
   }, [layout]);
@@ -514,7 +527,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                   </Badge>
                 )}
               </CardTitle>
-              {selected && defaults.size > 0 && (
+              {selected && defaults.has(selected.matrixIndex!) && (
                 <Button
                   size="sm"
                   variant="outline"
