@@ -81,5 +81,37 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_override": true,
+    "_why": "Chronos 68 (Syntech): the vendor points it at Common68_ZAP68, a 67-key picture with no Right Ctrl. This board has the key. Reported for the Chronos in issue #8.",
+    "_evidence": "The Chronos owner's keymap (issue #8) matched Common68_DK68HE, the same picture plus Right Ctrl, 68 of 68 keys. These four boards' own factory keymaps in the vendor data are byte-identical to it, so one baked layout serves all four. Local68_Chronos68 carries that geometry with slots from that keymap.",
+    "_unknown": "ZAP68 is left alone: of its 33 boards, 26 have no Right Ctrl and would gain a phantom key. Two others that do have it, K68 id 2301 and HG68 HE id 3316, place other keys differently, so they keep matching their own keymap instead.",
+    "id": 2446,
+    "keyLayout": "Local68_Chronos68"
+  },
+  {
+    "_override": true,
+    "_why": "AK680MC: the vendor points it at Common68_ZAP68, a 67-key picture with no Right Ctrl. This board has the key. Reported for the Chronos in issue #8.",
+    "_evidence": "The Chronos owner's keymap (issue #8) matched Common68_DK68HE, the same picture plus Right Ctrl, 68 of 68 keys. These four boards' own factory keymaps in the vendor data are byte-identical to it, so one baked layout serves all four. Local68_Chronos68 carries that geometry with slots from that keymap.",
+    "_unknown": "ZAP68 is left alone: of its 33 boards, 26 have no Right Ctrl and would gain a phantom key. Two others that do have it, K68 id 2301 and HG68 HE id 3316, place other keys differently, so they keep matching their own keymap instead.",
+    "id": 2605,
+    "keyLayout": "Local68_Chronos68"
+  },
+  {
+    "_override": true,
+    "_why": "AK680MC: the vendor points it at Common68_ZAP68, a 67-key picture with no Right Ctrl. This board has the key. Reported for the Chronos in issue #8.",
+    "_evidence": "The Chronos owner's keymap (issue #8) matched Common68_DK68HE, the same picture plus Right Ctrl, 68 of 68 keys. These four boards' own factory keymaps in the vendor data are byte-identical to it, so one baked layout serves all four. Local68_Chronos68 carries that geometry with slots from that keymap.",
+    "_unknown": "ZAP68 is left alone: of its 33 boards, 26 have no Right Ctrl and would gain a phantom key. Two others that do have it, K68 id 2301 and HG68 HE id 3316, place other keys differently, so they keep matching their own keymap instead.",
+    "id": 2608,
+    "keyLayout": "Local68_Chronos68"
+  },
+  {
+    "_override": true,
+    "_why": "AK680MC: the vendor points it at Common68_ZAP68, a 67-key picture with no Right Ctrl. This board has the key. Reported for the Chronos in issue #8.",
+    "_evidence": "The Chronos owner's keymap (issue #8) matched Common68_DK68HE, the same picture plus Right Ctrl, 68 of 68 keys. These four boards' own factory keymaps in the vendor data are byte-identical to it, so one baked layout serves all four. Local68_Chronos68 carries that geometry with slots from that keymap.",
+    "_unknown": "ZAP68 is left alone: of its 33 boards, 26 have no Right Ctrl and would gain a phantom key. Two others that do have it, K68 id 2301 and HG68 HE id 3316, place other keys differently, so they keep matching their own keymap instead.",
+    "id": 2609,
+    "keyLayout": "Local68_Chronos68"
   }
 ]

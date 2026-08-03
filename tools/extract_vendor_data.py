@@ -649,20 +649,31 @@ def convention_ui_name(enum_key, ui_defs):
 def load_extras(path):
     """Hand-maintained entries the bundle cannot supply.
 
-    Two cases: a board the vendor has removed from its catalogue, and a board
-    that was never in it but answered a read sweep on real hardware. Keys
-    beginning with `_` are notes for the next reader and are stripped here, so
-    the generated registry stays uniform.
+    Three cases. A board the vendor has removed from its catalogue, and a
+    board it never listed but which answered a read sweep on real hardware:
+    both are added whole. And a board the bundle does carry but describes
+    wrongly, marked `_override`, where only the named fields are replaced.
+    An override is the narrow tool: the vendor points several boards at one
+    layout even when their own factory keymaps prove they differ.
+
+    Keys beginning with `_` are notes for the next reader and are stripped
+    here, so the generated registry stays uniform.
     """
     if not path or not path.is_file():
-        return []
+        return [], {}
     raw = json.loads(path.read_text(encoding="utf-8"))
-    extras = [{k: v for k, v in e.items() if not k.startswith("_")} for e in raw]
-    ids = [e["id"] for e in extras]
+    adds, overrides = [], {}
+    for e in raw:
+        rec = {k: v for k, v in e.items() if not k.startswith("_")}
+        if e.get("_override"):
+            overrides[rec["id"]] = rec
+        else:
+            adds.append(rec)
+    ids = [e["id"] for e in adds] + list(overrides)
     dupes = {i for i in ids if ids.count(i) > 1}
     if dupes:
         raise SystemExit(f"{path}: duplicate ids {sorted(dupes)}")
-    return extras
+    return adds, overrides
 
 
 def main():
@@ -751,10 +762,21 @@ def main():
                 },
             }
         )
-    extras = load_extras(args.extras)
+    extras, overrides = load_extras(args.extras)
     from_bundle = {d["id"] for d in devices}
     redundant = [e["id"] for e in extras if e["id"] in from_bundle]
     devices.extend(e for e in extras if e["id"] not in from_bundle)
+
+    applied = []
+    for d in devices:
+        patch = overrides.get(d["id"])
+        if not patch:
+            continue
+        for k, v in patch.items():
+            if k != "id":
+                d[k] = v
+        applied.append(d["id"])
+    stale = sorted(set(overrides) - {d["id"] for d in devices})
 
     devices.sort(key=lambda d: d["id"])
     args.devices_out.parent.mkdir(parents=True, exist_ok=True)
@@ -769,6 +791,13 @@ def main():
         print(
             f"  extras now in the bundle, delete them from {args.extras.name}: "
             f"{sorted(set(redundant))}"
+        )
+    if applied:
+        print(f"  overrides applied from {args.extras.name}: {sorted(applied)}")
+    if stale:
+        print(
+            f"  overrides for ids the bundle no longer has, delete them from "
+            f"{args.extras.name}: {stale}"
         )
 
     fam_counts = {}
@@ -901,13 +930,24 @@ def main():
         print(f"  firmware-confirmed matrices applied: {len(evidence)}")
 
     # Clear stale output: layouts accumulate across runs otherwise, and the
-    # committed set must be exactly what the current sources reproduce.
+    # committed set must be exactly what the current sources reproduce. A
+    # layout marked `"local": true` is hand-maintained from hardware a
+    # bundle cannot describe, so it is neither deleted nor overwritten.
     args.layouts_out.mkdir(parents=True, exist_ok=True)
+    local = set()
     for old_layout in args.layouts_out.glob("*.json"):
+        try:
+            if json.loads(old_layout.read_text(encoding="utf-8")).get("local"):
+                local.add(old_layout.stem)
+                continue
+        except (ValueError, OSError):
+            pass
         old_layout.unlink()
+    if local:
+        print(f"  local layouts kept: {sorted(local)}")
     written, no_matrix, ambiguous = [], [], []
     for enum_key, ui_name in sorted(ui_map.items()):
-        if enum_key == "Common80_k72x86":
+        if enum_key == "Common80_k72x86" or enum_key in local:
             continue
         if ui_name not in ui_defs:
             continue

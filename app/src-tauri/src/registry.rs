@@ -162,27 +162,52 @@ mod tests {
         }
     }
 
-    /// Boards the vendor bundle cannot supply: one the vendor removed, one it
-    /// never listed. `tools/extract_vendor_data.py` merges
-    /// `data/devices.extra.json` into the registry it writes, so regenerating
-    /// without the extras silently drops real hardware. Fail instead.
+    /// Boards and corrections the vendor bundle cannot supply: one the vendor
+    /// removed, one it never listed, and boards it points at the wrong layout.
+    /// `tools/extract_vendor_data.py` merges `data/devices.extra.json` into the
+    /// registry it writes, so regenerating without the extras silently drops
+    /// real hardware or reinstates a layout known to be wrong. Fail instead.
+    ///
+    /// Whole entries are checked field by field. An `_override` entry carries
+    /// only the fields it replaces, so each is compared on its own terms.
     #[test]
     fn hand_added_boards_survive_a_regeneration() {
         static EXTRA_JSON: &str = include_str!("../data/devices.extra.json");
-        let extras: Vec<DeviceSpec> =
-            serde_json::from_str(EXTRA_JSON).expect("devices.extra.json parses as DeviceSpec");
-        assert!(!extras.is_empty(), "extras file is empty");
-        for e in extras {
-            let got = by_id(e.id).unwrap_or_else(|| {
-                panic!(
-                    "device {} is in devices.extra.json but not the registry",
-                    e.id
-                )
-            });
-            assert_eq!(got.family, e.family, "device {} family", e.id);
-            assert_eq!(got.vendor_id, e.vendor_id, "device {} vendor id", e.id);
-            assert_eq!(got.product_id, e.product_id, "device {} product id", e.id);
+        let entries: Vec<serde_json::Value> =
+            serde_json::from_str(EXTRA_JSON).expect("devices.extra.json parses");
+        assert!(!entries.is_empty(), "extras file is empty");
+        let mut wholes = 0;
+        let mut overrides = 0;
+        for e in entries {
+            let id = e["id"].as_u64().expect("every entry has an id") as u32;
+            let got = by_id(id)
+                .unwrap_or_else(|| panic!("device {id} is in the extras but not the registry"));
+            if e.get("_override")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false)
+            {
+                overrides += 1;
+                let have = serde_json::to_value(&got).unwrap();
+                for (key, want) in e.as_object().unwrap() {
+                    if key.starts_with('_') || key == "id" {
+                        continue;
+                    }
+                    assert_eq!(
+                        &have[key], want,
+                        "device {id} field {key} lost its override"
+                    );
+                }
+            } else {
+                wholes += 1;
+                let want: DeviceSpec =
+                    serde_json::from_value(e).expect("whole entry parses as DeviceSpec");
+                assert_eq!(got.family, want.family, "device {id} family");
+                assert_eq!(got.vendor_id, want.vendor_id, "device {id} vendor id");
+                assert_eq!(got.product_id, want.product_id, "device {id} product id");
+                assert_eq!(got.key_layout, want.key_layout, "device {id} layout");
+            }
         }
+        assert!(wholes > 0 && overrides > 0, "expected both kinds of entry");
     }
 
     /// A bundle has to name the build it came from, or a report from between

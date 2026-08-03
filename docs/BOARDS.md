@@ -13,8 +13,8 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 944 |
 | writable | 940 |
-| drawn | 184 |
-| drawn after confirmation | 738 |
+| drawn | 188 |
+| drawn after confirmation | 734 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -49,9 +49,9 @@ blank is a plain grid of key slots. All three work the same.
 | AJAZZMOUSE AK680 MAX | 2336 | 3151:502f | gen2 | yes | auto |
 | AJAZZMOUSE AK680 MAX | 2343 | 3151:502f | gen2 | yes | auto |
 | AJAZZMOUSE AK680 MAX | 2371 | 3151:502f | gen2 | yes | auto |
-| AJAZZMOUSE AK680MC | 2605 | 3151:5030 | gen2 | yes | auto |
-| AJAZZMOUSE AK680MC | 2608 | 3151:5029 | gen2 | yes | auto |
-| AJAZZMOUSE AK680MC | 2609 | 3151:5030 | gen2 | yes | auto |
+| AJAZZMOUSE AK680MC | 2605 | 3151:5030 | gen2 | yes | yes |
+| AJAZZMOUSE AK680MC | 2608 | 3151:5029 | gen2 | yes | yes |
+| AJAZZMOUSE AK680MC | 2609 | 3151:5030 | gen2 | yes | yes |
 | AJAZZMOUSE ALUX60 | 2621 | 3151:502d | gen2 | yes | auto |
 | AJAZZMOUSE ALUX60 | 2622 | 3151:502d | gen2 | yes | auto |
 | AJAZZMOUSE ALUX60 | 3218 | 3151:5029 | gen2 | yes | auto |
@@ -721,7 +721,7 @@ blank is a plain grid of key slots. All three work the same.
 | sunsonny N-J100 V1 | 3294 | 3151:502d | gen2 | yes | yes |
 | SUPER68 SUPER68 | 2879 | 3151:5029 | gen2 | yes | auto |
 | SUPER68 SUPER75 | 2802 | 3151:5029 | gen2 | yes | auto |
-| Syntech Chronos 68 | 2446 | 3151:502d | gen2 | yes | auto |
+| Syntech Chronos 68 | 2446 | 3151:502d | gen2 | yes | yes |
 | TITANHUB Storm68 | 2816 | 3151:5029 | gen2 | yes |  |
 | TITANHUB TITAN60 | 2220 | 3151:5029 | gen2 | yes |  |
 | TITANHUB TITAN68HE | 2116 | 3151:5029 | gen2 | yes |  |

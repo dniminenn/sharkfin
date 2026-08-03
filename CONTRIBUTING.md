@@ -102,9 +102,14 @@ The script:
   gen2 declares `10`. Hashes change between builds. (Family determines
   whether sharkfin will write to a board.)
 - Merges `app/src-tauri/data/devices.extra.json`: boards the vendor has
-  removed from its catalogue, and boards it never listed. Each entry
+  removed from its catalogue, boards it never listed, and corrections to
+  boards it describes wrongly. A correction is marked `_override` and
+  carries only the fields it replaces, usually `keyLayout`. Each entry
   records its own evidence in `_` keys, which are stripped on merge.
   `hand_added_boards_survive_a_regeneration` fails if a run drops one.
+- Keeps any layout file marked `"local": true`. Those are hand-made from
+  hardware evidence for boards no vendor layout fits, and regeneration
+  neither deletes nor overwrites them.
 - Extracts every bundled `*_keymappings_ui_info` layout object, and the
   SVG scenes newer builds ship instead. A layout named for a revision
   (`_v2`) falls back to the base revision's drawing, which is what the
