@@ -89,5 +89,33 @@
     "_unknown": "Only this board is moved. Three AK680MCs (2605, 2608, 2609) have byte-identical keymaps in the vendor data but publish no firmware, and the vendor's JavaScript alone does not evidence a write path, so they keep matching their own keymap through the Keys page. ZAP68 itself is left alone: 26 of its 33 boards have no Right Ctrl and would gain a phantom key.",
     "id": 2446,
     "keyLayout": "Local68_Chronos68"
+  },
+  {
+    "_why": "Reported in issue #10 as not working, which is what an unrecognised board looks like: the registry has no entry, so sharkfin will not write to it. Not in any vendor catalogue.",
+    "_evidence": "Read sweep from the owner's board (0.2.2 web build). identify 0x8F returns 0x04A8 = 1192. GET_KEYMATRIX 0x89 decodes as a yc500 keymap, reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 (120, 120, 1680, 1680) and auto-OS 0x97 answers. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. Profile count was not observable either, so it is pinned to 1. Edge light 0x88 answers, but the flag tracks a layout name the sweep cannot give, so it stays false.",
+    "id": 1192,
+    "name": "kiip_y87",
+    "displayName": "KiiP Y87",
+    "company": "KiiP",
+    "vendor": "KiiP",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "kiip_y87",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

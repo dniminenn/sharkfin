@@ -46,9 +46,14 @@ def layouts_present() -> tuple[set[str], set[str]]:
 
 
 def label(d: dict) -> str:
+    """Same rule as deviceLabel in app/src/lib/brands.ts: some vendor
+    display names already carry the brand, and prefixing it again reads as
+    "YUNZII YUNZII B75 PRO"."""
     name = d.get("displayName") or d["name"]
-    brand = d.get("company") or d.get("vendor") or ""
-    return f"{brand} {name}".strip()
+    brand = (d.get("company") or d.get("vendor") or "").strip()
+    if brand and not name.lower().startswith(brand.lower()):
+        return f"{brand} {name}"
+    return name
 
 
 def write_markdown(

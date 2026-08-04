@@ -604,6 +604,31 @@
     }
   },
   {
+    "id": 1192,
+    "name": "kiip_y87",
+    "displayName": "KiiP Y87",
+    "company": "KiiP",
+    "vendor": "KiiP",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "kiip_y87",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1220,
     "name": "yc500_c98pro_soc",
     "displayName": "C98 Pro",
