@@ -61,21 +61,10 @@ jobs:
           releaseBody: |
             Alpha. Back up from the Device tab before you rely on it.
 
-            ## What changed in 0.2.2
+            ## What changed in 0.2.3
 
-            **A profile you picked on one keyboard no longer follows you to
-            another.** Swapping boards left the old profile number selected,
-            and the next key you remapped was written to a profile the new
-            board may not have. The profile list is also capped at three,
-            which is the count the hardware is known to have and the number a
-            backup can restore.
-
-            **New board:** ROYUAN Sky100Pro.
-
-            **The Syntech Chronos 68 is drawn correctly.** Its layout was a
-            67-key picture with no Right Ctrl; it now uses one with all 68,
-            matched against the owner's own keyboard and confirmed in the
-            board's firmware.
+            **New board:** KiiP Y87. It was recognised as an unknown
+            keyboard before, which is why nothing could be changed on it.
 
             You can also use sharkfin without installing anything, at
             [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
