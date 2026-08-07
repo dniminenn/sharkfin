@@ -61,10 +61,13 @@ jobs:
           releaseBody: |
             Alpha. Back up from the Device tab before you rely on it.
 
-            ## What changed in 0.2.3
+            ## What changed in 0.2.4
 
-            **New board:** KiiP Y87. It was recognised as an unknown
-            keyboard before, which is why nothing could be changed on it.
+            **New board:** Siukie ACH105W. It read as an unknown keyboard
+            before, so nothing could be changed on it.
+
+            Brand names that run words together, like KiiP, are no longer
+            split apart in the board name.
 
             You can also use sharkfin without installing anything, at
             [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
