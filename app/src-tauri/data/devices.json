@@ -150,6 +150,31 @@
     }
   },
   {
+    "id": 768,
+    "name": "royalaxe_l98",
+    "displayName": "L98",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "royalaxe_l98",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 790,
     "name": "yc580_yz21",
     "displayName": "YZ-21",

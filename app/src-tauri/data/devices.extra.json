@@ -145,5 +145,33 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #14. Not in any vendor catalogue, so an extraction alone will not add it.",
+    "_evidence": "Read sweep from the owner's board (0.2.3 web build). identify 0x8F returns 0x0300 = 768. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 (900, 900, 1680, 1680). That fixes the family as yc500, whose write paths are [HW] evidenced on an X86.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. The keymap carries NonUsBackslash, so the board is likely ISO and the match is worth checking. Profile count was not observable either, so it is pinned to 1. Edge light 0x88 answers, but the flag tracks a layout name the sweep cannot give, so it stays false.",
+    "id": 768,
+    "name": "royalaxe_l98",
+    "displayName": "L98",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "royalaxe_l98",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]
