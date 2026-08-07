@@ -61,13 +61,10 @@ jobs:
           releaseBody: |
             Alpha. Back up from the Device tab before you rely on it.
 
-            ## What changed in 0.2.4
+            ## What changed in 0.2.5
 
-            **New board:** Siukie ACH105W. It read as an unknown keyboard
+            **New board:** ROYALAXE L98. It read as an unknown keyboard
             before, so nothing could be changed on it.
-
-            Brand names that run words together, like KiiP, are no longer
-            split apart in the board name.
 
             You can also use sharkfin without installing anything, at
             [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
