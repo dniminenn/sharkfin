@@ -141,7 +141,7 @@ plus 20/21/22. Mode 3 forces the rainbow flag. Speed is **not** inverted.
 
 `0x88` answers on boards with no edge LEDs. The X86 returns
 `[88,01,03,04,08,ff,ff,ff]` and has none. Presence comes from the
-registry's `sideLightLayout` (288 of 947).
+registry's `sideLightLayout` (288 of 948).
 
 ## Profiles [HW]
 

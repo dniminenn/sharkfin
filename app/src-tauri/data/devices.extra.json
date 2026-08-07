@@ -173,5 +173,33 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #15. The board's own product string is the generic 'Gaming Keyboard', so only the identify reply names it. Not in any vendor catalogue. Issue #3 was a different keyboard sold under the AK820 name on USB 1a2c:9605, a controller sharkfin cannot talk to; this MAX variant is on the ROYUAN platform.",
+    "_evidence": "Read sweep from the owner's board (0.2.5 web build). identify 0x8F returns 0x069E = 1694. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 and auto-OS 0x97 answers 1. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. Profile count is set to the least the board proves: 0x85 reports it sitting on profile 4, so at least four exist, which is one more than the three docs/PROTOCOL.md has hardware evidence for. The Keys page offers three either way.",
+    "id": 1694,
+    "name": "ajazz_ak820_max",
+    "displayName": "AK820 MAX",
+    "company": "AJAZZ",
+    "vendor": "AJAZZ",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "ajazz_ak820_max",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]
