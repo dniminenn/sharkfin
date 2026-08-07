@@ -117,5 +117,33 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issues #12 and #13 as not working, which is what an unrecognised board looks like: no registry entry, so sharkfin will not write to it. Not in any vendor catalogue.",
+    "_evidence": "Read sweep from the owner's board (0.2.3 web build). identify 0x8F returns 0x0DA0 = 3488. The replies carry gen2's framing, not yc500's: the keymap answers under 0x8A with an eight byte header and Escape at byte 8, while yc500's 0x89 returns a bare echo, and 0x91 gives four u16 sleep times where yc500's 0x92 answers nothing. ABKO's ACH105, id 3117, is the same model on the same USB ids and is also gen2.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. The two ACH105 siblings in the registry use Common104_K108SMG, but that is the vendor's word about a different device id, not evidence about this one, so it is left to the match. Profile count was not observable either, so it is pinned to 1. Edge light 0x88 answers, but the flag tracks a layout name the sweep cannot give, so it stays false.",
+    "id": 3488,
+    "name": "siukie_ach105w",
+    "displayName": "ACH105W",
+    "company": "Siukie",
+    "vendor": "Siukie",
+    "vendorId": 12625,
+    "productId": 20545,
+    "internalName": "siukie_ach105w",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "gen2",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

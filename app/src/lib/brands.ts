@@ -10,6 +10,7 @@ const BRANDS: Record<string, string> = {
   akko: "Akko",
   epomaker: "Epomaker",
   ikbc: "ikbc",
+  kiip: "KiiP",
   noppoo: "Noppoo",
   meetion: "Meetion",
   hator: "Hator",

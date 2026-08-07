@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Most of these boards are ROYUAN's 3151, but 110 of the 945 in the registry
+// Most of these boards are ROYUAN's 3151, but 110 of the 946 in the registry
 // ship under a different vendor ID, so matching 3151 alone locks their owners
 // out. Keep in step with `packaging/70-sharkfin.rules`.
 const UDEV_RULE =

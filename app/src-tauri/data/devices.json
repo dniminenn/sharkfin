@@ -16841,6 +16841,31 @@
     }
   },
   {
+    "id": 3488,
+    "name": "siukie_ach105w",
+    "displayName": "ACH105W",
+    "company": "Siukie",
+    "vendor": "Siukie",
+    "vendorId": 12625,
+    "productId": 20545,
+    "internalName": "siukie_ach105w",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "gen2",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3492,
     "name": "ry6609_zdm_m101_3m_8k_8k",
     "displayName": "M101",
