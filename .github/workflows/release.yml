@@ -61,22 +61,19 @@ jobs:
           releaseBody: |
             Alpha. Back up from the Device tab before you rely on it.
 
-            ## What changed in 0.2.6
+            ## What changed in 0.2.7
 
-            **Profiles now follow your keyboard.** sharkfin never asked the
-            board which profile it was running, and picking one in the app
-            did not switch it. If your board was on profile 4, the app
-            edited profile 1 and nothing you changed appeared to work. It
-            now reads the profile on connect and switches the board when you
-            pick another.
+            **ISO keyboards are drawn properly.** Nearly every stored
+            picture is ANSI, so ISO boards were missing the key beside left
+            Shift and the one beside Enter. sharkfin now builds the ISO
+            version of a picture when your board reports those keys. If your
+            picture was wrong, use "Check the picture again" on the Keys
+            page.
 
-            **Boards with more than three profiles are handled.** The app
-            offers as many as your board has, and a backup saves all of
-            them. It used to stop at three, so a fourth could be edited and
-            was never restored.
-
-            **New board:** AJAZZ AK820 MAX. Note that other keyboards sold
-            as AK820 use a different controller sharkfin cannot talk to.
+            **Settings are written once, when you let go.** The debounce and
+            sleep sliders wrote on every step while dragging. Those settings
+            live in the keyboard's flash, the same as lighting, and enough
+            writes in a row can stall the firmware.
 
             You can also use sharkfin without installing anything, at
             [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
