@@ -162,6 +162,18 @@ keymaps say before baking a layout they share.
 `tools/coverage.py` reports how many boards have a rendered layout and
 which layouts the writable boards still need.
 
+### ISO boards
+
+Almost every layout the vendor ships is ANSI, and ISO boards keep turning
+up. The difference is mechanical: left Shift gives up a unit to
+NonUsBackslash, Enter gives up one to NonUsHash. So when a board reports
+either of those keys, `app/src/lib/iso.ts` derives the ISO version of
+every candidate picture and lets it compete on the same footing. A board
+that is not ISO never sees one.
+
+A derived picture names no file on disk, so its bundle carries the
+geometry under `picture json:` and bakes like a pasted drawing.
+
 ### Baking a layout bundle
 
 For a board without a usable layout, the app searches every stored

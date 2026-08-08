@@ -63,7 +63,10 @@ export function layoutBundle(
     `keymap, profile ${inf.profile + 1}, base layer:`,
     ...hex,
   );
-  if (inf.layoutName === "kle") {
+  // A derived picture names no file on disk, so it travels with the bundle.
+  // "kle" is the owner's drawing; "<stem>+iso" is an ANSI layout with the
+  // ISO keys added.
+  if (inf.layoutName === "kle" || inf.layoutName.includes("+")) {
     const geometry = {
       canvas: inf.layout.canvas,
       keys: inf.layout.keys.map((k) => ({ ...k, matrixIndex: null })),

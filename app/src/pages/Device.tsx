@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -64,9 +64,10 @@ function Row({
   );
 }
 
-// Kept above the backend's write floor; coalescing faster only queues
-// writes the board has not asked for.
-const WRITE_GAP = 300;
+// Debounce and sleep are onboard settings, so every write lands in flash.
+// A drag changes nothing on the board: the number follows your finger and
+// the keyboard is written once, when you let go. Same reasoning as the
+// Lighting page, and the same reason an X86 wedged under a slider.
 
 export default function DevicePage({
   device,
@@ -74,10 +75,6 @@ export default function DevicePage({
   device: ConnectedDevice | null;
 }) {
   const [s, setS] = useState<DeviceSettings | null>(null);
-  // One timer per control: sharing it let a debounce nudge cancel a pending
-  // sleep write, leaving the UI showing a value the board never got.
-  const sleepTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const debounceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const load = useCallback(() => {
     getSettings()
@@ -90,27 +87,25 @@ export default function DevicePage({
     else setS(null);
   }, [device, load]);
 
-  const pushSleep = (patch: Partial<SleepTimes>) => {
+  /// Preview only. Nothing reaches the keyboard until commitSleep.
+  const pushSleep = (patch: Partial<SleepTimes>) =>
+    setS((prev) => (prev ? { ...prev, sleep: { ...prev.sleep, ...patch } } : prev));
+
+  const commitSleep = (patch: Partial<SleepTimes>) =>
     setS((prev) => {
       if (!prev) return prev;
       const sleep = { ...prev.sleep, ...patch };
-      clearTimeout(sleepTimer.current);
-      sleepTimer.current = setTimeout(() => {
-        setSleep(sleep).catch((e) => toast.error(`Write failed: ${e}`));
-      }, WRITE_GAP);
+      setSleep(sleep).catch((e) => toast.error(`Write failed: ${e}`));
       return { ...prev, sleep };
     });
-  };
 
-  const pushDebounce = (value: number) => {
-    setS((prev) => {
-      if (!prev) return prev;
-      clearTimeout(debounceTimer.current);
-      debounceTimer.current = setTimeout(() => {
-        setDebounce(value).catch((e) => toast.error(`Write failed: ${e}`));
-      }, WRITE_GAP);
-      return { ...prev, debounce: value };
-    });
+  /// Preview only. Nothing reaches the keyboard until commitDebounce.
+  const pushDebounce = (value: number) =>
+    setS((prev) => (prev ? { ...prev, debounce: value } : prev));
+
+  const commitDebounce = (value: number) => {
+    setS((prev) => (prev ? { ...prev, debounce: value } : prev));
+    setDebounce(value).catch((e) => toast.error(`Write failed: ${e}`));
   };
 
   const pushAutoOs = (enabled: boolean) => {
@@ -216,6 +211,7 @@ export default function DevicePage({
               step={1}
               value={[s.debounce]}
               onValueChange={([v]) => pushDebounce(v)}
+              onValueCommit={([v]) => commitDebounce(v)}
             />
             <p className="text-xs text-muted-foreground">
               Lower reacts faster; raise it if a switch starts chattering.
@@ -357,6 +353,7 @@ export default function DevicePage({
                     step={60}
                     value={[Math.max(s.sleep[key], min)]}
                     onValueChange={([v]) => pushSleep({ [key]: v })}
+                    onValueCommit={([v]) => commitSleep({ [key]: v })}
                   />
                 </div>
               ) : null,

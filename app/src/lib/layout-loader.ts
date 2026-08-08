@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import x86 from "@/lib/layouts/x86.json";
 import { readKeymap, type ConnectedDevice } from "@/lib/backend";
 import { agreement, inferSlots, type Inference } from "@/lib/layout-infer";
+import { isoVariant, looksIso } from "@/lib/iso";
 
 export interface LayoutKey {
   code: string;
@@ -29,6 +30,8 @@ export interface BoardLayout {
   grid?: boolean;
   /** Slots matched against the connected board, not vendor data. */
   inferred?: boolean;
+  /** Derived from an ANSI layout by adding the keys only ISO boards have. */
+  iso?: boolean;
 }
 
 export interface BoardLayoutState {
@@ -276,6 +279,11 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
 
       // Nothing confirmed yet: sweep the whole collection and offer the
       // closest pictures, the registry's own suggestion first.
+      // An ISO board reports two keys no ANSI picture draws, and almost
+      // every shipped picture is ANSI. Rather than leave those keys
+      // undrawable until someone contributes a layout, derive the ISO
+      // version of each candidate and let it compete on the same footing.
+      const wantsIso = matrices.some(looksIso);
       const candidates: Inference[] = [];
       for (const path of Object.keys(VENDOR)) {
         const stem = path.slice("./layouts/vendor/".length, -".json".length);
@@ -285,6 +293,11 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         if (!geometry) continue;
         const inf = bestMatch(geometry, stem, matrices);
         if (inf && inf.matchRate >= MATCH_BAR) candidates.push(inf);
+        if (!wantsIso) continue;
+        const iso = isoVariant(geometry);
+        if (!iso) continue;
+        const isoInf = bestMatch(iso, `${stem}+iso`, matrices);
+        if (isoInf && isoInf.matchRate >= MATCH_BAR) candidates.push(isoInf);
       }
       candidates.sort(
         (a, b) =>

@@ -222,8 +222,9 @@ const KEY_GAP_MS: f64 = 400.0;
 /// on the desktop constant.
 const LIGHT_GAP_MS: f64 = 1000.0;
 /// Everything else a user can hold down or click repeatedly: profile
-/// switches, debounce and sleep sliders, auto-OS, reset.
-const SETTING_GAP_MS: f64 = 200.0;
+/// switches, debounce and sleep sliders, auto-OS, reset. Flash class: all
+/// of it survives a power cycle; see the note on the desktop constant.
+const SETTING_GAP_MS: f64 = 1000.0;
 const PER_KEY_MODE: u8 = 13;
 
 pub const STALL_MESSAGE: &str =

@@ -76,9 +76,14 @@ const KEY_GAP: Duration = Duration::from_millis(400);
 const LIGHT_GAP: Duration = Duration::from_millis(1000);
 
 /// Everything else a user can hold down or click repeatedly: profile
-/// switches, debounce and sleep sliders, auto-OS, reset. None of these was
-/// spaced at all, and a slider drives them exactly like a lighting slider.
-const SETTING_GAP: Duration = Duration::from_millis(200);
+/// switches, debounce and sleep sliders, auto-OS, reset.
+///
+/// Treated as flash, because it is: every one of these survives a power
+/// cycle, which is what onboard storage means, and `factory_reset` wipes
+/// them alongside the keymaps and macros. Lighting was paced as a volatile
+/// register on the same reasoning and wedged an X86 after 39 writes. The
+/// cost of being wrong the other way is a slider that lags.
+const SETTING_GAP: Duration = Duration::from_millis(1000);
 
 impl Default for AppState {
     fn default() -> Self {
