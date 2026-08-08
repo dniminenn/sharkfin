@@ -120,10 +120,20 @@ export default function ContributePage({
               bundle is the first step.
             </p>
           )}
-          {!device && unknown && (
+          {!device && unknown && unknown.deviceId !== null && (
             <p className="text-sm text-muted-foreground">
               sharkfin does not know this board yet. A bundle is the first
               step to adding it.
+            </p>
+          )}
+          {!device && unknown && unknown.deviceId === null && (
+            <p className="text-sm text-muted-foreground">
+              This did not answer when asked what it is. That usually means
+              it is a 2.4 GHz receiver rather than the keyboard: settings
+              only travel over the cable, so plug the keyboard in directly
+              and it should appear. If it is already on a cable, the board
+              speaks a different protocol and a bundle is still worth
+              sending.
             </p>
           )}
 
