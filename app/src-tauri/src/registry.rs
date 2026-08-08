@@ -307,8 +307,8 @@ mod tests {
             ),
             // inlined in every release's notes
             (
-                ".github/workflows/release.yml",
-                include_str!("../../../.github/workflows/release.yml"),
+                ".github/release-notes.md",
+                include_str!("../../../.github/release-notes.md"),
             ),
         ];
         for (what, text) in copies {

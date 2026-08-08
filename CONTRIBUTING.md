@@ -200,6 +200,18 @@ ambiguous key pairing (twin keys, or a contributor whose board was
 remapped); `--force` overrides after inspection. It prints every board
 that shares the layout, since the bake reaches all of them.
 
+### Releasing
+
+Push a `v*` tag. The workflow drafts the release once, in a job the three
+platform builds wait on, then each uploads into it. They used to create it
+themselves, and in v0.2.7 two of them created one each: the published
+release had the Linux binaries and the Windows and macOS ones sat on a
+second draft nobody could see.
+
+Per-release notes are `.github/release-notes.md`, so they show up in the
+diff for review rather than sitting inline in the workflow. Edit the "What
+changed" section before tagging.
+
 ### Vendor builds stay out of this repo
 
 Keep vendor builds outside the working tree and point `--dist-js` at them
