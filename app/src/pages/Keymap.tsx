@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
+import { useBoardProfile } from "@/lib/use-profile";
 import { layoutBundle, type Inference } from "@/lib/layout-infer";
 import { kleToLayout } from "@/lib/kle";
 import {
@@ -30,16 +31,6 @@ import {
   type Assignable,
 } from "@/lib/hid-usages";
 import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
-
-// The board says how many it has, and offering three to a board with one
-// writes to profiles that may not exist. Capped at three regardless: that
-// is the only count docs/PROTOCOL.md has hardware evidence for, the
-// registry claims up to eight on the vendor's word alone, and a backup
-// only carries three (commands.rs clamps it), so a fourth would be
-// editable but never restored.
-const PROFILE_CAP = 3;
-const profileList = (n: number | undefined) =>
-  Array.from({ length: Math.min(PROFILE_CAP, Math.max(1, n ?? 1)) }, (_, i) => i);
 
 // Every plain-key usage, for the combo pickers.
 const COMBO_KEYS: { label: string; usage: number }[] = GROUPS.flatMap((g) =>
@@ -60,6 +51,8 @@ function sliceEntries(matrix: number[]): Map<number, number[]> {
 
 export default function KeymapPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
+  const { profile, count: profileCount, select: selectProfile, switching } =
+    useBoardProfile(device);
   const {
     layout,
     resolving,
@@ -77,7 +70,6 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   const [reported, setReported] = useState<Inference | null>(null);
   const [copied, setCopied] = useState(false);
   const [kleText, setKleText] = useState("");
-  const [profile, setProfile] = useState(0);
   const [layer, setLayer] = useState<"base" | "fn">("base");
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
   const [selected, setSelected] = useState<LayoutKey | null>(null);
@@ -119,13 +111,6 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   // A selection belongs to the picture it was made on. When the picture
   // changes underneath it, its slot means a different physical key, so
   // writing it would remap something the user never clicked.
-  // A profile chosen on one board must not stay armed when another is
-  // plugged in: the pages do not remount on a swap, and the number goes
-  // straight into a write whose address scales with it.
-  useEffect(() => {
-    const max = profileList(device?.spec.profiles).length - 1;
-    setProfile((p) => Math.min(p, max));
-  }, [device?.spec.id, device?.spec.profiles]);
 
   useEffect(() => {
     setSelected(null);
@@ -168,7 +153,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   }, [entries, defaults]);
 
   const assign = async (a: Assignable) => {
-    if (!selected || !entries || pending) return;
+    if (!selected || !entries || pending || switching) return;
     const slot = selected.matrixIndex!;
     setBusy(true);
     try {
@@ -311,13 +296,13 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
           <span className="text-sm text-muted-foreground">Profile</span>
           <Select
             value={String(profile)}
-            onValueChange={(v) => setProfile(Number(v))}
+            onValueChange={(v) => selectProfile(Number(v))}
           >
             <SelectTrigger className="w-24">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {profileList(device?.spec.profiles).map((p) => (
+              {Array.from({ length: profileCount }, (_, i) => i).map((p) => (
                 <SelectItem key={p} value={String(p)}>
                   {p + 1}
                 </SelectItem>
@@ -532,7 +517,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                   size="sm"
                   variant="outline"
                   onClick={resetKey}
-                  disabled={busy || pending}
+                  disabled={busy || pending || switching}
                 >
                   Reset to default
                 </Button>
@@ -551,7 +536,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                           {g.items.map((item) => (
                             <button
                               key={g.name + item.label}
-                              disabled={busy || pending}
+                              disabled={busy || pending || switching}
                               onClick={() => assign(item)}
                               className="rounded-md border px-2 py-1 text-xs transition-colors hover:bg-accent disabled:opacity-50"
                             >
@@ -573,7 +558,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                         {comboSelect("extraB", "third", true)}
                         <Button
                           size="sm"
-                          disabled={busy || pending || !combo.main}
+                          disabled={busy || pending || switching || !combo.main}
                           onClick={assignCombo}
                         >
                           Apply combo

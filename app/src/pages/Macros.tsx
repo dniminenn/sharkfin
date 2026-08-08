@@ -18,6 +18,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout } from "@/lib/layout-loader";
+import { useBoardProfile } from "@/lib/use-profile";
 import { CODE_TO_USAGE, entryLabel, usageLabel } from "@/lib/hid-usages";
 import {
   readFnKeymap,
@@ -30,15 +31,6 @@ import {
 } from "@/lib/backend";
 
 const SLOTS = Array.from({ length: 50 }, (_, i) => i);
-// The board says how many it has, and offering three to a board with one
-// writes to profiles that may not exist. Capped at three regardless: that
-// is the only count docs/PROTOCOL.md has hardware evidence for, the
-// registry claims up to eight on the vendor's word alone, and a backup
-// only carries three (commands.rs clamps it), so a fourth would be
-// editable but never restored.
-const PROFILE_CAP = 3;
-const profileList = (n: number | undefined) =>
-  Array.from({ length: Math.min(PROFILE_CAP, Math.max(1, n ?? 1)) }, (_, i) => i);
 const DIRECTIONS = [
   ["left", -1, 0],
   ["right", 1, 0],
@@ -73,12 +65,13 @@ function eventLabel(e: MacroEvent): string {
 export default function MacrosPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
   const { layout, resolving, pending } = useBoardLayout(device);
+  const { profile, count: profileCount, select: selectProfile, switching } =
+    useBoardProfile(device);
   const [slot, setSlot] = useState(0);
   const [events, setEvents] = useState<MacroEvent[]>([]);
   const [repeat, setRepeat] = useState(1);
   const [recording, setRecording] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [profile, setProfile] = useState(0);
   const [layer, setLayer] = useState<"base" | "fn">("base");
   const [dir, setDir] = useState<(typeof DIRECTIONS)[number][0]>("right");
   const [speed, setSpeed] = useState(5);
@@ -87,13 +80,6 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
   const lastTs = useRef<number | null>(null);
   const surface = useRef<HTMLDivElement>(null);
 
-  // A profile chosen on one board must not stay armed when another is
-  // plugged in: the pages do not remount on a swap, and the number goes
-  // straight into a write whose address scales with it.
-  useEffect(() => {
-    const max = profileList(device?.spec.profiles).length - 1;
-    setProfile((p) => Math.min(p, max));
-  }, [device?.spec.id, device?.spec.profiles]);
 
   useEffect(() => {
     if (!connected) return;
@@ -423,12 +409,12 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
               </SelectContent>
             </Select>
             <span className="text-sm text-muted-foreground">Profile</span>
-            <Select value={String(profile)} onValueChange={(v) => setProfile(Number(v))}>
+            <Select value={String(profile)} onValueChange={(v) => selectProfile(Number(v))}>
               <SelectTrigger className="w-20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {profileList(device?.spec.profiles).map((p) => (
+                {Array.from({ length: profileCount }, (_, i) => i).map((p) => (
                   <SelectItem key={p} value={String(p)}>
                     {p + 1}
                   </SelectItem>
@@ -457,7 +443,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                 labelFor={(k, entry) =>
                   entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
                 }
-                onSelect={(k) => !busy && !pending && bind(k.matrixIndex!, k.text ?? k.code)}
+                onSelect={(k) => !busy && !pending && !switching && bind(k.matrixIndex!, k.text ?? k.code)}
               />
             </>
           )}

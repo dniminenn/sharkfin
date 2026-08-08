@@ -145,7 +145,13 @@ registry's `sideLightLayout` (288 of 948).
 
 ## Profiles [HW]
 
-`SET 0x05 [profile]`; `GET 0x85` → `reply[1]`. Three onboard.
+`SET 0x05 [profile]`; `GET 0x85` → `reply[1]`. Zero based.
+
+Three onboard on an X86. Not every board has three: an AK820 MAX answered
+`0x85` with 4 while sitting on it, so it has at least five, and the
+registry claims up to eight. Read the board rather than assuming a count,
+and switch it with `0x05` before editing a profile, or the edit lands on
+one the user is not typing on.
 
 ## Settings
 

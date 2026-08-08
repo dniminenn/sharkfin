@@ -909,7 +909,8 @@ pub async fn export_config() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    let n = spec.profiles.clamp(1, 3);
+    // Every profile the board claims; see MAX_PROFILES in commands.rs.
+    let n = spec.profiles.clamp(1, 8);
     let mut profiles = Vec::new();
     let mut fn_layers = Vec::new();
     for p in 0..n {

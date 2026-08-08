@@ -584,6 +584,11 @@ pub fn set_auto_os(state: tauri::State<AppState>, enabled: bool) -> Result<(), S
     })
 }
 
+/// A backup covers every profile the board claims. Capping it at three left
+/// a fourth editable in the app and absent from the file, so a restore wiped
+/// work the user could see. Eight is the most any registry entry claims.
+pub const MAX_PROFILES: u8 = 8;
+
 /// Wipes every onboard profile, keymap, macro and light setting. Firmware
 /// needs a few seconds; the frontend re-reads afterwards.
 #[tauri::command(async)]
@@ -808,7 +813,7 @@ pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<Stri
     };
     let cfg = with_open(&state, |t, fc| {
         let fc = need(fc)?;
-        let n = spec.profiles.clamp(1, 3);
+        let n = spec.profiles.clamp(1, MAX_PROFILES);
         let mut profiles = Vec::new();
         let mut fn_layers = Vec::new();
         for p in 0..n {
