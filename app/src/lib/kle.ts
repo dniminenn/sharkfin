@@ -31,6 +31,24 @@ const NAMED: Record<string, number> = {
   ";": 51, ":": 51, "'": 52, '"': 52, ",": 54, "<": 54, ".": 55, ">": 55,
   "/": 56, "?": 56,
 };
+// Symbols and icon-font markup, which is how most KLE presets label the
+// modifier row. A drawing whose Tab, Caps, Enter and Shifts all fell through
+// as unmapped is what sent a KiiP Y87 owner round twice.
+const GLYPHS: Record<string, string> = {
+  "⇥": "TAB", "⇆": "TAB", "↹": "TAB",
+  "⏎": "ENTER", "⮠": "ENTER", "↵": "ENTER", "⏎↵": "ENTER",
+  "⌫": "BACKSPACE", "⟵": "BACKSPACE",
+  "⌦": "DELETE",
+  "⇪": "CAPS", "⇩": "CAPS", "⇬": "CAPS",
+  "␣": "SPACE", "─": "SPACE", "▁": "SPACE",
+  "⇧": "SHIFT",
+  "⎈": "CTRL", "⌃": "CTRL",
+  "⎇": "ALT", "⌥": "ALT",
+  "⊞": "WIN", "❖": "WIN", "⌘": "WIN",
+  "🠜": "LEFT", "🠞": "RIGHT", "🠝": "UP", "🠟": "DOWN",
+  "⯇": "LEFT", "⯈": "RIGHT", "⯅": "UP", "⯆": "DOWN",
+  "◀": "LEFT", "▶": "RIGHT", "▲": "UP", "▼": "DOWN",
+};
 for (let i = 0; i < 26; i++) NAMED[String.fromCharCode(65 + i)] = 4 + i;
 for (let i = 1; i <= 9; i++) NAMED[`${i}`] = 29 + i;
 NAMED["0"] = 39;
@@ -48,10 +66,21 @@ const USAGE_TO_CODE: Record<number, string> = Object.fromEntries(
   Object.entries(CODE_TO_USAGE).map(([c, u]) => [u, c]),
 );
 
+/** A legend as something the tables can be looked up by. */
+function normalise(raw: string): string {
+  let l = raw.trim();
+  // <i class="fa fa-windows"></i> and friends: the class names the key.
+  const icon = /fa-(windows|apple|command|option|linux|tux)/i.exec(l);
+  if (icon) return icon[1].toLowerCase() === "option" ? "ALT" : "WIN";
+  l = l.replace(/<[^>]*>/g, "").trim();
+  if (GLYPHS[l]) return GLYPHS[l];
+  return l.toUpperCase();
+}
+
 function mapLegend(legends: string[], seen: Map<string, number>, w: number): number | null {
   // A plain "x\ny" string is shifted over unshifted, so try later lines first.
   for (const raw of [...legends].reverse()) {
-    const l = raw.trim().toUpperCase();
+    const l = normalise(raw);
     if (!l) continue;
     if (l in PAIRED) {
       const nth = seen.get(l) ?? 0;
@@ -60,8 +89,12 @@ function mapLegend(legends: string[], seen: Map<string, number>, w: number): num
     }
     if (l in NAMED) return NAMED[l];
   }
-  // A wide blank key is a spacebar; anything else blank stays unmapped.
-  if (legends.every((l) => !l.trim()) && w >= 4) return NAMED.SPACE;
+  // Nothing matched. A key this wide is the spacebar whatever it is
+  // labelled with, and every drawing has exactly one.
+  if (w >= 4 && !seen.has("SPACE")) {
+    seen.set("SPACE", 1);
+    return NAMED.SPACE;
+  }
   return null;
 }
 
@@ -125,6 +158,27 @@ export function kleToLayout(text: string): BoardLayout {
     y += 1;
   }
   if (keys.length < 2) throw new Error("no keys in the drawing");
+
+  // Two keys claiming one function means a legend was read wrong, and the
+  // picture would then remap a key the user did not click. A Y87 drawing
+  // put its arrows on Minus and Equal that way. Refuse rather than guess:
+  // no keyboard has the same key twice.
+  const byUsage = new Map<number, string[]>();
+  for (const k of keys) {
+    if (k.hidUsage === null) continue;
+    const at = byUsage.get(k.hidUsage) ?? [];
+    at.push(k.text ?? k.code);
+    byUsage.set(k.hidUsage, at);
+  }
+  const clashes = [...byUsage.values()].filter((v) => v.length > 1);
+  if (clashes.length) {
+    const which = clashes.map((v) => v.join(" and ")).join("; ");
+    throw new Error(
+      `two keys in the drawing came out as the same key (${which}). ` +
+        "Label them the way they are printed and paste it again.",
+    );
+  }
+
   return {
     canvas: {
       width: Math.max(...keys.map((k) => k.x + k.w)) + 1,
