@@ -1,18 +1,17 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.2.7
+## What changed in 0.2.8
 
-**ISO keyboards are drawn properly.** Nearly every stored
-picture is ANSI, so ISO boards were missing the key beside left
-Shift and the one beside Enter. sharkfin now builds the ISO
-version of a picture when your board reports those keys. If your
-picture was wrong, use "Check the picture again" on the Keys
-page.
+**Drawn layouts are read correctly.** If you drew your board on
+keyboard-layout-editor, keys labelled with symbols rather than words were
+misread: Tab, Caps Lock, Enter, Shift, the spacebar and the arrows could
+come through as nothing, the arrows could be read as Minus and Equal, and
+a Windows key drawn with an icon swapped itself with Alt. A drawing where
+two keys come out as the same key is now refused rather than accepted.
 
-**Settings are written once, when you let go.** The debounce and
-sleep sliders wrote on every step while dragging. Those settings
-live in the keyboard's flash, the same as lighting, and enough
-writes in a row can stall the firmware.
+**Plugging in the wireless receiver says so.** It used to be reported as an
+unknown keyboard and invite a report that could not help. Settings only
+travel over the cable.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
