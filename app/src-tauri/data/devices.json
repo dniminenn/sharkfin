@@ -3105,6 +3105,31 @@
     }
   },
   {
+    "id": 2399,
+    "name": "menel_nia87",
+    "displayName": "Nia 87",
+    "company": "Menel",
+    "vendor": "Menel",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "menel_nia87",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2406,
     "name": "yc3121_nbd_mk606_uk_dm_v300",
     "displayName": "NEXA HE60",
