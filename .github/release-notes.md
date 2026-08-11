@@ -1,17 +1,11 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.2.8
+## What changed in 0.2.9
 
-**Drawn layouts are read correctly.** If you drew your board on
-keyboard-layout-editor, keys labelled with symbols rather than words were
-misread: Tab, Caps Lock, Enter, Shift, the spacebar and the arrows could
-come through as nothing, the arrows could be read as Minus and Equal, and
-a Windows key drawn with an icon swapped itself with Alt. A drawing where
-two keys come out as the same key is now refused rather than accepted.
+**One more board.** The Menel Nia 87 is now in the registry, from an owner's
+report. It is an ISO board, so the Keys page offers an ISO picture to confirm.
 
-**Plugging in the wireless receiver says so.** It used to be reported as an
-unknown keyboard and invite a report that could not help. Settings only
-travel over the cable.
+The registry is 949 boards.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
