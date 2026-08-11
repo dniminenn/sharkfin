@@ -946,9 +946,15 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
     out
 }
 
-/// Every GET opcode from both family tables. All reads, all harmless; on a
-/// board that doesn't implement one, the firmware echoes its previous reply,
-/// which is itself a data point.
+/// Read opcodes from both family tables. All reads, all harmless; on a board
+/// that doesn't implement one, the firmware echoes its previous reply, which
+/// is itself a data point.
+///
+/// Not every opcode above 0x80 belongs here. gen2 puts its flash chip erase
+/// at 0xAC, the only write in either family that sits in the read range, and
+/// on yc500 that same byte is a read. Sweeping the range blind would wipe a
+/// screen board's pictures. Anything added here has to be a read in *both*
+/// tables, because the sweep runs before the family is known.
 const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x80 revision", 0x80, &[]),
     ("0x83 report rate (gen2)", 0x83, &[]),
@@ -966,6 +972,7 @@ const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x91 debounce/sleep", 0x91, &[]),
     ("0x92 sleep (yc500)", 0x92, &[]),
     ("0x97 auto-OS (yc500)", 0x97, &[]),
+    ("0xAD OLED version", 0xAD, &[]),
 ];
 
 fn probe_sweep(t: &Transport, out: &mut String) {

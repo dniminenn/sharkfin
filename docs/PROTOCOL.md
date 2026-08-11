@@ -257,6 +257,58 @@ The X86's class chain defines 57 commands; most target hardware it lacks.
 **Destructive:** `0xAC` erases the flash chip; `0x30`/`0x31` and
 `0x40`/`0x41` are bootloader entry points.
 
+## Screens
+
+173 boards in the registry carry a display, 152 gen2 and 21 yc500. Nothing
+below is implemented and none of it is hardware evidenced. It is read out
+of the vendor's JavaScript and recorded here so the firmware can be checked
+against it.
+
+The display is a second chip with its own firmware. A board that has one
+ships a zip rather than a raw image, one member per chip, and states both
+versions in its release string:
+
+| board | release | members |
+|---|---|---|
+| EPOMAKER RT100 | `v108_oledv104` | `firmwareFile.bin`, `firmwareOledFile.bin` |
+| AttackShark X85PRO | `v104_oledv104` | `firmwareFile.bin`, `firmwareOledFile.bin` |
+| PIIFOXDRIVER ER75 | `v200_oledv105_mledv105` | adds `firmwareMledFile.bin` |
+
+`0xAD` returns that display firmware version and means the same thing in
+both families, so it is the one screen command the read sweep can send
+blind. A board that answers has a display; one that echoes does not.
+
+Geometry is per board, not per family, and comes from the vendor's own
+device record at `other.screen`: `size.w`, `size.h`, `mode` and `layer`.
+It defaults to 128 by 128 in mode `16`. Mode `16` is RGB565, mode `24` is
+three bytes per pixel, and mode `single` is refused by the vendor's own
+uploader.
+
+An upload announces itself, then streams pages:
+
+| step | gen2 | yc500 | payload |
+|---|---|---|---|
+| announce | `0xA5` | `0xA5` | frame index, frame count, delay, total length, bounding box |
+| data | `0x25` | `0x25` | 8-byte header then 56 bytes, page index at 4..6, length at 6 |
+| announce, 24-bit | `0xA9` | `0xA9` | as above |
+| data, 24-bit | `0x29` | `0x29` | as above |
+| erase chip | `0xAC` | `0x2C` | none |
+
+The announce is not a read despite sitting above `0x80`. It prepares a
+write, and the caller polls it up to ten times at 100 ms until `reply[1]`
+is 1. Only then do the data pages go out.
+
+yc500 defines a larger set the gen2 table has no entry for: `0x20`/`0xA0`
+picture index, `0x21`/`0xA1` picture data, `0x24`/`0xA4` animation data,
+`0x26`/`0xA6` animation index, `0x2A` weather, `0x2B`/`0xAB` effect,
+`0x30`/`0x31` boot logo. Both families share `0x22` display options,
+`0x27` display language and `0x28` clock.
+
+`0xAC` is the single most dangerous byte in this protocol. It is the only
+write at or above `0x80` in either table, it erases every picture on the
+chip, it takes about 55 seconds, and on yc500 the same byte is an ordinary
+read. Twenty opcodes in total mean different things in the two families.
+
 ## Battery
 
 No HID command found. The vendor reads it through a separate helper
