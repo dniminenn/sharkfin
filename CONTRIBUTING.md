@@ -167,9 +167,12 @@ which layouts the writable boards still need.
 Almost every layout the vendor ships is ANSI, and ISO boards keep turning
 up. The difference is mechanical: left Shift gives up a unit to
 NonUsBackslash, Enter gives up one to NonUsHash. So when a board reports
-either of those keys, `app/src/lib/iso.ts` derives the ISO version of
-every candidate picture and lets it compete on the same footing. A board
-that is not ISO never sees one.
+both of those keys, `app/src/lib/iso.ts` derives the ISO version of
+every candidate picture and lets it compete on the same footing.
+
+Both, because one alone means nothing. An ANSI board shares a PCB with its
+ISO version, and the firmware maps the unfitted position anyway: a Cypher
+81 reports NonUsBackslash at a slot with no key on it.
 
 A derived picture names no file on disk, so its bundle carries the
 geometry under `picture json:` and bakes like a pasted drawing.
