@@ -28,7 +28,7 @@
   },
   {
     "_why": "Reported in issue #4. Never appeared in any vendor catalogue, so an extraction alone will not add it.",
-    "_evidence": "Read sweep from the owner's board. GET_KEYMATRIX 0x89 returns a decodable yc500 keymap (Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0); the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 at bytes 1..9. identify 0x8F returns 1748. That fixes the family as yc500, whose write paths are already [HW] evidenced on an X86. The owner matched the board against Common81_K81JD in issue #20 and confirmed it, 84 of 84 keys, so the picture is baked in rather than matched again on every board.",
+    "_evidence": "Read sweep from the owner's board. GET_KEYMATRIX 0x89 returns a decodable yc500 keymap (Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0); the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 at bytes 1..9. identify 0x8F returns 1748. That fixes the family as yc500, whose write paths are already [HW] evidenced on an X86. The owner matched the board against Common81_K81JD in issue #20 and confirmed it, 84 of 84 keys, so the picture is baked in rather than matched again on every board. The owner reports a screen showing date and charge, so the screen flag is set from their report rather than the sweep, which cannot see one. Nothing reads the flag today: sharkfin has no screen support.",
     "_unknown": "Profile count was not observable from a read sweep, so profiles is pinned to 1 and nothing writes to a profile the board may not have. The keymap also carries NonUsBackslash at slot 10, which the owner confirms is not a key on the board: the firmware ships the ISO position mapped whether or not it is fitted.",
     "id": 1748,
     "name": "epomaker_cypher81",
@@ -50,7 +50,7 @@
       "sleep24": false,
       "sleepBT": false,
       "magneticSwitches": false,
-      "screen": false,
+      "screen": true,
       "sideLight": false
     }
   },

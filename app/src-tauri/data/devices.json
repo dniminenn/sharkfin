@@ -1044,7 +1044,7 @@
       "sleep24": false,
       "sleepBT": false,
       "magneticSwitches": false,
-      "screen": false,
+      "screen": true,
       "sideLight": false
     }
   },
