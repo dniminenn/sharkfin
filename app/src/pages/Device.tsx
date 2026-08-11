@@ -21,6 +21,7 @@ import { open, save } from "@tauri-apps/plugin-dialog";
 import {
   exportConfig,
   factoryReset,
+  getScreenVersion,
   getSettings,
   importConfig,
   setAutoOs,
@@ -86,6 +87,27 @@ export default function DevicePage({
     if (device) load();
     else setS(null);
   }, [device, load]);
+
+  // The display is a second chip with its own firmware. Asking it for a
+  // version is the one screen command that means the same thing on both
+  // protocol families, so it is safe on any board: one without a display
+  // echoes the previous reply and comes back null.
+  const [screenVersion, setScreenVersion] = useState<number | null>(null);
+  useEffect(() => {
+    if (!device) {
+      setScreenVersion(null);
+      return;
+    }
+    let live = true;
+    getScreenVersion()
+      .then((v) => live && setScreenVersion(v))
+      .catch(() => {
+        // A board that will not answer simply has no display to report.
+      });
+    return () => {
+      live = false;
+    };
+  }, [device]);
 
   /// Preview only. Nothing reaches the keyboard until commitSleep.
   const pushSleep = (patch: Partial<SleepTimes>) =>
@@ -219,6 +241,39 @@ export default function DevicePage({
           </div>
         </CardContent>
       </Card>
+
+      {(device.spec.screen || screenVersion !== null) && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Display</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <Label>Size</Label>
+              <span className="text-muted-foreground">
+                {device.spec.screen
+                  ? `${device.spec.screen.w} by ${device.spec.screen.h}`
+                  : "not recorded"}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <Label>Colour</Label>
+              <span className="text-muted-foreground">
+                {device.spec.screen?.mode === "24" ? "24-bit" : "16-bit"}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <Label>Firmware</Label>
+              <span className="text-muted-foreground">
+                {screenVersion === null ? "no answer" : screenVersion.toString(16)}
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              sharkfin reads the display but does not write to it yet.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>

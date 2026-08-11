@@ -343,6 +343,24 @@ pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
     })
 }
 
+/// The display's own firmware version, or `None` on a board without one.
+///
+/// `0xAD` is the one screen command that means the same thing in both
+/// families, so it is safe to send without knowing which one this is. An
+/// unimplemented command echoes the previous reply rather than failing, so
+/// a reply that does not lead with the opcode is a board with no display.
+#[tauri::command]
+pub fn get_screen_version(state: tauri::State<AppState>) -> Result<Option<u16>, String> {
+    with_open(&state, |t, _| {
+        let reply = t.roundtrip(crate::protocol::cmd::GET_OLED_VERSION, &[], Checksum::Bit7)?;
+        if reply[0] != crate::protocol::cmd::GET_OLED_VERSION {
+            return Ok(None);
+        }
+        let version = u16::from(reply[1]) | (u16::from(reply[2]) << 8);
+        Ok((version != 0).then_some(version))
+    })
+}
+
 #[tauri::command(async)]
 pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), String> {
     write_gap(&state, SETTING_GAP);

@@ -132,6 +132,8 @@ export const getLedParam = () => invoke<LedParam>("get_led_param");
 export const setLedParam = (param: LedParam) =>
   invoke<void>("set_led_param", { param });
 export const getProfile = () => invoke<number>("get_profile");
+/** The display's firmware version, or null on a board without one. */
+export const getScreenVersion = () => invoke<number | null>("get_screen_version");
 export const setProfile = (profile: number) =>
   invoke<void>("set_profile", { profile });
 export const readKeymap = (profile: number) =>

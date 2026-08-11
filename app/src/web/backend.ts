@@ -245,6 +245,9 @@ export const getLedParam = (): Promise<LedParam> =>
 export const setLedParam = (param: LedParam) =>
   withCore(() => core.set_led_param(JSON.stringify(param)));
 export const getProfile = (): Promise<number> => withCore(() => core.get_profile());
+/** The display's firmware version, or null on a board without one. */
+export const getScreenVersion = (): Promise<number | null> =>
+  withCore(() => core.get_screen_version());
 export const setProfile = (profile: number) => withCore(() => core.set_profile(profile));
 export const readKeymap = (profile: number): Promise<number[]> =>
   withCore(async () => Array.from(await core.read_keymap(profile)));

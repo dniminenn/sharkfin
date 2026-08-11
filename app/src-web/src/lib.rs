@@ -514,6 +514,24 @@ pub async fn get_profile() -> Result<u8, JsValue> {
     Ok(reply[1])
 }
 
+/// The display's own firmware version, or `None` on a board without one.
+/// `0xAD` means the same thing in both families, so it needs no family
+/// lookup. A board with no display echoes the previous reply instead.
+#[wasm_bindgen]
+pub async fn get_screen_version() -> Result<Option<u16>, JsValue> {
+    let _busy = acquire().await;
+    let (t, _) = get_open(false)?;
+    let reply = t
+        .roundtrip(protocol::cmd::GET_OLED_VERSION, &[], Checksum::Bit7)
+        .await
+        .map_err(fail)?;
+    if reply[0] != protocol::cmd::GET_OLED_VERSION {
+        return Ok(None);
+    }
+    let version = u16::from(reply[1]) | (u16::from(reply[2]) << 8);
+    Ok((version != 0).then_some(version))
+}
+
 #[wasm_bindgen]
 pub async fn set_profile(profile: u8) -> Result<(), JsValue> {
     gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;

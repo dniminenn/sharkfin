@@ -36,6 +36,7 @@ pub fn run() {
             commands::get_led_param,
             commands::set_led_param,
             commands::get_profile,
+            commands::get_screen_version,
             commands::set_profile,
             commands::read_keymap,
             commands::read_fn_keymap,
