@@ -13,6 +13,14 @@ export interface DeviceFeatures {
   sideLight: boolean;
 }
 
+export interface ScreenSpec {
+  w: number;
+  h: number;
+  /** `16` is RGB565, `24` is three bytes a pixel. */
+  mode: string;
+  layers: number;
+}
+
 export interface DeviceSpec {
   id: number;
   name: string;
@@ -27,6 +35,8 @@ export interface DeviceSpec {
   profiles: number;
   magnetic?: boolean;
   family?: string;
+  /** The display, absent on a board without one. */
+  screen?: ScreenSpec | null;
   features: DeviceFeatures;
 }
 

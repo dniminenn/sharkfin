@@ -657,8 +657,34 @@ def convention_ui_name(enum_key, ui_defs):
 KNOWN_DEVICE_FIELDS = {
     "id", "name", "displayName", "company", "vendor", "vendorId", "productId",
     "internalName", "keyLayout", "lightLayout", "sideLightLayout", "profiles",
-    "magnetic", "family", "features",
+    "magnetic", "family", "features", "screen",
 }
+
+
+def screen_spec(raw):
+    """A board's display, or None.
+
+    The vendor records geometry per board, not per family: 128x128, 160x80,
+    240x135 and 320x172 all appear, and one board reports 11x7 in mode 24,
+    which is an LED matrix driven by the same commands. Mode 16 is RGB565,
+    24 is three bytes a pixel. Nothing writes to a screen yet; this is here
+    so that when something does, it does not guess the size.
+    """
+    if not isinstance(raw, dict):
+        return None
+    size = raw.get("size")
+    if not isinstance(size, dict):
+        return None
+    w, h = size.get("w"), size.get("h")
+    if not isinstance(w, int) or not isinstance(h, int) or w < 1 or h < 1:
+        return None
+    layers = raw.get("layer")
+    return {
+        "w": w,
+        "h": h,
+        "mode": raw["mode"] if isinstance(raw.get("mode"), str) else "16",
+        "layers": len(layers) if isinstance(layers, list) else 1,
+    }
 
 
 def load_extras(path):
@@ -753,6 +779,7 @@ def main():
         knob = other.get("knobKeyCodes")
         if isinstance(knob, list):
             knob = [k for k in knob if isinstance(k, str)]
+        screen = screen_spec(other.get("screen"))
         company = as_str(d.get("company"))
         devices.append(
             {
@@ -773,6 +800,7 @@ def main():
                 "profiles": d.get("layer") if isinstance(d.get("layer"), int) else 1,
                 "magnetic": magnetic,
                 "family": family,
+                "screen": screen,
                 "features": {
                     "knob": knob if isinstance(knob, list) else [],
                     "debounce": "deBounce" in other,

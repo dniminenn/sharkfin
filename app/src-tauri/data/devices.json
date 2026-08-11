@@ -14,6 +14,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -39,6 +40,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -64,6 +66,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -89,6 +92,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -114,6 +118,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -139,6 +144,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -189,6 +195,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -214,6 +221,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -239,6 +247,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -264,6 +273,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -293,6 +303,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -318,6 +329,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -343,6 +355,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -368,6 +381,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -393,6 +407,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -418,6 +433,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -443,6 +459,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -468,6 +485,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -493,6 +511,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -518,6 +537,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -543,6 +563,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -568,6 +589,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -593,6 +620,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -618,6 +646,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -668,6 +697,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -697,6 +732,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -726,6 +767,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -751,6 +793,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -780,6 +823,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -805,6 +849,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 162,
+      "h": 173,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -834,6 +884,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -859,6 +910,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -888,6 +940,12 @@
     "profiles": 8,
     "magnetic": true,
     "family": "yc500",
+    "screen": {
+      "w": 80,
+      "h": 160,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -913,6 +971,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -963,6 +1022,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 60,
+      "h": 9,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -988,6 +1053,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -1013,6 +1084,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1063,6 +1135,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1088,6 +1161,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1113,6 +1187,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1138,6 +1213,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1163,6 +1239,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1188,6 +1265,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -1217,6 +1300,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1242,6 +1326,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 80,
+      "h": 160,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -1267,6 +1357,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1292,6 +1383,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1317,6 +1409,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -1346,6 +1439,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1371,6 +1465,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -1400,6 +1495,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -1429,6 +1525,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1454,6 +1551,7 @@
     "profiles": 5,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1479,6 +1577,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1529,6 +1628,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -1558,6 +1658,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -1587,6 +1688,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1612,6 +1714,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -1637,6 +1745,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1662,6 +1771,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -1691,6 +1801,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -1720,6 +1831,12 @@
     "profiles": 8,
     "magnetic": true,
     "family": "yc500",
+    "screen": {
+      "w": 80,
+      "h": 160,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -1745,6 +1862,7 @@
     "profiles": 5,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1770,6 +1888,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1795,6 +1914,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1820,6 +1940,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1845,6 +1966,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1870,6 +1992,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1895,6 +2018,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1920,6 +2044,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1945,6 +2070,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -1970,6 +2096,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -1995,6 +2122,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -2024,6 +2152,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -2049,6 +2178,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2074,6 +2204,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2099,6 +2230,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2124,6 +2256,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2149,6 +2282,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2174,6 +2308,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2199,6 +2334,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -2224,6 +2365,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -2249,6 +2391,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -2274,6 +2422,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -2299,6 +2448,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2324,6 +2474,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2349,6 +2500,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -2378,6 +2530,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2403,6 +2556,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2428,6 +2582,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2453,6 +2608,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -2478,6 +2634,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2503,6 +2660,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2528,6 +2686,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2553,6 +2712,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -2578,6 +2743,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2603,6 +2769,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2628,6 +2795,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2653,6 +2821,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -2678,6 +2847,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -2703,6 +2873,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2728,6 +2899,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2753,6 +2925,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2778,6 +2951,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2803,6 +2977,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -2828,6 +3003,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2853,6 +3029,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2878,6 +3055,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -2903,6 +3081,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -2932,6 +3116,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -2961,6 +3146,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -2986,6 +3172,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -3015,6 +3202,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3040,6 +3228,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -3065,6 +3254,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -3090,6 +3285,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -3144,6 +3340,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3169,6 +3366,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -3194,6 +3392,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 220,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -3223,6 +3427,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -3252,6 +3457,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3277,6 +3483,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3302,6 +3509,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3327,6 +3535,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -3356,6 +3565,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3381,6 +3591,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3406,6 +3617,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3431,6 +3643,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -3456,6 +3674,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -3481,6 +3705,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3506,6 +3731,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -3531,6 +3757,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3556,6 +3783,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -3585,6 +3813,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3610,6 +3839,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3635,6 +3865,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3660,6 +3891,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3685,6 +3917,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3710,6 +3943,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -3735,6 +3974,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3760,6 +4000,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3785,6 +4026,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -3814,6 +4061,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3839,6 +4087,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3864,6 +4113,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3889,6 +4139,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3914,6 +4165,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3939,6 +4191,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3964,6 +4217,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -3989,6 +4243,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4014,6 +4269,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4039,6 +4295,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4064,6 +4321,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -4093,6 +4351,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4118,6 +4377,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4143,6 +4403,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4168,6 +4429,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -4197,6 +4459,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4222,6 +4485,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -4251,6 +4520,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4276,6 +4546,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4301,6 +4572,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4326,6 +4598,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4351,6 +4624,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4376,6 +4650,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4401,6 +4676,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -4430,6 +4706,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4455,6 +4732,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4480,6 +4758,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4505,6 +4784,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -4534,6 +4814,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4559,6 +4840,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4584,6 +4866,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4609,6 +4892,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4634,6 +4918,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4659,6 +4944,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4684,6 +4970,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4709,6 +4996,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4734,6 +5022,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4759,6 +5048,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4784,6 +5074,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4809,6 +5100,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4834,6 +5126,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -4859,6 +5157,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4884,6 +5183,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4909,6 +5209,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4934,6 +5235,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4959,6 +5261,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -4984,6 +5287,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5009,6 +5313,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5034,6 +5339,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5059,6 +5365,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5084,6 +5391,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5109,6 +5417,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5134,6 +5443,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5159,6 +5469,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5184,6 +5495,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5209,6 +5521,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5234,6 +5547,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5259,6 +5573,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -5284,6 +5599,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -5309,6 +5630,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5334,6 +5656,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -5359,6 +5682,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeMute",
@@ -5388,6 +5712,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -5417,6 +5742,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5442,6 +5768,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5467,6 +5794,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -5492,6 +5825,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5517,6 +5851,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5542,6 +5877,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -5571,6 +5907,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5596,6 +5933,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -5625,6 +5963,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5650,6 +5989,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5675,6 +6015,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -5704,6 +6050,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5729,6 +6076,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5754,6 +6102,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5779,6 +6128,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5804,6 +6154,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeMute",
@@ -5833,6 +6184,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5858,6 +6210,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5883,6 +6236,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5908,6 +6262,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5933,6 +6288,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -5958,6 +6314,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "ArrowLeft_index1",
@@ -5993,6 +6350,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6018,6 +6376,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -6047,6 +6411,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6072,6 +6437,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6097,6 +6463,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6122,6 +6489,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -6151,6 +6519,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6176,6 +6545,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6201,6 +6571,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -6230,6 +6601,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6255,6 +6627,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -6284,6 +6662,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6309,6 +6688,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -6338,6 +6723,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6363,6 +6749,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -6392,6 +6784,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6417,6 +6810,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6442,6 +6836,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6467,6 +6862,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6492,6 +6888,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6517,6 +6914,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6542,6 +6940,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6567,6 +6966,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -6592,6 +6997,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6617,6 +7023,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6642,6 +7049,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -6671,6 +7079,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6696,6 +7105,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6721,6 +7131,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6746,6 +7157,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6771,6 +7183,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6796,6 +7209,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6821,6 +7235,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6846,6 +7261,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6871,6 +7287,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6896,6 +7313,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6921,6 +7339,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6946,6 +7365,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -6971,6 +7391,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -6996,6 +7422,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7021,6 +7448,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7046,6 +7474,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7071,6 +7500,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7096,6 +7526,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7121,6 +7552,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -7150,6 +7587,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "ArrowLeft_index1",
@@ -7182,6 +7620,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7207,6 +7646,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -7236,6 +7681,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7261,6 +7707,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -7290,6 +7737,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7315,6 +7763,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7340,6 +7789,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7365,6 +7815,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7390,6 +7841,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -7415,6 +7872,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7440,6 +7898,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7465,6 +7924,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -7490,6 +7950,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7515,6 +7976,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7540,6 +8002,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 220,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -7569,6 +8037,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7594,6 +8063,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7619,6 +8089,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7644,6 +8115,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7669,6 +8141,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7694,6 +8167,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7719,6 +8193,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7744,6 +8219,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -7769,6 +8245,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -7794,6 +8271,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -7819,6 +8302,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -7848,6 +8332,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -7873,6 +8358,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -7898,6 +8384,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -7927,6 +8414,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -7956,6 +8449,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -7985,6 +8484,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8010,6 +8510,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -8039,6 +8545,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -8068,6 +8580,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8093,6 +8606,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -8122,6 +8636,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8147,6 +8662,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8172,6 +8688,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8197,6 +8714,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8247,6 +8765,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -8272,6 +8791,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8297,6 +8817,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8322,6 +8843,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -8347,6 +8874,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8372,6 +8900,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8397,6 +8926,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8422,6 +8952,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8447,6 +8978,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8472,6 +9004,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "PageUp",
@@ -8507,6 +9040,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8532,6 +9066,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -8557,6 +9092,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8582,6 +9118,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8607,6 +9144,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 320,
+      "h": 172,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -8632,6 +9175,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "LEDBIRDEC",
@@ -8661,6 +9205,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8686,6 +9231,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8711,6 +9257,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -8736,6 +9283,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8761,6 +9309,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8786,6 +9335,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8811,6 +9361,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8836,6 +9387,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8861,6 +9413,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8886,6 +9439,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -8911,6 +9465,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8936,6 +9491,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -8961,6 +9522,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -8986,6 +9548,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9011,6 +9574,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -9040,6 +9604,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -9069,6 +9634,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -9094,6 +9665,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -9119,6 +9696,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9144,6 +9722,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -9169,6 +9748,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9194,6 +9774,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 65,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -9219,6 +9805,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9244,6 +9831,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9269,6 +9857,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9294,6 +9883,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -9323,6 +9918,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9348,6 +9944,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -9373,6 +9970,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -9402,6 +10005,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9427,6 +10031,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -9456,6 +10066,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9481,6 +10092,7 @@
     "profiles": 5,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9506,6 +10118,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9531,6 +10144,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9556,6 +10170,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9581,6 +10196,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -9610,6 +10231,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -9635,6 +10257,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9660,6 +10283,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9685,6 +10309,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9710,6 +10335,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9735,6 +10361,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9760,6 +10387,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -9789,6 +10417,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9814,6 +10443,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9839,6 +10469,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -9868,6 +10499,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -9893,6 +10530,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9918,6 +10556,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9943,6 +10582,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9968,6 +10608,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -9993,6 +10634,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -10018,6 +10660,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10043,6 +10686,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10068,6 +10712,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10093,6 +10738,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10118,6 +10764,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10143,6 +10790,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10168,6 +10816,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10193,6 +10842,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10218,6 +10868,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10243,6 +10894,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -10272,6 +10924,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -10301,6 +10954,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10326,6 +10980,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -10351,6 +11006,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -10380,6 +11036,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10405,6 +11062,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -10434,6 +11097,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10459,6 +11123,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10484,6 +11149,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10509,6 +11175,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10534,6 +11201,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10559,6 +11227,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -10588,6 +11257,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10613,6 +11283,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10638,6 +11309,7 @@
     "profiles": 5,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -10667,6 +11339,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10692,6 +11365,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10717,6 +11391,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10742,6 +11417,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10767,6 +11443,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10792,6 +11469,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10817,6 +11495,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10842,6 +11521,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -10867,6 +11547,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10892,6 +11573,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -10917,6 +11599,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -10946,6 +11629,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -10975,6 +11664,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -11000,6 +11695,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11029,6 +11725,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11058,6 +11755,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11087,6 +11785,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11116,6 +11815,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11141,6 +11841,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11170,6 +11871,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11199,6 +11901,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11228,6 +11931,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11257,6 +11961,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 428,
+      "h": 142,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11286,6 +11996,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11315,6 +12031,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11344,6 +12066,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11369,6 +12092,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11394,6 +12118,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11419,6 +12144,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11444,6 +12170,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11469,6 +12196,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11494,6 +12222,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11523,6 +12252,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11552,6 +12282,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -11577,6 +12308,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11602,6 +12334,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11631,6 +12364,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11656,6 +12390,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11681,6 +12416,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11706,6 +12442,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11731,6 +12468,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11756,6 +12494,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11781,6 +12520,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11810,6 +12550,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11835,6 +12576,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11860,6 +12602,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 9,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11889,6 +12637,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -11918,6 +12667,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11943,6 +12693,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11968,6 +12719,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -11993,6 +12745,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12018,6 +12771,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12047,6 +12801,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -12076,6 +12831,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12105,6 +12866,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12130,6 +12892,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12155,6 +12918,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 220,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -12180,6 +12949,12 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -12205,6 +12980,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12234,6 +13010,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -12259,6 +13041,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12284,6 +13067,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12313,6 +13102,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12342,6 +13137,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 135,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -12367,6 +13168,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12392,6 +13194,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12421,6 +13229,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12450,6 +13259,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12475,6 +13285,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12500,6 +13311,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12525,6 +13337,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12550,6 +13363,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12579,6 +13393,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12608,6 +13423,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -12637,6 +13458,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12662,6 +13484,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -12691,6 +13514,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12716,6 +13540,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12745,6 +13575,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12770,6 +13601,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12799,6 +13631,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12824,6 +13657,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12853,6 +13692,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -12878,6 +13718,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12907,6 +13748,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12936,6 +13778,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12965,6 +13808,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 135,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -12994,6 +13843,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -13019,6 +13869,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -13044,6 +13895,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13069,6 +13921,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13098,6 +13951,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -13127,6 +13981,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13152,6 +14007,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13181,6 +14037,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -13206,6 +14063,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13231,6 +14089,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13256,6 +14115,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13285,6 +14145,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13314,6 +14180,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13343,6 +14210,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -13368,6 +14236,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -13393,6 +14262,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13422,6 +14297,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13451,6 +14327,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -13476,6 +14358,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13501,6 +14384,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13526,6 +14410,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13555,6 +14440,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13584,6 +14470,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 1
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -13609,6 +14501,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13634,6 +14527,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13659,6 +14553,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13684,6 +14579,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "unknown",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -13709,6 +14605,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13734,6 +14631,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13759,6 +14657,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 320,
+      "h": 175,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -13788,6 +14692,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13817,6 +14722,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13842,6 +14748,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13867,6 +14774,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13892,6 +14800,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13917,6 +14826,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -13946,6 +14856,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13971,6 +14882,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -13996,6 +14908,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -14025,6 +14938,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14050,6 +14964,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14079,6 +14994,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14108,6 +15024,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14137,6 +15054,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -14166,6 +15084,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14191,6 +15110,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14220,6 +15140,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -14245,6 +15166,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14274,6 +15201,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14299,6 +15227,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14324,6 +15253,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14349,6 +15279,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14374,6 +15305,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14399,6 +15331,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14428,6 +15361,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14457,6 +15391,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14486,6 +15426,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14511,6 +15452,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -14536,6 +15478,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 135,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -14561,6 +15509,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -14586,6 +15535,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14611,6 +15561,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14640,6 +15591,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14669,6 +15621,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14698,6 +15656,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -14723,6 +15682,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 428,
+      "h": 142,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14752,6 +15717,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14781,6 +15747,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14810,6 +15777,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14839,6 +15807,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14864,6 +15833,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14889,6 +15859,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -14914,6 +15885,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14943,6 +15915,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -14972,6 +15945,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -14997,6 +15971,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15026,6 +16001,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15055,6 +16036,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15084,6 +16066,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -15109,6 +16092,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15134,6 +16118,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 65,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -15159,6 +16149,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -15184,6 +16175,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15209,6 +16201,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15234,6 +16227,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15263,6 +16257,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15292,6 +16287,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 96,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -15317,6 +16318,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15342,6 +16344,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15367,6 +16370,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15392,6 +16396,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15421,6 +16426,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15446,6 +16452,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15475,6 +16482,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15500,6 +16508,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15529,6 +16538,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15554,6 +16564,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15583,6 +16594,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15612,6 +16624,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15641,6 +16654,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15666,6 +16680,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -15695,6 +16710,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15720,6 +16736,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15749,6 +16766,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15774,6 +16792,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15803,6 +16827,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15832,6 +16857,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15861,6 +16892,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -15886,6 +16918,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -15911,6 +16949,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15940,6 +16979,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -15969,6 +17009,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -15994,6 +17035,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16023,6 +17065,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16048,6 +17091,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16077,6 +17121,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16102,6 +17147,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 142,
+      "h": 428,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -16127,6 +17178,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16152,6 +17204,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16177,6 +17230,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16202,6 +17256,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 7,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -16227,6 +17287,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16252,6 +17313,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -16277,6 +17339,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16306,6 +17369,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16335,6 +17399,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16364,6 +17429,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16393,6 +17464,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16422,6 +17494,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -16447,6 +17520,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -16472,6 +17551,12 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16501,6 +17586,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16526,6 +17612,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16551,6 +17638,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16580,6 +17668,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16605,6 +17694,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16630,6 +17720,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16659,6 +17750,12 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 80,
+      "h": 160,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -16684,6 +17781,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16709,6 +17807,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16734,6 +17833,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16763,6 +17863,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 7,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -16792,6 +17898,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -16821,6 +17928,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16851,6 +17964,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -16880,6 +17999,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16905,6 +18025,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -16955,6 +18076,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -16980,6 +18102,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -17005,6 +18128,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 135,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17034,6 +18163,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17063,6 +18198,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17092,6 +18228,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17121,6 +18263,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17150,6 +18298,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -17175,6 +18324,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -17200,6 +18350,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17229,6 +18385,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17258,6 +18415,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17287,6 +18445,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -17312,6 +18471,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -17337,6 +18497,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -17362,6 +18523,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -17387,6 +18549,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17416,6 +18579,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17445,6 +18609,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17474,6 +18639,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -17499,6 +18665,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17528,6 +18695,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -17553,6 +18721,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17582,6 +18756,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17611,6 +18786,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 142,
+      "h": 428,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -17636,6 +18817,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 80,
+      "h": 160,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -17661,6 +18848,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17690,6 +18878,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17719,6 +18908,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -17744,6 +18934,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -17769,6 +18965,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -17794,6 +18991,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -17819,6 +19017,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -17844,6 +19043,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17873,6 +19073,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -17898,6 +19099,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17927,6 +19129,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -17952,6 +19160,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 135,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -17981,6 +19195,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18010,6 +19230,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18035,6 +19256,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18064,6 +19291,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18089,6 +19317,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18114,6 +19343,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18143,6 +19373,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18168,6 +19399,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18193,6 +19425,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18218,6 +19451,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18243,6 +19477,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18268,6 +19503,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18293,6 +19529,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18322,6 +19564,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18351,6 +19594,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18380,6 +19624,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18405,6 +19650,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18434,6 +19680,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18463,6 +19710,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -18492,6 +19740,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -18517,6 +19771,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18542,6 +19797,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18567,6 +19823,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18592,6 +19849,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18621,6 +19884,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18650,6 +19919,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18675,6 +19945,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18700,6 +19971,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18725,6 +19997,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18750,6 +20023,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18775,6 +20049,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18800,6 +20075,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -18825,6 +20101,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18850,6 +20127,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18875,6 +20153,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18900,6 +20179,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -18925,6 +20205,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -18954,6 +20235,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "ArrowLeft_index1",
@@ -18989,6 +20271,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19018,6 +20306,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19047,6 +20336,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19076,6 +20366,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19105,6 +20401,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -19130,6 +20427,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -19155,6 +20458,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -19180,6 +20484,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19209,6 +20514,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19238,6 +20549,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19263,6 +20575,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -19288,6 +20601,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -19313,6 +20627,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19338,6 +20653,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19363,6 +20679,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19388,6 +20705,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19417,6 +20735,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19442,6 +20761,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -19467,6 +20787,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -19492,6 +20813,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 7,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19521,6 +20848,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 7,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -19546,6 +20879,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19571,6 +20905,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19596,6 +20931,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19625,6 +20961,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19650,6 +20987,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19679,6 +21017,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19708,6 +21047,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19737,6 +21077,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 428,
+      "h": 142,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19766,6 +21112,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19795,6 +21147,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19824,6 +21182,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19849,6 +21208,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19874,6 +21234,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19903,6 +21264,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -19932,6 +21294,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -19957,6 +21320,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -19982,6 +21351,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20011,6 +21381,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20040,6 +21416,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20065,6 +21442,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20090,6 +21468,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20115,6 +21494,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20140,6 +21520,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20165,6 +21546,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20190,6 +21572,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20215,6 +21598,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20240,6 +21624,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20265,6 +21650,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20290,6 +21676,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20319,6 +21706,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20344,6 +21732,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 65,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -20369,6 +21763,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20394,6 +21789,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20423,6 +21819,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 18,
+      "h": 9,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20452,6 +21854,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20477,6 +21880,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 320,
+      "h": 170,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20506,6 +21915,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20531,6 +21941,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20556,6 +21967,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20581,6 +21993,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20610,6 +22023,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20635,6 +22049,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20664,6 +22079,12 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -20689,6 +22110,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20714,6 +22136,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -20739,6 +22162,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -20768,6 +22192,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 320,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20797,6 +22227,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20822,6 +22253,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "ArrowLeft_index1",
@@ -20854,6 +22286,12 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 11,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -20883,6 +22321,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 320,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20918,6 +22362,12 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 11,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -20943,6 +22393,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -20972,6 +22423,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -20997,6 +22449,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21026,6 +22479,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21055,6 +22514,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21080,6 +22540,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -21105,6 +22566,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21134,6 +22601,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21163,6 +22631,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21192,6 +22661,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21217,6 +22687,12 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -21242,6 +22718,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21271,6 +22748,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21296,6 +22774,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21325,6 +22804,12 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 11,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -21354,6 +22839,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -21379,6 +22865,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21408,6 +22900,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21437,6 +22930,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -21466,6 +22965,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21491,6 +22991,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21516,6 +23017,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -21541,6 +23043,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21566,6 +23069,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21591,6 +23095,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21620,6 +23125,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21649,6 +23155,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21678,6 +23185,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21707,6 +23215,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21736,6 +23245,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -21761,6 +23271,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21790,6 +23306,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21819,6 +23336,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -21844,6 +23362,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21873,6 +23397,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -21902,6 +23427,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 428,
+      "h": 142,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -21931,6 +23462,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21956,6 +23488,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -21981,6 +23514,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22010,6 +23549,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22039,6 +23579,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22068,6 +23609,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22093,6 +23635,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22122,6 +23665,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 230,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22151,6 +23700,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22176,6 +23726,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 33,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22205,6 +23761,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -22230,6 +23787,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -22255,6 +23813,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -22280,6 +23839,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22309,6 +23869,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22334,6 +23895,7 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22359,6 +23921,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22388,6 +23951,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22413,6 +23977,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22438,6 +24003,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22467,6 +24033,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22496,6 +24063,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22525,6 +24093,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -22550,6 +24124,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22579,6 +24154,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22608,6 +24184,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -22637,6 +24214,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22666,6 +24249,12 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -22691,6 +24280,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22716,6 +24306,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22741,6 +24332,12 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22770,6 +24367,12 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 7,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -22795,6 +24398,12 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22824,6 +24433,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22853,6 +24463,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22882,6 +24493,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22911,6 +24523,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22940,6 +24553,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -22965,6 +24579,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -22994,6 +24614,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeUp",
@@ -23023,6 +24649,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -23048,6 +24675,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23077,6 +24705,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23106,6 +24735,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23135,6 +24765,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23160,6 +24791,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23189,6 +24821,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23218,6 +24851,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23243,6 +24877,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23268,6 +24903,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 135,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23297,6 +24938,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23326,6 +24968,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23355,6 +24998,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23380,6 +25024,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23405,6 +25050,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23434,6 +25080,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23459,6 +25106,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23488,6 +25136,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23517,6 +25166,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 7,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23546,6 +25201,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23571,6 +25227,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23600,6 +25262,12 @@
     "profiles": 2,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -23625,6 +25293,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23654,6 +25323,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23683,6 +25358,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23712,6 +25388,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -23737,6 +25414,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 320,
+      "h": 172,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -23762,6 +25445,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 428,
+      "h": 142,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23791,6 +25480,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23816,6 +25506,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23845,6 +25536,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 230,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23874,6 +25571,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23903,6 +25601,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23928,6 +25627,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -23957,6 +25657,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -23982,6 +25683,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24011,6 +25713,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24036,6 +25739,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24061,6 +25765,7 @@
     "profiles": 8,
     "magnetic": false,
     "family": "yc500",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24090,6 +25795,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "yc500",
+    "screen": {
+      "w": 162,
+      "h": 173,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24119,6 +25830,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24148,6 +25860,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24177,6 +25895,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24206,6 +25930,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24235,6 +25960,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24264,6 +25990,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 320,
+      "h": 172,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -24289,6 +26021,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 24,
+      "h": 8,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24318,6 +26056,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24343,6 +26082,12 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -24368,6 +26113,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24393,6 +26139,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24422,6 +26169,7 @@
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24447,6 +26195,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24476,6 +26230,12 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24505,6 +26265,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24534,6 +26295,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -24559,6 +26326,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24588,6 +26356,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24613,6 +26382,12 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": {
+      "w": 54,
+      "h": 7,
+      "mode": "24",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": true,
@@ -24638,6 +26413,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24663,6 +26439,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24688,6 +26465,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24713,6 +26491,7 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -24738,6 +26517,7 @@
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24763,6 +26543,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24792,6 +26573,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24817,6 +26599,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": true,
@@ -24842,6 +26625,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24871,6 +26655,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -24900,6 +26685,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24925,6 +26711,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24950,6 +26737,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [],
       "debounce": false,
@@ -24975,6 +26763,7 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": null,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -25004,6 +26793,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 320,
+      "h": 172,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,
@@ -25029,6 +26824,12 @@
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
+    "screen": {
+      "w": 220,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
     "features": {
       "knob": [],
       "debounce": false,

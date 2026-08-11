@@ -48,7 +48,23 @@ pub struct DeviceSpec {
     pub magnetic: bool,
     #[serde(default = "family_unknown")]
     pub family: String,
+    /// The display's size and pixel format, absent on a board without one.
+    /// Geometry is per board: 128x128, 160x80, 240x135 and 320x172 all
+    /// ship, so nothing may assume a default.
+    #[serde(default)]
+    pub screen: Option<ScreenSpec>,
     pub features: DeviceFeatures,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ScreenSpec {
+    pub w: u16,
+    pub h: u16,
+    /// `16` is RGB565, `24` is three bytes a pixel.
+    pub mode: String,
+    #[serde(default)]
+    pub layers: u8,
 }
 
 fn family_unknown() -> String {
