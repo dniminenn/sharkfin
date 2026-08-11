@@ -218,8 +218,16 @@ jobs:
           install -d -m 700 ~/.ssh
           printf '%s\n' "$AUR_SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          # keyscan proved flaky in the container; pin acceptance instead.
-          export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new"
+          # The AUR's host key, written out rather than fetched. keyscan was
+          # flaky in the container, and accepting whatever key answers would
+          # hand the deploy key to anything that can sit in front of the
+          # runner. This is the ed25519 key aur.archlinux.org publishes,
+          # SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4.
+          printf '%s %s %s\n' aur.archlinux.org ssh-ed25519 \
+            AAAAC3NzaC1lZDI1NTE5AAAAIEuBKrPzbawxA/k2g6NcyV5jmqwJ2s+zpgZGZ7tpLIcN \
+            > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts"
           git config --global user.name 'dniminenn'
           git config --global user.email 'root@dnim.dev'
 
