@@ -179,6 +179,21 @@ impl Transport {
         Err(HidError::NoHandshake)
     }
 
+    /// Round-trip a packet the caller built. The screen announce sets fields
+    /// past the checksum byte, so it cannot be expressed as an opcode plus a
+    /// payload the way `roundtrip` wants.
+    pub fn roundtrip_packet(&self, pkt: &[u8; REPORT_LEN]) -> Result<[u8; REPORT_LEN], HidError> {
+        self.send(pkt)?;
+        for attempt in 0..5 {
+            sleep(self.settle * (attempt + 1));
+            let reply = self.read()?;
+            if reply[0] == pkt[0] {
+                return Ok(reply);
+            }
+        }
+        Err(HidError::NoHandshake)
+    }
+
     /// For bulk reads whose replies are raw pages (no opcode echo).
     pub fn read_raw_page(
         &self,

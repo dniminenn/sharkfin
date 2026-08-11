@@ -4,8 +4,10 @@ Reference for the wire protocol sharkfin speaks. Nothing here is needed to
 use the app.
 
 Evidence markers: **[HW]** round-tripped on an Attack Shark X86 (device
-1967). **[FW]** read out of device firmware (`2268_v309`, Attack Shark
-X65HE, gen2). **[JS]** vendor host code only, never exercised.
+1967). **[FW]** read out of device firmware, naming the image where it
+matters: `2268_v309` (X65HE, gen2), `1379 v108_oledv104` (EPOMAKER RT100,
+yc500), `2454 v413_oledv111` (Keydous NJ81-CP, gen2). **[JS]** vendor host
+code only, never exercised.
 
 ## Transport [HW]
 
@@ -259,57 +261,74 @@ The X86's class chain defines 57 commands; most target hardware it lacks.
 
 ## Screens
 
-173 boards in the registry carry a display, 152 gen2 and 21 yc500.
-
-Only `0xAD` is implemented, and only as a read. Everything else below is
-read out of the vendor's JavaScript, is not hardware evidenced, and is
-recorded here so the firmware can be checked against it before anything
-writes to a display.
-
-The display is a second chip with its own firmware. A board that has one
-ships a zip rather than a raw image, one member per chip, and states both
-versions in its release string:
-
-| board | release | members |
-|---|---|---|
-| EPOMAKER RT100 | `v108_oledv104` | `firmwareFile.bin`, `firmwareOledFile.bin` |
-| AttackShark X85PRO | `v104_oledv104` | `firmwareFile.bin`, `firmwareOledFile.bin` |
-| PIIFOXDRIVER ER75 | `v200_oledv105_mledv105` | adds `firmwareMledFile.bin` |
-
-`0xAD` returns that display firmware version and means the same thing in
-both families, so it is the one screen command the read sweep can send
-blind. A board that answers has a display; one that echoes does not.
+173 boards in the registry carry a display, 152 gen2 and 21 yc500. The two
+families do not drive them the same way, so what sharkfin does splits along
+that line.
 
 Geometry is per board, not per family, and comes from the vendor's own
 device record at `other.screen`: `size.w`, `size.h`, `mode` and `layer`.
-It defaults to 128 by 128 in mode `16`. Mode `16` is RGB565, mode `24` is
-three bytes per pixel, and mode `single` is refused by the vendor's own
-uploader.
+25 distinct sizes ship, from 128x128 to 428x142, so nothing may assume a
+default. Mode `16` is RGB565, mode `24` is three bytes a pixel and belongs
+to the small LED matrices (7x7, 11x7) rather than to a screen.
 
-An upload announces itself, then streams pages:
+`0xAD` returns the display's own firmware version, means the same thing in
+both families, and is the one screen command the read sweep can send blind.
+A board that answers has a display; one that echoes does not.
 
-| step | gen2 | yc500 | payload |
+### Drawing, yc500 [FW]
+
+Evidenced against an RT100's firmware (device 1379, `v108_oledv104`). Its
+dispatch is a comparison tree at `0x24C00` over a 42-entry jump table at
+`0x24C2A`. Decoding that table yields the same opcodes for four commands
+already verified on hardware (`0x09` keymap, `0x0C` per-key colour, `0x11`
+debounce, `0x12` sleep), which is what says the decode is right.
+
+| step | opcode | handler | payload |
 |---|---|---|---|
-| announce | `0xA5` | `0xA5` | frame index, frame count, delay, total length, bounding box |
-| data | `0x25` | `0x25` | 8-byte header then 56 bytes, page index at 4..6, length at 6 |
-| announce, 24-bit | `0xA9` | `0xA9` | as above |
-| data, 24-bit | `0x29` | `0x29` | as above |
-| erase chip | `0xAC` | `0x2C` | none |
+| announce | `0xA5` | `0x23F1E` | `[1]` frame, `[2]` frame count, `[3]` delay, `[4..6]` length u16 LE, `[8..12]` bounding box |
+| data | `0x25` | `0x23FB6` | 8-byte header, `[4..6]` page index, `[6]` page length, data at `[8]`, 56 bytes |
 
-The announce is not a read despite sitting above `0x80`. It prepares a
-write, and the caller polls it up to ten times at 100 ms until `reply[1]`
-is 1. Only then do the data pages go out.
+What the firmware settles, that the vendor's JavaScript could not:
 
-yc500 defines a larger set the gen2 table has no entry for: `0x20`/`0xA0`
-picture index, `0x21`/`0xA1` picture data, `0x24`/`0xA4` animation data,
+- The announce returns immediately unless a flag at `+27` is set. That is
+  why the caller polls it until `reply[1]` is 1 instead of assuming.
+- Byte 18 is never read. The `layer` the vendor sends is ignored here.
+- The announce erases nothing. It resets counters, so a frame does not
+  need the chip erased first.
+- The page handler checks `[1]` against the frame the announce recorded
+  and counts bytes against the announced length, so a page that disagrees
+  is dropped rather than written.
+
+Pixel order is the one part still taken from the vendor's JavaScript, and
+it is content rather than command: column major, sorted by x then y, RGB565
+high byte first. Getting it wrong scrambles a picture; it does not reach
+anything else.
+
+### Drawing, gen2
+
+Not implemented. The dispatch is at `0x152A0` in a Keydous NJ81-CP
+(device 2454, `v413_oledv111`) and reaches `0xA5`, `0xAC`, `0xAD`, `0xB0`,
+`0xB1` and `0xB2`, with `0xAE` branching to the same target as the default
+reject, which is what this document already said about that opcode.
+
+But its `0xA5` handler at `0x15A48` does not parse a frame. It builds a
+14-byte message, copies twelve bytes of the request into it and appends a
+checksum: the keyboard is handing the request to the display chip, whose
+own firmware on this board is larger than the keyboard's. What that chip
+expects is not established, so nothing is sent.
+
+### The dangerous byte
+
+`0xAC` is the only write at or above `0x80` in either family. On gen2 it
+erases every picture on the flash chip and takes about 55 seconds; on
+yc500 the same byte is an ordinary read and the erase is `0x2C`. Twenty
+opcodes in total mean different things in the two families.
+
+yc500 defines a larger set gen2 has no entry for: `0x20`/`0xA0` picture
+index, `0x21`/`0xA1` picture data, `0x24`/`0xA4` animation data,
 `0x26`/`0xA6` animation index, `0x2A` weather, `0x2B`/`0xAB` effect,
-`0x30`/`0x31` boot logo. Both families share `0x22` display options,
-`0x27` display language and `0x28` clock.
-
-`0xAC` is the single most dangerous byte in this protocol. It is the only
-write at or above `0x80` in either table, it erases every picture on the
-chip, it takes about 55 seconds, and on yc500 the same byte is an ordinary
-read. Twenty opcodes in total mean different things in the two families.
+`0x30`/`0x31` boot logo. Both share `0x22` display options, `0x27` display
+language and `0x28` clock.
 
 ## Battery
 

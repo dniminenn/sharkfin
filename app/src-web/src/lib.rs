@@ -182,6 +182,20 @@ impl Transport {
         Err(HidErr::NoHandshake)
     }
 
+    /// Round-trip a packet the caller built. The screen announce sets fields
+    /// past the checksum byte, so it cannot be an opcode plus a payload.
+    async fn roundtrip_packet(&self, pkt: &[u8; REPORT_LEN]) -> Result<[u8; REPORT_LEN], HidErr> {
+        self.send(pkt).await?;
+        for attempt in 0..5u32 {
+            sleep_ms(SETTLE_MS * (attempt + 1) as f64).await;
+            let reply = self.read().await?;
+            if reply[0] == pkt[0] {
+                return Ok(reply);
+            }
+        }
+        Err(HidErr::NoHandshake)
+    }
+
     /// For bulk reads whose replies are raw pages (no opcode echo).
     async fn read_raw_page(
         &self,
@@ -800,6 +814,77 @@ async fn flash_cooldown() {
     // Claimed last: claiming before a ten second wait would leave the shared
     // clock stale enough for anything racing in to skip its gap entirely.
     gap(|s| &mut s.last_cmd, FLASH_PAGE_GAP_MS).await;
+}
+
+/// Same values and reasoning as commands.rs.
+const SCREEN_PAGE_GAP_MS: f64 = 5.0;
+const SCREEN_READY_TRIES: u32 = 10;
+const SCREEN_READY_GAP_MS: f64 = 100.0;
+
+/// Draw one still frame on the display. `rgb` is `w * h * 3` in row order;
+/// the column order and pixel format the display wants are applied here.
+/// Lands in flash, so it takes the flash cooldown.
+#[wasm_bindgen]
+pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
+    let (screen, family) = {
+        let (_, spec) = get_open(false)?;
+        (
+            spec.screen.clone().ok_or_else(|| {
+                JsValue::from_str("this board has no display sharkfin knows the size of")
+            })?,
+            spec.family.clone(),
+        )
+    };
+    // yc500 only; see the note in commands.rs. A gen2 board forwards the
+    // request to a display chip whose own expectations are not established.
+    if family != "yc500" {
+        return Err(JsValue::from_str(
+            "sharkfin can only draw on this family of board so far. This one hands \
+             the picture to a separate display chip, and that path is not worked out.",
+        ));
+    }
+    if screen.mode != "16" && screen.mode != "24" {
+        return Err(format!("display mode {} is not supported", screen.mode).into());
+    }
+    let data = protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)
+        .map_err(|e| JsValue::from_str(&e))?;
+    let (announce, page_op) = if screen.mode == "24" {
+        (0xA9_u8, 0x29_u8)
+    } else {
+        (0xA5_u8, 0x25_u8)
+    };
+
+    flash_cooldown().await;
+    let _busy = acquire().await;
+    let (t, _) = get_open(true)?;
+    let pkt = protocol::screen_announce_packet(
+        announce,
+        0,
+        1,
+        0,
+        data.len() as u32,
+        (0, 0, screen.w, screen.h),
+        0,
+    );
+    let mut ready = false;
+    for _ in 0..SCREEN_READY_TRIES {
+        if let Ok(reply) = t.roundtrip_packet(&pkt).await {
+            if reply[1] == 1 {
+                ready = true;
+                break;
+            }
+        }
+        sleep_ms(SCREEN_READY_GAP_MS).await;
+    }
+    if !ready {
+        return Err(JsValue::from_str("the display did not accept the picture"));
+    }
+    for page in protocol::screen_page_packets(page_op, 0, 1, 0, &data) {
+        t.send(&page).await.map_err(fail)?;
+        sleep_ms(SCREEN_PAGE_GAP_MS).await;
+    }
+    sleep_ms(FLASH_SETTLE_MS).await;
+    Ok(())
 }
 
 #[wasm_bindgen]

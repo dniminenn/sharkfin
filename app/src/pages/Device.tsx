@@ -22,6 +22,7 @@ import {
   exportConfig,
   factoryReset,
   getScreenVersion,
+  writeScreenImage,
   getSettings,
   importConfig,
   setAutoOs,
@@ -108,6 +109,42 @@ export default function DevicePage({
       live = false;
     };
   }, [device]);
+
+  // The display wants exactly its own pixels, so the picture is scaled here
+  // and handed over as plain RGB. Everything about the display's byte order
+  // lives in the backend, where the pacing is.
+  const [drawing, setDrawing] = useState(false);
+  const drawImage = async (file: File) => {
+    const screen = device?.spec.screen;
+    if (!screen) return;
+    setDrawing(true);
+    try {
+      const bitmap = await createImageBitmap(file);
+      const canvas = document.createElement("canvas");
+      canvas.width = screen.w;
+      canvas.height = screen.h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("could not prepare the picture");
+      // Cover rather than stretch: a squashed photo looks like a bug.
+      const scale = Math.max(screen.w / bitmap.width, screen.h / bitmap.height);
+      const w = bitmap.width * scale;
+      const h = bitmap.height * scale;
+      ctx.drawImage(bitmap, (screen.w - w) / 2, (screen.h - h) / 2, w, h);
+      const { data } = ctx.getImageData(0, 0, screen.w, screen.h);
+      const rgb = new Array<number>(screen.w * screen.h * 3);
+      for (let i = 0, j = 0; i < data.length; i += 4) {
+        rgb[j++] = data[i];
+        rgb[j++] = data[i + 1];
+        rgb[j++] = data[i + 2];
+      }
+      await writeScreenImage(rgb);
+      toast.success("Picture sent to the display.");
+    } catch (e) {
+      toast.error(`Could not draw the picture: ${e}`);
+    } finally {
+      setDrawing(false);
+    }
+  };
 
   /// Preview only. Nothing reaches the keyboard until commitSleep.
   const pushSleep = (patch: Partial<SleepTimes>) =>
@@ -268,9 +305,33 @@ export default function DevicePage({
                 {screenVersion === null ? "no answer" : screenVersion.toString(16)}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              sharkfin reads the display but does not write to it yet.
-            </p>
+            {device.spec.screen && device.spec.family === "yc500" && (
+              <div className="space-y-2 pt-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="block w-full text-sm file:mr-3 file:rounded-md file:border-0
+                             file:bg-secondary file:px-3 file:py-1.5 file:text-sm"
+                  disabled={drawing}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    e.target.value = "";
+                    if (file) drawImage(file);
+                  }}
+                />
+                <p className="text-xs text-muted-foreground">
+                  {drawing
+                    ? "Writing. Leave the keyboard plugged in."
+                    : "The picture is scaled to fit and replaces what is on the display."}
+                </p>
+              </div>
+            )}
+            {device.spec.screen && device.spec.family !== "yc500" && (
+              <p className="text-xs text-muted-foreground">
+                sharkfin reads this display but cannot draw on it. The picture
+                goes through a separate chip on this board.
+              </p>
+            )}
           </CardContent>
         </Card>
       )}

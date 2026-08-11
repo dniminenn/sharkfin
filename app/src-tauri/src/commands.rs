@@ -755,6 +755,97 @@ pub fn write_per_key(
     out
 }
 
+/// Gap between screen pages. The vendor uses 2 ms wired and 5 ms in a
+/// browser; the transport's own floor is already stricter than either, and
+/// a full 240x135 frame is over a thousand pages, so pacing this like a
+/// seven-page per-key upload would take minutes.
+const SCREEN_PAGE_GAP: Duration = Duration::from_millis(5);
+/// How long the board is given to answer the announce, polled the way the
+/// vendor polls it.
+const SCREEN_READY_TRIES: u32 = 10;
+const SCREEN_READY_GAP: Duration = Duration::from_millis(100);
+
+/// Draw one still frame on the board's display.
+///
+/// `rgb` is `w * h * 3` bytes in row order; the display's own column order
+/// and pixel format are applied here rather than in the UI. The whole
+/// display is rewritten, so there is no partial-update path to get wrong.
+///
+/// This lands in flash, so it takes the flash cooldown like any other
+/// upload. The announce is polled until the board says it is ready and the
+/// pages are abandoned if it never does, which is what stops a half-written
+/// frame going out at the board's expense.
+#[tauri::command(async)]
+pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result<(), String> {
+    let (screen, family) = {
+        let inner = state.inner.lock();
+        let spec = &inner.open.as_ref().ok_or("no keyboard connected")?.spec;
+        (
+            spec.screen
+                .clone()
+                .ok_or("this board has no display sharkfin knows the size of")?,
+            spec.family.clone(),
+        )
+    };
+    // yc500 only, and not for tidiness. Its firmware parses the frame itself:
+    // the announce handler stores the geometry and the page handler checks
+    // every page against it. A gen2 board does not do that. Its handler
+    // builds a short message, copies twelve bytes of the request into it and
+    // checksums it, which is the keyboard passing the request to the display
+    // chip that carries its own firmware. What that chip then expects is not
+    // established, and the two are not interchangeable.
+    if family != "yc500" {
+        return Err(
+            "sharkfin can only draw on this family of board so far. This one hands \
+             the picture to a separate display chip, and that path is not worked out."
+                .into(),
+        );
+    }
+    if screen.mode != "16" && screen.mode != "24" {
+        return Err(format!("display mode {} is not supported", screen.mode));
+    }
+    let data = crate::protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)?;
+    // 0xA5 announces the 16-bit path and 0xA9 the 24-bit one; each data
+    // opcode is its announce minus 0x80.
+    let (announce, page_op) = if screen.mode == "24" {
+        (0xA9_u8, 0x29_u8)
+    } else {
+        (0xA5_u8, 0x25_u8)
+    };
+
+    flash_cooldown(&state);
+    let out = with_writable(&state, |t, _| {
+        let bbox = (0, 0, screen.w, screen.h);
+        let pkt =
+            crate::protocol::screen_announce_packet(announce, 0, 1, 0, data.len() as u32, bbox, 0);
+        let mut ready = false;
+        for _ in 0..SCREEN_READY_TRIES {
+            // The announce is a write dressed as a read: it answers, but
+            // only once the display has room for the frame.
+            if let Ok(reply) = t.roundtrip_packet(&pkt) {
+                if reply[1] == 1 {
+                    ready = true;
+                    break;
+                }
+            }
+            std::thread::sleep(SCREEN_READY_GAP);
+        }
+        if !ready {
+            return Err(HidError::Protocol(
+                "the display did not accept the picture".into(),
+            ));
+        }
+        for page in crate::protocol::screen_page_packets(page_op, 0, 1, 0, &data) {
+            t.send(&page)?;
+            std::thread::sleep(SCREEN_PAGE_GAP);
+        }
+        std::thread::sleep(FLASH_SETTLE);
+        Ok(())
+    });
+    stamp_write(&state);
+    out
+}
+
 fn check_macro_slot(slot: u8) -> Result<(), String> {
     if slot >= crate::protocol::MACRO_SLOTS {
         return Err(format!(

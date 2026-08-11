@@ -399,6 +399,132 @@ impl SledParam {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Displays
+//
+// Evidenced against an RT100's own firmware (device 1379, v108_oledv104).
+// Its command dispatch is a comparison tree at 0x24C00 over a 42-entry jump
+// table at 0x24C2A; decoding that table gives the same opcodes for the
+// commands already verified on hardware (0x09 keymap, 0x0C per-key colour,
+// 0x11 debounce, 0x12 sleep), which is what says the decode is right.
+//
+// The announce handler at 0x23F1E reads the report back byte for byte:
+// [1] frame index, [2] frame count, [3] frame delay, [4..6] length as u16
+// LE, [8..12] the bounding box. The page handler at 0x23FB6 checks [1]
+// against the frame the announce recorded and counts bytes against the
+// announced length, so a page that disagrees is dropped rather than written.
+//
+// Not evidenced, and so not done here: erasing the flash chip (0x2C on
+// yc500, 0xAC on gen2), picture slots, and what byte 18 of the announce
+// selects. This writes one frame to whatever the board is already showing.
+
+/// Data bytes per page. The header is bytes 0..8, the checksum byte 7.
+pub const SCREEN_PAGE_DATA: usize = 56;
+
+/// A pixel as the display wants it: RGB565, high byte first.
+fn rgb565_be(r: u8, g: u8, b: u8) -> [u8; 2] {
+    let v = (u16::from(r >> 3) << 11) | (u16::from(g >> 2) << 5) | u16::from(b >> 3);
+    [(v >> 8) as u8, (v & 0xFF) as u8]
+}
+
+/// `w * h` RGB triples to the display's own byte order.
+///
+/// Column major, not row major: the vendor sorts by x and then y before
+/// packing, so a row-major blob would come out sheared. `mode` is the
+/// registry's, `16` for RGB565 and `24` for three bytes a pixel.
+pub fn screen_pixels(rgb: &[u8], w: u16, h: u16, mode: &str) -> Result<Vec<u8>, String> {
+    let (w, h) = (usize::from(w), usize::from(h));
+    if rgb.len() != w * h * 3 {
+        return Err(format!(
+            "expected {} bytes of RGB for a {w} by {h} display, got {}",
+            w * h * 3,
+            rgb.len()
+        ));
+    }
+    let mut out = Vec::with_capacity(w * h * if mode == "24" { 3 } else { 2 });
+    for x in 0..w {
+        for y in 0..h {
+            let i = (y * w + x) * 3;
+            let (r, g, b) = (rgb[i], rgb[i + 1], rgb[i + 2]);
+            if mode == "24" {
+                out.extend_from_slice(&[r, g, b]);
+            } else {
+                out.extend_from_slice(&rgb565_be(r, g, b));
+            }
+        }
+    }
+    Ok(out)
+}
+
+/// The packet that announces an upload. The board answers `reply[1] == 1`
+/// when it is ready for the pages, and the caller must wait for that.
+pub fn screen_announce_packet(
+    opcode: u8,
+    frame: u8,
+    frames: u8,
+    delay: u8,
+    len: u32,
+    bbox: (u16, u16, u16, u16),
+    layer: u8,
+) -> [u8; REPORT_LEN] {
+    let (left, top, right, bottom) = bbox;
+    let mut buf = packet(
+        opcode,
+        &[
+            frame,
+            frames,
+            delay,
+            (len & 0xFF) as u8,
+            ((len >> 8) & 0xFF) as u8,
+            0,
+        ],
+        Checksum::Bit7,
+    );
+    // Byte 7 is the checksum, so everything wider than a byte lands past it.
+    buf[8] = (left & 0xFF) as u8;
+    buf[9] = (top & 0xFF) as u8;
+    buf[10] = (right & 0xFF) as u8;
+    buf[11] = (bottom & 0xFF) as u8;
+    buf[12] = (left >> 8) as u8;
+    buf[13] = (top >> 8) as u8;
+    buf[14] = (right >> 8) as u8;
+    buf[15] = (bottom >> 8) as u8;
+    buf[16] = ((len >> 16) & 0xFF) as u8;
+    buf[17] = ((len >> 24) & 0xFF) as u8;
+    buf[18] = layer;
+    buf
+}
+
+/// Every data page for one frame, in order.
+pub fn screen_page_packets(
+    opcode: u8,
+    frame: u8,
+    frames: u8,
+    delay: u8,
+    data: &[u8],
+) -> Vec<[u8; REPORT_LEN]> {
+    data.chunks(SCREEN_PAGE_DATA)
+        .enumerate()
+        .map(|(page, chunk)| {
+            let page = page as u16;
+            let mut buf = packet(
+                opcode,
+                &[
+                    frame,
+                    frames,
+                    delay,
+                    (page & 0xFF) as u8,
+                    (page >> 8) as u8,
+                    chunk.len() as u8,
+                ],
+                Checksum::Bit7,
+            );
+            buf[8..8 + chunk.len()].copy_from_slice(chunk);
+            buf
+        })
+        .collect()
+}
+
 /// Per-key colours: 128 slots × RGB = 384 bytes, indexed by matrix slot.
 pub const PER_KEY_BYTES: usize = 384;
 const USERPIC_PAGE_DATA: usize = 56;
@@ -1110,5 +1236,78 @@ mod tests {
         let p = LedParam::from_reply(&reply).unwrap();
         assert_eq!((p.r, p.g, p.b), (0x00, 0xFF, 0xFF));
         assert!(!p.dazzle);
+    }
+
+    // The firmware reads the announce back byte for byte (0x23F1E in the
+    // RT100 image), so these offsets are the contract, not a preference.
+    #[test]
+    fn the_announce_puts_each_field_where_the_firmware_looks() {
+        let pkt = screen_announce_packet(0xA5, 2, 5, 30, 0xABCD, (1, 2, 0x140, 0x88), 3);
+        assert_eq!(pkt[0], 0xA5);
+        assert_eq!(pkt[1], 2, "frame index");
+        assert_eq!(pkt[2], 5, "frame count");
+        assert_eq!(pkt[3], 30, "frame delay");
+        assert_eq!([pkt[4], pkt[5]], [0xCD, 0xAB], "length, low half, LE");
+        assert_eq!(
+            [pkt[8], pkt[9], pkt[10], pkt[11]],
+            [1, 2, 0x40, 0x88],
+            "bbox low"
+        );
+        assert_eq!(
+            [pkt[12], pkt[13], pkt[14], pkt[15]],
+            [0, 0, 1, 0],
+            "bbox high"
+        );
+        assert_eq!([pkt[16], pkt[17]], [0, 0], "length, high half");
+        assert_eq!(pkt[18], 3, "layer");
+        // Byte 7 is the checksum and must survive the wide fields.
+        let sum: u32 = pkt[..7].iter().map(|&b| b as u32).sum();
+        assert_eq!(pkt[7], 0xFF - (sum & 0xFF) as u8);
+    }
+
+    #[test]
+    fn pages_carry_their_index_and_their_own_length() {
+        let data: Vec<u8> = (0..(SCREEN_PAGE_DATA * 2 + 5) as u16)
+            .map(|i| i as u8)
+            .collect();
+        let pages = screen_page_packets(0x25, 0, 1, 0, &data);
+        assert_eq!(pages.len(), 3);
+        assert_eq!(pages[0][6], SCREEN_PAGE_DATA as u8);
+        assert_eq!(pages[2][6], 5, "a short last page states its real length");
+        assert_eq!([pages[1][4], pages[1][5]], [1, 0], "page index, LE");
+        assert_eq!(
+            &pages[0][8..8 + SCREEN_PAGE_DATA],
+            &data[..SCREEN_PAGE_DATA]
+        );
+        assert_eq!(&pages[2][8..13], &data[SCREEN_PAGE_DATA * 2..]);
+        // The tail of a short page stays zero rather than repeating data.
+        assert!(pages[2][13..].iter().all(|&b| b == 0));
+    }
+
+    #[test]
+    fn pixels_go_out_column_major_in_big_endian_565() {
+        // 2x2: red, green / blue, white.
+        let rgb = vec![255, 0, 0, 0, 255, 0, 0, 0, 255, 255, 255, 255];
+        let out = screen_pixels(&rgb, 2, 2, "16").unwrap();
+        assert_eq!(out.len(), 8);
+        // Column 0 is red then blue, not red then green.
+        assert_eq!(&out[0..2], &[0xF8, 0x00], "red");
+        assert_eq!(&out[2..4], &[0x00, 0x1F], "blue, below it");
+        assert_eq!(&out[4..6], &[0x07, 0xE0], "green, second column");
+        assert_eq!(&out[6..8], &[0xFF, 0xFF], "white");
+    }
+
+    #[test]
+    fn twenty_four_bit_mode_sends_plain_triples() {
+        let rgb = vec![1, 2, 3, 4, 5, 6];
+        assert_eq!(
+            screen_pixels(&rgb, 2, 1, "24").unwrap(),
+            vec![1, 2, 3, 4, 5, 6]
+        );
+    }
+
+    #[test]
+    fn a_frame_that_does_not_fit_the_display_is_refused() {
+        assert!(screen_pixels(&[0; 12], 4, 4, "16").is_err());
     }
 }
