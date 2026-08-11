@@ -14,7 +14,7 @@ blank is a plain grid of key slots. All three work the same.
 | total | 949 |
 | writable | 945 |
 | drawn | 185 |
-| drawn after confirmation | 737 |
+| drawn after confirmation | 738 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -193,7 +193,7 @@ blank is a plain grid of key slots. All three work the same.
 | EDRA EK368RT | 2835 | 3151:5030 | gen2 | yes | auto |
 | EDRAVN TKG82WD8 | 3482 | 3151:504c | gen2 | yes | yes |
 | Epomaker 65 | 2870 | 3151:502d | gen2 | yes | auto |
-| EPOMAKER Cypher 81 | 1748 | 3151:4015 | yc500 | yes |  |
+| EPOMAKER Cypher 81 | 1748 | 3151:4015 | yc500 | yes | auto |
 | EPOMAKER Dynatab75X-UK | 1723 | 3151:4015 | yc500 | yes | yes |
 | Epomaker EK75 | 3633 | 3151:5056 | gen2 | yes | auto |
 | EPOMAKER G84 HE | 2959 | 3151:5030 | gen2 | yes | auto |
