@@ -259,10 +259,12 @@ The X86's class chain defines 57 commands; most target hardware it lacks.
 
 ## Screens
 
-173 boards in the registry carry a display, 152 gen2 and 21 yc500. Nothing
-below is implemented and none of it is hardware evidenced. It is read out
-of the vendor's JavaScript and recorded here so the firmware can be checked
-against it.
+173 boards in the registry carry a display, 152 gen2 and 21 yc500.
+
+Only `0xAD` is implemented, and only as a read. Everything else below is
+read out of the vendor's JavaScript, is not hardware evidenced, and is
+recorded here so the firmware can be checked against it before anything
+writes to a display.
 
 The display is a second chip with its own firmware. A board that has one
 ships a zip rather than a raw image, one member per chip, and states both
