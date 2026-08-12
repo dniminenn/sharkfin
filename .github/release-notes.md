@@ -1,16 +1,20 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.3.2
+## What changed in 0.3.3
 
-**Paint works like a paint app.** The Paint page gains a colour picker:
-right-click any key to pick its colour up, or use the pipette in the
-toolbar. Colours you mix can be saved to swatches that persist between
-sessions. The cursor is a brush that shows the current colour, hovering
-previews it on the key under it, Ctrl+Z undoes a stroke, and painting by
-drag now works on touchscreens. The toolbar sits above the keyboard.
+**Drawings import properly.** Pasting a keyboard-layout-editor.com
+drawing on the Keys page now reads Menu, Fn, numpads, and the legends
+UK, German, French, Japanese and Turkish boards print. A label that
+means different keys in different countries stays unassigned instead of
+guessed, and a doubled engraving no longer refuses the whole drawing.
+Every shipped picture is drawn and re-imported in CI, so a legend the
+importer cannot read fails the build instead of reaching you.
 
-None of this touches the board. Sending a pattern is still the explicit
-Apply button, unchanged.
+**The KiiP Y87 ships with its own picture**, drawn by its owner, who
+filed four issues with full bundles until every key matched. Thank you.
+
+Right Alt on the FF101 and VK99C and Print Screen on the MK232 V2 were
+missing from their pictures and can be remapped now.
 
 The registry is 949 boards.
 
