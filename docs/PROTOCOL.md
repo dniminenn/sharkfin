@@ -306,6 +306,12 @@ What the firmware settles, that the vendor's JavaScript could not:
   only as its low bytes, the length only as its u16, and the `layer` the
   vendor sends is ignored. sharkfin refuses frames past 65535 bytes for
   that reason.
+- The u16 is a yc3121 trait, not a yc500 one. Two yc3123 images (devices
+  2730 and 2936, 64800-byte panels) parse the same announce with the
+  length as a u32, high bytes at 16 and 17 where the vendor writes them,
+  and their page handlers count against the full value. The registry
+  carries yc3123 boards in the gen2 family, where drawing is refused
+  outright, so the 65535 limit only ever applies to yc3121.
 - The announce erases nothing. It resets counters, so a frame does not
   need the chip erased first.
 - The page handlers check `[1]` against the frame the announce recorded
