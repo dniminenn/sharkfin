@@ -42,28 +42,36 @@ const SLEEP_MAX = 3600;
 const DEEP_MIN = 600;
 
 // Mirrors DeviceSpec::screen_draw in registry.rs: drawing is offered only
-// where the board's own firmware is known to parse the frame. yc500 boards
-// draw in modes 16 and 24, yc3123-lineage gen2 boards in mode 16. Every
-// other gen2 board hands the picture to a separate display chip and is
+// where firmware is known to parse the frame, either the keyboard's own or
+// the display chip's. Three lineages qualify; every other gen2 board is
 // refused, in the backend as well as here.
-function canDraw(spec: DeviceSpec): boolean {
-  if (!spec.screen) return false;
+function drawRules(
+  spec: DeviceSpec,
+): { maxFrame: number; maxDim: number; mode24: boolean } | null {
   if (spec.family === "yc500")
-    return spec.screen.mode === "16" || spec.screen.mode === "24";
-  return (
-    spec.family === "gen2" &&
-    spec.internalName.startsWith("yc3123_") &&
-    spec.screen.mode === "16"
-  );
+    return { maxFrame: 65535, maxDim: 255, mode24: true };
+  if (spec.family !== "gen2") return null;
+  if (spec.internalName.startsWith("yc3123_"))
+    return { maxFrame: 0xffffffff, maxDim: 65535, mode24: false };
+  if (spec.internalName.startsWith("ry5088_"))
+    return { maxFrame: 65535, maxDim: 255, mode24: false };
+  return null;
 }
 
-// The boards drawing is refused on because the picture goes through a
-// separate chip, as opposed to a mode sharkfin cannot pack yet.
+function canDraw(spec: DeviceSpec): boolean {
+  const rules = drawRules(spec);
+  if (!rules || !spec.screen) return false;
+  const { w, h, mode } = spec.screen;
+  if (mode !== "16" && !(mode === "24" && rules.mode24)) return false;
+  if (w > rules.maxDim || h > rules.maxDim) return false;
+  return w * h * (mode === "24" ? 3 : 2) <= rules.maxFrame;
+}
+
+// The boards drawing is refused on because no firmware evidences the path,
+// as opposed to a board sharkfin supports but whose panel or mode it cannot
+// address.
 function drawsElsewhere(spec: DeviceSpec): boolean {
-  return (
-    spec.family !== "yc500" &&
-    !(spec.family === "gen2" && spec.internalName.startsWith("yc3123_"))
-  );
+  return drawRules(spec) === null;
 }
 
 function mins(seconds: number) {

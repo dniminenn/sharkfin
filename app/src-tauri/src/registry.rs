@@ -106,7 +106,7 @@ impl DeviceSpec {
     /// parse frames itself; most gen2 boards instead hand the request to a
     /// display chip whose protocol is not established, and stay refused.
     ///
-    /// Two lineages qualify (docs/PROTOCOL.md, "Screens"):
+    /// Three lineages qualify (docs/PROTOCOL.md, "Screens"):
     ///
     /// - The yc500 family. Its images read the frame length as a u16 and
     ///   never the high bytes, so frames past 65535 bytes are refused.
@@ -115,14 +115,30 @@ impl DeviceSpec {
     ///   Their images read the length as a u32 and stream through banked
     ///   RAM, so the big panels fit. Mode 16 only; no yc3123 image
     ///   evidences mode 24.
+    /// - ry5088-lineage gen2 boards. These hand the frame to a display
+    ///   chip, but that chip's own firmware parses the layout sharkfin
+    ///   already builds, and the keyboard forwards only the packet's first
+    ///   twelve bytes, so the length is a u16 there too. Mode 16 only; the
+    ///   gen2 dispatcher has no mode 24 opcode at all.
+    ///
+    /// The remaining gen2 lineages (ry6602, ry6609, pan1086) sit in the
+    /// same family and are refused: only ry5088 keyboard firmware was
+    /// disassembled, and a shared family is not evidence.
     pub fn screen_draw(&self) -> Option<ScreenDrawRules> {
         match self.family.as_str() {
             "yc500" => Some(ScreenDrawRules {
                 max_frame: usize::from(u16::MAX),
+                max_dim: 255,
                 mode24: true,
             }),
             "gen2" if self.internal_name.starts_with("yc3123_") => Some(ScreenDrawRules {
                 max_frame: u32::MAX as usize,
+                max_dim: u16::MAX,
+                mode24: false,
+            }),
+            "gen2" if self.internal_name.starts_with("ry5088_") => Some(ScreenDrawRules {
+                max_frame: usize::from(u16::MAX),
+                max_dim: 255,
                 mode24: false,
             }),
             _ => None,
@@ -131,9 +147,17 @@ impl DeviceSpec {
 }
 
 /// The limits `screen_draw` grants: the largest frame the board's firmware
-/// can count, and whether the mode 24 opcode pair is evidenced for it.
+/// can count, the largest panel its bounding box can address, and whether
+/// the mode 24 opcode pair is evidenced for it.
+///
+/// `max_dim` is not cosmetic. yc500 and the ry5088 display chip both read
+/// the bounding box from its low bytes only, and the chip turns them into a
+/// size by subtracting. A 320-wide panel arrives as a width of 64 and the
+/// picture is laid out wrong rather than refused, so the check belongs
+/// here. yc3123 reads the box's high bytes and has no such limit.
 pub struct ScreenDrawRules {
     pub max_frame: usize,
+    pub max_dim: u16,
     pub mode24: bool,
 }
 
@@ -232,11 +256,43 @@ mod tests {
         let screen = k2401e.screen.expect("k2401e has a screen");
         assert!(usize::from(screen.w) * usize::from(screen.h) * 2 > rules.max_frame);
 
-        // An ry5088 gen2 board with a screen stays refused outright.
+        // The ry5088 display chip parses the same layout, evidenced from
+        // its own firmware, but reads the box as low bytes only.
         let nj81 = by_id(2454).expect("NJ81-CP present");
         assert_eq!(nj81.family, "gen2");
-        assert!(!nj81.internal_name.starts_with("yc3123_"));
-        assert!(nj81.screen_draw().is_none());
+        let rules = nj81.screen_draw().expect("ry5088 draws");
+        assert_eq!(rules.max_frame, usize::from(u16::MAX));
+        assert_eq!(rules.max_dim, 255);
+        assert!(!rules.mode24, "gen2 has no mode 24 opcode at all");
+
+        // A gen2 lineage whose firmware was never disassembled stays
+        // refused, family alone is not evidence.
+        let other = all()
+            .into_iter()
+            .find(|d| {
+                d.family == "gen2"
+                    && d.screen.is_some()
+                    && (d.internal_name.starts_with("ry6609_")
+                        || d.internal_name.starts_with("ry6602_"))
+            })
+            .expect("an ry66xx screen board is in the registry");
+        assert!(other.screen_draw().is_none(), "{}", other.internal_name);
+    }
+
+    /// The 320px ry5088 panels arrive at the chip as a width of 64, because
+    /// it reads the box's low byte and subtracts. They must be refused on
+    /// size, not drawn wrong.
+    #[test]
+    fn oversized_panels_are_refused_where_the_box_is_a_low_byte() {
+        for id in [3728u32, 4051, 4161] {
+            let d = by_id(id).unwrap_or_else(|| panic!("device {id} present"));
+            let rules = d.screen_draw().expect("ry5088 lineage draws");
+            let screen = d.screen.expect("has a screen");
+            assert!(
+                screen.w > rules.max_dim || screen.h > rules.max_dim,
+                "device {id} should trip the dimension limit"
+            );
+        }
     }
 
     #[test]

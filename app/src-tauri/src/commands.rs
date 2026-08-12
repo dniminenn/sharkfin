@@ -816,10 +816,17 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
             ))
         }
     };
+    // Checked before the pixels are packed: a panel whose bounding box does
+    // not fit the bytes the firmware reads would be drawn at the wrong size
+    // rather than refused. See ScreenDrawRules::max_dim.
+    if screen.w > rules.max_dim || screen.h > rules.max_dim {
+        return Err("this display is larger than sharkfin can address on this board".into());
+    }
     let data = crate::protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)?;
-    // The frame limit is per lineage: yc500 images read the length as a u16
-    // and nothing wider, yc3123 images read a u32. A frame past what the
-    // firmware can count would truncate silently, so it is refused instead.
+    // The frame limit is per lineage: yc500 and ry5088 images read the
+    // length as a u16 and nothing wider, yc3123 images read a u32. A frame
+    // past what the firmware can count would truncate silently, so it is
+    // refused instead.
     if data.len() > rules.max_frame {
         return Err("this display takes a bigger frame than sharkfin can safely send yet".into());
     }

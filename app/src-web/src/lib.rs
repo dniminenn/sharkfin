@@ -851,6 +851,13 @@ pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
         "24" if rules.mode24 => (0xA9_u8, 0x29_u8),
         other => return Err(format!("sharkfin cannot draw on a mode {other} display yet").into()),
     };
+    // See ScreenDrawRules::max_dim: a panel the bounding box cannot address
+    // would be drawn at the wrong size rather than refused.
+    if screen.w > rules.max_dim || screen.h > rules.max_dim {
+        return Err(JsValue::from_str(
+            "this display is larger than sharkfin can address on this board",
+        ));
+    }
     let data = protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)
         .map_err(|e| JsValue::from_str(&e))?;
     if data.len() > rules.max_frame {

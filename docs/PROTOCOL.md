@@ -263,9 +263,10 @@ The X86's class chain defines 57 commands; most target hardware it lacks.
 ## Screens
 
 172 boards in the registry carry a display, 152 gen2 and 20 yc500. Whether
-sharkfin can draw follows the chip that parses the frame, not the family:
-yc500 boards and yc3123-lineage gen2 boards parse it in the keyboard's own
-firmware, the rest of gen2 hands it to a separate display chip.
+sharkfin can draw follows the firmware that parses the frame, not the
+family: yc500 and yc3123-lineage boards parse it in the keyboard, ry5088
+boards forward it to a display chip that parses it there, and the remaining
+gen2 lineages have no firmware evidence either way.
 
 Geometry is per board, not per family, and comes from the vendor's own
 device record at `other.screen`: `size.w`, `size.h`, `mode` and `layer`.
@@ -372,18 +373,58 @@ length split the firmware reads.
 yc3121 pairing; `0xAC` additionally preloads the `AA AA 55 55` reply. The
 erase rule below covers yc3123 unchanged.
 
-### Drawing, ry5088 gen2
+### Drawing, ry5088 gen2 [FW]
 
-Not implemented. The dispatch is at `0x152A0` in a Keydous NJ81-CP
-(device 2454, `v413_oledv111`) and reaches `0xA5`, `0xAC`, `0xAD`, `0xB0`,
-`0xB1` and `0xB2`, with `0xAE` branching to the same target as the default
-reject, which is what this document already said about that opcode.
+These boards do hand the frame to a separate display chip, but that chip's
+own firmware parses the layout sharkfin already builds. Evidenced from both
+ends of the link: the keyboard image (device 2454, `v413_oledv111`,
+dispatch `0x152A0`) and the display chip image shipped beside it,
+`firmwareOledFile.bin`, which loads at `0x01000000`.
 
-But its `0xA5` handler at `0x15A48` does not parse a frame. It builds a
-14-byte message, copies twelve bytes of the request into it and appends a
-checksum: the keyboard is handing the request to the display chip, whose
-own firmware on this board is larger than the keyboard's. What that chip
-expects is not established, so nothing is sent.
+The keyboard is a repackager. It wraps part of the host packet in its own
+link frame:
+
+| offset | meaning |
+|---|---|
+| `[0]` | `0x55` sync |
+| `[1..2]` | length u16 LE, counting the type byte, payload and checksum |
+| `[3]` | type |
+| `[4..]` | payload |
+| `[3+len]` | checksum, `sum` of bytes 1 to `3+len-1` |
+
+| host opcode | builder | type | payload |
+|---|---|---|---|
+| `0xA5` announce | `0x15A48` | 3 | host packet `[0..11]` |
+| `0x25` data | `0x159E2` | 4 | host packet `[0..63]`, `[0]` replaced |
+
+The chip validates the frame at `0x10149DA` and dispatches on the type at
+`0x10148CA` through a jump table at file offset `0x148F0`. Type 3 reaches
+the announce handler at `0x101460C`, type 4 the page handler at
+`0x1014476`. Those handlers read the same fields as the other families:
+`[1]` frame, `[2]` count, `[3]` delay, `[4]`,`[5]` length u16, `[8..12]`
+the box, and for pages `[4]`,`[5]` page index, `[6]` page length, data at
+`[8]`, 56 bytes, streamed through ten 4096-byte banks.
+
+Two limits follow from the forwarding. The keyboard copies only twelve
+bytes for the announce, so the chip never sees `[16]`,`[17]` and the length
+is a **u16**. The box is read from its low bytes and turned into a size by
+subtraction, so a panel over **255 px** in either direction arrives at the
+wrong size: three registry boards (3728, 4051, 4161, all 320 px wide) are
+refused on that ground.
+
+Mode 24 is refused on gen2 because the dispatcher has no `0x29` or `0xA9`
+case at all.
+
+One hazard has no counterpart in the other families. Both link builders
+begin by testing a busy bit and, when it is set, drop the frame without
+telling the host, so a page sent while the previous one is still going out
+is lost silently. The bit is cleared when the transfer completes. The page
+gap sharkfin uses is the same one the vendor's own uploader uses for these
+boards, and is not otherwise evidenced.
+
+The other gen2 lineages (`ry6602`, `ry6609`, `pan1086`) are still refused.
+Only ry5088 keyboard firmware was read, and a shared family is not
+evidence.
 
 ### The dangerous byte
 
