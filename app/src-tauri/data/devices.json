@@ -367,6 +367,31 @@
     }
   },
   {
+    "id": 946,
+    "name": "epomaker_rt100_wired",
+    "displayName": "RT100 Wired",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "epomaker_rt100_wired",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
     "id": 994,
     "name": "yc500_c84_soc",
     "displayName": "C84",
