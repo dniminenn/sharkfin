@@ -1,20 +1,16 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.3.1
+## What changed in 0.3.2
 
-**Drawing reaches another 46 boards.** Boards that pass the picture to a
-separate display chip can now be drawn on, where that chip's firmware is
-known to accept it. This covers the Keydous NJ81 and NJ98, and many
-ry5088-based boards from other brands. 116 boards can now take a picture,
-up from 70 in 0.3.0.
+**Paint works like a paint app.** The Paint page gains a colour picker:
+right-click any key to pick its colour up, or use the pipette in the
+toolbar. Colours you mix can be saved to swatches that persist between
+sessions. The cursor is a brush that shows the current colour, hovering
+previews it on the key under it, Ctrl+Z undoes a stroke, and painting by
+drag now works on touchscreens. The toolbar sits above the keyboard.
 
-Boards whose panel is wider than the display chip can address, and the
-remaining chip families that nothing evidences yet, are still refused and
-say so on the Display card.
-
-Drawing has still not been confirmed on physical hardware. If a picture
-comes out wrong, or nothing appears, please open an issue and name your
-board.
+None of this touches the board. Sending a pattern is still the explicit
+Apply button, unchanged.
 
 The registry is 949 boards.
 

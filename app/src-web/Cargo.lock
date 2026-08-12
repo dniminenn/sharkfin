@@ -148,7 +148,7 @@ dependencies = [
 
 [[package]]
 name = "sharkfin-web"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "js-sys",
  "log",
