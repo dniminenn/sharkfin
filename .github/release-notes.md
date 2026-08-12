@@ -1,26 +1,20 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.3.0
+## What changed in 0.3.1
 
-**Draw on the screen.** Boards with a built-in display can now take a
-picture from the Device page. Pick an image on the Display card; it is
-scaled to fit and replaces what the display is showing. 70 boards
-qualify, the ones whose own firmware drives the display, including the
-EPOMAKER RT100, RT85, RT75, RT100 PRO and Glyph, most Hator HTK41xx and
-several AttackShark models. Boards that hand the picture to a separate
-display chip are not supported yet, and the app says so on the Display
-card.
+**Drawing reaches another 46 boards.** Boards that pass the picture to a
+separate display chip can now be drawn on, where that chip's firmware is
+known to accept it. This covers the Keydous NJ81 and NJ98, and many
+ry5088-based boards from other brands. 116 boards can now take a picture,
+up from 70 in 0.3.0.
 
-This path is new. If a picture comes out wrong, or nothing appears,
-please open an issue and name your board.
+Boards whose panel is wider than the display chip can address, and the
+remaining chip families that nothing evidences yet, are still refused and
+say so on the Display card.
 
-**Cypher 81 drawn out of the box.** An owner confirmed all 84 keys, so
-its layout now ships baked.
-
-**Fewer wrong ISO guesses.** The Keys page offers an ISO picture only
-when the board's firmware carries both ISO keys. A correction to the
-0.2.9 notes: the Menel Nia 87 was called an ISO board there. That was
-wrong, and the registry no longer says it.
+Drawing has still not been confirmed on physical hardware. If a picture
+comes out wrong, or nothing appears, please open an issue and name your
+board.
 
 The registry is 949 boards.
 
