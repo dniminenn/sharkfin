@@ -87,7 +87,7 @@ never transmit.
 
 | | layout |
 |---|---|
-| read `0x8A` | `[profile, 0xFF\|slot, page, os]` |
+| read `0x8A` | `[profile, 0xFF\|slot, page, os]`; bulk pages 0..7, raw 64-byte replies |
 | write slot `0x0A` | `[profile, slot, 0, 0, apply, os]`, value at 8..12 |
 | write bulk `0x0A` | `[profile, 0xFF, page, len, last, os]` + ≤56 bytes at 8, 10 pages |
 | Fn read `0x90` | `[os, profile, 0xFF\|slot, page]` |
@@ -96,6 +96,10 @@ never transmit.
 `last` sets the firmware's commit-to-flash bit. Storage is
 `0x08028800 + profile×2048 + layer×512 + slot×4`, i.e. four layers per
 profile. Overwriting a slot holding Fn (`[0x0A,0x01,0,0]`) is permitted.
+
+On yc500, `0x8A` answers a 64-byte record from a fixed table, reading only
+the profile byte (1379 firmware at `0x23C18`). That record is the all-`0xFF`
+reply the read sweeps show, not an echo. **[FW]**
 
 ### Slot values
 

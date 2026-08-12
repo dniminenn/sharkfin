@@ -1089,6 +1089,15 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
 /// screen board's pictures. Anything added here has to be evidenced as a
 /// harmless read in *both* families, because the sweep runs before the
 /// family is known.
+///
+/// The keymap pages carry the whole base layer, so a report names its
+/// layout without a second round trip. Both shapes are pure reads in both
+/// families: the gen2 0x89 handler answers options without reading the
+/// payload (2454 firmware at 0x155A2, 2730 at 0x11DEC), the gen2 0x8A bulk
+/// read copies a 64-byte flash page into the reply (2454 at 0x15616, 2730
+/// at 0x11E3A), and yc500 answers 0x8A from a fixed table, reading only
+/// the profile byte (1379 at 0x23C18), which is the all-0xFF reply older
+/// bundles show.
 const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x80 revision", 0x80, &[]),
     ("0x83 report rate (gen2)", 0x83, &[]),
@@ -1098,7 +1107,22 @@ const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x87 backlight", 0x87, &[]),
     ("0x88 edge light", 0x88, &[]),
     ("0x89 keymap/options p0", 0x89, &[0, 0]),
-    ("0x8A keymap (gen2) p0", 0x8A, &[0, 0]),
+    ("0x89 keymap (yc500) p1", 0x89, &[0, 1]),
+    ("0x89 keymap (yc500) p2", 0x89, &[0, 2]),
+    ("0x89 keymap (yc500) p3", 0x89, &[0, 3]),
+    ("0x89 keymap (yc500) p4", 0x89, &[0, 4]),
+    ("0x89 keymap (yc500) p5", 0x89, &[0, 5]),
+    ("0x89 keymap (yc500) p6", 0x89, &[0, 6]),
+    ("0x89 keymap (yc500) p7", 0x89, &[0, 7]),
+    ("0x89 keymap (yc500) p8", 0x89, &[0, 8]),
+    ("0x8A keymap (gen2) p0", 0x8A, &[0, 0xFF, 0, 0]),
+    ("0x8A keymap (gen2) p1", 0x8A, &[0, 0xFF, 1, 0]),
+    ("0x8A keymap (gen2) p2", 0x8A, &[0, 0xFF, 2, 0]),
+    ("0x8A keymap (gen2) p3", 0x8A, &[0, 0xFF, 3, 0]),
+    ("0x8A keymap (gen2) p4", 0x8A, &[0, 0xFF, 4, 0]),
+    ("0x8A keymap (gen2) p5", 0x8A, &[0, 0xFF, 5, 0]),
+    ("0x8A keymap (gen2) p6", 0x8A, &[0, 0xFF, 6, 0]),
+    ("0x8A keymap (gen2) p7", 0x8A, &[0, 0xFF, 7, 0]),
     ("0x8B macro s0 p0", 0x8B, &[0, 0]),
     ("0x8C userpic p0", 0x8C, &[0, 0]),
     ("0x8F identify", 0x8F, &[]),
