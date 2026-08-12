@@ -262,7 +262,7 @@ The X86's class chain defines 57 commands; most target hardware it lacks.
 
 ## Screens
 
-173 boards in the registry carry a display, 152 gen2 and 21 yc500. Whether
+172 boards in the registry carry a display, 152 gen2 and 20 yc500. Whether
 sharkfin can draw follows the chip that parses the frame, not the family:
 yc500 boards and yc3123-lineage gen2 boards parse it in the keyboard's own
 firmware, the rest of gen2 hands it to a separate display chip.
