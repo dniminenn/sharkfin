@@ -1,9 +1,26 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.2.9
+## What changed in 0.3.0
 
-**One more board.** The Menel Nia 87 is now in the registry, from an owner's
-report. It is an ISO board, so the Keys page offers an ISO picture to confirm.
+**Draw on the screen.** Boards with a built-in display can now take a
+picture from the Device page. Pick an image on the Display card; it is
+scaled to fit and replaces what the display is showing. 70 boards
+qualify, the ones whose own firmware drives the display, including the
+EPOMAKER RT100, RT85, RT75, RT100 PRO and Glyph, most Hator HTK41xx and
+several AttackShark models. Boards that hand the picture to a separate
+display chip are not supported yet, and the app says so on the Display
+card.
+
+This path is new. If a picture comes out wrong, or nothing appears,
+please open an issue and name your board.
+
+**Cypher 81 drawn out of the box.** An owner confirmed all 84 keys, so
+its layout now ships baked.
+
+**Fewer wrong ISO guesses.** The Keys page offers an ISO picture only
+when the board's firmware carries both ISO keys. A correction to the
+0.2.9 notes: the Menel Nia 87 was called an ISO board there. That was
+wrong, and the registry no longer says it.
 
 The registry is 949 boards.
 
