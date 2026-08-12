@@ -402,20 +402,28 @@ impl SledParam {
 // ---------------------------------------------------------------------------
 // Displays
 //
-// Evidenced against an RT100's own firmware (device 1379, v108_oledv104).
-// Its command dispatch is a comparison tree at 0x24C00 over a 42-entry jump
-// table at 0x24C2A; decoding that table gives the same opcodes for the
-// commands already verified on hardware (0x09 keymap, 0x0C per-key colour,
-// 0x11 debounce, 0x12 sleep), which is what says the decode is right.
+// Evidenced against two boards' own firmware, one per pixel mode: an RT100
+// (device 1379, v108_oledv104, mode 16) and a Dynatab75X-UK (device 1723,
+// v102_oledv103, mode 24). The RT100's command dispatch is a comparison
+// tree at 0x24C00 over a 42-entry jump table at 0x24C2A; decoding that
+// table gives the same opcodes for the commands already verified on
+// hardware (0x09 keymap, 0x0C per-key colour, 0x11 debounce, 0x12 sleep),
+// which is what says the decode is right.
 //
-// The announce handler at 0x23F1E reads the report back byte for byte:
-// [1] frame index, [2] frame count, [3] frame delay, [4..6] length as u16
-// LE, [8..12] the bounding box. Bytes 12..19, the box's high half, the
-// length's high half and the vendor's layer byte, are never read: the
-// length the firmware knows is a u16, which is why frames past 65535
-// bytes are refused. The page handler at 0x23FB6 checks [1] against the
-// frame the announce recorded and counts bytes against the announced
-// length, so a page that disagrees is dropped rather than written.
+// The two images are mirrors. The RT100 handles 0xA5/0x25 and sends
+// 0xA9/0x29 to its reject entry; the Dynatab (dispatch 0x23D1E, announce
+// 0x2311C, pages 0x231AA) handles 0xA9/0x29 and rejects 0xA5/0x25. Each
+// board implements exactly the pair its vendor record's mode declares, so
+// the mode picks the pair and nothing else does.
+//
+// Both announce handlers read the report the same way: [1] frame index,
+// [2] frame count, [3] frame delay, [4..6] length as u16 LE, [8..12] the
+// bounding box. Bytes 12..19, the box's high half, the length's high half
+// and the vendor's layer byte, are never read: the length the firmware
+// knows is a u16, which is why frames past 65535 bytes are refused. The
+// page handlers check [1] against the frame the announce recorded and
+// count bytes against the announced length, so a page that disagrees is
+// dropped rather than written.
 //
 // Not evidenced, and so not done here: erasing the flash chip (0x2C on
 // yc500, 0xAC on gen2; the RT100 image routes yc500's 0xAC onto the same
@@ -432,11 +440,12 @@ fn rgb565_be(r: u8, g: u8, b: u8) -> [u8; 2] {
     [(v >> 8) as u8, (v & 0xFF) as u8]
 }
 
-/// `w * h` RGB triples to the display's own byte order: RGB565.
+/// `w * h` RGB triples to the display's own byte order.
 ///
 /// Column major, not row major: the vendor sorts by x and then y before
-/// packing, so a row-major blob would come out sheared.
-pub fn screen_pixels(rgb: &[u8], w: u16, h: u16) -> Result<Vec<u8>, String> {
+/// packing, so a row-major blob would come out sheared. `mode` is the
+/// registry's, `16` for RGB565 high byte first and `24` for plain triples.
+pub fn screen_pixels(rgb: &[u8], w: u16, h: u16, mode: &str) -> Result<Vec<u8>, String> {
     let (w, h) = (usize::from(w), usize::from(h));
     if rgb.len() != w * h * 3 {
         return Err(format!(
@@ -445,11 +454,15 @@ pub fn screen_pixels(rgb: &[u8], w: u16, h: u16) -> Result<Vec<u8>, String> {
             rgb.len()
         ));
     }
-    let mut out = Vec::with_capacity(w * h * 2);
+    let mut out = Vec::with_capacity(w * h * if mode == "24" { 3 } else { 2 });
     for x in 0..w {
         for y in 0..h {
             let i = (y * w + x) * 3;
-            out.extend_from_slice(&rgb565_be(rgb[i], rgb[i + 1], rgb[i + 2]));
+            if mode == "24" {
+                out.extend_from_slice(&rgb[i..i + 3]);
+            } else {
+                out.extend_from_slice(&rgb565_be(rgb[i], rgb[i + 1], rgb[i + 2]));
+            }
         }
     }
     Ok(out)
@@ -1287,7 +1300,7 @@ mod tests {
     fn pixels_go_out_column_major_in_big_endian_565() {
         // 2x2: red, green / blue, white.
         let rgb = vec![255, 0, 0, 0, 255, 0, 0, 0, 255, 255, 255, 255];
-        let out = screen_pixels(&rgb, 2, 2).unwrap();
+        let out = screen_pixels(&rgb, 2, 2, "16").unwrap();
         assert_eq!(out.len(), 8);
         // Column 0 is red then blue, not red then green.
         assert_eq!(&out[0..2], &[0xF8, 0x00], "red");
@@ -1297,7 +1310,16 @@ mod tests {
     }
 
     #[test]
+    fn twenty_four_bit_pixels_are_plain_triples_in_the_same_column_order() {
+        // 2x2: red, green / blue, white.
+        let rgb = vec![255, 0, 0, 0, 255, 0, 0, 0, 255, 255, 255, 255];
+        let out = screen_pixels(&rgb, 2, 2, "24").unwrap();
+        // Column 0 is red then blue, not red then green.
+        assert_eq!(out, vec![255, 0, 0, 0, 0, 255, 0, 255, 0, 255, 255, 255]);
+    }
+
+    #[test]
     fn a_frame_that_does_not_fit_the_display_is_refused() {
-        assert!(screen_pixels(&[0; 12], 4, 4).is_err());
+        assert!(screen_pixels(&[0; 12], 4, 4, "16").is_err());
     }
 }

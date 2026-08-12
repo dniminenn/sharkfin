@@ -6,8 +6,9 @@ use the app.
 Evidence markers: **[HW]** round-tripped on an Attack Shark X86 (device
 1967). **[FW]** read out of device firmware, naming the image where it
 matters: `2268_v309` (X65HE, gen2), `1379 v108_oledv104` (EPOMAKER RT100,
-yc500), `2454 v413_oledv111` (Keydous NJ81-CP, gen2). **[JS]** vendor host
-code only, never exercised.
+yc500), `1723 v102_oledv103` (EPOMAKER Dynatab75X-UK, yc500), `2454
+v413_oledv111` (Keydous NJ81-CP, gen2). **[JS]** vendor host code only,
+never exercised.
 
 ## Transport [HW]
 
@@ -277,37 +278,44 @@ A board that answers has a display; one that echoes does not.
 
 ### Drawing, yc500 [FW]
 
-Evidenced against an RT100's firmware (device 1379, `v108_oledv104`). Its
-dispatch is a comparison tree at `0x24C00` over a 42-entry jump table at
-`0x24C2A`. Decoding that table yields the same opcodes for four commands
-already verified on hardware (`0x09` keymap, `0x0C` per-key colour, `0x11`
+Evidenced against two boards' firmware, one per pixel mode: an RT100
+(device 1379, `v108_oledv104`, mode `16`) and a Dynatab75X-UK (device
+1723, `v102_oledv103`, mode `24`, a 60x9 matrix). The RT100's dispatch is
+a comparison tree at `0x24C00` over a 42-entry jump table at `0x24C2A`.
+Decoding that table yields the same opcodes for four commands already
+verified on hardware (`0x09` keymap, `0x0C` per-key colour, `0x11`
 debounce, `0x12` sleep), which is what says the decode is right.
 
-| step | opcode | handler | payload |
-|---|---|---|---|
-| announce | `0xA5` | `0x23F1E` | `[1]` frame, `[2]` frame count, `[3]` delay, `[4..6]` length u16 LE, `[8..12]` bounding box |
-| data | `0x25` | `0x23FB6` | 8-byte header, `[4..6]` page index, `[6]` page length, data at `[8]`, 56 bytes |
+| step | opcode | RT100 handler | Dynatab handler | payload |
+|---|---|---|---|---|
+| announce, mode 16 | `0xA5` | `0x23F1E` | rejected | `[1]` frame, `[2]` frame count, `[3]` delay, `[4..6]` length u16 LE, `[8..12]` bounding box |
+| data, mode 16 | `0x25` | `0x23FB6` | rejected | 8-byte header, `[4..6]` page index, `[6]` page length, data at `[8]`, 56 bytes |
+| announce, mode 24 | `0xA9` | rejected | `0x2311C` | as the mode 16 announce |
+| data, mode 24 | `0x29` | rejected | `0x231AA` | as the mode 16 data |
+
+The two images are mirrors: each implements exactly the pair its vendor
+record's mode declares and sends the other pair to its reject entry. The
+registry's mode picks the pair; nothing else may.
 
 What the firmware settles, that the vendor's JavaScript could not:
 
-- The announce returns immediately unless a flag at `+27` is set. That is
-  why the caller polls it until `reply[1]` is 1 instead of assuming.
-- Bytes 12 to 18 are never read: the bounding box exists only as its low
-  bytes, the length only as its u16, and the `layer` the vendor sends is
-  ignored. sharkfin refuses frames past 65535 bytes for that reason.
-- The 24-bit pair the vendor's JavaScript defines, `0xA9`/`0x29`, has no
-  handler: the table sends `0x29` to the reject entry and the tree has no
-  `0xA9` case. sharkfin draws mode `16` only.
+- The RT100's announce returns immediately unless a flag at `+27` is set.
+  That is why the caller polls it until `reply[1]` is 1 instead of
+  assuming.
+- Bytes 12 to 18 are never read, in either image: the bounding box exists
+  only as its low bytes, the length only as its u16, and the `layer` the
+  vendor sends is ignored. sharkfin refuses frames past 65535 bytes for
+  that reason.
 - The announce erases nothing. It resets counters, so a frame does not
   need the chip erased first.
-- The page handler checks `[1]` against the frame the announce recorded
-  and counts bytes against the announced length, so a page that disagrees
+- The page handlers check `[1]` against the frame the announce recorded
+  and count bytes against the announced length, so a page that disagrees
   is dropped rather than written.
 
 Pixel order is the one part still taken from the vendor's JavaScript, and
-it is content rather than command: column major, sorted by x then y, RGB565
-high byte first. Getting it wrong scrambles a picture; it does not reach
-anything else.
+it is content rather than command: column major, sorted by x then y,
+RGB565 high byte first in mode `16` and plain RGB triples in mode `24`.
+Getting it wrong scrambles a picture; it does not reach anything else.
 
 ### Drawing, gen2
 
@@ -330,9 +338,10 @@ table lists it as a read, but the RT100 firmware disagrees: its `0x2C` and
 `0xAC` handlers set the same flag (bit `0x20` at `0x2050C+2`), and the
 routine that consumes the flag sends the display chip the same command,
 `0x25`, for both. `0xAC` differs only in preloading an `AA AA 55 55`
-reply. Whatever one opcode starts, the other starts too, so neither may
-be sent blind. Twenty opcodes in total mean different things in the two
-families.
+reply. The Dynatab75X image has the same structure (one flag, bit `0x80`
+at `+4`, set by both handlers). Whatever one opcode starts, the other
+starts too, so neither may be sent blind. Twenty opcodes in total mean
+different things in the two families.
 
 yc500 defines a larger set gen2 has no entry for: `0x20`/`0xA0` picture
 index, `0x21`/`0xA1` picture data, `0x24`/`0xA4` animation data,

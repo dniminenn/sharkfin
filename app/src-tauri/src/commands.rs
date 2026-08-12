@@ -801,23 +801,26 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
                 .into(),
         );
     }
-    // Mode 16 only. The vendor's JavaScript defines a 24-bit pair at
-    // 0xA9/0x29, but the RT100 image sends 0x29 to its reject entry and has
-    // no 0xA9 case at all, so that pair is evidenced by nothing.
-    if screen.mode != "16" {
-        return Err(format!(
-            "sharkfin cannot draw on a mode {} display yet",
-            screen.mode
-        ));
-    }
-    let data = crate::protocol::screen_pixels(&rgb, screen.w, screen.h)?;
-    // The announce carries the length as a u16: the firmware reads bytes
-    // 4..6 and never the high half at 16..18. A longer frame is territory
-    // no image has evidenced.
+    // Each pair is evidenced against the firmware of a board that declares
+    // that mode: 0xA5/0x25 by the RT100 image (mode 16), 0xA9/0x29 by the
+    // Dynatab75X image (mode 24). Each image rejects the other pair, so the
+    // registry's mode picks the pair and nothing else may.
+    let (announce, page_op) = match screen.mode.as_str() {
+        "16" => (0xA5_u8, 0x25_u8),
+        "24" => (0xA9_u8, 0x29_u8),
+        other => {
+            return Err(format!(
+                "sharkfin cannot draw on a mode {other} display yet"
+            ))
+        }
+    };
+    let data = crate::protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)?;
+    // The announce carries the length as a u16: both images read bytes 4..6
+    // and never the high half at 16..18. A longer frame is territory no
+    // image has evidenced.
     if data.len() > usize::from(u16::MAX) {
         return Err("this display takes a bigger frame than sharkfin can safely send yet".into());
     }
-    let (announce, page_op) = (0xA5_u8, 0x25_u8);
 
     flash_cooldown(&state);
     let out = with_writable(&state, |t, _| {

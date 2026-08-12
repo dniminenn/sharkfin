@@ -311,7 +311,8 @@ export default function DevicePage({
             </div>
             {device.spec.screen &&
               device.spec.family === "yc500" &&
-              device.spec.screen.mode === "16" && (
+              (device.spec.screen.mode === "16" ||
+                device.spec.screen.mode === "24") && (
               <div className="space-y-2 pt-2">
                 <input
                   type="file"
@@ -334,7 +335,8 @@ export default function DevicePage({
             )}
             {device.spec.screen &&
               device.spec.family === "yc500" &&
-              device.spec.screen.mode !== "16" && (
+              device.spec.screen.mode !== "16" &&
+              device.spec.screen.mode !== "24" && (
               <p className="text-xs text-muted-foreground">
                 sharkfin reads this display but cannot draw on it yet.
               </p>
