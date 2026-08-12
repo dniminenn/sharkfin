@@ -1165,6 +1165,7 @@ const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x91 debounce/sleep", 0x91, &[]),
     ("0x92 sleep (yc500)", 0x92, &[]),
     ("0x97 auto-OS (yc500)", 0x97, &[]),
+    ("0xAD OLED version", 0xAD, &[]),
 ];
 
 async fn probe_sweep(t: &Transport, out: &mut String) -> Result<(), JsValue> {
