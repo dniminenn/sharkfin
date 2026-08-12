@@ -1059,11 +1059,14 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
 /// that doesn't implement one, the firmware echoes its previous reply, which
 /// is itself a data point.
 ///
-/// Not every opcode above 0x80 belongs here. gen2 puts its flash chip erase
-/// at 0xAC, the only write in either family that sits in the read range, and
-/// on yc500 that same byte is a read. Sweeping the range blind would wipe a
-/// screen board's pictures. Anything added here has to be a read in *both*
-/// tables, because the sweep runs before the family is known.
+/// Not every opcode above 0x80 belongs here. Both families put their flash
+/// chip erase within reach of it: gen2 at 0xAC outright, and on yc500 the
+/// same byte triggers the same display-chip command as the 0x2C erase (the
+/// RT100 firmware routes both handlers through one flag), even though the
+/// vendor's table lists it as a read. Sweeping the range blind would wipe a
+/// screen board's pictures. Anything added here has to be evidenced as a
+/// harmless read in *both* families, because the sweep runs before the
+/// family is known.
 const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x80 revision", 0x80, &[]),
     ("0x83 report rate (gen2)", 0x83, &[]),

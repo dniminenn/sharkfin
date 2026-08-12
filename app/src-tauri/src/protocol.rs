@@ -415,8 +415,10 @@ impl SledParam {
 // announced length, so a page that disagrees is dropped rather than written.
 //
 // Not evidenced, and so not done here: erasing the flash chip (0x2C on
-// yc500, 0xAC on gen2), picture slots, and what byte 18 of the announce
-// selects. This writes one frame to whatever the board is already showing.
+// yc500, 0xAC on gen2; the RT100 image routes yc500's 0xAC onto the same
+// flag as 0x2C, so it is not the read the vendor's table claims), picture
+// slots, and what byte 18 of the announce selects. This writes one frame
+// to whatever the board is already showing.
 
 /// Data bytes per page. The header is bytes 0..8, the checksum byte 7.
 pub const SCREEN_PAGE_DATA: usize = 56;

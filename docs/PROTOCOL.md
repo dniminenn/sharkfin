@@ -319,10 +319,15 @@ expects is not established, so nothing is sent.
 
 ### The dangerous byte
 
-`0xAC` is the only write at or above `0x80` in either family. On gen2 it
-erases every picture on the flash chip and takes about 55 seconds; on
-yc500 the same byte is an ordinary read and the erase is `0x2C`. Twenty
-opcodes in total mean different things in the two families.
+`0xAC` must be treated as the flash chip erase in both families. On gen2
+it erases every picture and takes about 55 seconds. The vendor's yc500
+table lists it as a read, but the RT100 firmware disagrees: its `0x2C` and
+`0xAC` handlers set the same flag (bit `0x20` at `0x2050C+2`), and the
+routine that consumes the flag sends the display chip the same command,
+`0x25`, for both. `0xAC` differs only in preloading an `AA AA 55 55`
+reply. Whatever one opcode starts, the other starts too, so neither may
+be sent blind. Twenty opcodes in total mean different things in the two
+families.
 
 yc500 defines a larger set gen2 has no entry for: `0x20`/`0xA0` picture
 index, `0x21`/`0xA1` picture data, `0x24`/`0xA4` animation data,
