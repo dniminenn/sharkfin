@@ -229,5 +229,33 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #22. Not in any vendor catalogue, so an extraction alone will not add it. The wireless RT100 is device 1379 on 3151:4015; this wired variant answers its own id on 3151:4010.",
+    "_evidence": "Read sweep from the owner's board (0.3.3, 93de677). The product string is 'RT100 Wired'; identify 0x8F returns 0x03B2 = 946. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 (120, 120, 1680, 1680) at bytes 1..9, and 0x91 carries a debounce at byte 2 with nothing at the gen2 sleep offsets. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86. 0x83 and 0x84 answer with a value where the X86 echoes, so the framing above is what classifies, not the answered set. 0xAD answers under its own opcode, the one screen probe a sweep can send blind, so the board has a display.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. The wireless RT100 uses Common98_C98D, but that is the vendor's word about a different device id, not evidence about this one. Profile count was not observable either (0x85 shows the board sitting on profile 0), so it is pinned to 1. The display's geometry and pixel mode are not observable, so no screen record is written and nothing may draw to it. The sleep flags stay false although 0x92 answers: the board names itself Wired, and the firmware answers for radios that are not fitted. Edge light 0x88 answers, but the flag tracks a layout name the sweep cannot give, so it stays false.",
+    "id": 946,
+    "name": "epomaker_rt100_wired",
+    "displayName": "RT100 Wired",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "epomaker_rt100_wired",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
   }
 ]
