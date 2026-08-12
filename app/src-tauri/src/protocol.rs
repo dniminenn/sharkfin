@@ -419,8 +419,12 @@ impl SledParam {
 // Both announce handlers read the report the same way: [1] frame index,
 // [2] frame count, [3] frame delay, [4..6] length as u16 LE, [8..12] the
 // bounding box. Bytes 12..19, the box's high half, the length's high half
-// and the vendor's layer byte, are never read: the length the firmware
-// knows is a u16, which is why frames past 65535 bytes are refused. The
+// and the vendor's layer byte, are never read: the length these images
+// know is a u16, which is why yc500 frames past 65535 bytes are refused.
+// yc3123 images (devices 2730 and 2936, gen2 family, keyed by the
+// internalName prefix) parse the same packets but read the length as a
+// u32 from [4], [5], [16], [17], all bytes this builder already fills, so
+// their limit is wider; registry.rs `screen_draw` carries the split. The
 // page handlers check [1] against the frame the announce recorded and
 // count bytes against the announced length, so a page that disagrees is
 // dropped rather than written.

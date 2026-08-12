@@ -30,6 +30,7 @@ import {
   setOptions,
   setSleep,
   type ConnectedDevice,
+  type DeviceSpec,
   type DeviceSettings,
   type KbOptions,
   type SleepTimes,
@@ -39,6 +40,31 @@ import { deviceLabel } from "@/lib/brands";
 const SLEEP_MIN = 60;
 const SLEEP_MAX = 3600;
 const DEEP_MIN = 600;
+
+// Mirrors DeviceSpec::screen_draw in registry.rs: drawing is offered only
+// where the board's own firmware is known to parse the frame. yc500 boards
+// draw in modes 16 and 24, yc3123-lineage gen2 boards in mode 16. Every
+// other gen2 board hands the picture to a separate display chip and is
+// refused, in the backend as well as here.
+function canDraw(spec: DeviceSpec): boolean {
+  if (!spec.screen) return false;
+  if (spec.family === "yc500")
+    return spec.screen.mode === "16" || spec.screen.mode === "24";
+  return (
+    spec.family === "gen2" &&
+    spec.internalName.startsWith("yc3123_") &&
+    spec.screen.mode === "16"
+  );
+}
+
+// The boards drawing is refused on because the picture goes through a
+// separate chip, as opposed to a mode sharkfin cannot pack yet.
+function drawsElsewhere(spec: DeviceSpec): boolean {
+  return (
+    spec.family !== "yc500" &&
+    !(spec.family === "gen2" && spec.internalName.startsWith("yc3123_"))
+  );
+}
 
 function mins(seconds: number) {
   if (seconds === 0) return "off";
@@ -309,10 +335,7 @@ export default function DevicePage({
                 {screenVersion === null ? "no answer" : screenVersion.toString(16)}
               </span>
             </div>
-            {device.spec.screen &&
-              device.spec.family === "yc500" &&
-              (device.spec.screen.mode === "16" ||
-                device.spec.screen.mode === "24") && (
+            {canDraw(device.spec) && (
               <div className="space-y-2 pt-2">
                 <input
                   type="file"
@@ -334,14 +357,13 @@ export default function DevicePage({
               </div>
             )}
             {device.spec.screen &&
-              device.spec.family === "yc500" &&
-              device.spec.screen.mode !== "16" &&
-              device.spec.screen.mode !== "24" && (
+              !canDraw(device.spec) &&
+              !drawsElsewhere(device.spec) && (
               <p className="text-xs text-muted-foreground">
                 sharkfin reads this display but cannot draw on it yet.
               </p>
             )}
-            {device.spec.screen && device.spec.family !== "yc500" && (
+            {device.spec.screen && drawsElsewhere(device.spec) && (
               <p className="text-xs text-muted-foreground">
                 sharkfin reads this display but cannot draw on it. The picture
                 goes through a separate chip on this board.

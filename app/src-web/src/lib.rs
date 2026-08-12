@@ -826,33 +826,34 @@ const SCREEN_READY_GAP_MS: f64 = 100.0;
 /// Lands in flash, so it takes the flash cooldown.
 #[wasm_bindgen]
 pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
-    let (screen, family) = {
+    let (screen, rules) = {
         let (_, spec) = get_open(false)?;
         (
             spec.screen.clone().ok_or_else(|| {
                 JsValue::from_str("this board has no display sharkfin knows the size of")
             })?,
-            spec.family.clone(),
+            spec.screen_draw(),
         )
     };
-    // yc500 only; see the note in commands.rs. A gen2 board forwards the
-    // request to a display chip whose own expectations are not established.
-    if family != "yc500" {
+    // Only boards whose own firmware parses the frame; see the note in
+    // commands.rs. Most gen2 boards forward the request to a display chip
+    // whose own expectations are not established.
+    let Some(rules) = rules else {
         return Err(JsValue::from_str(
             "sharkfin can only draw on this family of board so far. This one hands \
              the picture to a separate display chip, and that path is not worked out.",
         ));
-    }
-    // The mode picks the opcode pair, and frames stay within the u16 the
-    // firmware reads; see the notes in commands.rs and protocol.rs.
+    };
+    // The mode picks the opcode pair, and the frame stays within the length
+    // the firmware reads; see the notes in commands.rs and protocol.rs.
     let (announce, page_op) = match screen.mode.as_str() {
         "16" => (0xA5_u8, 0x25_u8),
-        "24" => (0xA9_u8, 0x29_u8),
+        "24" if rules.mode24 => (0xA9_u8, 0x29_u8),
         other => return Err(format!("sharkfin cannot draw on a mode {other} display yet").into()),
     };
     let data = protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)
         .map_err(|e| JsValue::from_str(&e))?;
-    if data.len() > usize::from(u16::MAX) {
+    if data.len() > rules.max_frame {
         return Err(JsValue::from_str(
             "this display takes a bigger frame than sharkfin can safely send yet",
         ));

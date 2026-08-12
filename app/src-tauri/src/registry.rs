@@ -100,6 +100,41 @@ impl DeviceSpec {
     pub fn writes_supported(&self) -> bool {
         KNOWN_FAMILIES.contains(&self.family.as_str())
     }
+
+    /// What drawing is allowed on this board's display, or `None` when the
+    /// path is not evidenced. The board's own firmware must be known to
+    /// parse frames itself; most gen2 boards instead hand the request to a
+    /// display chip whose protocol is not established, and stay refused.
+    ///
+    /// Two lineages qualify (docs/PROTOCOL.md, "Screens"):
+    ///
+    /// - The yc500 family. Its images read the frame length as a u16 and
+    ///   never the high bytes, so frames past 65535 bytes are refused.
+    ///   Modes 16 and 24 each have a firmware image behind them.
+    /// - yc3123-lineage gen2 boards, named by the `internalName` prefix.
+    ///   Their images read the length as a u32 and stream through banked
+    ///   RAM, so the big panels fit. Mode 16 only; no yc3123 image
+    ///   evidences mode 24.
+    pub fn screen_draw(&self) -> Option<ScreenDrawRules> {
+        match self.family.as_str() {
+            "yc500" => Some(ScreenDrawRules {
+                max_frame: usize::from(u16::MAX),
+                mode24: true,
+            }),
+            "gen2" if self.internal_name.starts_with("yc3123_") => Some(ScreenDrawRules {
+                max_frame: u32::MAX as usize,
+                mode24: false,
+            }),
+            _ => None,
+        }
+    }
+}
+
+/// The limits `screen_draw` grants: the largest frame the board's firmware
+/// can count, and whether the mode 24 opcode pair is evidenced for it.
+pub struct ScreenDrawRules {
+    pub max_frame: usize,
+    pub mode24: bool,
 }
 
 /// What a data bundle calls this build. The version alone does not identify
@@ -167,6 +202,41 @@ mod tests {
         );
         assert!(x86.writes_supported());
         assert_eq!(x86.label(), "AttackShark X86");
+    }
+
+    /// Drawing is granted per lineage, never per family alone. yc3123 boards
+    /// live in gen2 beside ry5088 boards that forward frames to a display
+    /// chip, so the prefix test is what keeps those refused.
+    #[test]
+    fn screen_draw_follows_the_lineage() {
+        let rt85 = by_id(2895).expect("RT85 present");
+        assert_eq!(rt85.family, "gen2");
+        assert!(rt85.internal_name.starts_with("yc3123_"));
+        let rules = rt85.screen_draw().expect("yc3123 draws");
+        let screen = rt85.screen.expect("RT85 has a screen");
+        // 320x172 RGB565 is 110080 bytes: over the u16, within the u32.
+        assert!(usize::from(screen.w) * usize::from(screen.h) * 2 <= rules.max_frame);
+        assert!(!rules.mode24, "mode 24 has no yc3123 image behind it");
+
+        let rt100 = by_id(1379).expect("RT100 present");
+        assert_eq!(rt100.family, "yc500");
+        let rules = rt100.screen_draw().expect("yc500 draws");
+        assert_eq!(rules.max_frame, usize::from(u16::MAX));
+        assert!(rules.mode24);
+
+        // The k2401e is yc3121-lineage with a 121552-byte panel and no
+        // published firmware; its frame must still exceed the u16 limit.
+        let k2401e = by_id(3430).expect("k2401e present");
+        assert_eq!(k2401e.family, "yc500");
+        let rules = k2401e.screen_draw().expect("family gate passes");
+        let screen = k2401e.screen.expect("k2401e has a screen");
+        assert!(usize::from(screen.w) * usize::from(screen.h) * 2 > rules.max_frame);
+
+        // An ry5088 gen2 board with a screen stays refused outright.
+        let nj81 = by_id(2454).expect("NJ81-CP present");
+        assert_eq!(nj81.family, "gen2");
+        assert!(!nj81.internal_name.starts_with("yc3123_"));
+        assert!(nj81.screen_draw().is_none());
     }
 
     #[test]

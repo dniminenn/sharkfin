@@ -262,9 +262,10 @@ The X86's class chain defines 57 commands; most target hardware it lacks.
 
 ## Screens
 
-173 boards in the registry carry a display, 152 gen2 and 21 yc500. The two
-families do not drive them the same way, so what sharkfin does splits along
-that line.
+173 boards in the registry carry a display, 152 gen2 and 21 yc500. Whether
+sharkfin can draw follows the chip that parses the frame, not the family:
+yc500 boards and yc3123-lineage gen2 boards parse it in the keyboard's own
+firmware, the rest of gen2 hands it to a separate display chip.
 
 Geometry is per board, not per family, and comes from the vendor's own
 device record at `other.screen`: `size.w`, `size.h`, `mode` and `layer`.
@@ -306,12 +307,10 @@ What the firmware settles, that the vendor's JavaScript could not:
   only as its low bytes, the length only as its u16, and the `layer` the
   vendor sends is ignored. sharkfin refuses frames past 65535 bytes for
   that reason.
-- The u16 is a yc3121 trait, not a yc500 one. Two yc3123 images (devices
-  2730 and 2936, 64800-byte panels) parse the same announce with the
-  length as a u32, high bytes at 16 and 17 where the vendor writes them,
-  and their page handlers count against the full value. The registry
-  carries yc3123 boards in the gen2 family, where drawing is refused
-  outright, so the 65535 limit only ever applies to yc3121.
+- The u16 is a yc3121 trait, not a yc500 one. A third yc3121 image
+  (device 1996, `v113_oledv102`) reads the announce the same way. yc3123
+  reads a u32; see below. The 65535 limit applies to the yc500 family,
+  whose screen boards are all yc3121-lineage.
 - The announce erases nothing. It resets counters, so a frame does not
   need the chip erased first.
 - The page handlers check `[1]` against the frame the announce recorded
@@ -323,7 +322,57 @@ it is content rather than command: column major, sorted by x then y,
 RGB565 high byte first in mode `16` and plain RGB triples in mode `24`.
 Getting it wrong scrambles a picture; it does not reach anything else.
 
-### Drawing, gen2
+### Drawing, yc3123 [FW]
+
+yc3123 boards sit in the gen2 family but their keyboard firmware parses
+frames itself, yc500-style. Evidenced against two images: an AttackShark
+K86 (device 2730, `v115_oledv108`) and a Hator HTK4100UA (device 2936,
+`v113_oledv106`), both 240x135 mode `16`. Addresses below are 2730 then
+2936. The registry has no yc3123 marker, so sharkfin keys the path on the
+`internalName` prefix inside the gen2 family.
+
+The dispatcher (`0x22174` / `0x23f3c`) verifies the checksum
+(`0x133b0` / `0x1357c`) before dispatching, with sharkfin's exact rule:
+sum bytes 0 to 6 against byte 7, except opcodes `0x07` and `0x08` which
+sum 0 to 7 against byte 8. A failed packet is rejected outright. The
+verifier is called on the buffer at offset 2, which anchors packet index =
+buffer offset - 2 for everything below.
+
+| step | opcode | 2730 | 2936 | payload |
+|---|---|---|---|---|
+| announce | `0xA5` | `0x120dc` | `0x121f0` | as yc500, plus: length u32 from `[4]`, `[5]`, `[16]`, `[17]`; box high bytes read from `[14]`, `[15]` |
+| data | `0x25` | `0x12b6c` | `0x12ccc` | as yc500: `[1]` frame, `[4..6]` page index u16 LE, `[6]` page length, data at `[8]`, 56 bytes |
+
+Both images reject `0xA9`/`0x29`, matching their records' mode `16`. Two
+yc3123 registry boards declare mode `24`; no image evidences it, so it
+stays refused.
+
+What makes the big panels work: pages stream through ten 4096-byte RAM
+banks with the announced length as a countdown, so the board never holds
+the frame. Duplicate and out-of-order pages are dropped, not written. The
+frame goes to flash, which is why the upload keeps the flash cooldown and
+the backend rate limit.
+
+Both announce handlers return without doing anything unless a firmware
+internal byte is set (`0x204e3` / `0x204e4`), written by display-init
+routines and by no host command found. A frame sent while it is clear is
+silently ignored. The caller must poll the announce and treat silence as
+failure, never as success. The vendor's own uploader does the same: it
+polls `reply[1] == 1` up to ten times at 100 ms and reports failure
+otherwise, and its replies echo the opcode at byte 0, the same framing
+sharkfin's `roundtrip_packet` requires.
+
+Pixel order is vendor JavaScript evidence, as on yc3121: the yc3123
+device modules in the vendor's web build inherit the same uploader class,
+fed column-major RGB565 high-byte-first data by the same
+`cImageDataToScreenData`, and the same announce builder writing the u32
+length split the firmware reads.
+
+`0x2C` and `0xAC` set the same flag (bit 0 of `0x20166`), replicating the
+yc3121 pairing; `0xAC` additionally preloads the `AA AA 55 55` reply. The
+erase rule below covers yc3123 unchanged.
+
+### Drawing, ry5088 gen2
 
 Not implemented. The dispatch is at `0x152A0` in a Keydous NJ81-CP
 (device 2454, `v413_oledv111`) and reaches `0xA5`, `0xAC`, `0xAD`, `0xB0`,

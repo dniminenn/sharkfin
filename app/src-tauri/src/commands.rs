@@ -777,37 +777,39 @@ const SCREEN_READY_GAP: Duration = Duration::from_millis(100);
 /// frame going out at the board's expense.
 #[tauri::command(async)]
 pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result<(), String> {
-    let (screen, family) = {
+    let (screen, rules) = {
         let inner = state.inner.lock();
         let spec = &inner.open.as_ref().ok_or("no keyboard connected")?.spec;
         (
             spec.screen
                 .clone()
                 .ok_or("this board has no display sharkfin knows the size of")?,
-            spec.family.clone(),
+            spec.screen_draw(),
         )
     };
-    // yc500 only, and not for tidiness. Its firmware parses the frame itself:
-    // the announce handler stores the geometry and the page handler checks
-    // every page against it. A gen2 board does not do that. Its handler
-    // builds a short message, copies twelve bytes of the request into it and
-    // checksums it, which is the keyboard passing the request to the display
-    // chip that carries its own firmware. What that chip then expects is not
-    // established, and the two are not interchangeable.
-    if family != "yc500" {
+    // Only boards whose own firmware parses the frame: the announce handler
+    // stores the geometry and the page handler checks every page against it.
+    // Most gen2 boards do not do that. Their handler builds a short message,
+    // copies twelve bytes of the request into it and checksums it, which is
+    // the keyboard passing the request to the display chip that carries its
+    // own firmware. What that chip then expects is not established, and the
+    // two are not interchangeable. screen_draw in registry.rs draws the line.
+    let Some(rules) = rules else {
         return Err(
             "sharkfin can only draw on this family of board so far. This one hands \
              the picture to a separate display chip, and that path is not worked out."
                 .into(),
         );
-    }
+    };
     // Each pair is evidenced against the firmware of a board that declares
-    // that mode: 0xA5/0x25 by the RT100 image (mode 16), 0xA9/0x29 by the
-    // Dynatab75X image (mode 24). Each image rejects the other pair, so the
-    // registry's mode picks the pair and nothing else may.
+    // that mode: 0xA5/0x25 by the RT100 image (mode 16) and two yc3123
+    // images, 0xA9/0x29 by the Dynatab75X image (mode 24). Each image
+    // rejects the other pair, so the registry's mode picks the pair and
+    // nothing else may. No yc3123 image handles the mode 24 pair, which is
+    // why screen_draw withholds it there.
     let (announce, page_op) = match screen.mode.as_str() {
         "16" => (0xA5_u8, 0x25_u8),
-        "24" => (0xA9_u8, 0x29_u8),
+        "24" if rules.mode24 => (0xA9_u8, 0x29_u8),
         other => {
             return Err(format!(
                 "sharkfin cannot draw on a mode {other} display yet"
@@ -815,10 +817,10 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
         }
     };
     let data = crate::protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)?;
-    // The announce carries the length as a u16: both images read bytes 4..6
-    // and never the high half at 16..18. A longer frame is territory no
-    // image has evidenced.
-    if data.len() > usize::from(u16::MAX) {
+    // The frame limit is per lineage: yc500 images read the length as a u16
+    // and nothing wider, yc3123 images read a u32. A frame past what the
+    // firmware can count would truncate silently, so it is refused instead.
+    if data.len() > rules.max_frame {
         return Err("this display takes a bigger frame than sharkfin can safely send yet".into());
     }
 
