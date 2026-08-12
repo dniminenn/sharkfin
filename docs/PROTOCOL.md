@@ -292,7 +292,12 @@ What the firmware settles, that the vendor's JavaScript could not:
 
 - The announce returns immediately unless a flag at `+27` is set. That is
   why the caller polls it until `reply[1]` is 1 instead of assuming.
-- Byte 18 is never read. The `layer` the vendor sends is ignored here.
+- Bytes 12 to 18 are never read: the bounding box exists only as its low
+  bytes, the length only as its u16, and the `layer` the vendor sends is
+  ignored. sharkfin refuses frames past 65535 bytes for that reason.
+- The 24-bit pair the vendor's JavaScript defines, `0xA9`/`0x29`, has no
+  handler: the table sends `0x29` to the reject entry and the tree has no
+  `0xA9` case. sharkfin draws mode `16` only.
 - The announce erases nothing. It resets counters, so a frame does not
   need the chip erased first.
 - The page handler checks `[1]` against the frame the announce recorded

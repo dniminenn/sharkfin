@@ -843,16 +843,19 @@ pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
              the picture to a separate display chip, and that path is not worked out.",
         ));
     }
-    if screen.mode != "16" && screen.mode != "24" {
-        return Err(format!("display mode {} is not supported", screen.mode).into());
+    // Mode 16 only, and frames no longer than the u16 the firmware reads;
+    // see the notes in commands.rs and protocol.rs.
+    if screen.mode != "16" {
+        return Err(format!("sharkfin cannot draw on a mode {} display yet", screen.mode).into());
     }
-    let data = protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)
-        .map_err(|e| JsValue::from_str(&e))?;
-    let (announce, page_op) = if screen.mode == "24" {
-        (0xA9_u8, 0x29_u8)
-    } else {
-        (0xA5_u8, 0x25_u8)
-    };
+    let data =
+        protocol::screen_pixels(&rgb, screen.w, screen.h).map_err(|e| JsValue::from_str(&e))?;
+    if data.len() > usize::from(u16::MAX) {
+        return Err(JsValue::from_str(
+            "this display takes a bigger frame than sharkfin can safely send yet",
+        ));
+    }
+    let (announce, page_op) = (0xA5_u8, 0x25_u8);
 
     flash_cooldown().await;
     let _busy = acquire().await;

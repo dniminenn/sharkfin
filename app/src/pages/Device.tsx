@@ -296,7 +296,11 @@ export default function DevicePage({
             <div className="flex justify-between text-sm">
               <Label>Colour</Label>
               <span className="text-muted-foreground">
-                {device.spec.screen?.mode === "24" ? "24-bit" : "16-bit"}
+                {device.spec.screen
+                  ? device.spec.screen.mode === "24"
+                    ? "24-bit"
+                    : "16-bit"
+                  : "not recorded"}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -305,7 +309,9 @@ export default function DevicePage({
                 {screenVersion === null ? "no answer" : screenVersion.toString(16)}
               </span>
             </div>
-            {device.spec.screen && device.spec.family === "yc500" && (
+            {device.spec.screen &&
+              device.spec.family === "yc500" &&
+              device.spec.screen.mode === "16" && (
               <div className="space-y-2 pt-2">
                 <input
                   type="file"
@@ -325,6 +331,13 @@ export default function DevicePage({
                     : "The picture is scaled to fit and replaces what is on the display."}
                 </p>
               </div>
+            )}
+            {device.spec.screen &&
+              device.spec.family === "yc500" &&
+              device.spec.screen.mode !== "16" && (
+              <p className="text-xs text-muted-foreground">
+                sharkfin reads this display but cannot draw on it yet.
+              </p>
             )}
             {device.spec.screen && device.spec.family !== "yc500" && (
               <p className="text-xs text-muted-foreground">
