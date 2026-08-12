@@ -51,6 +51,10 @@ jobs:
           npx tsc --noEmit
           npm run build
 
+      - name: Frontend unit tests
+        working-directory: app
+        run: npx vitest run
+
       - name: Rust format
         working-directory: app/src-tauri
         run: cargo fmt --check

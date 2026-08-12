@@ -56,7 +56,7 @@ The user's board is real hardware and mistakes reach it.
 ## Before you commit
 
 ```sh
-cd app        && npx tsc --noEmit
+cd app        && npx tsc --noEmit && npx vitest run
 cd app/src-tauri && cargo fmt --check && cargo clippy --all-targets -- -D warnings && cargo test --lib
 python3 tools/coverage.py --markdown   # regenerates docs/BOARDS.md
 ```
