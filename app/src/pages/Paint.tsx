@@ -1,7 +1,16 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Eraser, PaintBucket, Paintbrush, Pipette, Plus, Send, Undo2 } from "lucide-react";
+import {
+  Eraser,
+  PaintBucket,
+  Paintbrush,
+  Pipette,
+  Plus,
+  Save,
+  Send,
+  Undo2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,18 +35,42 @@ const MAX_SWATCHES = 10;
 
 const STORE = "sharkfin.perkey";
 const SWATCH_STORE = "sharkfin.perkey.swatches";
+const PATTERNS_STORE = "sharkfin.patterns";
+const MAX_PATTERNS = 6;
 
-function loadPattern(): string[] {
+// One working pattern per board, so switching keyboards switches canvases.
+// "default" is the bucket used before a board is connected; it doubles as
+// the pre-0.3.3 store, so an existing pattern carries over.
+function patternStore(board: string): string {
+  return board === "default" ? STORE : `${STORE}.${board}`;
+}
+
+function loadPattern(board: string): string[] | null {
   try {
-    const raw = localStorage.getItem(STORE);
+    const raw = localStorage.getItem(patternStore(board));
     if (raw) {
       const p = JSON.parse(raw);
       if (Array.isArray(p) && p.length === SLOTS) return p;
     }
   } catch {
-    // fall through to a fresh pattern
+    // fall through
   }
-  return Array(SLOTS).fill("#000000");
+  return null;
+}
+
+type PatternBook = Record<string, string[][]>;
+
+function loadBook(): PatternBook {
+  try {
+    const raw = localStorage.getItem(PATTERNS_STORE);
+    if (raw) {
+      const b = JSON.parse(raw);
+      if (b && typeof b === "object" && !Array.isArray(b)) return b;
+    }
+  } catch {
+    // fall through to an empty book
+  }
+  return {};
 }
 
 function loadSwatches(): string[] {
@@ -99,7 +132,11 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
     () => layout.keys.filter((k) => k.matrixIndex !== null && k.type !== "knob"),
     [layout],
   );
-  const [pattern, setPattern] = useState<string[]>(loadPattern);
+  const boardKey = device?.spec.internalName ?? "default";
+  const [pattern, setPattern] = useState<string[]>(
+    () => loadPattern(boardKey) ?? loadPattern("default") ?? Array(SLOTS).fill("#000000"),
+  );
+  const [book, setBook] = useState<PatternBook>(loadBook);
   const [swatches, setSwatches] = useState<string[]>(loadSwatches);
   const [brush, setBrush] = useState(PALETTE[0]);
   const [tool, setTool] = useState<"brush" | "picker">("brush");
@@ -107,10 +144,28 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
   const [busy, setBusy] = useState(false);
   const painting = useRef(false);
   const history = useRef<string[][]>([]);
+  const board = useRef(boardKey);
+
+  // On a board change, load that board's canvas if it has one; a canvas
+  // painted before the board connected carries over instead.
+  useEffect(() => {
+    if (board.current === boardKey) return;
+    board.current = boardKey;
+    const stored = loadPattern(boardKey);
+    if (stored) {
+      history.current = [];
+      setPattern(stored);
+    }
+  }, [boardKey]);
 
   useEffect(() => {
-    localStorage.setItem(STORE, JSON.stringify(pattern));
-  }, [pattern]);
+    if (board.current !== boardKey) return;
+    localStorage.setItem(patternStore(boardKey), JSON.stringify(pattern));
+  }, [pattern, boardKey]);
+
+  useEffect(() => {
+    localStorage.setItem(PATTERNS_STORE, JSON.stringify(book));
+  }, [book]);
 
   useEffect(() => {
     localStorage.setItem(SWATCH_STORE, JSON.stringify(swatches));
@@ -184,6 +239,28 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
   const saveSwatch = () => {
     if (PALETTE.includes(brush) || swatches.includes(brush)) return;
     setSwatches((prev) => [...prev.slice(-(MAX_SWATCHES - 1)), brush]);
+  };
+
+  const saved = useMemo(() => book[boardKey] ?? [], [book, boardKey]);
+
+  const savePattern = () => {
+    setBook((prev) => {
+      const slots = prev[boardKey] ?? [];
+      if (slots.some((s) => s.every((c, i) => c === pattern[i]))) return prev;
+      return { ...prev, [boardKey]: [...slots.slice(-(MAX_PATTERNS - 1)), pattern] };
+    });
+  };
+
+  const loadSlot = (slot: string[]) => {
+    snapshot();
+    setPattern(slot);
+  };
+
+  const deleteSlot = (index: number) => {
+    setBook((prev) => ({
+      ...prev,
+      [boardKey]: (prev[boardKey] ?? []).filter((_, i) => i !== index),
+    }));
   };
 
   const fillAll = (color: string) => {
@@ -308,6 +385,48 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
               <Send className="mr-1 h-4 w-4" />
               {busy ? "Sending…" : "Apply to keyboard"}
             </Button>
+          </div>
+
+          <div className="flex w-full flex-wrap items-center gap-2 border-t pt-3">
+            <span className="text-xs text-muted-foreground">Patterns</span>
+            {saved.map((slot, i) => (
+              <button
+                key={i}
+                onClick={() => loadSlot(slot)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  deleteSlot(i);
+                }}
+                aria-label={`Saved pattern ${i + 1}`}
+                title="Load this pattern. Right-click to remove."
+                className="keycap-plate relative h-8 w-14 overflow-hidden rounded-md border transition-transform hover:scale-110"
+              >
+                {paintKeys.map((k) => (
+                  <span
+                    key={`${k.code}-${k.matrixIndex}`}
+                    className="absolute"
+                    style={{
+                      left: `${(k.x / canvas.w) * 100}%`,
+                      top: `${(k.y / canvas.h) * 100}%`,
+                      width: `${(k.w / canvas.w) * 100}%`,
+                      height: `${(k.h / canvas.h) * 100}%`,
+                      background: slot[k.matrixIndex!] ?? "#000000",
+                    }}
+                  />
+                ))}
+              </button>
+            ))}
+            {saved.length < MAX_PATTERNS && (
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                aria-label="Save pattern"
+                title="Save the canvas as a pattern"
+                onClick={savePattern}
+              >
+                <Save className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
