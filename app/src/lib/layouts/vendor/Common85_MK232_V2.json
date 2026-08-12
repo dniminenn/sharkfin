@@ -75,7 +75,7 @@
   {"code":"Digit2","type":"key","x":93,"y":61,"w":40,"h":40,"text":"2@","matrixIndex":null,"matrixEntry":[0,0,31,0],"hidUsage":31,"consumerUsage":null},
   {"code":"Digit1","type":"key","x":47,"y":61,"w":40,"h":40,"text":"1!","matrixIndex":null,"matrixEntry":[0,0,30,0],"hidUsage":30,"consumerUsage":null},
   {"code":"Backquote","type":"key","x":1,"y":61,"w":40,"h":40,"text":"`~","matrixIndex":null,"matrixEntry":[0,0,53,0],"hidUsage":53,"consumerUsage":null},
-  {"code":"PrtSc","type":"key","x":707,"y":6,"w":40,"h":40,"text":"PrtSc","matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null},
+  {"code":"PrintScreen","type":"key","x":707,"y":6,"w":40,"h":40,"text":"PrtSc","matrixIndex":null,"matrixEntry":[0,0,70,0],"hidUsage":70,"consumerUsage":null},
   {"code":"F12","type":"key","x":651,"y":6,"w":40,"h":40,"text":"F12","matrixIndex":null,"matrixEntry":[0,0,69,0],"hidUsage":69,"consumerUsage":null},
   {"code":"F11","type":"key","x":605,"y":6,"w":40,"h":40,"text":"F11","matrixIndex":null,"matrixEntry":[0,0,68,0],"hidUsage":68,"consumerUsage":null},
   {"code":"F10","type":"key","x":559,"y":6,"w":40,"h":40,"text":"F10","matrixIndex":null,"matrixEntry":[0,0,67,0],"hidUsage":67,"consumerUsage":null},

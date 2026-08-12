@@ -11,7 +11,7 @@
   {"code":"MetaLeft","type":"key","x":55,"y":240,"w":48,"h":40,"text":"Win","matrixIndex":null,"matrixEntry":[0,0,227,0],"hidUsage":227,"consumerUsage":null},
   {"code":"AltLeft","type":"key","x":109,"y":240,"w":48,"h":40,"text":"Alt","matrixIndex":null,"matrixEntry":[0,0,226,0],"hidUsage":226,"consumerUsage":null},
   {"code":"Space","type":"key","x":163,"y":240,"w":312,"h":40,"text":"Space","matrixIndex":null,"matrixEntry":[0,0,44,0],"hidUsage":44,"consumerUsage":null},
-  {"code":"AltLeft_2","type":"key","x":481,"y":240,"w":48,"h":40,"text":"Alt","matrixIndex":null,"matrixEntry":null,"hidUsage":null,"consumerUsage":null},
+  {"code":"AltRight","type":"key","x":481,"y":240,"w":48,"h":40,"text":"Alt","matrixIndex":null,"matrixEntry":[0,0,230,0],"hidUsage":230,"consumerUsage":null},
   {"code":"ControlRight","type":"key","x":535,"y":240,"w":48,"h":40,"text":"Ctrl","matrixIndex":null,"matrixEntry":[0,0,228,0],"hidUsage":228,"consumerUsage":null},
   {"code":"Numpad0","type":"key","x":753,"y":240,"w":84,"h":40,"text":"0\nIns","matrixIndex":null,"matrixEntry":[0,0,98,0],"hidUsage":98,"consumerUsage":null},
   {"code":"NumpadAdd","type":"key","x":891,"y":102,"w":40,"h":86,"text":"+","matrixIndex":null,"matrixEntry":[0,0,87,0],"hidUsage":87,"consumerUsage":null},
