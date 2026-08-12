@@ -1,22 +1,17 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.3.3
+## What changed in 0.3.4
 
-**Drawings import properly.** Pasting a keyboard-layout-editor.com
-drawing on the Keys page now reads Menu, Fn, numpads, and the legends
-UK, German, French, Japanese and Turkish boards print. A label that
-means different keys in different countries stays unassigned instead of
-guessed, and a doubled engraving no longer refuses the whole drawing.
-Every shipped picture is drawn and re-imported in CI, so a legend the
-importer cannot read fails the build instead of reaching you.
+**The EPOMAKER RT100 Wired is supported.** Its owner reported it with a
+data bundle in issue #22. The Keys page matches a picture against the
+board and asks you to confirm it before remapping.
 
-**The KiiP Y87 ships with its own picture**, drawn by its owner, who
-filed four issues with full bundles until every key matched. Thank you.
+**Bug reports carry the whole keymap now.** The data bundle on the
+Contribute tab used to read the first sixteen keys; it reads all of them
+now, so a new board's layout can usually be worked out from one report
+instead of a follow-up.
 
-Right Alt on the FF101 and VK99C and Print Screen on the MK232 V2 were
-missing from their pictures and can be remapped now.
-
-The registry is 949 boards.
+The registry is 950 boards.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
