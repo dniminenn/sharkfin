@@ -871,11 +871,16 @@ pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
     );
     let mut ready = false;
     for _ in 0..SCREEN_READY_TRIES {
-        if let Ok(reply) = t.roundtrip_packet(&pkt).await {
-            if reply[1] == 1 {
+        // Not ready looks like a different answer or none at all; anything
+        // else is the transport failing and is reported as that, not as a
+        // refusal.
+        match t.roundtrip_packet(&pkt).await {
+            Ok(reply) if reply[1] == 1 => {
                 ready = true;
                 break;
             }
+            Ok(_) | Err(HidErr::NoHandshake) => {}
+            Err(e) => return Err(fail(e).into()),
         }
         sleep_ms(SCREEN_READY_GAP_MS).await;
     }

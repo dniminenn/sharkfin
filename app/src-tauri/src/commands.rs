@@ -827,12 +827,16 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
         let mut ready = false;
         for _ in 0..SCREEN_READY_TRIES {
             // The announce is a write dressed as a read: it answers, but
-            // only once the display has room for the frame.
-            if let Ok(reply) = t.roundtrip_packet(&pkt) {
-                if reply[1] == 1 {
+            // only once the display has room for the frame. Not ready looks
+            // like a different answer or none at all; anything else is the
+            // transport failing and is reported as that, not as a refusal.
+            match t.roundtrip_packet(&pkt) {
+                Ok(reply) if reply[1] == 1 => {
                     ready = true;
                     break;
                 }
+                Ok(_) | Err(HidError::NoHandshake) => {}
+                Err(e) => return Err(e),
             }
             std::thread::sleep(SCREEN_READY_GAP);
         }
