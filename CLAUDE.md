@@ -59,6 +59,7 @@ The user's board is real hardware and mistakes reach it.
 cd app        && npx tsc --noEmit && npx vitest run
 cd app/src-tauri && cargo fmt --check && cargo clippy --all-targets -- -D warnings && cargo test --lib
 python3 tools/coverage.py --markdown   # regenerates docs/BOARDS.md
+python3 tools/lint_layouts.py          # pictures and registry
 ```
 
 CI runs all of these on three operating systems, plus a check that

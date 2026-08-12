@@ -44,6 +44,9 @@ jobs:
           python3 tools/coverage.py --markdown
           git diff --exit-code docs/BOARDS.md
 
+      - name: Layout and registry lint
+        run: python3 tools/lint_layouts.py
+
       - name: Frontend typecheck & build
         working-directory: app
         run: |
