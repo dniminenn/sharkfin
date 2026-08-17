@@ -174,8 +174,13 @@ Both, because one alone means nothing. An ANSI board shares a PCB with its
 ISO version, and the firmware maps the unfitted position anyway: a Cypher
 81 reports NonUsBackslash at a slot with no key on it.
 
+A board whose picture already carries slot data is drawn as shipped
+instead of matched, so the derived version is offered there too. Without
+it those two keys have no key to click and cannot be remapped at all.
+
 A derived picture names no file on disk, so its bundle carries the
-geometry under `picture json:` and bakes like a pasted drawing.
+geometry under `picture json:` and bakes like a pasted drawing, and a
+confirmed one is rebuilt from its name rather than loaded.
 
 ### Baking a layout bundle
 

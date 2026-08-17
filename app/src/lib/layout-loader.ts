@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import x86 from "@/lib/layouts/x86.json";
 import { readKeymap, type ConnectedDevice } from "@/lib/backend";
 import { agreement, inferSlots, type Inference } from "@/lib/layout-infer";
-import { isoVariant, looksIso } from "@/lib/iso";
+import { isoName, isoVariant, looksIso, resolvePicture } from "@/lib/iso";
 
 export interface LayoutKey {
   code: string;
@@ -229,17 +229,44 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
           if (!live) return;
           if (matrices.length) {
             const fit = Math.max(...matrices.map((m) => agreement(named, m)));
+            const offers: Inference[] = [];
             const alt = bestMatch(named, name, matrices);
             if (alt && alt.f1 >= fit + RETHINK_MARGIN && alt.matchRate >= MATCH_BAR) {
-              setInference(alt);
-              setLayout(alt.layout);
-              candidatesRef.current = [alt];
-              indexRef.current = 0;
+              offers.push(alt);
+            }
+            // An ISO board reports two keys an ANSI picture does not draw,
+            // and a key the picture omits cannot be remapped at all. The
+            // margin above must not gate this one: the derived picture is
+            // the shipped picture plus two keys, which moves the score by
+            // less than the margin on any board this size.
+            if (matrices.some(looksIso)) {
+              const iso = isoVariant(named);
+              const isoAlt = iso && bestMatch(iso, isoName(name), matrices);
+              if (
+                isoAlt &&
+                isoAlt.matchRate >= MATCH_BAR &&
+                isoAlt.matched > (alt?.matched ?? 0)
+              ) {
+                offers.push(isoAlt);
+              }
+            }
+            offers.sort((a, b) => b.f1 - a.f1);
+            // Only a confirmation of THIS picture counts. Treating any
+            // stored answer as a yes would adopt an unreviewed assignment
+            // on a board whose file changed under it.
+            const stored = readStore(confirmedKey(id));
+            const at = Math.max(
+              0,
+              offers.findIndex((o) => o.layoutName === stored),
+            );
+            if (offers.length) {
+              setInference(offers[at]);
+              setLayout(offers[at].layout);
+              candidatesRef.current = offers;
+              indexRef.current = at;
               fallbackRef.current = named;
-              // Only a confirmation of THIS picture counts. Treating any
-              // stored answer as a yes would adopt an unreviewed
-              // assignment on a board whose file changed under it.
-              setPending(readStore(confirmedKey(id)) !== alt.layoutName);
+              setRemaining(offers.length - at - 1);
+              setPending(offers[at].layoutName !== stored);
             }
           }
         }
@@ -264,7 +291,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
           const raw = readStore(customKey(id));
           if (raw) geometry = JSON.parse(raw) as BoardLayout;
         } else {
-          geometry = await loadVendor(stored === "1" ? name : stored);
+          geometry = await resolvePicture(stored === "1" ? name : stored, loadVendor);
         }
         if (!live) return;
         const inf = geometry
@@ -296,7 +323,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         if (!wantsIso) continue;
         const iso = isoVariant(geometry);
         if (!iso) continue;
-        const isoInf = bestMatch(iso, `${stem}+iso`, matrices);
+        const isoInf = bestMatch(iso, isoName(stem), matrices);
         if (isoInf && isoInf.matchRate >= MATCH_BAR) candidates.push(isoInf);
       }
       candidates.sort(

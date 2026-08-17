@@ -107,3 +107,24 @@ export function isoVariant(layout: BoardLayout): BoardLayout | null {
 
   return { ...layout, keys, iso: true };
 }
+
+/** What a derived picture is called. It names no file on disk. */
+export const ISO_SUFFIX = "+iso";
+export const isoName = (stem: string) => `${stem}${ISO_SUFFIX}`;
+
+/**
+ * Geometry for a picture by name, deriving the ISO version when the name
+ * carries the suffix.
+ *
+ * A stored answer names the picture the owner confirmed, and a derived one
+ * has no file to load: reading it back as a stem finds nothing, and the
+ * board a picture was already found for falls back to the slot grid.
+ */
+export async function resolvePicture(
+  picture: string,
+  load: (stem: string) => Promise<BoardLayout | null>,
+): Promise<BoardLayout | null> {
+  if (!picture.endsWith(ISO_SUFFIX)) return load(picture);
+  const base = await load(picture.slice(0, -ISO_SUFFIX.length));
+  return base ? isoVariant(base) : null;
+}
