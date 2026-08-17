@@ -778,6 +778,31 @@
     }
   },
   {
+    "id": 1259,
+    "name": "keydous_nj98cp",
+    "displayName": "NJ98-CP",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "keydous_nj98cp",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1318,
     "name": "yc500_yz1108",
     "displayName": "YZ1108",

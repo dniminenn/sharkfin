@@ -257,5 +257,33 @@
       "screen": true,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #24. Not in any vendor catalogue. The three NJ98-CP boards the vendor does list (2576, 3496, 3793) are magnetic gen2 boards on 3151:502f and 3151:5030; this one shares the name and nothing else.",
+    "_evidence": "Read sweep from the owner's board (0.3.4, baafd27). identify 0x8F returns 0x04EB = 1259. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 (120, 120, 1680, 1680) and auto-OS 0x97 answers 1. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86. The name shared with three gen2 boards is why the family is read off the sweep and not off the model. 0xAD returns a zero version with the request's own checksum still at byte 7, where a board with a display fills the reply in (RT100 Wired, issue #22, answers 6.5), so screen stays false.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. Common104_Knob_NJ98CP, the picture the gen2 NJ98-CP uses, matches this keymap 100 of 104 and nothing else comes near, but it is not baked in: the knob sits at slots 115 and 116 where that layout has 114 and 115, and slots 78 and 90 read Home and End where it has F12 and Calculator. Profile count was not observable either (0x85 shows the board sitting on profile 0), so it is pinned to 1. Edge light 0x88 answers with the same canned reply an X86 gives, and the X86 has no edge LEDs.",
+    "id": 1259,
+    "name": "keydous_nj98cp",
+    "displayName": "NJ98-CP",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "keydous_nj98cp",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]
