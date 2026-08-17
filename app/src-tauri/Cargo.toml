@@ -1,6 +1,6 @@
 [package]
 name = "sharkfin"
-version = "0.3.4"
+version = "0.3.5"
 description = "Configurator for Attack Shark / ROYUAN keyboards"
 authors = ["dniminenn"]
 edition = "2021"

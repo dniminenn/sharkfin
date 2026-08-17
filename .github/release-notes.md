@@ -1,17 +1,14 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.3.4
+## What changed in 0.3.5
 
-**The EPOMAKER RT100 Wired is supported.** Its owner reported it with a
-data bundle in issue #22. The Keys page matches a picture against the
-board and asks you to confirm it before remapping.
+**The Keydous NJ98-CP is supported.** The board sold under that name
+before the magnetic revisions speaks a different command set, so it was
+not covered by the three NJ98-CP entries already listed. Its owner
+reported it with a data bundle in issue #24. The Keys page matches a
+picture against the board and asks you to confirm it before remapping.
 
-**Bug reports carry the whole keymap now.** The data bundle on the
-Contribute tab used to read the first sixteen keys; it reads all of them
-now, so a new board's layout can usually be worked out from one report
-instead of a follow-up.
-
-The registry is 950 boards.
+The registry is 951 boards.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
