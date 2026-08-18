@@ -20,9 +20,7 @@
 
 Remap keys, set the RGB, record macros and change device settings on 949
 keyboards built on ROYUAN hardware: Attack Shark, Hator, ikbc, NOPPOO,
-Epomaker, Akko, MEETION, rongyuan and more. Most identify as USB vendor
-`0x3151`; a minority ship under their brand's own ID, so `docs/BOARDS.md`
-lists the real one per board and discovery scans for all of them.
+Epomaker, Akko, MEETION, rongyuan and more.
 
 **Use a USB cable.** There's no config interface over 2.4 GHz or Bluetooth.
 sharkfin never flashes firmware.
@@ -39,18 +37,23 @@ sharkfin never flashes firmware.
 and 737 more after a one-time check against your board; the rest show a
 slot grid.
 
-If your board is one of those, or the picture is wrong, draw it on
+The check exists because two boards can share one picture and still
+disagree about which slot each key lives in, and a wrong guess sends a
+remap to the wrong key. So sharkfin trusts your keyboard over its own
+files: the picture is matched against your board's keymap and stays
+read-only until you confirm it. A picture ships built in only when every
+board sharing it agrees.
+
+If your board shows the grid, or the picture is wrong, draw it on
 [keyboard-layout-editor.com](http://www.keyboard-layout-editor.com) and
-paste the drawing into the Keys page. sharkfin matches it against your
-keys, and sending the result back means the board ships drawn for
-everyone who owns one.
+paste the drawing into the Keys page. Sending the result back gets the
+board drawn for everyone who owns one.
 
 ## Features
 
 - **Keys.** Remap any key, on a picture of your board, per profile. Base
   and Fn layers, combos, and the knob (turn left, turn right, press). Writes
-  go to the keyboard immediately. The picture is checked against your own
-  keyboard first, and stays read-only until you say it matches.
+  go to the keyboard immediately.
 - **Lighting.** 18 effects with direction options, full RGB, brightness and
   speed. Sliders preview as you drag and write when you let go, because the
   keyboard keeps its lighting in flash. Edge-light controls appear on boards
@@ -76,9 +79,8 @@ hardware doesn't have one.
 ## Install
 
 Nothing to install: open **[app.getsharkfin.com](https://app.getsharkfin.com/)**
-in Chrome, Edge or another Chromium browser and plug the keyboard in. The page
-reaches the keyboard's settings channel over WebHID and never sees your typing,
-because the browser does not expose the keyboard's own collections.
+in Chrome, Edge or another Chromium browser and plug the keyboard in. The
+page reaches only the keyboard's settings channel and never sees your typing.
 
 For the desktop app, download a release or build it yourself:
 
@@ -99,10 +101,9 @@ npm run web:build   # -> app/dist-web
 ```
 
 On Linux the keyboard's device node belongs to root, so sharkfin needs a
-udev rule to reach it. The browser build needs it too, because Chrome opens
-the same node. The .deb, .rpm and Arch packages install the rule; replug
-the keyboard after installing. The AppImage and the browser build cannot
-install it. For those, one line, then replug the keyboard:
+udev rule, browser build included. The .deb, .rpm and Arch packages
+install it; replug the keyboard after installing. For the AppImage or the
+browser, one line, then replug:
 
 ```sh
 echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f", MODE="0660", TAG+="uaccess"' \
@@ -110,10 +111,8 @@ echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|379a|374a|38a9|046a|2ea8|145f"
   && sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
 
-If you already configure keyboards on this machine you may have a rule from
-VIA, Vial or a vendor package that covers it, in which case nothing is
-needed. The app shows you this command if it finds a keyboard it cannot
-open.
+A rule from VIA, Vial or a vendor package may already cover it. The app
+shows this command when it finds a keyboard it cannot open.
 
 ## If the keyboard stops responding
 
