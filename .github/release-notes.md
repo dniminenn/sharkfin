@@ -1,12 +1,18 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.3.5
+## What changed in 0.3.6
 
-**The Keydous NJ98-CP is supported.** The board sold under that name
-before the magnetic revisions speaks a different command set, so it was
-not covered by the three NJ98-CP entries already listed. Its owner
-reported it with a data bundle in issue #24. The Keys page matches a
-picture against the board and asks you to confirm it before remapping.
+**Switching profiles no longer risks freezing the keyboard.** A profile
+switch is stored in the keyboard's own flash, and reading from the board
+while that write settled could leave it unresponsive until replugged.
+The app now leaves the board alone until the write has landed, then
+checks it took. A switch takes about a second; that is the quiet, not
+lag.
+
+**ISO boards keep their picture.** Confirming a picture with the two ISO
+keys added was forgotten on the next launch, and a board whose picture
+ships built in was never offered the ISO version at all, so those two
+keys could not be remapped. Both fixed.
 
 The registry is 951 boards.
 
