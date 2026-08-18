@@ -81,6 +81,8 @@ hardware doesn't have one.
 Nothing to install: open **[app.getsharkfin.com](https://app.getsharkfin.com/)**
 in Chrome, Edge or another Chromium browser and plug the keyboard in. The
 page reaches only the keyboard's settings channel and never sees your typing.
+It keeps working without a connection after the first visit, and the browser
+can install it as an app.
 
 For the desktop app, download a release or build it yourself:
 

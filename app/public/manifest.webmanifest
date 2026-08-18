@@ -1,0 +1,14 @@
+{
+  "name": "sharkfin",
+  "short_name": "sharkfin",
+  "description": "Configure Attack Shark and other ROYUAN keyboards.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#12161d",
+  "theme_color": "#12161d",
+  "icons": [
+    { "src": "/icons/sharkfin-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/sharkfin-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
