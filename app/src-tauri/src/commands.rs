@@ -273,6 +273,20 @@ fn run<T>(
     f: impl FnOnce(&Transport, Option<&'static FamilyCmds>) -> Result<T, HidError>,
 ) -> Result<T, String> {
     let mut inner = state.inner.lock();
+    // Reads share the wire with flash-class writes, and a read landing in a
+    // write's quiet window stalls the endpoint just as another write would:
+    // an X86 wedged on a keymap read 120 ms after a profile switch. Writes
+    // pace themselves through the gap claims, so only reads wait here, with
+    // the lock held so nothing else reaches the board meanwhile.
+    if !require_writable {
+        if let Some((prev, min)) = inner.last_write {
+            let until = prev + min;
+            let now = Instant::now();
+            if until > now {
+                std::thread::sleep(until - now);
+            }
+        }
+    }
     let open = inner.open.as_mut().ok_or("no device connected")?;
     if require_writable && !open.spec.writes_supported() {
         return Err(format!(
@@ -365,8 +379,22 @@ pub fn get_screen_version(state: tauri::State<AppState>) -> Result<Option<u16>, 
 pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), String> {
     write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
-        let pkt = crate::protocol::packet(need(fc)?.set_profile, &[profile], Checksum::Bit7);
+        let fc = need(fc)?;
+        let pkt = crate::protocol::packet(fc.set_profile, &[profile], Checksum::Bit7);
         t.send(&pkt)?;
+        // The switch lands in flash and gets no ack, and anything on the
+        // wire during the commit can stall the endpoint. GET_PROFILE is no
+        // probe of the commit either: it answers within 25 ms while the
+        // commit is still going. So the full quiet comes first and the
+        // confirmation after, with the device lock held throughout, like a
+        // flash batch.
+        std::thread::sleep(SETTING_GAP);
+        let reply = t.roundtrip(fc.get_profile, &[], Checksum::Bit7)?;
+        if reply[1] != profile {
+            return Err(HidError::Protocol(
+                "the board did not take the profile switch".into(),
+            ));
+        }
         Ok(())
     })
 }

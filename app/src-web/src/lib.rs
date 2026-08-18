@@ -358,6 +358,20 @@ async fn gap(last: impl Fn(&mut AppState) -> &mut Option<(f64, f64)> + Copy, min
     }
 }
 
+/// Waits out whatever quiet the last write declared, without claiming the
+/// clock. Reads share the wire with flash-class writes, and a read landing
+/// in a write's quiet window stalls the endpoint just as another write
+/// would: an X86 wedged on a keymap read 120 ms after a profile switch.
+async fn read_quiet() {
+    let wait = STATE.with(|s| match s.borrow().last_cmd {
+        Some((prev, min)) => prev + min - js_now(),
+        None => 0.0,
+    });
+    if wait > 0.0 {
+        sleep_ms(wait).await;
+    }
+}
+
 fn to_js<T: serde::Serialize>(v: &T) -> Result<JsValue, JsValue> {
     serde_json::to_string(v)
         .map(JsValue::from)
@@ -497,6 +511,7 @@ pub fn clear_stall() {
 #[wasm_bindgen]
 pub async fn get_led_param() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, _) = get_open(false)?;
     let reply = t
         .roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)
@@ -519,6 +534,7 @@ pub async fn set_led_param(param_json: String) -> Result<(), JsValue> {
 #[wasm_bindgen]
 pub async fn get_profile() -> Result<u8, JsValue> {
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
     let reply = t
@@ -534,6 +550,7 @@ pub async fn get_profile() -> Result<u8, JsValue> {
 #[wasm_bindgen]
 pub async fn get_screen_version() -> Result<Option<u16>, JsValue> {
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, _) = get_open(false)?;
     let reply = t
         .roundtrip(protocol::cmd::GET_OLED_VERSION, &[], Checksum::Bit7)
@@ -554,6 +571,23 @@ pub async fn set_profile(profile: u8) -> Result<(), JsValue> {
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
     let pkt = protocol::packet(fc.set_profile, &[profile], Checksum::Bit7);
     t.send(&pkt).await.map_err(fail)?;
+    // The switch lands in flash and gets no ack, and anything on the wire
+    // during the commit can stall the endpoint. GET_PROFILE is no probe of
+    // the commit either: it answers within 25 ms while the commit is still
+    // going. So the full quiet comes first and the confirmation after, with
+    // the busy guard held throughout, like a flash batch.
+    sleep_ms(SETTING_GAP_MS).await;
+    let reply = t
+        .roundtrip(fc.get_profile, &[], Checksum::Bit7)
+        .await
+        .map_err(fail)?;
+    if reply[1] != profile {
+        return Err(
+            HidErr::Protocol("the board did not take the profile switch".into())
+                .to_string()
+                .into(),
+        );
+    }
     Ok(())
 }
 
@@ -613,6 +647,7 @@ fn key_write_packet(
 #[wasm_bindgen]
 pub async fn read_keymap(profile: u8) -> Result<Vec<u8>, JsValue> {
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
     read_matrix(&t, fc, profile, false)
@@ -624,6 +659,7 @@ pub async fn read_keymap(profile: u8) -> Result<Vec<u8>, JsValue> {
 #[wasm_bindgen]
 pub async fn read_fn_keymap(layer: u8) -> Result<Vec<u8>, JsValue> {
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
     read_matrix(&t, fc, layer, true)
@@ -708,6 +744,7 @@ async fn read_settings(
 #[wasm_bindgen]
 pub async fn get_settings() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
     let s = read_settings(&t, fc, spec.features.side_light)
@@ -967,6 +1004,7 @@ fn check_macro_slot(slot: u8) -> Result<(), String> {
 pub async fn read_macro(slot: u8) -> Result<JsValue, JsValue> {
     check_macro_slot(slot)?;
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, _) = get_open(false)?;
     let mut blob = [0u8; protocol::MACRO_BYTES];
     for page in 0..4u8 {
@@ -1028,6 +1066,7 @@ struct SavedConfig {
 #[wasm_bindgen]
 pub async fn export_config() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
     // Every profile the board claims; see MAX_PROFILES in commands.rs.
@@ -1228,6 +1267,7 @@ async fn probe_sweep(t: &Transport, out: &mut String) -> Result<(), JsValue> {
 pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
     use std::fmt::Write;
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, spec) = get_open(false)?;
     let mut out = String::new();
     let _ = writeln!(out, "```");
@@ -1313,6 +1353,7 @@ pub async fn raw_command(
         _ => Checksum::None,
     };
     let _busy = acquire().await;
+    read_quiet().await;
     let (t, _) = get_open(false)?;
     let reply = t.roundtrip(opcode, &payload, mode).await.map_err(fail)?;
     Ok(reply.to_vec())
