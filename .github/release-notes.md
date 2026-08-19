@@ -1,18 +1,18 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.3.6
+## What changed in 0.3.7
 
-**Switching profiles no longer risks freezing the keyboard.** A profile
-switch is stored in the keyboard's own flash, and reading from the board
-while that write settled could leave it unresponsive until replugged.
-The app now leaves the board alone until the write has landed, then
-checks it took. A switch takes about a second; that is the quiet, not
-lag.
+**sharkfin speaks Bahasa Indonesia and Brazilian Portuguese.** The app
+picks the language from your system and you can change it at the bottom
+of the sidebar. The board list at
+[getsharkfin.com](https://getsharkfin.com/) has the same three languages.
+Board names, key labels and technical values stay as they are. Spotted a
+translation that reads wrong? Open an issue.
 
-**ISO boards keep their picture.** Confirming a picture with the two ISO
-keys added was forgotten on the next launch, and a board whose picture
-ships built in was never offered the ISO version at all, so those two
-keys could not be remapped. Both fixed.
+**The browser version works offline.** Load
+[app.getsharkfin.com](https://app.getsharkfin.com/) once and it keeps
+working without a connection, and your browser can install it like an
+app.
 
 The registry is 951 boards.
 
