@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { t } from "@/lib/i18n";
 
 // Most of these boards are ROYUAN's 3151, but 110 of the 949 in the registry
 // ship under a different vendor ID, so matching 3151 alone locks their owners
@@ -41,13 +42,11 @@ export default function PermissionNotice() {
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
       <div className="pointer-events-auto rounded-xl border bg-card px-4 py-3 shadow-lg">
         <div className="max-w-xl space-y-2 text-sm">
-          <p className="font-medium">The keyboard is there, but sharkfin can't open it.</p>
+          <p className="font-medium">{t("The keyboard is there, but sharkfin can't open it.")}</p>
           {isLinux() ? (
             <>
               <p className="text-muted-foreground">
-                On Linux the keyboard's device node belongs to root until a udev rule hands
-                it to you. Paste this into a terminal, then unplug the keyboard and plug it
-                back in:
+                {t("On Linux the keyboard's device node belongs to root until a udev rule hands it to you. Paste this into a terminal, then unplug the keyboard and plug it back in:")}
               </p>
               <pre className="whitespace-pre-wrap break-all rounded-md border bg-muted/50 p-2 text-[11px] leading-relaxed">
                 {UDEV_ONELINER}
@@ -56,23 +55,22 @@ export default function PermissionNotice() {
                 <Button size="sm" variant="outline" onClick={copy}>
                   {copied ? (
                     <>
-                      <Check className="mr-1 h-3.5 w-3.5" /> Copied
+                      <Check className="mr-1 h-3.5 w-3.5" /> {t("Copied")}
                     </>
                   ) : (
                     <>
-                      <Copy className="mr-1 h-3.5 w-3.5" /> Copy the command
+                      <Copy className="mr-1 h-3.5 w-3.5" /> {t("Copy the command")}
                     </>
                   )}
                 </Button>
                 <span className="text-xs text-muted-foreground">
-                  It writes one rule file and reloads udev. Nothing else.
+                  {t("It writes one rule file and reloads udev. Nothing else.")}
                 </span>
               </div>
             </>
           ) : (
             <p className="text-muted-foreground">
-              Something else is holding the keyboard open. Close any other keyboard software,
-              including a second copy of sharkfin, then unplug it and plug it back in.
+              {t("Something else is holding the keyboard open. Close any other keyboard software, including a second copy of sharkfin, then unplug it and plug it back in.")}
             </p>
           )}
         </div>

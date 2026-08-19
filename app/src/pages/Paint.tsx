@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
 import { writePerKey, type ConnectedDevice } from "@/lib/backend";
 
@@ -186,7 +187,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
     setBusy(true);
     try {
       await writePerKey(toBlob(pattern), true);
-      toast.success("Pattern sent to the keyboard");
+      toast.success(t("Pattern sent to the keyboard"));
     } catch (e) {
       toast.error(`${e}`);
     } finally {
@@ -274,11 +275,9 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
     <div className="mx-auto max-w-4xl space-y-5 p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Paint</h1>
+          <h1 className="text-xl font-semibold tracking-tight">{t("Paint")}</h1>
           <p className="text-sm text-muted-foreground">
-            Click or drag to colour keys, right-click to pick a colour up, then
-            send it. Sending writes the keyboard's flash and takes a few
-            seconds.
+            {t("Click or drag to colour keys, right-click to pick a colour up, then send it. Sending writes the keyboard's flash and takes a few seconds.")}
           </p>
         </div>
       </div>
@@ -289,8 +288,8 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
             <Button
               variant={tool === "brush" ? "secondary" : "ghost"}
               size="icon-xs"
-              aria-label="Brush"
-              title="Brush"
+              aria-label={t("Brush")}
+              title={t("Brush")}
               onClick={() => setTool("brush")}
             >
               <Paintbrush className="h-4 w-4" />
@@ -298,8 +297,8 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
             <Button
               variant={tool === "picker" ? "secondary" : "ghost"}
               size="icon-xs"
-              aria-label="Colour picker"
-              title="Colour picker. Right-clicking a key does this too."
+              aria-label={t("Colour picker")}
+              title={t("Colour picker. Right-clicking a key does this too.")}
               onClick={() => setTool("picker")}
             >
               <Pipette className="h-4 w-4" />
@@ -307,8 +306,8 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
             <Button
               variant="ghost"
               size="icon-xs"
-              aria-label="Undo"
-              title="Undo (Ctrl+Z)"
+              aria-label={t("Undo")}
+              title={t("Undo (Ctrl+Z)")}
               onClick={undo}
             >
               <Undo2 className="h-4 w-4" />
@@ -337,7 +336,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
               value={brush}
               onChange={(e) => setBrush(e.target.value)}
               className="h-7 w-7 cursor-pointer rounded-full border bg-transparent"
-              aria-label="Custom brush colour"
+              aria-label={t("Custom brush colour")}
             />
           </div>
 
@@ -351,7 +350,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
                   setSwatches((prev) => prev.filter((s) => s !== c));
                 }}
                 aria-label={c}
-                title="Saved colour. Right-click to remove."
+                title={t("Saved colour. Right-click to remove.")}
                 className={cn(
                   "h-7 w-7 rounded-md border-2 transition-transform hover:scale-110",
                   brush === c ? "border-foreground" : "border-transparent",
@@ -363,8 +362,8 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
               <Button
                 variant="ghost"
                 size="icon-xs"
-                aria-label="Save colour"
-                title="Save the current colour"
+                aria-label={t("Save colour")}
+                title={t("Save the current colour")}
                 onClick={saveSwatch}
               >
                 <Plus className="h-4 w-4" />
@@ -375,20 +374,20 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
           <div className="ml-auto flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={() => fillAll(brush)}>
               <PaintBucket className="mr-1 h-4 w-4" />
-              Fill
+              {t("Fill")}
             </Button>
             <Button variant="outline" size="sm" onClick={() => fillAll("#000000")}>
               <Eraser className="mr-1 h-4 w-4" />
-              Clear
+              {t("Clear")}
             </Button>
             <Button size="sm" disabled={!connected || busy} onClick={apply}>
               <Send className="mr-1 h-4 w-4" />
-              {busy ? "Sending…" : "Apply to keyboard"}
+              {busy ? t("Sending…") : t("Apply to keyboard")}
             </Button>
           </div>
 
           <div className="flex w-full flex-wrap items-center gap-2 border-t pt-3">
-            <span className="text-xs text-muted-foreground">Patterns</span>
+            <span className="text-xs text-muted-foreground">{t("Patterns")}</span>
             {saved.map((slot, i) => (
               <button
                 key={i}
@@ -397,8 +396,8 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
                   e.preventDefault();
                   deleteSlot(i);
                 }}
-                aria-label={`Saved pattern ${i + 1}`}
-                title="Load this pattern. Right-click to remove."
+                aria-label={t("Saved pattern {n}", { n: i + 1 })}
+                title={t("Load this pattern. Right-click to remove.")}
                 className="keycap-plate relative h-8 w-14 overflow-hidden rounded-md border transition-transform hover:scale-110"
               >
                 {paintKeys.map((k) => (
@@ -420,8 +419,8 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
               <Button
                 variant="ghost"
                 size="icon-xs"
-                aria-label="Save pattern"
-                title="Save the canvas as a pattern"
+                aria-label={t("Save pattern")}
+                title={t("Save the canvas as a pattern")}
                 onClick={savePattern}
               >
                 <Save className="h-4 w-4" />
@@ -444,7 +443,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
           >
             {resolving && (
               <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">
-                Finding your keyboard…
+                {t("Finding your keyboard…")}
               </div>
             )}
             {!resolving && paintKeys.map((k) => {
@@ -504,7 +503,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
 
       {!connected && (
         <p className="text-center text-sm text-muted-foreground">
-          Connect the keyboard by USB cable to send this pattern.
+          {t("Connect the keyboard by USB cable to send this pattern.")}
         </p>
       )}
     </div>

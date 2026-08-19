@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { BoardLayout, LayoutKey } from "@/lib/layout-loader";
 import { DISABLED_GLYPH, PASSTHRU_GLYPH } from "@/lib/hid-usages";
+import { t } from "@/lib/i18n";
 
 export type { BoardLayout, LayoutKey };
 
@@ -85,7 +86,7 @@ function Knob({
     >
       <div className="knob-ring absolute inset-0" />
       <button
-        title="Knob · rotate left"
+        title={t("Knob · rotate left")}
         disabled={!live(down)}
         data-selected={live(down) && selected === down!.matrixIndex}
         onClick={() => live(down) && onSelect(down!)}
@@ -96,7 +97,7 @@ function Knob({
         </span>
       </button>
       <button
-        title="Knob · rotate right"
+        title={t("Knob · rotate right")}
         disabled={!live(up)}
         data-selected={live(up) && selected === up!.matrixIndex}
         onClick={() => live(up) && onSelect(up!)}
@@ -107,7 +108,7 @@ function Knob({
         </span>
       </button>
       <button
-        title="Knob · press"
+        title={t("Knob · press")}
         disabled={!live(press)}
         data-selected={live(press) && selected === press!.matrixIndex}
         onClick={() => live(press) && onSelect(press!)}

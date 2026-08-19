@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
@@ -133,7 +134,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       const matrix = lay === "fn" ? await readFnKeymap(prof) : await readKeymap(prof);
       setEntries(sliceEntries(matrix));
     } catch (e) {
-      toast.error(`Failed to read keymap: ${e}`);
+      toast.error(t("Failed to read keymap: {e}", { e: String(e) }));
     }
   }, []);
 
@@ -165,7 +166,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       });
       toast.success(`${selected.text ?? selected.code} → ${a.label}`);
     } catch (e) {
-      toast.error(`Write failed: ${e}`);
+      toast.error(t("Write failed: {e}", { e: String(e) }));
     } finally {
       setBusy(false);
     }
@@ -203,8 +204,10 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       if (rate < 0.9) {
         toast.error(
           rate === 0
-            ? "Could not read the board's keymap to match against."
-            : `Only ${Math.round(rate * 100)}% of the drawn keys match this board.`,
+            ? t("Could not read the board's keymap to match against.")
+            : t("Only {pct}% of the drawn keys match this board.", {
+                pct: Math.round(rate * 100),
+              }),
         );
       } else {
         setVerdict(null);
@@ -227,19 +230,19 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       layoutBundle(device, bundleFor, effectiveVerdict),
     );
     setCopied(true);
-    toast.success("Copied. Paste it into the report.");
+    toast.success(t("Copied. Paste it into the report."));
   };
 
   const resetKey = async () => {
     if (!selected) return;
     const def = defaults.get(selected.matrixIndex!);
-    if (def) await assign({ label: "default", entry: def as Assignable["entry"] });
+    if (def) await assign({ label: t("default"), entry: def as Assignable["entry"] });
   };
 
   if (!connected) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        Connect your keyboard by USB cable to edit the keymap.
+        {t("Connect your keyboard by USB cable to edit the keymap.")}
       </div>
     );
   }
@@ -259,7 +262,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {optional && <SelectItem value="0">none</SelectItem>}
+        {optional && <SelectItem value="0">{t("none")}</SelectItem>}
         {COMBO_KEYS.map((k) => (
           <SelectItem key={`${field}-${k.usage}`} value={String(k.usage)}>
             {k.label}
@@ -273,9 +276,9 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     <div className="mx-auto max-w-5xl space-y-4 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Keys</h1>
+          <h1 className="text-xl font-semibold tracking-tight">{t("Keys")}</h1>
           <p className="text-sm text-muted-foreground">
-            Click a key, then pick its new function. Writes are instant.
+            {t("Click a key, then pick its new function. Writes are instant.")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -289,11 +292,11 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                   layer === l ? "bg-primary/10 font-medium" : "text-muted-foreground",
                 )}
               >
-                {l === "base" ? "Base" : "Fn layer"}
+                {l === "base" ? t("Base") : t("Fn layer")}
               </button>
             ))}
           </div>
-          <span className="text-sm text-muted-foreground">Profile</span>
+          <span className="text-sm text-muted-foreground">{t("Profile")}</span>
           <Select
             value={String(profile)}
             onValueChange={(v) => selectProfile(Number(v))}
@@ -314,40 +317,34 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
 
       {layout.grid && (
         <p className="text-xs text-muted-foreground">
-          No layout data for this board yet, so here are its 128 matrix slots as a
-          grid. Everything is still editable; labels come from what the board
-          reports.
+          {t("No layout data for this board yet, so here are its 128 matrix slots as a grid. Everything is still editable; labels come from what the board reports.")}
         </p>
       )}
 
       {pending && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Does this match your keyboard?</CardTitle>
+            <CardTitle className="text-base">{t("Does this match your keyboard?")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p>
-              This picture was matched against your board's current keymap.
-              Compare it with the physical keys: same shape, same legends in
-              the same places. Keys stay read-only until you answer.
+              {t("This picture was matched against your board's current keymap. Compare it with the physical keys: same shape, same legends in the same places. Keys stay read-only until you answer.")}
             </p>
             {inference && inference.ambiguous.length > 0 && (
               <p className="text-muted-foreground">
-                {inference.ambiguous.length} keys share a factory function
-                with another key, so each pair may be swapped. Check those
-                first.
+                {t("{n} keys share a factory function with another key, so each pair may be swapped. Check those first.", { n: inference.ambiguous.length })}
               </p>
             )}
             <div className="flex items-center gap-2">
               <Button size="sm" onClick={() => answer("right")}>
-                Looks right
+                {t("Looks right")}
               </Button>
               <Button size="sm" variant="outline" onClick={() => answer("wrong")}>
-                Something is wrong
+                {t("Something is wrong")}
               </Button>
               {remaining > 0 && (
                 <span className="text-xs text-muted-foreground">
-                  no shows the next closest picture, {remaining} left
+                  {t("no shows the next closest picture, {remaining} left", { remaining })}
                 </span>
               )}
             </div>
@@ -359,14 +356,14 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         <Card>
           <CardHeader>
             <CardTitle className="text-base">
-              {effectiveVerdict === "right" ? "Make it built-in" : "Help fix it"}
+              {effectiveVerdict === "right" ? t("Make it built-in") : t("Help fix it")}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p>
               {effectiveVerdict === "right"
-                ? "This layout is matched on your board every time it connects. Paste this bundle into a board report and it ships built in for everyone with this board."
-                : "You get the slot grid instead. Paste this bundle into a board report so the layout can be fixed for everyone with this board."}
+                ? t("This layout is matched on your board every time it connects. Paste this bundle into a board report and it ships built in for everyone with this board.")
+                : t("You get the slot grid instead. Paste this bundle into a board report so the layout can be fixed for everyone with this board.")}
             </p>
             <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="outline" onClick={copyBundle}>
@@ -375,7 +372,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                 ) : (
                   <Copy className="mr-1 h-3.5 w-3.5" />
                 )}
-                {copied ? "Copied" : "Copy bundle"}
+                {copied ? t("Copied") : t("Copy bundle")}
               </Button>
               <Button
                 size="sm"
@@ -388,9 +385,9 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                   )
                 }
               >
-                <Keyboard className="mr-1 h-3.5 w-3.5" /> Open a board report
+                <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Open a board report")}
               </Button>
-              <span className="text-muted-foreground">then paste</span>
+              <span className="text-muted-foreground">{t("then paste")}</span>
             </div>
           </CardContent>
         </Card>
@@ -399,19 +396,18 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       {connected && layout.grid && !pending && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Draw your board</CardTitle>
+            <CardTitle className="text-base">{t("Draw your board")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p className="text-muted-foreground">
-              No stored picture matches this keyboard. If you can draw it on{" "}
+              {t("No stored picture matches this keyboard. If you can draw it on")}{" "}
               <button
                 className="underline"
                 onClick={() => openUrl("http://www.keyboard-layout-editor.com")}
               >
                 keyboard-layout-editor.com
               </button>
-              , paste the raw data here and sharkfin will try to match it to
-              your keys.
+              {t(", paste the raw data here and sharkfin will try to match it to your keys.")}
             </p>
             <textarea
               value={kleText}
@@ -421,7 +417,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
               className="h-24 w-full rounded-md border bg-transparent p-2 font-mono text-xs"
             />
             <Button size="sm" disabled={!kleText.trim()} onClick={tryKle}>
-              Try it
+              {t("Try it")}
             </Button>
           </CardContent>
         </Card>
@@ -429,7 +425,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
 
       {!entries || resolving ? (
         <div className="flex h-64 items-center justify-center text-muted-foreground">
-          {resolving ? "Finding your keyboard…" : "Reading keymap…"}
+          {resolving ? t("Finding your keyboard…") : t("Reading keymap…")}
         </div>
       ) : (
         <>
@@ -448,19 +444,19 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
             {defaults.size > 0 && (
               <>
                 <span className="mr-1 inline-block h-[0.5em] w-[0.5em] rounded-full bg-(--ring) align-middle" />
-                marks a key that differs from this board's factory default.{" "}
+                {t("marks a key that differs from this board's factory default.")}{" "}
               </>
             )}
             {layer === "fn"
-              ? `${PASSTHRU_GLYPH} means the key falls through to the base layer.`
-              : `${DISABLED_GLYPH} means the key does nothing.`}
+              ? t("{glyph} means the key falls through to the base layer.", { glyph: PASSTHRU_GLYPH })
+              : t("{glyph} means the key does nothing.", { glyph: DISABLED_GLYPH })}
           </p>
 
           {!pending && (
             <p className="text-center text-xs text-muted-foreground">
-              Not your keyboard, or a key missing?{" "}
+              {t("Not your keyboard, or a key missing?")}{" "}
               <button className="underline" onClick={recheck}>
-                Check the picture again
+                {t("Check the picture again")}
               </button>
             </p>
           )}
@@ -469,14 +465,12 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">
-                  Keys this picture leaves out
+                  {t("Keys this picture leaves out")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <p className="text-muted-foreground">
-                  Your board answers for these, but the picture does not draw
-                  them. Pick one to remap it. Sending a board report from the
-                  Contribute tab is what gets them drawn.
+                  {t("Your board answers for these, but the picture does not draw them. Pick one to remap it. Sending a board report from the Contribute tab is what gets them drawn.")}
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {offPicture.map((k) => (
@@ -491,7 +485,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                     >
                       {k.text}
                       <span className="ml-1 text-muted-foreground">
-                        slot {k.matrixIndex}
+                        {t("slot {n}", { n: k.matrixIndex! })}
                       </span>
                     </button>
                   ))}
@@ -504,11 +498,13 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
             <CardHeader className="flex-row items-center justify-between space-y-0">
               <CardTitle className="text-base">
                 {selected
-                  ? `Assign: ${selected.text ?? selected.code}${layer === "fn" ? " (Fn layer)" : ""}`
-                  : "Select a key above"}
+                  ? layer === "fn"
+                    ? t("Assign: {key} (Fn layer)", { key: selected.text ?? selected.code })
+                    : t("Assign: {key}", { key: selected.text ?? selected.code })
+                  : t("Select a key above")}
                 {selected && selectedEntry && (
                   <Badge variant="outline" className="ml-2">
-                    now: {entryLabel(selectedEntry, layer === "fn")}
+                    {t("now: {label}", { label: entryLabel(selectedEntry, layer === "fn") })}
                   </Badge>
                 )}
               </CardTitle>
@@ -519,7 +515,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                   onClick={resetKey}
                   disabled={busy || pending || switching}
                 >
-                  Reset to default
+                  {t("Reset to default")}
                 </Button>
               )}
             </CardHeader>
@@ -548,20 +544,20 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                     ))}
                     <div>
                       <div className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        Combo: up to three keys on one press
+                        {t("Combo: up to three keys on one press")}
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
-                        {comboSelect("main", "key", false)}
+                        {comboSelect("main", t("key"), false)}
                         <span className="text-xs text-muted-foreground">+</span>
-                        {comboSelect("extraA", "second", true)}
+                        {comboSelect("extraA", t("second"), true)}
                         <span className="text-xs text-muted-foreground">+</span>
-                        {comboSelect("extraB", "third", true)}
+                        {comboSelect("extraB", t("third"), true)}
                         <Button
                           size="sm"
                           disabled={busy || pending || switching || !combo.main}
                           onClick={assignCombo}
                         >
-                          Apply combo
+                          {t("Apply combo")}
                         </Button>
                       </div>
                     </div>

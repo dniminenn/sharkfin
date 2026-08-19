@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout } from "@/lib/layout-loader";
 import { useBoardProfile } from "@/lib/use-profile";
@@ -41,25 +42,31 @@ const DIRECTIONS = [
 // Step size per event. The firmware sets how fast a held macro repeats, so
 // this is the only speed control available.
 const SPEEDS = [
-  { label: "slow", step: 2 },
-  { label: "medium", step: 5 },
-  { label: "fast", step: 12 },
+  { label: t("slow"), step: 2 },
+  { label: t("medium"), step: 5 },
+  { label: t("fast"), step: 12 },
 ];
 
 const MODES = [
-  { value: 0, label: "Repeat count" },
-  { value: 1, label: "Toggle" },
-  { value: 2, label: "While held" },
+  { value: 0, label: t("Repeat count") },
+  { value: 1, label: t("Toggle") },
+  { value: 2, label: t("While held") },
 ];
-const MOUSE_LABELS = ["Mouse L", "Mouse R", "Mouse M", "Mouse Back", "Mouse Fwd"];
+const MOUSE_LABELS = [
+  t("Mouse L"),
+  t("Mouse R"),
+  t("Mouse M"),
+  t("Mouse Back"),
+  t("Mouse Fwd"),
+];
 // JS button order is L, M, R; the protocol's is L, R, M.
 const JS_TO_PROTO_BUTTON = [0, 2, 1, 3, 4];
 
 function eventLabel(e: MacroEvent): string {
   if (e.kind === "key") return `${usageLabel(e.usage)} ${e.pressed ? "↓" : "↑"}`;
   if (e.kind === "mouseButton")
-    return `${MOUSE_LABELS[e.button] ?? "Mouse ?"} ${e.pressed ? "↓" : "↑"}`;
-  return `Move ${e.dx},${e.dy}`;
+    return `${MOUSE_LABELS[e.button] ?? t("Mouse ?")} ${e.pressed ? "↓" : "↑"}`;
+  return t("Move {dx},{dy}", { dx: e.dx, dy: e.dy });
 }
 
 export default function MacrosPage({ device }: { device: ConnectedDevice | null }) {
@@ -90,7 +97,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
         setEvents(m.events);
         setRepeat(Math.max(1, m.repeat));
       })
-      .catch((e) => toast.error(`Failed to read macro: ${e}`));
+      .catch((e) => toast.error(t("Failed to read macro: {error}", { error: String(e) })));
   }, [connected, slot]);
 
   useEffect(() => {
@@ -157,9 +164,9 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
     setBusy(true);
     try {
       await writeMacro(slot, { repeat: 1, events: next });
-      toast.success(`Macro ${slot + 1} moves the cursor ${dir}. Now click a key.`);
+      toast.success(t("Macro {slot} moves the cursor {dir}. Now click a key.", { slot: slot + 1, dir }));
     } catch (e) {
-      toast.error(`Send failed: ${e}`);
+      toast.error(t("Send failed: {error}", { error: String(e) }));
     } finally {
       setBusy(false);
     }
@@ -172,9 +179,9 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
     setBusy(true);
     try {
       await writeMacro(slot, { repeat, events });
-      toast.success(`Macro ${slot + 1} sent`);
+      toast.success(t("Macro {slot} sent", { slot: slot + 1 }));
     } catch (e) {
-      toast.error(`Send failed: ${e}`);
+      toast.error(t("Send failed: {error}", { error: String(e) }));
     } finally {
       setBusy(false);
     }
@@ -197,9 +204,9 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
         next.set(matrixIndex, value);
         return next;
       });
-      toast.success(`${keyName} → Macro ${slot + 1}`);
+      toast.success(t("{key} → Macro {slot}", { key: keyName, slot: slot + 1 }));
     } catch (e) {
-      toast.error(`Bind failed: ${e}`);
+      toast.error(t("Bind failed: {error}", { error: String(e) }));
     } finally {
       setBusy(false);
     }
@@ -208,7 +215,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
   if (!connected) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        Connect your keyboard by USB cable to edit macros.
+        {t("Connect your keyboard by USB cable to edit macros.")}
       </div>
     );
   }
@@ -217,14 +224,13 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
     <div className="mx-auto max-w-5xl space-y-4 p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Macros</h1>
+          <h1 className="text-xl font-semibold tracking-tight">{t("Macros")}</h1>
           <p className="text-sm text-muted-foreground">
-            Record a sequence, send it to one of the 50 onboard slots, then
-            bind it to a key. Slots load straight from the keyboard.
+            {t("Record a sequence, send it to one of the 50 onboard slots, then bind it to a key. Slots load straight from the keyboard.")}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Slot</span>
+          <span className="text-sm text-muted-foreground">{t("Slot")}</span>
           <Select value={String(slot)} onValueChange={(v) => setSlot(Number(v))}>
             <SelectTrigger className="w-24">
               <SelectValue />
@@ -243,13 +249,13 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
       <Card>
         <CardHeader className="flex-row items-center justify-between space-y-0">
           <CardTitle className="text-base">
-            Sequence
+            {t("Sequence")}
             <Badge variant="outline" className="ml-2">
-              {events.length} events
+              {t(events.length === 1 ? "1 event" : "{n} events", { n: events.length })}
             </Badge>
           </CardTitle>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Repeat</span>
+            <span className="text-sm text-muted-foreground">{t("Repeat")}</span>
             <Input
               type="number"
               min={1}
@@ -264,19 +270,19 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
               disabled={events.length === 0 || recording}
               onClick={() => setEvents([])}
             >
-              <Trash2 className="mr-1 h-3.5 w-3.5" /> Clear
+              <Trash2 className="mr-1 h-3.5 w-3.5" /> {t("Clear")}
             </Button>
             {recording ? (
               <Button size="sm" variant="destructive" onClick={() => setRecording(false)}>
-                <Square className="mr-1 h-3.5 w-3.5" /> Stop
+                <Square className="mr-1 h-3.5 w-3.5" /> {t("Stop")}
               </Button>
             ) : (
               <Button size="sm" variant="outline" onClick={startRecording}>
-                <Circle className="mr-1 h-3.5 w-3.5 text-red-500" /> Record
+                <Circle className="mr-1 h-3.5 w-3.5 text-red-500" /> {t("Record")}
               </Button>
             )}
             <Button size="sm" disabled={busy || recording || events.length === 0} onClick={send}>
-              <Send className="mr-1 h-3.5 w-3.5" /> Send to keyboard
+              <Send className="mr-1 h-3.5 w-3.5" /> {t("Send to keyboard")}
             </Button>
           </div>
         </CardHeader>
@@ -292,11 +298,11 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
               onContextMenu={(e) => e.preventDefault()}
               className="flex h-24 items-center justify-center rounded-lg border-2 border-dashed border-(--ring) text-sm text-muted-foreground outline-none"
             >
-              Type or click here. Every press and release is captured.
+              {t("Type or click here. Every press and release is captured.")}
             </div>
           )}
           <div className="flex flex-wrap items-center gap-2 rounded-md border p-2 text-sm">
-            <span className="shrink-0 text-muted-foreground">Mouse key</span>
+            <span className="shrink-0 text-muted-foreground">{t("Mouse key")}</span>
             {DIRECTIONS.map(([label]) => (
               <Button
                 key={label}
@@ -322,18 +328,16 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
               </SelectContent>
             </Select>
             <Button size="sm" disabled={busy || recording} onClick={makeMouseKey}>
-              Build and send
+              {t("Build and send")}
             </Button>
             <span className="w-full text-xs text-muted-foreground">
-              Builds a macro that nudges the cursor, sends it to slot {slot + 1},
-              and sets the binding to While held so it repeats. Then click a key
-              below.
+              {t("Builds a macro that nudges the cursor, sends it to slot {slot}, and sets the binding to While held so it repeats. Then click a key below.", { slot: slot + 1 })}
             </span>
           </div>
 
           {events.length === 0 && !recording ? (
             <div className="py-6 text-center text-sm text-muted-foreground">
-              Empty. Hit Record to capture a sequence.
+              {t("Empty. Hit Record to capture a sequence.")}
             </div>
           ) : (
             <ScrollArea className={cn(events.length > 8 && "h-64")}>
@@ -348,7 +352,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                     </span>
                     <span className="flex-1 font-medium">{eventLabel(e)}</span>
                     <label className="flex items-center gap-1 text-xs text-muted-foreground">
-                      delay
+                      {t("delay")}
                       <Input
                         type="number"
                         min={0}
@@ -359,7 +363,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                         }
                         className="h-7 w-20"
                       />
-                      ms
+                      {t("ms")}
                     </label>
                     <button
                       onClick={() => setEvents((prev) => prev.filter((_, j) => j !== i))}
@@ -378,7 +382,9 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
       <Card>
         <CardHeader className="flex-row items-center justify-between space-y-0">
           <CardTitle className="text-base">
-            Bind macro {slot + 1} to a {layer === "fn" ? "Fn layer " : ""}key
+            {layer === "fn"
+              ? t("Bind macro {slot} to a Fn layer key", { slot: slot + 1 })
+              : t("Bind macro {slot} to a key", { slot: slot + 1 })}
           </CardTitle>
           <div className="flex items-center gap-2">
             <div className="flex rounded-md border p-0.5">
@@ -391,11 +397,11 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                     layer === l ? "bg-primary/10 font-medium" : "text-muted-foreground",
                   )}
                 >
-                  {l === "base" ? "Base" : "Fn layer"}
+                  {l === "base" ? t("Base") : t("Fn layer")}
                 </button>
               ))}
             </div>
-            <span className="text-sm text-muted-foreground">Mode</span>
+            <span className="text-sm text-muted-foreground">{t("Mode")}</span>
             <Select value={String(mode)} onValueChange={(v) => setMode(Number(v))}>
               <SelectTrigger className="w-36">
                 <SelectValue />
@@ -408,7 +414,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                 ))}
               </SelectContent>
             </Select>
-            <span className="text-sm text-muted-foreground">Profile</span>
+            <span className="text-sm text-muted-foreground">{t("Profile")}</span>
             <Select value={String(profile)} onValueChange={(v) => selectProfile(Number(v))}>
               <SelectTrigger className="w-20">
                 <SelectValue />
@@ -426,14 +432,14 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
         <CardContent>
           {!entries || resolving ? (
             <div className="py-6 text-center text-sm text-muted-foreground">
-              {resolving ? "Finding your keyboard…" : "Reading keymap…"}
+              {resolving ? t("Finding your keyboard…") : t("Reading keymap…")}
             </div>
           ) : (
             <>
               <p className="mb-3 text-sm text-muted-foreground">
                 {pending
-                  ? "This keyboard picture is not confirmed yet. Confirm it on the Keys page before binding macros."
-                  : "Click a key to bind it. Keys already running this macro are dotted; unbind from the Keys page."}
+                  ? t("This keyboard picture is not confirmed yet. Confirm it on the Keys page before binding macros.")
+                  : t("Click a key to bind it. Keys already running this macro are dotted; unbind from the Keys page.")}
               </p>
               <KeyboardView
                 layout={layout}

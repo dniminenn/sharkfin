@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 import { BE_MODES } from "@/lib/lighting-modes";
 import {
   getLedParam,
@@ -84,7 +85,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
         paramRef.current = p;
         setParam(p);
       })
-      .catch((e) => toast.error(`Failed to read lighting: ${e}`));
+      .catch((e) => toast.error(t("Failed to read lighting: {e}", { e })));
     getSettings()
       .then((s) => {
         sideRef.current = s.sideLight;
@@ -101,7 +102,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
     if (!opts || opts.ledOff === ledOff) return;
     const next = { ...opts, ledOff };
     setOpts(next);
-    setOptions(next).catch((e) => toast.error(`Write failed: ${e}`));
+    setOptions(next).catch((e) => toast.error(t("Write failed: {e}", { e })));
   };
 
   /// Preview only. Nothing reaches the keyboard until commitSide.
@@ -121,7 +122,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
     sideTimer.current = setTimeout(
       () => {
         lastSideSent.current = Date.now();
-        setSideLight(next).catch((e) => toast.error(`Write failed: ${e}`));
+        setSideLight(next).catch((e) => toast.error(t("Write failed: {e}", { e })));
       },
       Math.max(0, WRITE_GAP - (Date.now() - lastSideSent.current)),
     );
@@ -152,7 +153,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
     pushTimer.current = setTimeout(
       () => {
         lastSent.current = Date.now();
-        setLedParam(next).catch((e) => toast.error(`Write failed: ${e}`));
+        setLedParam(next).catch((e) => toast.error(t("Write failed: {e}", { e })));
       },
       Math.max(0, WRITE_GAP - (Date.now() - lastSent.current)),
     );
@@ -163,7 +164,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
   const pickColor = (rgb: { r: number; g: number; b: number }) => {
     if (isNearBlack(rgb) && opts) {
       setLedOff(true);
-      toast("Backlight off. Pick a colour to light it back up.");
+      toast(t("Backlight off. Pick a colour to light it back up."));
       return;
     }
     setLedOff(false);
@@ -173,14 +174,14 @@ export default function LightingPage({ connected }: { connected: boolean }) {
   if (!connected) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        Connect your keyboard by USB cable to configure lighting.
+        {t("Connect your keyboard by USB cable to configure lighting.")}
       </div>
     );
   }
   if (!param) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        Reading current lighting…
+        {t("Reading current lighting…")}
       </div>
     );
   }
@@ -192,15 +193,15 @@ export default function LightingPage({ connected }: { connected: boolean }) {
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-8">
       <div>
-        <h1 className="text-xl font-semibold tracking-tight">Lighting</h1>
+        <h1 className="text-xl font-semibold tracking-tight">{t("Lighting")}</h1>
         <p className="text-sm text-muted-foreground">
-          Backlight effect, color and motion. Changes apply live.
+          {t("Backlight effect, color and motion. Changes apply live.")}
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Effect</CardTitle>
+          <CardTitle className="text-base">{t("Effect")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
@@ -215,13 +216,13 @@ export default function LightingPage({ connected }: { connected: boolean }) {
                     : "hover:bg-accent",
                 )}
               >
-                {m.label}
+                {t(m.label)}
               </button>
             ))}
           </div>
           {mode?.options && (
             <div className="flex items-center gap-2">
-              <Label className="text-sm text-muted-foreground">Direction</Label>
+              <Label className="text-sm text-muted-foreground">{t("Direction")}</Label>
               <div className="flex gap-1">
                 {mode.options.map((opt, i) => (
                   <button
@@ -234,7 +235,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
                         : "hover:bg-accent",
                     )}
                   >
-                    {opt}
+                    {t(opt)}
                   </button>
                 ))}
               </div>
@@ -245,13 +246,12 @@ export default function LightingPage({ connected }: { connected: boolean }) {
 
       <Card className={cn(colorless && "opacity-50")}>
         <CardHeader>
-          <CardTitle className="text-base">Color</CardTitle>
+          <CardTitle className="text-base">{t("Color")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {opts?.ledOff && (
             <div className="rounded-md border border-(--ring) bg-accent/40 px-3 py-2 text-sm">
-              The backlight is off. Pick a colour or rainbow to light it back
-              up.
+              {t("The backlight is off. Pick a colour or rainbow to light it back up.")}
             </div>
           )}
           <div className="flex items-center gap-3">
@@ -276,12 +276,12 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               disabled={colorless}
               onChange={(e) => commitIdle({ ...hexToRgb(e.target.value), dazzle: false })}
               className="h-8 w-8 cursor-pointer rounded-full border bg-transparent"
-              aria-label="Custom color"
+              aria-label={t("Custom color")}
             />
           </div>
           <div className="flex items-center justify-between">
             <Label htmlFor="dazzle" className="text-sm">
-              Rainbow cycle
+              {t("Rainbow cycle")}
             </Label>
             <Switch
               id="dazzle"
@@ -299,7 +299,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
       {side && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Edge light</CardTitle>
+            <CardTitle className="text-base">{t("Edge light")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
@@ -314,7 +314,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
                       : "hover:bg-accent",
                   )}
                 >
-                  {m.label}
+                  {t(m.label)}
                 </button>
               ))}
             </div>
@@ -335,7 +335,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               ))}
               <div className="ml-auto flex items-center gap-2">
                 <Label htmlFor="side-dazzle" className="text-xs">
-                  Rainbow
+                  {t("Rainbow")}
                 </Label>
                 <Switch
                   id="side-dazzle"
@@ -347,7 +347,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <Label>Brightness</Label>
+                  <Label>{t("Brightness")}</Label>
                   <span className="text-muted-foreground">
                     {side.brightness}/4
                   </span>
@@ -363,7 +363,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <Label>Speed</Label>
+                  <Label>{t("Speed")}</Label>
                   <span className="text-muted-foreground">{side.speed}/4</span>
                 </div>
                 <Slider
@@ -382,12 +382,12 @@ export default function LightingPage({ connected }: { connected: boolean }) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Motion</CardTitle>
+          <CardTitle className="text-base">{t("Motion")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <Label>Brightness</Label>
+              <Label>{t("Brightness")}</Label>
               <span className="text-muted-foreground">{param.brightness}/4</span>
             </div>
             <Slider
@@ -403,7 +403,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
             className={cn("space-y-2", mode?.noSpeed && "pointer-events-none opacity-50")}
           >
             <div className="flex justify-between text-sm">
-              <Label>Speed</Label>
+              <Label>{t("Speed")}</Label>
               <span className="text-muted-foreground">{param.speed}/4</span>
             </div>
             <Slider

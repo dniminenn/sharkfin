@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { t, LOCALES, locale, setLocale } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
 import { scan, type ConnectedDevice, type DiscoveredUnknown } from "@/lib/backend";
 import ColorwayPicker from "@/components/ColorwayPicker";
@@ -114,7 +115,7 @@ export default function App() {
               )}
             >
               <Icon className="h-4 w-4" />
-              {label}
+              {t(label)}
             </button>
           ))}
         </nav>
@@ -148,22 +149,36 @@ export default function App() {
                         !readOnly(device) && "text-(--key-accent)",
                       )}
                     >
-                      {readOnly(device) ? "read-only" : `USB · id ${device.deviceId}`}
+                      {readOnly(device)
+                        ? t("read-only")
+                        : t("USB · id {id}", { id: device.deviceId })}
                     </Badge>
                   ) : stalled ? (
-                    "Unplug, wait 10s, plug back in"
+                    t("Unplug, wait 10s, plug back in")
                   ) : unknown ? (
                     <Badge variant="outline" className="mt-1">
-                      not in the registry
+                      {t("not in the registry")}
                     </Badge>
                   ) : (
-                    "Connect by cable"
+                    t("Connect by cable")
                   )}
                 </div>
               </div>
             </div>
           </div>
           <ColorwayPicker />
+          <select
+            aria-label={t("Language")}
+            value={locale}
+            onChange={(e) => setLocale(e.target.value)}
+            className="w-full rounded-md border bg-transparent px-2 py-1 text-xs text-muted-foreground"
+          >
+            {LOCALES.map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
         </div>
       </aside>
 

@@ -36,6 +36,7 @@ import {
   type SleepTimes,
 } from "@/lib/backend";
 import { deviceLabel } from "@/lib/brands";
+import { t } from "@/lib/i18n";
 
 const SLEEP_MIN = 60;
 const SLEEP_MAX = 3600;
@@ -75,9 +76,11 @@ function drawsElsewhere(spec: DeviceSpec): boolean {
 }
 
 function mins(seconds: number) {
-  if (seconds === 0) return "off";
+  if (seconds === 0) return t("off");
   const m = Math.round(seconds / 60);
-  return m >= 60 ? `${(m / 60).toFixed(1)} h` : `${m} min`;
+  return m >= 60
+    ? t("{h} h", { h: (m / 60).toFixed(1) })
+    : t("{m} min", { m });
 }
 
 function Row({
@@ -115,7 +118,7 @@ export default function DevicePage({
   const load = useCallback(() => {
     getSettings()
       .then(setS)
-      .catch((e) => toast.error(`Failed to read settings: ${e}`));
+      .catch((e) => toast.error(t("Failed to read settings: {e}", { e })));
   }, []);
 
   useEffect(() => {
@@ -158,7 +161,7 @@ export default function DevicePage({
       canvas.width = screen.w;
       canvas.height = screen.h;
       const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("could not prepare the picture");
+      if (!ctx) throw new Error(t("could not prepare the picture"));
       // Cover rather than stretch: a squashed photo looks like a bug.
       const scale = Math.max(screen.w / bitmap.width, screen.h / bitmap.height);
       const w = bitmap.width * scale;
@@ -172,9 +175,9 @@ export default function DevicePage({
         rgb[j++] = data[i + 2];
       }
       await writeScreenImage(rgb);
-      toast.success("Picture sent to the display.");
+      toast.success(t("Picture sent to the display."));
     } catch (e) {
-      toast.error(`Could not draw the picture: ${e}`);
+      toast.error(t("Could not draw the picture: {e}", { e: String(e) }));
     } finally {
       setDrawing(false);
     }
@@ -188,7 +191,7 @@ export default function DevicePage({
     setS((prev) => {
       if (!prev) return prev;
       const sleep = { ...prev.sleep, ...patch };
-      setSleep(sleep).catch((e) => toast.error(`Write failed: ${e}`));
+      setSleep(sleep).catch((e) => toast.error(t("Write failed: {e}", { e })));
       return { ...prev, sleep };
     });
 
@@ -198,22 +201,22 @@ export default function DevicePage({
 
   const commitDebounce = (value: number) => {
     setS((prev) => (prev ? { ...prev, debounce: value } : prev));
-    setDebounce(value).catch((e) => toast.error(`Write failed: ${e}`));
+    setDebounce(value).catch((e) => toast.error(t("Write failed: {e}", { e })));
   };
 
   const pushAutoOs = (enabled: boolean) => {
     setS((prev) => (prev ? { ...prev, autoOs: enabled } : prev));
-    setAutoOs(enabled).catch((e) => toast.error(`Write failed: ${e}`));
+    setAutoOs(enabled).catch((e) => toast.error(t("Write failed: {e}", { e })));
   };
 
   const doReset = async () => {
     try {
       await factoryReset();
-      toast.success("Factory reset sent. The board reboots its settings.");
+      toast.success(t("Factory reset sent. The board reboots its settings."));
       setS(null);
       setTimeout(load, 4500);
     } catch (e) {
-      toast.error(`Reset failed: ${e}`);
+      toast.error(t("Reset failed: {e}", { e: String(e) }));
     }
   };
 
@@ -222,14 +225,14 @@ export default function DevicePage({
   const doExport = async () => {
     const path = await save({
       defaultPath: `${deviceLabel(device!.spec).split(" ").join("-")}.sharkfin.json`,
-      filters: [{ name: "sharkfin config", extensions: ["json"] }],
+      filters: [{ name: t("sharkfin config"), extensions: ["json"] }],
     });
     if (!path) return;
     setTransferring(true);
     try {
       toast.success(await exportConfig(path));
     } catch (e) {
-      toast.error(`Export failed: ${e}`);
+      toast.error(t("Export failed: {e}", { e: String(e) }));
     } finally {
       setTransferring(false);
     }
@@ -238,7 +241,7 @@ export default function DevicePage({
   const doImport = async () => {
     const path = await open({
       multiple: false,
-      filters: [{ name: "sharkfin config", extensions: ["json"] }],
+      filters: [{ name: t("sharkfin config"), extensions: ["json"] }],
     });
     if (typeof path !== "string") return;
     setTransferring(true);
@@ -246,7 +249,7 @@ export default function DevicePage({
       toast.success(await importConfig(path));
       load();
     } catch (e) {
-      toast.error(`Import failed: ${e}`);
+      toast.error(t("Import failed: {e}", { e: String(e) }));
     } finally {
       setTransferring(false);
     }
@@ -256,7 +259,7 @@ export default function DevicePage({
     setS((prev) => {
       if (!prev?.options) return prev;
       const options = { ...prev.options, ...patch };
-      setOptions(options).catch((e) => toast.error(`Write failed: ${e}`));
+      setOptions(options).catch((e) => toast.error(t("Write failed: {e}", { e })));
       return { ...prev, options };
     });
   };
@@ -264,14 +267,14 @@ export default function DevicePage({
   if (!device) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        Connect your keyboard by USB cable.
+        {t("Connect your keyboard by USB cable.")}
       </div>
     );
   }
   if (!s) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        Reading device settings…
+        {t("Reading device settings…")}
       </div>
     );
   }
@@ -281,21 +284,25 @@ export default function DevicePage({
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-8">
       <div>
-        <h1 className="text-xl font-semibold tracking-tight">Device</h1>
+        <h1 className="text-xl font-semibold tracking-tight">{t("Device")}</h1>
         <p className="text-sm text-muted-foreground">
-          {deviceLabel(device.spec)} · firmware {s.revision} · device ID{" "}
-          {device.deviceId} · {device.spec.profiles} profiles
+          {t("{label} · firmware {revision} · device ID {deviceId} · {profiles} profiles", {
+            label: deviceLabel(device.spec),
+            revision: s.revision,
+            deviceId: device.deviceId,
+            profiles: device.spec.profiles,
+          })}
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Switches</CardTitle>
+          <CardTitle className="text-base">{t("Switches")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <Label>Debounce</Label>
+              <Label>{t("Debounce")}</Label>
               <span className="text-muted-foreground">{s.debounce}</span>
             </div>
             <Slider
@@ -307,7 +314,7 @@ export default function DevicePage({
               onValueCommit={([v]) => commitDebounce(v)}
             />
             <p className="text-xs text-muted-foreground">
-              Lower reacts faster; raise it if a switch starts chattering.
+              {t("Lower reacts faster; raise it if a switch starts chattering.")}
             </p>
           </div>
         </CardContent>
@@ -316,31 +323,36 @@ export default function DevicePage({
       {(device.spec.screen || screenVersion !== null) && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Display</CardTitle>
+            <CardTitle className="text-base">{t("Display")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="flex justify-between text-sm">
-              <Label>Size</Label>
+              <Label>{t("Size")}</Label>
               <span className="text-muted-foreground">
                 {device.spec.screen
-                  ? `${device.spec.screen.w} by ${device.spec.screen.h}`
-                  : "not recorded"}
+                  ? t("{w} by {h}", {
+                      w: device.spec.screen.w,
+                      h: device.spec.screen.h,
+                    })
+                  : t("not recorded")}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <Label>Colour</Label>
+              <Label>{t("Colour")}</Label>
               <span className="text-muted-foreground">
                 {device.spec.screen
                   ? device.spec.screen.mode === "24"
-                    ? "24-bit"
-                    : "16-bit"
-                  : "not recorded"}
+                    ? t("24-bit")
+                    : t("16-bit")
+                  : t("not recorded")}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <Label>Firmware</Label>
+              <Label>{t("Firmware")}</Label>
               <span className="text-muted-foreground">
-                {screenVersion === null ? "no answer" : screenVersion.toString(16)}
+                {screenVersion === null
+                  ? t("no answer")
+                  : screenVersion.toString(16)}
               </span>
             </div>
             {canDraw(device.spec) && (
@@ -359,8 +371,8 @@ export default function DevicePage({
                 />
                 <p className="text-xs text-muted-foreground">
                   {drawing
-                    ? "Writing. Leave the keyboard plugged in."
-                    : "The picture is scaled to fit and replaces what is on the display."}
+                    ? t("Writing. Leave the keyboard plugged in.")
+                    : t("The picture is scaled to fit and replaces what is on the display.")}
                 </p>
               </div>
             )}
@@ -368,13 +380,12 @@ export default function DevicePage({
               !canDraw(device.spec) &&
               !drawsElsewhere(device.spec) && (
               <p className="text-xs text-muted-foreground">
-                sharkfin reads this display but cannot draw on it yet.
+                {t("sharkfin reads this display but cannot draw on it yet.")}
               </p>
             )}
             {device.spec.screen && drawsElsewhere(device.spec) && (
               <p className="text-xs text-muted-foreground">
-                sharkfin reads this display but cannot draw on it. The picture
-                goes through a separate chip on this board.
+                {t("sharkfin reads this display but cannot draw on it. The picture goes through a separate chip on this board.")}
               </p>
             )}
           </CardContent>
@@ -383,24 +394,27 @@ export default function DevicePage({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Behaviour</CardTitle>
+          <CardTitle className="text-base">{t("Behaviour")}</CardTitle>
         </CardHeader>
         <CardContent className="divide-y">
           {s.options ? (
             <>
-              <Row label="Windows key lock" hint="Ignore the Win key while gaming">
+              <Row
+                label={t("Windows key lock")}
+                hint={t("Ignore the Win key while gaming")}
+              >
                 <Switch
                   checked={s.options.winLock}
                   onCheckedChange={(v) => pushOptions({ winLock: v })}
                 />
               </Row>
-              <Row label="Swap WASD and arrows">
+              <Row label={t("Swap WASD and arrows")}>
                 <Switch
                   checked={s.options.wasdSwap}
                   onCheckedChange={(v) => pushOptions({ wasdSwap: v })}
                 />
               </Row>
-              <Row label="Backlight off">
+              <Row label={t("Backlight off")}>
                 <Switch
                   checked={s.options.ledOff}
                   onCheckedChange={(v) => pushOptions({ ledOff: v })}
@@ -409,14 +423,12 @@ export default function DevicePage({
             </>
           ) : (
             <p className="py-2 text-sm text-muted-foreground">
-              This board's protocol family reports its switches in a layout
-              sharkfin hasn't decoded, so they're hidden rather than shown
-              wrong.
+              {t("This board's protocol family reports its switches in a layout sharkfin hasn't decoded, so they're hidden rather than shown wrong.")}
             </p>
           )}
           <Row
-            label="Auto-detect host OS"
-            hint="Board picks its Windows or macOS layer by itself"
+            label={t("Auto-detect host OS")}
+            hint={t("Board picks its Windows or macOS layer by itself")}
           >
             <Switch
               checked={s.autoOs}
@@ -424,7 +436,7 @@ export default function DevicePage({
             />
           </Row>
           {s.options && (
-            <Row label="Layout mode" hint="Switched on the keyboard itself">
+            <Row label={t("Layout mode")} hint={t("Switched on the keyboard itself")}>
               <Badge variant="outline">
                 {s.options.macMode ? "macOS" : "Windows"}
               </Badge>
@@ -435,20 +447,18 @@ export default function DevicePage({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Backup</CardTitle>
+          <CardTitle className="text-base">{t("Backup")}</CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            Keymaps for every profile and layer, lighting and settings, as one
-            file. Per-key paint patterns live in the Paint tab, because the firmware
-            can't report those back.
+            {t("Keymaps for every profile and layer, lighting and settings, as one file. Per-key paint patterns live in the Paint tab, because the firmware can't report those back.")}
           </p>
           <div className="flex shrink-0 gap-2">
             <Button size="sm" variant="outline" disabled={transferring} onClick={doExport}>
-              Export
+              {t("Export")}
             </Button>
             <Button size="sm" variant="outline" disabled={transferring} onClick={doImport}>
-              {transferring ? "Working…" : "Import"}
+              {transferring ? t("Working…") : t("Import")}
             </Button>
           </div>
         </CardContent>
@@ -456,29 +466,28 @@ export default function DevicePage({
 
       <Card className="border-destructive/40">
         <CardHeader>
-          <CardTitle className="text-base">Factory reset</CardTitle>
+          <CardTitle className="text-base">{t("Factory reset")}</CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            Clears every onboard profile, keymap, macro and light setting.
+            {t("Clears every onboard profile, keymap, macro and light setting.")}
           </p>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="destructive" size="sm">
-                Reset
+                {t("Reset")}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Factory reset this keyboard?</DialogTitle>
+                <DialogTitle>{t("Factory reset this keyboard?")}</DialogTitle>
                 <DialogDescription>
-                  Every profile, remapped key, macro and lighting setting stored
-                  on the board is erased. This cannot be undone from here.
+                  {t("Every profile, remapped key, macro and lighting setting stored on the board is erased. This cannot be undone from here.")}
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
                 <Button variant="destructive" onClick={doReset}>
-                  Erase and reset
+                  {t("Erase and reset")}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -489,15 +498,15 @@ export default function DevicePage({
       {wireless && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Wireless sleep</CardTitle>
+            <CardTitle className="text-base">{t("Wireless sleep")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             {(
               [
-                ["sleep24", "Sleep · 2.4 GHz", "sleep24" as const, SLEEP_MIN],
-                ["sleepBT", "Sleep · Bluetooth", "sleepBt" as const, SLEEP_MIN],
-                ["sleep24", "Deep sleep · 2.4 GHz", "deep24" as const, DEEP_MIN],
-                ["sleepBT", "Deep sleep · Bluetooth", "deepBt" as const, DEEP_MIN],
+                ["sleep24", t("Sleep · 2.4 GHz"), "sleep24" as const, SLEEP_MIN],
+                ["sleepBT", t("Sleep · Bluetooth"), "sleepBt" as const, SLEEP_MIN],
+                ["sleep24", t("Deep sleep · 2.4 GHz"), "deep24" as const, DEEP_MIN],
+                ["sleepBT", t("Deep sleep · Bluetooth"), "deepBt" as const, DEEP_MIN],
               ] as const
             ).map(([feature, label, key, min]) =>
               device.spec.features[feature] ? (
