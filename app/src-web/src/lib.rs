@@ -953,7 +953,7 @@ pub async fn write_per_key(colors: Vec<u8>, activate: bool) -> Result<(), JsValu
     }
     flash_cooldown().await;
     let _busy = acquire().await;
-    let (t, _) = get_open(true)?;
+    let (t, spec) = get_open(true)?;
     // Decide about the mode switch before the upload: asking afterwards
     // means talking to a board that is still writing flash.
     let needs_mode = activate
@@ -963,11 +963,19 @@ pub async fn write_per_key(colors: Vec<u8>, activate: bool) -> Result<(), JsValu
                 .unwrap_or(true),
             Err(_) => true,
         };
-    for page in 0..7u8 {
-        t.send(&protocol::userpic_write_packet(page, &colors))
-            .await
-            .map_err(fail)?;
-        sleep_ms(FLASH_PAGE_GAP_MS).await;
+    if spec.family == "gen2" {
+        // Slot 0, matching the option nibble in the mode switch below.
+        for pkt in protocol::gen2::userpic_packets(0, &colors) {
+            t.send(&pkt).await.map_err(fail)?;
+            sleep_ms(FLASH_PAGE_GAP_MS).await;
+        }
+    } else {
+        for page in 0..7u8 {
+            t.send(&protocol::userpic_write_packet(page, &colors))
+                .await
+                .map_err(fail)?;
+            sleep_ms(FLASH_PAGE_GAP_MS).await;
+        }
     }
     sleep_ms(FLASH_SETTLE_MS).await;
     if needs_mode {

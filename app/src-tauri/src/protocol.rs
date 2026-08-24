@@ -87,8 +87,9 @@ pub mod cmd {
 /// (e.g. yc500 SET_KEYMATRIX 0x09 is gen2 SET_KBOPTION), so every
 /// family-dependent command must resolve through this table rather than the
 /// `cmd` constants. `None` = the family has no such command, or its opcode
-/// is not documented. LEDPARAM, FN, GET_MACRO, USERPIC and identify are
-/// identical across both.
+/// is not documented. LEDPARAM, GET_MACRO and identify are identical
+/// across both; FN and USERPIC share opcodes but not packet shapes, so
+/// their gen2 builders live in the `gen2` module.
 #[derive(Debug)]
 pub struct FamilyCmds {
     pub name: &'static str,
@@ -237,6 +238,41 @@ pub mod gen2 {
                 buf[3] = page as u8;
                 buf[4] = chunk.len() as u8;
                 buf[5] = (page == matrix.len().div_ceil(56) - 1) as u8;
+                apply_checksum(&mut buf, Checksum::Bit7);
+                buf[8..8 + chunk.len()].copy_from_slice(chunk);
+                buf
+            })
+            .collect()
+    }
+
+    /// The gen2 wire carries two fewer keys than yc500's 128.
+    pub const PER_KEY_BYTES: usize = 378;
+
+    /// Per-key colours: 126 keys × RGB = 378 bytes in 7 pages:
+    /// [0x0C, slot, 0xFF, page, len, last, 0, ck7] + data at byte 8.
+    ///
+    /// Firmware 2268_v309 (handler 0x8010db8) accepts a page only when
+    /// byte 2 is 0xFF, stages it at page*56, and commits the slot to flash
+    /// when page 6 arrives with the last flag set. When byte 2 is anything
+    /// else it skips the copy but still commits, so a yc500-shaped packet
+    /// burns a flash cycle on stale data. The firmware bounds-checks
+    /// neither page nor length; both come from the chunking here, never
+    /// from a caller.
+    ///
+    /// `slot` must match the pattern slot in the LEDPARAM option nibble.
+    /// A longer blob is truncated.
+    pub fn userpic_packets(slot: u8, blob: &[u8]) -> Vec<[u8; REPORT_LEN]> {
+        let blob = &blob[..blob.len().min(PER_KEY_BYTES)];
+        blob.chunks(56)
+            .enumerate()
+            .map(|(page, chunk)| {
+                let mut buf = [0u8; REPORT_LEN];
+                buf[0] = super::cmd::SET_USERPIC;
+                buf[1] = slot;
+                buf[2] = BULK_SENTINEL;
+                buf[3] = page as u8;
+                buf[4] = chunk.len() as u8;
+                buf[5] = (page == blob.len().div_ceil(56) - 1) as u8;
                 apply_checksum(&mut buf, Checksum::Bit7);
                 buf[8..8 + chunk.len()].copy_from_slice(chunk);
                 buf
@@ -545,8 +581,10 @@ pub fn screen_page_packets(
 pub const PER_KEY_BYTES: usize = 384;
 const USERPIC_PAGE_DATA: usize = 56;
 
-/// Upload page `page` (0..7) of the colour blob. Header carries the total
-/// length and the page index at byte 4; data starts at byte 8.
+/// Upload page `page` (0..7) of the colour blob, yc500 shape: the header
+/// carries the total length at bytes 2-3 and the page index at byte 4;
+/// data starts at byte 8. Hardware-verified on an X86. gen2 firmware
+/// parses this header differently -- use `gen2::userpic_packets` there.
 pub fn userpic_write_packet(page: u8, blob: &[u8]) -> [u8; REPORT_LEN] {
     let len = PER_KEY_BYTES as u16;
     let mut buf = packet(
@@ -1184,6 +1222,20 @@ mod tests {
         // vendor's own loop truncates identically, worth knowing before
         // anyone verifies this path
         assert_eq!(&y[8][8..8 + 56], &[0xAB; 56]);
+    }
+
+    #[test]
+    fn gen2_userpic_packets_match_the_firmware_parse() {
+        // 2268_v309, handler 0x8010db8: sentinel at byte 2, page at 3,
+        // length at 4, last flag at 5. Seven pages, 42 bytes on the last,
+        // and the 384-byte UI blob loses its final two keys on the wire.
+        let blob = [0xCDu8; PER_KEY_BYTES];
+        let pages = gen2::userpic_packets(0, &blob);
+        assert_eq!(pages.len(), 7);
+        assert_eq!(&pages[0][..6], &[0x0C, 0, 0xFF, 0, 56, 0]);
+        assert_eq!(&pages[6][..6], &[0x0C, 0, 0xFF, 6, 42, 1]);
+        assert_eq!(&pages[6][8..8 + 42], &[0xCD; 42]);
+        assert_eq!(pages[6][8 + 42], 0, "tail padded with zeros");
     }
 
     #[test]

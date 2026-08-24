@@ -727,10 +727,12 @@ fn flash_cooldown(state: &tauri::State<AppState>) {
 
 /// Upload 384 bytes of per-key colour (128 slots × RGB, matrix order) and
 /// optionally switch the backlight to the pattern mode that shows it.
+/// The packet shape is per family; gen2 carries 126 of the 128 slots.
 ///
 /// Write-only by design: `GET_USERPIC` returns stable data that does *not*
 /// reflect what was just written, so the board is not a source of truth here
-/// and the host keeps the pattern. Verified visually on an X86.
+/// and the host keeps the pattern. Verified visually on an X86; the gen2
+/// shape is read out of the X65HE firmware (2268_v309).
 #[tauri::command(async)]
 pub fn write_per_key(
     state: tauri::State<AppState>,
@@ -745,7 +747,8 @@ pub fn write_per_key(
         ));
     }
     flash_cooldown(&state);
-    let out = with_writable(&state, |t, _| {
+    let out = with_writable(&state, |t, fc| {
+        let fc = need(fc)?;
         // Decide about the mode switch before the upload: asking afterwards
         // means talking to a board that is still writing flash.
         let needs_mode = activate
@@ -755,9 +758,17 @@ pub fn write_per_key(
                 .map(|p| p.mode != PER_KEY_MODE)
                 .unwrap_or(true);
 
-        for page in 0..7u8 {
-            t.send(&crate::protocol::userpic_write_packet(page, &colors))?;
-            std::thread::sleep(FLASH_PAGE_GAP);
+        if fc.name == "gen2" {
+            // Slot 0, matching the option nibble in the mode switch below.
+            for pkt in crate::protocol::gen2::userpic_packets(0, &colors) {
+                t.send(&pkt)?;
+                std::thread::sleep(FLASH_PAGE_GAP);
+            }
+        } else {
+            for page in 0..7u8 {
+                t.send(&crate::protocol::userpic_write_packet(page, &colors))?;
+                std::thread::sleep(FLASH_PAGE_GAP);
+            }
         }
         std::thread::sleep(FLASH_SETTLE);
 

@@ -222,11 +222,30 @@ the first all-zero page.
 
 Bind with keymap slot value `[0x09, mode, index, 0]`.
 
-## Per-key colour [HW]
+## Per-key colour
 
-`SET_USERPIC 0x0C` uploads 384 bytes (128 × RGB, matrix order) as seven
-56-byte pages: length `384` at bytes 2-3, page index at byte 4, data from
-byte 8. Display it by selecting light mode 13.
+`SET_USERPIC 0x0C` uploads RGB triples in matrix order as seven pages with
+data from byte 8. The opcode is shared across the families; the header is
+not.
+
+| byte | yc500 [HW] | gen2 [FW] |
+|---|---|---|
+| 1 | `0` | slot |
+| 2 | length low | `0xFF` |
+| 3 | length high | page, 0..6 |
+| 4 | page, 0..6 | page length: 56, then 42 |
+| 5 | `0` | `1` on the final page |
+| total | 384 (128 keys) | 378 (126 keys) |
+
+Display it by selecting light mode 13; the mode's option nibble is the
+gen2 slot.
+
+gen2 (`2268_v309`, handler `0x8010db8`): a page is copied only when byte 2
+is `0xFF`, staged at page × 56, and committed to flash at
+`0x0802f800 + slot × 384` when page 6 carries the final flag. A packet
+whose byte 2 is not `0xFF` skips the copy but still triggers the commit,
+so a misaddressed header burns a flash cycle on stale data. The firmware
+bounds-checks neither page nor length.
 
 `GET_USERPIC 0x8C` returns stable data that does not reflect writes. Treat
 as write-only.
