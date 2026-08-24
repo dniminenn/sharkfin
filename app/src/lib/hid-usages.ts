@@ -30,7 +30,12 @@ export const GROUPS: { name: string; items: Assignable[] }[] = [
   },
   {
     name: "F-keys",
-    items: Array.from({ length: 12 }, (_, i) => key(58 + i, `F${i + 1}`)),
+    items: [
+      ...Array.from({ length: 12 }, (_, i) => key(58 + i, `F${i + 1}`)),
+      // F13-F24 sit apart in the HID table; the vendor's own key list
+      // carries F13 as 104, so the boards take them as plain usages.
+      ...Array.from({ length: 12 }, (_, i) => key(104 + i, `F${i + 13}`)),
+    ],
   },
   {
     name: "Modifiers",
@@ -319,6 +324,7 @@ export const CODE_TO_USAGE: Record<string, number> = (() => {
   for (let i = 1; i <= 9; i++) m[`Digit${i}`] = 29 + i;
   m.Digit0 = 39;
   for (let i = 1; i <= 12; i++) m[`F${i}`] = 57 + i;
+  for (let i = 13; i <= 24; i++) m[`F${i}`] = 91 + i;
   for (let i = 1; i <= 9; i++) m[`Numpad${i}`] = 88 + i;
   return m;
 })();
