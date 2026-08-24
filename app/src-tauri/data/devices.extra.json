@@ -285,5 +285,33 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #27. Not in any vendor catalogue, old or current, so an extraction alone will not add it. The board's own product string is the generic 'Gaming Keyboard'; the owner names it as an Attack Shark X65HE ('Ataka Akul' is the brand's Russian name), but see _unknown: the name and the keymap disagree.",
+    "_evidence": "Read sweep from the owner's board (0.3.7 web build, f6dbcfb). identify 0x8F returns 0x0401 = 1025. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 (120, 120, 1680, 1680) at bytes 1..9 and auto-OS 0x97 answers 1. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. The keymap carries a full F row, a nav column and two knob slots, and matches Common81_TOP75CyberMax, the K75RGB's picture, 83 of 83 in slot order; every X65 the vendor lists is gen2, so the model name and the data disagree and the owner's confirmation decides. Profile count was not observable (0x85 shows the board sitting on profile 0), so it is pinned to 1. Edge light 0x88 answers with the X86's canned reply, and the X86 has no edge LEDs. 0xAD echoes the previous reply, so no display.",
+    "id": 1025,
+    "name": "attackshark_x65he",
+    "displayName": "X65HE",
+    "company": "AttackShark",
+    "vendor": "AttackShark",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "attackshark_x65he",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]
