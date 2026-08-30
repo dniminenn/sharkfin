@@ -26915,5 +26915,31 @@
       "screen": true,
       "sideLight": false
     }
+  },
+  {
+    "id": 1549,
+    "name": "monka_a75",
+    "displayName": "A75",
+    "company": "Monka",
+    "vendor": "Monka",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "monka_a75",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   }
 ]
