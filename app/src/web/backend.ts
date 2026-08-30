@@ -43,6 +43,8 @@ export interface DeviceSpec {
   /** The display, absent on a board without one. */
   screen?: ScreenSpec | null;
   features: DeviceFeatures;
+  /** An owner's read sweep from this board is on file. */
+  confirmed?: { issue: number; version: string } | null;
 }
 
 export interface ConnectedDevice {
