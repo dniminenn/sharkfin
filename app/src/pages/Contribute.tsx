@@ -49,6 +49,8 @@ export default function ContributePage({
   const [layoutCopied, setLayoutCopied] = useState(false);
   // No answer to identify means a 2.4 GHz receiver; nothing to report from it.
   const receiver = !device && !!unknown && unknown.deviceId === null;
+  // A board with an owner's sweep on file has nothing left to report.
+  const confirmed = device && !device.readOnly ? device.spec.confirmed : null;
 
   const copyLayout = async () => {
     if (!device || !inference) return;
@@ -124,6 +126,11 @@ export default function ContributePage({
               {t("This board stays read-only until its command set is known. A bundle is the first step.")}
             </p>
           )}
+          {confirmed && (
+            <p className="text-sm text-muted-foreground">
+              {t("This board is confirmed on hardware (issue #{issue}, sharkfin {version}). There is nothing to send unless something is wrong; a bug report still wants a bundle.", { issue: confirmed.issue, version: confirmed.version })}
+            </p>
+          )}
           {!device && unknown && unknown.deviceId !== null && (
             <p className="text-sm text-muted-foreground">
               {t("sharkfin does not know this board yet. A bundle is the first step to adding it.")}
@@ -168,13 +175,15 @@ export default function ContributePage({
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
                   3
                 </span>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
-                >
-                  <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
-                </Button>
+                {!confirmed && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
+                  >
+                    <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
+                  </Button>
+                )}
                 <Button
                   size="sm"
                   variant="outline"

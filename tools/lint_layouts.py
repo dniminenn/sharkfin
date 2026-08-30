@@ -27,6 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DEVICES = ROOT / "app/src-tauri/data/devices.json"
 EXTRA = ROOT / "app/src-tauri/data/devices.extra.json"
+CONFIRMED = ROOT / "app/src-tauri/data/confirmed.json"
 VENDOR_LAYOUTS = ROOT / "app/src/lib/layouts/vendor"
 
 # Mirrors KNOWN_FAMILIES in app/src-tauri/src/registry.rs plus the marker
@@ -96,6 +97,9 @@ def lint_registry(errors: list[str], warnings: list[str]) -> None:
         if kl and kl != "Unknown" and kl not in stems:
             warnings.append(f"device {did} ({d['name']}): keyLayout {kl} has no picture")
     by_id = {d["id"]: d for d in devices}
+    for c in json.loads(CONFIRMED.read_text("utf-8")):
+        if c["id"] not in by_id:
+            errors.append(f"confirmed.json id {c['id']} is not in devices.json")
     for x in json.loads(EXTRA.read_text("utf-8")):
         d = by_id.get(x["id"])
         if d is None:

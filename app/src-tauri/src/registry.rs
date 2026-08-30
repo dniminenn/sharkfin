@@ -54,6 +54,18 @@ pub struct DeviceSpec {
     #[serde(default)]
     pub screen: Option<ScreenSpec>,
     pub features: DeviceFeatures,
+    /// Set when an owner's read sweep from this board is on file
+    /// (`data/confirmed.json`). The vendor's data alone never sets it.
+    #[serde(default)]
+    pub confirmed: Option<Confirmation>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Confirmation {
+    pub id: u32,
+    pub issue: u32,
+    pub version: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -174,17 +186,29 @@ pub fn build_id() -> String {
 }
 
 static DEVICES_JSON: &str = include_str!("../data/devices.json");
+static CONFIRMED_JSON: &str = include_str!("../data/confirmed.json");
 
 /// A malformed registry must not take the app down; callers fall back to
 /// treating the board as unknown.
 pub fn all() -> Vec<DeviceSpec> {
-    match serde_json::from_str(DEVICES_JSON) {
+    let mut devices: Vec<DeviceSpec> = match serde_json::from_str(DEVICES_JSON) {
         Ok(v) => v,
         Err(e) => {
             log::error!("data/devices.json failed to parse: {e}");
+            return Vec::new();
+        }
+    };
+    let confirmed: Vec<Confirmation> = match serde_json::from_str(CONFIRMED_JSON) {
+        Ok(v) => v,
+        Err(e) => {
+            log::error!("data/confirmed.json failed to parse: {e}");
             Vec::new()
         }
+    };
+    for d in &mut devices {
+        d.confirmed = confirmed.iter().find(|c| c.id == d.id).cloned();
     }
+    devices
 }
 
 pub fn by_id(id: u32) -> Option<DeviceSpec> {
@@ -301,6 +325,24 @@ mod tests {
             assert!(!d.family.is_empty(), "device {} has no family", d.id);
             let known = matches!(d.family.as_str(), "yc500" | "gen2");
             assert_eq!(d.writes_supported(), known, "device {}", d.id);
+        }
+    }
+
+    #[test]
+    fn confirmations_name_registered_boards() {
+        let entries: Vec<Confirmation> =
+            serde_json::from_str(CONFIRMED_JSON).expect("confirmed.json parses");
+        for c in entries {
+            assert!(
+                by_id(c.id).is_some(),
+                "confirmed.json id {} is not in the registry",
+                c.id
+            );
+            assert!(
+                c.issue > 0 && !c.version.is_empty(),
+                "confirmed.json id {}",
+                c.id
+            );
         }
     }
 

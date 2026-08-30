@@ -17,6 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEVICES = ROOT / "app/src-tauri/data/devices.json"
+CONFIRMED = ROOT / "app/src-tauri/data/confirmed.json"
 VENDOR_LAYOUTS = ROOT / "app/src/lib/layouts/vendor"
 CANONICAL = {"Common80_k72x86"}
 
@@ -64,6 +65,7 @@ def write_markdown(
     drawn = sum(1 for d in rows if d["keyLayout"] in baked)
     auto = sum(1 for d in rows if d["keyLayout"] in geometry)
     writable = sum(1 for d in rows if d.get("family") in WRITABLE_FAMILIES)
+    confirmed = {c["id"]: c for c in json.loads(CONFIRMED.read_text("utf-8"))}
 
     out = [
         "# Board support",
@@ -76,6 +78,8 @@ def write_markdown(
         "**yes** is drawn out of the box, **auto** is drawn once sharkfin has",
         "matched the picture against your board and you have confirmed it,",
         "blank is a plain grid of key slots. All three work the same.",
+        "**Confirmed** names the issue where an owner sent a read sweep from",
+        "the board itself; blank means the entry rests on the vendor's data.",
         "",
         f"| | count |",
         f"|---|---:|",
@@ -83,14 +87,15 @@ def write_markdown(
         f"| writable | {writable} |",
         f"| drawn | {drawn} |",
         f"| drawn after confirmation | {auto} |",
+        f"| confirmed on hardware | {len(confirmed)} |",
         "",
-        "| board | id | usb | family | write | draw |",
-        "|---|---|---|---|---|---|",
+        "| board | id | usb | family | write | draw | confirmed |",
+        "|---|---|---|---|---|---|---|",
     ]
     for d in rows:
         fam = d.get("family", "unknown")
         out.append(
-            "| {} | {} | {:04x}:{:04x} | {} | {} | {} |".format(
+            "| {} | {} | {:04x}:{:04x} | {} | {} | {} | {} |".format(
                 label(d),
                 d["id"],
                 d["vendorId"],
@@ -98,6 +103,7 @@ def write_markdown(
                 fam,
                 "yes" if fam in WRITABLE_FAMILIES else "",
                 "yes" if d["keyLayout"] in baked else "auto" if d["keyLayout"] in geometry else "",
+                f"#{confirmed[d['id']]['issue']}" if d["id"] in confirmed else "",
             )
         )
     out.append("")

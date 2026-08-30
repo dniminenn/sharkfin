@@ -107,6 +107,12 @@ The script:
   carries only the fields it replaces, usually `keyLayout`. Each entry
   records its own evidence in `_` keys, which are stripped on merge.
   `hand_added_boards_survive_a_regeneration` fails if a run drops one.
+- `app/src-tauri/data/confirmed.json` is separate and untouched by
+  regeneration: one line per board whose owner sent a read sweep in an
+  issue, with the issue number and app version. It marks the board
+  **confirmed** in `docs/BOARDS.md` and the Contribute page stops asking
+  for a board report on it. Add a line when a clean bundle for a
+  registered board comes in.
 - Keeps any layout file marked `"local": true`. Those are hand-made from
   hardware evidence for boards no vendor layout fits, and regeneration
   neither deletes nor overwrites them. The name must not match a vendor
