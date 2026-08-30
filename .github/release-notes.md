@@ -1,20 +1,17 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.3.7
+## What changed in 0.4.0
 
-**sharkfin speaks Bahasa Indonesia and Brazilian Portuguese.** The app
-picks the language from your system and you can change it at the bottom
-of the sidebar. The board list at
-[getsharkfin.com](https://getsharkfin.com/) has the same three languages.
-Board names, key labels and technical values stay as they are. Spotted a
-translation that reads wrong? Open an issue.
+**Per-key colour on gen2 boards.** The Paint page now writes to boards
+in the gen2 family, not only yc500. The upload format comes from the
+board firmware and is documented in `docs/PROTOCOL.md`.
 
-**The browser version works offline.** Load
-[app.getsharkfin.com](https://app.getsharkfin.com/) once and it keeps
-working without a connection, and your browser can install it like an
-app.
+**F13 to F24** can be assigned to keys.
 
-The registry is 951 boards.
+**Plugging in the 2.4 GHz receiver** now says so, and tells you to use
+the cable, instead of offering a board report.
+
+The registry is 952 boards.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,

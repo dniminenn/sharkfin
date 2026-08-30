@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 [package]
 name = "sharkfin-web"
-version = "0.3.7"
+version = "0.4.0"
 description = "Browser build of sharkfin: the same protocol core over WebHID"
 edition = "2021"
 license = "GPL-3.0-or-later"
