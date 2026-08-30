@@ -1,17 +1,18 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.4.0
+## What changed in 0.4.1
 
-**Per-key colour on gen2 boards.** The Paint page now writes to boards
-in the gen2 family, not only yc500. The upload format comes from the
-board firmware and is documented in `docs/PROTOCOL.md`.
+**Monka A75** is supported (device id 1549). It has no built-in picture
+yet: the Keys page matches one against the board and asks you to confirm
+it.
 
-**F13 to F24** can be assigned to keys.
+**Boards confirmed on hardware.** When an owner sends a read sweep from
+a board, that board is marked confirmed in
+[docs/BOARDS.md](https://github.com/dniminenn/sharkfin/blob/master/docs/BOARDS.md)
+and the Contribute page stops asking for a board report on it. Bug
+reports still work the same way.
 
-**Plugging in the 2.4 GHz receiver** now says so, and tells you to use
-the cable, instead of offering a board report.
-
-The registry is 952 boards.
+The registry is 953 boards.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
