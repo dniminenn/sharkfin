@@ -157,7 +157,7 @@ export default function App() {
                     t("Unplug, wait 10s, plug back in")
                   ) : unknown ? (
                     <Badge variant="outline" className="mt-1">
-                      {t("not in the registry")}
+                      {unknown.deviceId === null ? t("receiver") : t("not in the registry")}
                     </Badge>
                   ) : (
                     t("Connect by cable")

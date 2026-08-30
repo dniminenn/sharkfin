@@ -47,6 +47,8 @@ export default function ContributePage({
   const [copied, setCopied] = useState(false);
   const { pending, inference } = useBoardLayout(device);
   const [layoutCopied, setLayoutCopied] = useState(false);
+  // No answer to identify means a 2.4 GHz receiver; nothing to report from it.
+  const receiver = !device && !!unknown && unknown.deviceId === null;
 
   const copyLayout = async () => {
     if (!device || !inference) return;
@@ -109,7 +111,11 @@ export default function ContributePage({
               {device.readOnly ? t("read-only") : t("id {id}", { id: device.deviceId })}
             </Badge>
           ) : (
-            unknown && <Badge variant="outline">{t("not in the registry")}</Badge>
+            unknown && (
+              <Badge variant="outline">
+                {receiver ? t("receiver") : t("not in the registry")}
+              </Badge>
+            )
           )}
         </CardHeader>
         <CardContent className="space-y-4">
@@ -123,61 +129,63 @@ export default function ContributePage({
               {t("sharkfin does not know this board yet. A bundle is the first step to adding it.")}
             </p>
           )}
-          {!device && unknown && unknown.deviceId === null && (
+          {receiver && (
             <p className="text-sm text-muted-foreground">
-              {t("This did not answer when asked what it is. That usually means it is a 2.4 GHz receiver rather than the keyboard: settings only travel over the cable, so plug the keyboard in directly and it should appear. If it is already on a cable, the board speaks a different protocol and a bundle is still worth sending.")}
+              {t("This is the 2.4 GHz receiver, not the keyboard. sharkfin only talks to the keyboard over a USB cable. Unplug the receiver, connect the keyboard with its cable, and it will appear here.")}
             </p>
           )}
 
-          <ol className="space-y-3 text-sm">
-            <li className="flex items-center gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
-                1
-              </span>
-              <Button size="sm" onClick={collect} disabled={busy || (!device && !unknown)}>
-                <FileDown className="mr-1 h-3.5 w-3.5" />
-                {busy ? t("Reading board…") : t("Collect data bundle")}
-              </Button>
-              {!device && !unknown && (
-                <span className="text-muted-foreground">
-                  {t("connect a keyboard by USB cable")}
+          {!receiver && (
+            <ol className="space-y-3 text-sm">
+              <li className="flex items-center gap-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
+                  1
                 </span>
-              )}
-            </li>
-            <li className="flex items-center gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
-                2
-              </span>
-              <Button size="sm" variant="outline" onClick={copy} disabled={!bundle}>
-                {copied ? (
-                  <Check className="mr-1 h-3.5 w-3.5" />
-                ) : (
-                  <Copy className="mr-1 h-3.5 w-3.5" />
+                <Button size="sm" onClick={collect} disabled={busy || (!device && !unknown)}>
+                  <FileDown className="mr-1 h-3.5 w-3.5" />
+                  {busy ? t("Reading board…") : t("Collect data bundle")}
+                </Button>
+                {!device && !unknown && (
+                  <span className="text-muted-foreground">
+                    {t("connect a keyboard by USB cable")}
+                  </span>
                 )}
-                {copied ? t("Copied") : t("Copy")}
-              </Button>
-            </li>
-            <li className="flex flex-wrap items-center gap-3">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
-                3
-              </span>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
-              >
-                <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => openUrl(issueUrl(device, unknown, "bug"))}
-              >
-                <Bug className="mr-1 h-3.5 w-3.5" /> {t("Report a bug")}
-              </Button>
-              <span className="text-muted-foreground">{t("then paste")}</span>
-            </li>
-          </ol>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
+                  2
+                </span>
+                <Button size="sm" variant="outline" onClick={copy} disabled={!bundle}>
+                  {copied ? (
+                    <Check className="mr-1 h-3.5 w-3.5" />
+                  ) : (
+                    <Copy className="mr-1 h-3.5 w-3.5" />
+                  )}
+                  {copied ? t("Copied") : t("Copy")}
+                </Button>
+              </li>
+              <li className="flex flex-wrap items-center gap-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
+                  3
+                </span>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
+                >
+                  <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => openUrl(issueUrl(device, unknown, "bug"))}
+                >
+                  <Bug className="mr-1 h-3.5 w-3.5" /> {t("Report a bug")}
+                </Button>
+                <span className="text-muted-foreground">{t("then paste")}</span>
+              </li>
+            </ol>
+          )}
         </CardContent>
       </Card>
 
