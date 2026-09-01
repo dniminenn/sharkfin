@@ -73,9 +73,10 @@ pub mod cmd {
     pub const GET_OLED_VERSION: u8 = 0xAD;
 
     /// Erases the whole flash chip, pictures and all, and takes about 55
-    /// seconds. It is a *write* sitting in the read range, the only one in
-    /// either family, and on yc500 the same byte is an ordinary read. Never
-    /// send it while sweeping, and never on a board of unknown family.
+    /// seconds. It is a write sitting in the read range. On yc500 the
+    /// RT100 image routes it onto the same flag as 0x2C, so it is not the
+    /// read the vendor's table once claimed. Never send it while sweeping,
+    /// and never on a board of unknown family.
     pub const GEN2_FLASH_CHIP_ERASE: u8 = 0xAC;
 }
 
