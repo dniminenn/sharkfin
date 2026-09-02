@@ -26941,5 +26941,31 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 1721,
+    "name": "machenike_k600_b82",
+    "displayName": "K600-B82",
+    "company": "Machenike",
+    "vendor": "Machenike",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "machenike_k600_b82",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   }
 ]
