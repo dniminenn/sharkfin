@@ -1,18 +1,12 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.4.1
+## What changed in 0.4.2
 
-**Monka A75** is supported (device id 1549). It has no built-in picture
-yet: the Keys page matches one against the board and asks you to confirm
-it.
+**Machenike K600-B82** is supported (device id 1721). It has no built-in
+picture yet: the Keys page matches one against the board and asks you to
+confirm it.
 
-**Boards confirmed on hardware.** When an owner sends a read sweep from
-a board, that board is marked confirmed in
-[docs/BOARDS.md](https://github.com/dniminenn/sharkfin/blob/master/docs/BOARDS.md)
-and the Contribute page stops asking for a board report on it. Bug
-reports still work the same way.
-
-The registry is 953 boards.
+The registry is 954 boards.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
