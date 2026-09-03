@@ -15,7 +15,7 @@ the board itself; blank means the entry rests on the vendor's data.
 |---|---:|
 | total | 954 |
 | writable | 950 |
-| drawn | 185 |
+| drawn | 186 |
 | drawn after confirmation | 739 |
 | confirmed on hardware | 1 |
 
@@ -440,7 +440,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | LTCFn KF202 | 2397 | 3151:5025 | gen2 | yes | auto |  |
 | Luoyika K98 | 3532 | 3151:5025 | gen2 | yes | auto |  |
 | M4G MAG 68 HE | 3017 | 3151:5029 | gen2 | yes | auto |  |
-| Machenike K600-B82 | 1721 | 3151:4015 | yc500 | yes |  |  |
+| Machenike K600-B82 | 1721 | 3151:4015 | yc500 | yes | yes |  |
 | MageGee AIR68 | 3146 | 3151:5030 | gen2 | yes | auto |  |
 | MageGee CAPTAIN87 | 2789 | 3151:5030 | gen2 | yes | auto |  |
 | MageGee Gaming Keyboard | 2677 | 3151:5030 | gen2 | yes | auto |  |

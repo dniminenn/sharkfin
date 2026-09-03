@@ -401,24 +401,33 @@ mod tests {
     /// fall back to a bare slot grid with nothing failing in between.
     #[test]
     fn local_layouts_stay_local() {
-        static CHRONOS: &str = include_str!("../../src/lib/layouts/vendor/Local68_Chronos68.json");
-        let v: serde_json::Value = serde_json::from_str(CHRONOS).expect("parses");
-        assert_eq!(v["local"], serde_json::json!(true), "lost its local flag");
-
-        let named: Vec<u32> = all()
-            .iter()
-            .filter(|d| d.key_layout.starts_with("Local"))
-            .map(|d| d.id)
-            .collect();
-        assert!(
-            named.contains(&2446),
-            "no board points at a local layout, so nothing keeps it honest"
-        );
-        for id in named {
-            let d = by_id(id).unwrap();
+        static LOCAL: &[(&str, &str)] = &[
+            (
+                "Local68_Chronos68",
+                include_str!("../../src/lib/layouts/vendor/Local68_Chronos68.json"),
+            ),
+            (
+                "Local82_K600B82",
+                include_str!("../../src/lib/layouts/vendor/Local82_K600B82.json"),
+            ),
+        ];
+        for (name, text) in LOCAL {
+            let v: serde_json::Value = serde_json::from_str(text).expect("parses");
             assert_eq!(
-                d.key_layout, "Local68_Chronos68",
-                "device {id} names a local layout this test does not check exists"
+                v["local"],
+                serde_json::json!(true),
+                "{name} lost its local flag"
+            );
+            assert!(
+                all().iter().any(|d| d.key_layout == *name),
+                "no board points at {name}, so nothing keeps it honest"
+            );
+        }
+        for d in all().iter().filter(|d| d.key_layout.starts_with("Local")) {
+            assert!(
+                LOCAL.iter().any(|(name, _)| *name == d.key_layout),
+                "device {} names a local layout this test does not check exists",
+                d.id
             );
         }
     }
