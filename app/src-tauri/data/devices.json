@@ -26993,5 +26993,35 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 957,
+    "name": "darmoshark_top75",
+    "displayName": "Top75",
+    "company": "Darmoshark",
+    "vendor": "Darmoshark",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "darmoshark_top75",
+    "keyLayout": "Local81_DarmosharkTop75",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    },
+    "screen": null
   }
 ]
