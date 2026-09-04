@@ -397,5 +397,37 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported by the board's owner. Darmoshark is absent from the vendor device tables, so an extraction alone will not add it. The vendor OTA API does publish firmware for id 957 (v113_oledv108). The board's product string is the generic 'Gaming Keyboard' and it shares 3151:4015 with 89 other entries, so USB alone cannot name it; the owner identifies it as a Darmoshark Top75. First Darmoshark board in the registry.",
+    "_evidence": "Read sweep from the owner's board (0.4.2, 652bbef). identify 0x8F returns 0x03bd = 957. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 (120, 120, 1680, 1680) at bytes 1..8; auto-OS 0x97 answers 0. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86. Debounce 0x91 answers 7 at byte 2, inside the documented 1..10 range, so debounce is live here where the K600-B82 (1721) echoed. Local81_DarmosharkTop75 is baked from that keymap on the TOP75CyberMax geometry, 84/84 keys matched: same body, but the F row sits one matrix column later than the CyberMax and the bottom row one earlier, so no shipped picture's slot data fits. The baked table appears byte for byte in that firmware image at 0x34f8c and in eight copies from 0x3ff00, recorded in matrix-evidence.json, so the picture is confirmed by the device's own firmware. The image begins with the yc500 stub, as the RT100 and X85PRO images do.",
+    "_unknown": "Profile count was not observable (0x85 shows profile 0), so it is pinned to 1. The owner confirms a TFT screen and 0xAD answers 08 01 rather than echoing, so screen is on, but its geometry was not read and 128x128, 160x80, 240x135 and 320x172 all ship, so the spec stays absent. Edge light 0x88 answers a plausible state, but the owner reports no edge LEDs, so sideLight stays off. The keymap fills 86 slots, four more than the body has keys: Fn at 65, a knob press (consumer Mute at 84) and two knob turns (consumer 0xEA/0xE9 at 90 and 91), plus slots 10 and 75 carrying NonUsBackslash and NonUsHash. The owner confirms an ANSI body with a full left Shift, so those two are the unfitted ISO positions and sit in matrixEntriesWithoutUIKey. Reported with 0.4.2, before the receiver link: over its own 2.4G receiver (3151:4011) that version found no device. 0.5.0 relays through the receiver and has not been tried on this board. The knob is the owner's word plus the three consumer slots; which way the turns map is not established.",
+    "id": 957,
+    "name": "darmoshark_top75",
+    "displayName": "Top75",
+    "company": "Darmoshark",
+    "vendor": "Darmoshark",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "darmoshark_top75",
+    "keyLayout": "Local81_DarmosharkTop75",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
   }
 ]
