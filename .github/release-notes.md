@@ -1,19 +1,26 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.4.2
+## What changed in 0.5.0
 
-**Machenike K600-B82** is supported (device id 1721). It has no built-in
+**The 2.4 GHz receiver works.** Plug in the receiver instead of the
+cable and sharkfin reads and writes through it: keys, lighting, macros,
+settings and per-key colour. The Device tab shows the link and the
+keyboard's battery. If the keyboard has dozed off, press a key. Factory
+reset and display pictures still need the cable. Tested on one board so
+far. If yours does not answer through its receiver, use the cable.
+
+**Fire Phoenix BK-11** is supported (device id 2570). It has no built-in
 picture yet: the Keys page matches one against the board and asks you to
 confirm it.
 
-The registry is 954 boards.
+The registry is 955 boards.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
 Edge or another Chromium browser. Same app, same keyboard.
 
-Plug the keyboard in with a USB cable. There is no config
-interface over 2.4 GHz or Bluetooth.
+Use a USB cable or the 2.4 GHz receiver. Bluetooth has no settings
+channel.
 
 **Linux** needs a udev rule before either the app or the browser
 can reach the keyboard. The .deb and .rpm install it; replug the

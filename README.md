@@ -33,8 +33,8 @@ channel. Factory reset and display pictures need the cable. sharkfin never flash
 
 **Alpha, so back up first.**
 
-945 of 949 accept changes, 4 are read-only. 185 are drawn out of the box
-and 737 more after a one-time check against your board; the rest show a
+951 of 955 accept changes, 4 are read-only. 186 are drawn out of the box
+and 739 more after a one-time check against your board; the rest show a
 slot grid.
 
 The check exists because two boards can share one picture and still
