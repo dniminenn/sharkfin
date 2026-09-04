@@ -21,8 +21,8 @@ use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 
 use protocol::{
-    cmd, family_cmds, Checksum, FamilyCmds, KbOptions, LedParam, Macro, SledParam, SleepTimes,
-    REPORT_LEN,
+    cmd, family_cmds, receiver, Checksum, FamilyCmds, KbOptions, LedParam, Macro, SledParam,
+    SleepTimes, REPORT_LEN,
 };
 use registry::DeviceSpec;
 
@@ -80,6 +80,8 @@ enum HidErr {
     /// fixes, so it is treated exactly like the desktop's stall path.
     Stall(String),
     NoHandshake,
+    KeyboardOffline,
+    ReceiverBusy,
     ShortRead(usize),
     Protocol(String),
 }
@@ -89,6 +91,11 @@ impl std::fmt::Display for HidErr {
         match self {
             HidErr::Stall(m) => write!(f, "webhid: {m}"),
             HidErr::NoHandshake => write!(f, "device did not answer the identify handshake"),
+            HidErr::KeyboardOffline => write!(
+                f,
+                "the receiver is paired, but the keyboard is asleep or switched off"
+            ),
+            HidErr::ReceiverBusy => write!(f, "the receiver did not accept a packet to relay"),
             HidErr::ShortRead(n) => write!(f, "short feature report ({n} bytes)"),
             HidErr::Protocol(m) => write!(f, "{m}"),
         }
@@ -116,9 +123,27 @@ fn js_err_text(e: JsValue) -> String {
 const MIN_WRITE_GAP_MS: f64 = 12.0;
 const SETTLE_MS: f64 = 10.0;
 
+/// Receiver bookkeeping, same numbers and reasoning as hid.rs.
+const RECEIVER_SEND_DEADLINE_MS: f64 = 500.0;
+const RECEIVER_READ_DEADLINE_MS: f64 = 1000.0;
+const RECEIVER_TICK_MS: f64 = 5.0;
+const RECEIVER_REST_MS: f64 = 10.0;
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+enum Link {
+    Usb,
+    Receiver,
+}
+
 struct Transport {
     dev: JsHidDevice,
     last_write: std::cell::Cell<f64>,
+    /// Set once identify has succeeded through the receiver's relay; every
+    /// send and read then goes through the select/release handshake.
+    relay: std::cell::Cell<bool>,
+    /// The receiver keeps its relay target until told otherwise.
+    selected: std::cell::Cell<bool>,
 }
 
 impl Transport {
@@ -130,7 +155,91 @@ impl Transport {
         self.last_write.set(js_now());
     }
 
+    fn link(&self) -> Link {
+        if self.relay.get() {
+            Link::Receiver
+        } else {
+            Link::Usb
+        }
+    }
+
     async fn send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidErr> {
+        if self.relay.get() {
+            self.relay_send(buf).await
+        } else {
+            self.raw_send(buf).await
+        }
+    }
+
+    async fn read(&self) -> Result<[u8; REPORT_LEN], HidErr> {
+        if self.relay.get() {
+            self.relay_read().await
+        } else {
+            self.raw_read().await
+        }
+    }
+
+    /// The receiver's own status; `None` when the node is a keyboard on a
+    /// cable.
+    async fn receiver_status(&self) -> Result<Option<receiver::Status>, HidErr> {
+        self.raw_send(&receiver::status_packet()).await?;
+        sleep_ms(RECEIVER_REST_MS).await;
+        Ok(receiver::parse_status(&self.raw_read().await?))
+    }
+
+    async fn relay_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidErr> {
+        let deadline = js_now() + RECEIVER_SEND_DEADLINE_MS;
+        let mut ready = false;
+        loop {
+            match self.receiver_status().await? {
+                Some(s) if !s.keyboard_online => return Err(HidErr::KeyboardOffline),
+                Some(s) if s.can_send => {
+                    ready = true;
+                    break;
+                }
+                _ => {}
+            }
+            if js_now() >= deadline {
+                break;
+            }
+            sleep_ms(RECEIVER_TICK_MS).await;
+        }
+        if !ready {
+            self.selected.set(false);
+            return Err(HidErr::ReceiverBusy);
+        }
+        if !self.selected.get() {
+            self.raw_send(&receiver::select_keyboard_packet()).await?;
+            sleep_ms(RECEIVER_REST_MS).await;
+            self.selected.set(true);
+        }
+        self.raw_send(buf).await
+    }
+
+    async fn relay_read(&self) -> Result<[u8; REPORT_LEN], HidErr> {
+        let deadline = js_now() + RECEIVER_READ_DEADLINE_MS;
+        let mut ready = false;
+        loop {
+            if matches!(self.receiver_status().await?, Some(s) if s.reply_ready) {
+                ready = true;
+                break;
+            }
+            if js_now() >= deadline {
+                break;
+            }
+            sleep_ms(RECEIVER_TICK_MS).await;
+        }
+        if !ready {
+            return Err(HidErr::NoHandshake);
+        }
+        self.raw_send(&receiver::release_packet()).await?;
+        sleep_ms(RECEIVER_REST_MS).await;
+        self.raw_read().await
+    }
+
+    /// One feature report to whatever is on the other end of the node: the
+    /// keyboard by cable, or the receiver itself.
+    async fn raw_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidErr> {
         self.pace().await;
         let arr = js_sys::Uint8Array::new_with_length(REPORT_LEN as u32);
         arr.copy_from(buf);
@@ -140,7 +249,7 @@ impl Transport {
             .map_err(|e| HidErr::Stall(js_err_text(e)))
     }
 
-    async fn read(&self) -> Result<[u8; REPORT_LEN], HidErr> {
+    async fn raw_read(&self) -> Result<[u8; REPORT_LEN], HidErr> {
         let dv = JsFuture::from(self.dev.receive_feature_report(0))
             .await
             .map_err(|e| HidErr::Stall(js_err_text(e)))?;
@@ -209,18 +318,45 @@ impl Transport {
         self.read().await
     }
 
-    async fn identify(&self) -> Result<u32, HidErr> {
+    async fn try_identify(&self) -> Option<u32> {
         for _ in 0..3 {
             if let Ok(reply) = self
                 .roundtrip(cmd::GET_USB_VERSION, &[], Checksum::Bit7)
                 .await
             {
                 if let Some(id) = protocol::parse_device_id(&reply) {
-                    return Ok(id);
+                    return Some(id);
                 }
             }
         }
-        Err(HidErr::NoHandshake)
+        None
+    }
+
+    /// 0x8F identify. A node that does not answer by cable is asked whether
+    /// it is a receiver, and identify is repeated through the relay when it
+    /// is one with a keyboard awake. Same shape as hid.rs.
+    async fn identify(&self) -> Result<u32, HidErr> {
+        if self.relay.get() {
+            return self.try_identify().await.ok_or(HidErr::NoHandshake);
+        }
+        if let Some(id) = self.try_identify().await {
+            return Ok(id);
+        }
+        let Some(status) = self.receiver_status().await? else {
+            return Err(HidErr::NoHandshake);
+        };
+        if !status.has_keyboard || !status.keyboard_online {
+            return Err(HidErr::KeyboardOffline);
+        }
+        self.relay.set(true);
+        self.selected.set(false);
+        match self.try_identify().await {
+            Some(id) => Ok(id),
+            None => {
+                self.relay.set(false);
+                Err(HidErr::NoHandshake)
+            }
+        }
     }
 }
 
@@ -247,6 +383,8 @@ pub const STALL_MESSAGE: &str =
 struct Open {
     transport: Rc<Transport>,
     spec: DeviceSpec,
+    /// Reported by the receiver at connect; there is no such number by cable.
+    battery: Option<u8>,
 }
 
 #[derive(Default)]
@@ -311,6 +449,17 @@ fn get_open(require_writable: bool) -> Result<(Rc<Transport>, DeviceSpec), Strin
 
 fn need(fc: Option<&'static FamilyCmds>) -> Result<&'static FamilyCmds, HidErr> {
     fc.ok_or_else(|| HidErr::Protocol("this board's protocol family is unknown".into()))
+}
+
+/// Factory reset and screen frames wait for the cable; same reasoning as
+/// commands.rs::require_cable.
+fn require_cable() -> Result<(), String> {
+    STATE.with(|s| match &s.borrow().open {
+        Some(open) if open.transport.link() == Link::Receiver => {
+            Err("Not over the receiver yet: connect the keyboard by cable for this.".into())
+        }
+        _ => Ok(()),
+    })
 }
 
 /// Error mapping shared by every command: a stalled endpoint invalidates the
@@ -388,6 +537,10 @@ struct ConnectedInfo {
     device_id: u32,
     spec: DeviceSpec,
     read_only: bool,
+    /// Cable, or the 2.4 GHz receiver's relay. Factory reset needs the cable.
+    link: Link,
+    /// Percent, receiver link only.
+    battery: Option<u8>,
 }
 
 #[derive(serde::Serialize)]
@@ -425,23 +578,45 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
     let transport = Transport {
         dev: device,
         last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
+        relay: std::cell::Cell::new(false),
+        selected: std::cell::Cell::new(false),
     };
     let id = match transport.identify().await {
         Ok(id) => id,
+        Err(HidErr::KeyboardOffline) => {
+            return Err(connect_err(
+                "keyboardOffline",
+                None,
+                HidErr::KeyboardOffline.to_string(),
+            ))
+        }
         Err(e) => return Err(connect_err("noHandshake", None, e.to_string())),
     };
     match registry::by_id(id) {
         Some(spec) => {
+            let battery = if transport.link() == Link::Receiver {
+                transport
+                    .receiver_status()
+                    .await
+                    .ok()
+                    .flatten()
+                    .map(|s| s.keyboard_battery)
+            } else {
+                None
+            };
             let info = ConnectedInfo {
                 path: "webhid".into(),
                 device_id: id,
                 read_only: !spec.writes_supported(),
                 spec: spec.clone(),
+                link: transport.link(),
+                battery,
             };
             STATE.with(|s| {
                 s.borrow_mut().open = Some(Open {
                     transport: Rc::new(transport),
                     spec,
+                    battery,
                 });
             });
             to_js(&info)
@@ -486,6 +661,8 @@ pub fn status() -> Result<JsValue, JsValue> {
                 device_id: o.spec.id,
                 read_only: !o.spec.writes_supported(),
                 spec: o.spec.clone(),
+                link: o.transport.link(),
+                battery: o.battery,
             }),
             stalled: s.stalled,
         })
@@ -836,6 +1013,7 @@ pub async fn set_auto_os(enabled: bool) -> Result<(), JsValue> {
 
 #[wasm_bindgen]
 pub async fn factory_reset() -> Result<(), JsValue> {
+    require_cable()?;
     gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
@@ -863,6 +1041,7 @@ const SCREEN_READY_GAP_MS: f64 = 100.0;
 /// Lands in flash, so it takes the flash cooldown.
 #[wasm_bindgen]
 pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
+    require_cable()?;
     let (screen, rules) = {
         let (_, spec) = get_open(false)?;
         (
@@ -1323,6 +1502,8 @@ pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
     let t = Transport {
         dev: device,
         last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
+        relay: std::cell::Cell::new(false),
+        selected: std::cell::Cell::new(false),
     };
     let mut out = String::new();
     let _ = writeln!(out, "```");

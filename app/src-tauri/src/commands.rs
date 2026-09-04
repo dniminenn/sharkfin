@@ -5,7 +5,7 @@ use std::time::{Duration, Instant};
 use parking_lot::Mutex;
 use serde::Serialize;
 
-use crate::hid::{self, HidError, Transport};
+use crate::hid::{self, HidError, Link, Transport};
 use crate::protocol::{
     cmd, family_cmds, Checksum, FamilyCmds, KbOptions, LedParam, Macro, SledParam, SleepTimes,
 };
@@ -35,6 +35,22 @@ struct OpenDevice {
     spec: DeviceSpec,
     /// Last time the device demonstrably answered.
     last_ok: Instant,
+    /// Reported by the receiver alongside identify; there is no such number
+    /// by cable.
+    battery: Option<u8>,
+}
+
+impl OpenDevice {
+    fn connected(&self) -> ConnectedDevice {
+        ConnectedDevice {
+            path: self.path.clone(),
+            device_id: self.spec.id,
+            read_only: !self.spec.writes_supported(),
+            spec: self.spec.clone(),
+            link: self.transport.link(),
+            battery: self.battery,
+        }
+    }
 }
 
 /// How long a successful exchange vouches for the connection. Below this,
@@ -107,6 +123,10 @@ pub struct ConnectedDevice {
     pub spec: DeviceSpec,
     /// Families whose opcodes aren't established never accept writes.
     pub read_only: bool,
+    /// Cable, or the 2.4 GHz receiver's relay. Factory reset needs the cable.
+    pub link: Link,
+    /// Percent, receiver link only.
+    pub battery: Option<u8>,
 }
 
 #[derive(Serialize)]
@@ -130,6 +150,9 @@ pub struct ScanResult {
     /// The firmware stalled and the board must be replugged. Nothing is
     /// retried while this is set.
     pub stalled: bool,
+    /// A receiver is plugged in and paired, but its keyboard is asleep or
+    /// switched off. A key press wakes it; so does the cable.
+    pub keyboard_offline: bool,
 }
 
 /// Light mode that displays an uploaded per-key pattern.
@@ -154,8 +177,14 @@ impl Inner {
     }
 }
 
+// Every command is `async` so Tauri runs it off the main thread. A command
+// on the main thread blocks the window for as long as the board takes to
+// answer: ten milliseconds by cable, but through the 2.4 GHz receiver each
+// exchange waits about 150 ms on the radio, which freezes animation and
+// scrolling for every read.
+
 /// Open and identify the first recognized board; frontend polls this.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
     let mut inner = state.inner.lock();
 
@@ -165,17 +194,18 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
             if !fresh {
                 open.last_ok = Instant::now();
             }
-            let open = inner.open.as_ref().unwrap();
+            let open = inner.open.as_mut().unwrap();
+            if open.transport.link() == Link::Receiver {
+                // The receiver answers this itself, so it costs the keyboard
+                // nothing; the number drifts while the board charges.
+                open.battery = receiver_battery(&open.transport);
+            }
             return Ok(ScanResult {
-                connected: Some(ConnectedDevice {
-                    path: open.path.clone(),
-                    device_id: open.spec.id,
-                    read_only: !open.spec.writes_supported(),
-                    spec: open.spec.clone(),
-                }),
+                connected: Some(open.connected()),
                 unknown: vec![],
                 open_failed: false,
                 stalled: false,
+                keyboard_offline: false,
             });
         }
         inner.open = None;
@@ -197,6 +227,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                 unknown: vec![],
                 open_failed: false,
                 stalled: true,
+                keyboard_offline: false,
             });
         }
     }
@@ -204,6 +235,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
     let mut unknown = Vec::new();
     let mut connected = None;
     let mut open_failed = false;
+    let mut keyboard_offline = false;
 
     for d in found {
         let api = inner.api.as_ref().unwrap();
@@ -218,18 +250,20 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
         match transport.identify() {
             Ok(id) => match registry::by_id(id) {
                 Some(spec) => {
-                    connected = Some(ConnectedDevice {
-                        path: d.path.clone(),
-                        device_id: id,
-                        read_only: !spec.writes_supported(),
-                        spec: spec.clone(),
-                    });
-                    inner.open = Some(OpenDevice {
+                    let battery = if transport.link() == Link::Receiver {
+                        receiver_battery(&transport)
+                    } else {
+                        None
+                    };
+                    let open = OpenDevice {
                         path: d.path,
                         transport,
                         spec,
                         last_ok: Instant::now(),
-                    });
+                        battery,
+                    };
+                    connected = Some(open.connected());
+                    inner.open = Some(open);
                     break;
                 }
                 None => unknown.push(DiscoveredUnknown {
@@ -239,6 +273,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                     device_id: Some(id),
                 }),
             },
+            Err(HidError::KeyboardOffline) => keyboard_offline = true,
             Err(_) => unknown.push(DiscoveredUnknown {
                 path: d.path,
                 product_id: d.product_id,
@@ -253,7 +288,30 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
         unknown,
         open_failed,
         stalled: false,
+        keyboard_offline,
     })
+}
+
+fn receiver_battery(t: &Transport) -> Option<u8> {
+    t.receiver_status()
+        .ok()
+        .flatten()
+        .map(|s| s.keyboard_battery)
+}
+
+/// Factory reset waits for the cable: a bare opcode with no read-back, not
+/// sent through a receiver, on a link that drops a packet when the board has
+/// dozed off between the status poll and the send. Screen frames wait too:
+/// a thousand pages over a link that drops one when the board dozes, and the
+/// vendor's own app disables picture upload in wireless mode.
+fn require_cable(state: &tauri::State<AppState>) -> Result<(), String> {
+    let inner = state.inner.lock();
+    match &inner.open {
+        Some(open) if open.transport.link() == Link::Receiver => {
+            Err("Not over the receiver yet: connect the keyboard by cable for this.".into())
+        }
+        _ => Ok(()),
+    }
 }
 
 /// The two families assign the same opcodes to different registers, so a
@@ -332,7 +390,7 @@ fn with_writable<T>(
     run(state, true, f)
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn get_led_param(state: tauri::State<AppState>) -> Result<LedParam, String> {
     with_open(&state, |t, _| {
         let reply = t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)?;
@@ -349,7 +407,7 @@ pub fn set_led_param(state: tauri::State<AppState>, param: LedParam) -> Result<(
     })
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
     with_open(&state, |t, fc| {
         let reply = t.roundtrip(need(fc)?.get_profile, &[], Checksum::Bit7)?;
@@ -363,7 +421,7 @@ pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
 /// families, so it is safe to send without knowing which one this is. An
 /// unimplemented command echoes the previous reply rather than failing, so
 /// a reply that does not lead with the opcode is a board with no display.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn get_screen_version(state: tauri::State<AppState>) -> Result<Option<u16>, String> {
     with_open(&state, |t, _| {
         let reply = t.roundtrip(crate::protocol::cmd::GET_OLED_VERSION, &[], Checksum::Bit7)?;
@@ -453,17 +511,17 @@ fn key_write_packet(
 }
 
 /// Which build this is, for the UI to show and a reporter to quote.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn build_id() -> String {
     registry::build_id()
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn read_keymap(state: tauri::State<AppState>, profile: u8) -> Result<Vec<u8>, String> {
     with_open(&state, |t, fc| read_matrix(t, need(fc)?, profile, false))
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn read_fn_keymap(state: tauri::State<AppState>, layer: u8) -> Result<Vec<u8>, String> {
     with_open(&state, |t, fc| read_matrix(t, need(fc)?, layer, true))
 }
@@ -505,7 +563,7 @@ pub struct DeviceSettings {
     pub side_light: Option<SledParam>,
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn get_settings(state: tauri::State<AppState>) -> Result<DeviceSettings, String> {
     let has_side_light = {
         let inner = state.inner.lock();
@@ -644,6 +702,7 @@ pub const MAX_PROFILES: u8 = 8;
 /// needs a few seconds; the frontend re-reads afterwards.
 #[tauri::command(async)]
 pub fn factory_reset(state: tauri::State<AppState>) -> Result<(), String> {
+    require_cable(&state)?;
     write_gap(&state, SETTING_GAP);
     with_writable(&state, |t, fc| {
         let pkt = crate::protocol::packet(need(fc)?.set_reset, &[], Checksum::Bit7);
@@ -816,6 +875,7 @@ const SCREEN_READY_GAP: Duration = Duration::from_millis(100);
 /// frame going out at the board's expense.
 #[tauri::command(async)]
 pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result<(), String> {
+    require_cable(&state)?;
     let (screen, rules) = {
         let inner = state.inner.lock();
         let spec = &inner.open.as_ref().ok_or("no keyboard connected")?.spec;
@@ -920,7 +980,7 @@ fn check_macro_slot(slot: u8) -> Result<(), String> {
 /// 256-byte blob over four raw pages. Unlike `GET_USERPIC`, this read does
 /// reflect the last write (verified on an X86), so the board is a usable
 /// source of truth for macros.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn read_macro(state: tauri::State<AppState>, slot: u8) -> Result<Macro, String> {
     check_macro_slot(slot)?;
     with_open(&state, |t, _| {
@@ -976,7 +1036,7 @@ pub struct SavedConfig {
     options: Option<KbOptions>,
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<String, String> {
     let spec = {
         let inner = state.inner.lock();
@@ -1198,7 +1258,7 @@ fn probe_sweep(t: &Transport, out: &mut String) {
 /// Everything a developer needs from a board they don't own, as text the
 /// owner pastes into a GitHub issue. Read-only. `path` reaches a discovered
 /// board the registry does not know; without it the open board is used.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn contribution_bundle(
     state: tauri::State<AppState>,
     path: Option<String>,
@@ -1283,7 +1343,7 @@ fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<S
 }
 
 /// Dev escape hatch.
-#[tauri::command]
+#[tauri::command(async)]
 pub fn raw_command(
     state: tauri::State<AppState>,
     opcode: u8,

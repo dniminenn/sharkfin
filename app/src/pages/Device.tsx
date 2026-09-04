@@ -37,6 +37,7 @@ import {
 } from "@/lib/backend";
 import { deviceLabel } from "@/lib/brands";
 import { t } from "@/lib/i18n";
+import Waiting from "@/components/Waiting";
 
 const SLEEP_MIN = 60;
 const SLEEP_MAX = 3600;
@@ -267,14 +268,14 @@ export default function DevicePage({
   if (!device) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        {t("Connect your keyboard by USB cable.")}
+        {t("Connect your keyboard.")}
       </div>
     );
   }
   if (!s) {
     return (
-      <div className="flex h-full items-center justify-center text-muted-foreground">
-        {t("Reading device settings…")}
+      <div className="flex h-full items-center justify-center">
+        <Waiting label={t("Reading device settings…")} />
       </div>
     );
   }
@@ -362,7 +363,7 @@ export default function DevicePage({
                   accept="image/*"
                   className="block w-full text-sm file:mr-3 file:rounded-md file:border-0
                              file:bg-secondary file:px-3 file:py-1.5 file:text-sm"
-                  disabled={drawing}
+                  disabled={drawing || device.link === "receiver"}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     e.target.value = "";
@@ -370,9 +371,11 @@ export default function DevicePage({
                   }}
                 />
                 <p className="text-xs text-muted-foreground">
-                  {drawing
-                    ? t("Writing. Leave the keyboard plugged in.")
-                    : t("The picture is scaled to fit and replaces what is on the display.")}
+                  {device.link === "receiver"
+                    ? t("Connect the keyboard by cable to send a picture.")
+                    : drawing
+                      ? t("Writing. Leave the keyboard plugged in.")
+                      : t("The picture is scaled to fit and replaces what is on the display.")}
                 </p>
               </div>
             )}
@@ -470,11 +473,13 @@ export default function DevicePage({
         </CardHeader>
         <CardContent className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            {t("Clears every onboard profile, keymap, macro and light setting.")}
+            {device?.link === "receiver"
+              ? t("Connect the keyboard by cable to reset it.")
+              : t("Clears every onboard profile, keymap, macro and light setting.")}
           </p>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="destructive" size="sm">
+              <Button variant="destructive" size="sm" disabled={device?.link === "receiver"}>
                 {t("Reset")}
               </Button>
             </DialogTrigger>

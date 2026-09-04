@@ -8,6 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
+import Waiting from "@/components/Waiting";
 import { BE_MODES } from "@/lib/lighting-modes";
 import {
   getLedParam,
@@ -174,14 +175,14 @@ export default function LightingPage({ connected }: { connected: boolean }) {
   if (!connected) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        {t("Connect your keyboard by USB cable to configure lighting.")}
+        {t("Connect your keyboard to configure lighting.")}
       </div>
     );
   }
   if (!param) {
     return (
-      <div className="flex h-full items-center justify-center text-muted-foreground">
-        {t("Reading current lighting…")}
+      <div className="flex h-full items-center justify-center">
+        <Waiting label={t("Reading current lighting…")} />
       </div>
     );
   }

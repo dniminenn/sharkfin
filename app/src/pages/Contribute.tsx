@@ -47,8 +47,8 @@ export default function ContributePage({
   const [copied, setCopied] = useState(false);
   const { pending, inference } = useBoardLayout(device);
   const [layoutCopied, setLayoutCopied] = useState(false);
-  // No answer to identify means a 2.4 GHz receiver; nothing to report from it.
-  const receiver = !device && !!unknown && unknown.deviceId === null;
+  // Answered neither as a keyboard nor as a receiver; nothing to report from it.
+  const silent = !device && !!unknown && unknown.deviceId === null;
   // A board with an owner's sweep on file has nothing left to report.
   const confirmed = device && !device.readOnly ? device.spec.confirmed : null;
 
@@ -115,7 +115,7 @@ export default function ContributePage({
           ) : (
             unknown && (
               <Badge variant="outline">
-                {receiver ? t("receiver") : t("not in the registry")}
+                {silent ? t("no answer") : t("not in the registry")}
               </Badge>
             )
           )}
@@ -136,13 +136,13 @@ export default function ContributePage({
               {t("sharkfin does not know this board yet. A bundle is the first step to adding it.")}
             </p>
           )}
-          {receiver && (
+          {silent && (
             <p className="text-sm text-muted-foreground">
-              {t("This is the 2.4 GHz receiver, not the keyboard. sharkfin only talks to the keyboard over a USB cable. Unplug the receiver, connect the keyboard with its cable, and it will appear here.")}
+              {t("This device did not answer as a keyboard or as a receiver. Connect the keyboard by cable and it will appear here.")}
             </p>
           )}
 
-          {!receiver && (
+          {!silent && (
             <ol className="space-y-3 text-sm">
               <li className="flex items-center gap-3">
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
@@ -154,7 +154,7 @@ export default function ContributePage({
                 </Button>
                 {!device && !unknown && (
                   <span className="text-muted-foreground">
-                    {t("connect a keyboard by USB cable")}
+                    {t("connect a keyboard")}
                   </span>
                 )}
               </li>

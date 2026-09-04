@@ -32,6 +32,7 @@ import {
   type Assignable,
 } from "@/lib/hid-usages";
 import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
+import Waiting from "@/components/Waiting";
 
 // Every plain-key usage, for the combo pickers.
 const COMBO_KEYS: { label: string; usage: number }[] = GROUPS.flatMap((g) =>
@@ -242,7 +243,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   if (!connected) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        {t("Connect your keyboard by USB cable to edit the keymap.")}
+        {t("Connect your keyboard to edit the keymap.")}
       </div>
     );
   }
@@ -424,8 +425,8 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       )}
 
       {!entries || resolving ? (
-        <div className="flex h-64 items-center justify-center text-muted-foreground">
-          {resolving ? t("Finding your keyboard…") : t("Reading keymap…")}
+        <div className="flex h-64 items-center justify-center">
+          <Waiting label={resolving ? t("Finding your keyboard…") : t("Reading keymap…")} />
         </div>
       ) : (
         <>

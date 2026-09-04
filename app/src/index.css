@@ -407,3 +407,24 @@
         border-radius: 9999px;
     }
 }
+
+/* ─── waiting ───────────────────────────────────────────────────────────── */
+/* The fin swims while a page waits on the board. */
+@keyframes fin-swim {
+  0%,
+  100% {
+    transform: translate(-8px, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate(8px, -3px) rotate(4deg);
+  }
+}
+.fin-swim {
+  display: inline-flex;
+  animation: fin-swim 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fin-swim {
+    animation: none;
+  }
+}

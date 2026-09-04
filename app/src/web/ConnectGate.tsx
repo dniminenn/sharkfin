@@ -36,7 +36,7 @@ export default function ConnectGate() {
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
       <div className="pointer-events-auto flex items-center gap-3 rounded-xl border bg-card px-4 py-3 shadow-lg">
         <span className="text-sm text-muted-foreground">
-          Plug the keyboard in with a USB cable, then
+          Plug in the keyboard or its receiver, then
         </span>
         <Button size="sm" onClick={() => requestDevice().catch(() => undefined)}>
           <Usb className="mr-1 h-3.5 w-3.5" /> Connect keyboard

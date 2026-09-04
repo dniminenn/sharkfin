@@ -1,14 +1,16 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-//! hidapi transport to the vendor collection (wired USB only).
+//! hidapi transport to the vendor collection, by cable or through the 2.4 GHz
+//! receiver's relay.
 
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
 use hidapi::{HidApi, HidDevice};
 use parking_lot::Mutex;
 
-use crate::protocol::{self, Checksum, REPORT_LEN, USAGE, USAGE_PAGE};
+use crate::protocol::{self, receiver, Checksum, REPORT_LEN, USAGE, USAGE_PAGE};
 
 #[derive(Debug, thiserror::Error)]
 pub enum HidError {
@@ -18,6 +20,10 @@ pub enum HidError {
     NotFound,
     #[error("device did not answer the identify handshake")]
     NoHandshake,
+    #[error("the receiver is paired, but the keyboard is asleep or switched off")]
+    KeyboardOffline,
+    #[error("the receiver did not accept a packet to relay")]
+    ReceiverBusy,
     #[error("short feature report ({0} bytes)")]
     ShortRead(usize),
     #[error("{0}")]
@@ -71,10 +77,34 @@ pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
 /// operations; 12 ms per report is the sustainable rate measured on an X86.
 const MIN_WRITE_GAP: Duration = Duration::from_millis(12);
 
+/// Receiver bookkeeping. The vendor allows 500 ms for the receiver to accept
+/// a packet and 1 s for a reply to come back over the air, polling status
+/// every 100 ms and resting 10 ms between its own exchanges with the
+/// receiver. A reply is ready about 100 ms after the send on an X86, so the
+/// deadlines are kept and the poll runs as fast as the write floor allows:
+/// a 100 ms tick would round every exchange up to 200.
+const RECEIVER_SEND_DEADLINE: Duration = Duration::from_millis(500);
+const RECEIVER_READ_DEADLINE: Duration = Duration::from_millis(1000);
+const RECEIVER_TICK: Duration = Duration::from_millis(5);
+const RECEIVER_REST: Duration = Duration::from_millis(10);
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum Link {
+    Usb,
+    Receiver,
+}
+
 pub struct Transport {
     dev: HidDevice,
     pub settle: Duration,
     last_write: Mutex<Option<Instant>>,
+    /// Set once identify has succeeded through the receiver's relay. Every
+    /// send and read then goes through the select/release handshake.
+    relay: AtomicBool,
+    /// The receiver keeps its relay target until told otherwise; the vendor
+    /// selects once and never again unless the target changes.
+    selected: AtomicBool,
 }
 
 /// A rolling record of what actually reached the wire, so a stall can be
@@ -120,7 +150,17 @@ impl Transport {
             dev,
             settle: Duration::from_millis(10),
             last_write: Mutex::new(None),
+            relay: AtomicBool::new(false),
+            selected: AtomicBool::new(false),
         })
+    }
+
+    pub fn link(&self) -> Link {
+        if self.relay.load(Ordering::Relaxed) {
+            Link::Receiver
+        } else {
+            Link::Usb
+        }
     }
 
     fn pace(&self) {
@@ -135,6 +175,24 @@ impl Transport {
     }
 
     pub fn send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidError> {
+        if self.relay.load(Ordering::Relaxed) {
+            self.relay_send(buf)
+        } else {
+            self.raw_send(buf)
+        }
+    }
+
+    pub fn read(&self) -> Result<[u8; REPORT_LEN], HidError> {
+        if self.relay.load(Ordering::Relaxed) {
+            self.relay_read()
+        } else {
+            self.raw_read()
+        }
+    }
+
+    /// One feature report to whatever is on the other end of the node: the
+    /// keyboard by cable, or the receiver itself.
+    fn raw_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidError> {
         trace_wire('W', buf[0]);
         self.pace();
         let mut wire = [0u8; REPORT_LEN + 1];
@@ -143,7 +201,7 @@ impl Transport {
         Ok(())
     }
 
-    pub fn read(&self) -> Result<[u8; REPORT_LEN], HidError> {
+    fn raw_read(&self) -> Result<[u8; REPORT_LEN], HidError> {
         trace_wire('R', 0);
         let mut wire = [0u8; REPORT_LEN + 1];
         let n = self.dev.get_feature_report(&mut wire)?;
@@ -158,6 +216,64 @@ impl Transport {
             out.copy_from_slice(&wire[..REPORT_LEN]);
         }
         Ok(out)
+    }
+
+    /// The receiver's own status. Answered by the receiver whether or not a
+    /// keyboard is paired; `None` when the node is a keyboard on a cable.
+    pub fn receiver_status(&self) -> Result<Option<receiver::Status>, HidError> {
+        self.raw_send(&receiver::status_packet())?;
+        sleep(RECEIVER_REST);
+        Ok(receiver::parse_status(&self.raw_read()?))
+    }
+
+    fn relay_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidError> {
+        let deadline = Instant::now() + RECEIVER_SEND_DEADLINE;
+        let mut ready = false;
+        loop {
+            match self.receiver_status()? {
+                Some(s) if !s.keyboard_online => return Err(HidError::KeyboardOffline),
+                Some(s) if s.can_send => {
+                    ready = true;
+                    break;
+                }
+                _ => {}
+            }
+            if Instant::now() >= deadline {
+                break;
+            }
+            sleep(RECEIVER_TICK);
+        }
+        if !ready {
+            self.selected.store(false, Ordering::Relaxed);
+            return Err(HidError::ReceiverBusy);
+        }
+        if !self.selected.load(Ordering::Relaxed) {
+            self.raw_send(&receiver::select_keyboard_packet())?;
+            sleep(RECEIVER_REST);
+            self.selected.store(true, Ordering::Relaxed);
+        }
+        self.raw_send(buf)
+    }
+
+    fn relay_read(&self) -> Result<[u8; REPORT_LEN], HidError> {
+        let deadline = Instant::now() + RECEIVER_READ_DEADLINE;
+        let mut ready = false;
+        loop {
+            if matches!(self.receiver_status()?, Some(s) if s.reply_ready) {
+                ready = true;
+                break;
+            }
+            if Instant::now() >= deadline {
+                break;
+            }
+            sleep(RECEIVER_TICK);
+        }
+        if !ready {
+            return Err(HidError::NoHandshake);
+        }
+        self.raw_send(&receiver::release_packet())?;
+        sleep(RECEIVER_REST);
+        self.raw_read()
     }
 
     pub fn roundtrip(
@@ -207,15 +323,41 @@ impl Transport {
         self.read()
     }
 
-    /// 0x8F identify; returns the registry device ID.
-    pub fn identify(&self) -> Result<u32, HidError> {
+    fn try_identify(&self) -> Option<u32> {
         for _ in 0..3 {
             if let Ok(reply) = self.roundtrip(protocol::cmd::GET_USB_VERSION, &[], Checksum::Bit7) {
                 if let Some(id) = protocol::parse_device_id(&reply) {
-                    return Ok(id);
+                    return Some(id);
                 }
             }
         }
-        Err(HidError::NoHandshake)
+        None
+    }
+
+    /// 0x8F identify; returns the registry device ID. A node that does not
+    /// answer by cable is asked whether it is a receiver, and identify is
+    /// repeated through the relay when it is one with a keyboard awake.
+    pub fn identify(&self) -> Result<u32, HidError> {
+        if self.relay.load(Ordering::Relaxed) {
+            return self.try_identify().ok_or(HidError::NoHandshake);
+        }
+        if let Some(id) = self.try_identify() {
+            return Ok(id);
+        }
+        let Some(status) = self.receiver_status()? else {
+            return Err(HidError::NoHandshake);
+        };
+        if !status.has_keyboard || !status.keyboard_online {
+            return Err(HidError::KeyboardOffline);
+        }
+        self.relay.store(true, Ordering::Relaxed);
+        self.selected.store(false, Ordering::Relaxed);
+        match self.try_identify() {
+            Some(id) => Ok(id),
+            None => {
+                self.relay.store(false, Ordering::Relaxed);
+                Err(HidError::NoHandshake)
+            }
+        }
     }
 }

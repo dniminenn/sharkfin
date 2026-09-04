@@ -17,6 +17,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
+import Waiting from "@/components/Waiting";
 import KeyboardView from "@/components/KeyboardView";
 import { useBoardLayout } from "@/lib/layout-loader";
 import { useBoardProfile } from "@/lib/use-profile";
@@ -78,6 +79,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
   const [events, setEvents] = useState<MacroEvent[]>([]);
   const [repeat, setRepeat] = useState(1);
   const [recording, setRecording] = useState(false);
+  const [reading, setReading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [layer, setLayer] = useState<"base" | "fn">("base");
   const [dir, setDir] = useState<(typeof DIRECTIONS)[number][0]>("right");
@@ -92,12 +94,14 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
     if (!connected) return;
     setEvents([]);
     setRepeat(1);
+    setReading(true);
     readMacro(slot)
       .then((m) => {
         setEvents(m.events);
         setRepeat(Math.max(1, m.repeat));
       })
-      .catch((e) => toast.error(t("Failed to read macro: {error}", { error: String(e) })));
+      .catch((e) => toast.error(t("Failed to read macro: {error}", { error: String(e) })))
+      .finally(() => setReading(false));
   }, [connected, slot]);
 
   useEffect(() => {
@@ -215,7 +219,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
   if (!connected) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
-        {t("Connect your keyboard by USB cable to edit macros.")}
+        {t("Connect your keyboard to edit macros.")}
       </div>
     );
   }
@@ -335,7 +339,11 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
             </span>
           </div>
 
-          {events.length === 0 && !recording ? (
+          {reading && !recording ? (
+            <div className="py-6">
+              <Waiting label={t("Reading macro…")} />
+            </div>
+          ) : events.length === 0 && !recording ? (
             <div className="py-6 text-center text-sm text-muted-foreground">
               {t("Empty. Hit Record to capture a sequence.")}
             </div>
@@ -431,8 +439,8 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
         </CardHeader>
         <CardContent>
           {!entries || resolving ? (
-            <div className="py-6 text-center text-sm text-muted-foreground">
-              {resolving ? t("Finding your keyboard…") : t("Reading keymap…")}
+            <div className="py-6">
+              <Waiting label={resolving ? t("Finding your keyboard…") : t("Reading keymap…")} />
             </div>
           ) : (
             <>

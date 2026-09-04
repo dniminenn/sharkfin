@@ -28,13 +28,81 @@ v113_oledv106` (Hator HTK4100UA, yc3123). Bootloader: first 20 KB of the
 |---|---|
 | Collection | usage page `0xFFFF`, usage `2` |
 | Reports | 64 bytes, feature, report ID 0, both directions |
-| Link | this collection is on wired USB. 2.4 GHz and Bluetooth do not expose it **[HW]** |
+| Link | wired USB, or the 2.4 GHz receiver through the relay below. Bluetooth does not expose the collection **[HW]** |
 
 USB VID `0x3151` is common. Other vendor IDs occur. They are not part of
 the HID layout.
 
 GET replies echo the opcode in byte 0, except bulk page reads (keymatrix,
 Fn layer, macro, userpic), which return raw page bytes. **[HW]**
+
+### 2.4 GHz receiver
+
+The receiver (`3151:4011` on an X86) enumerates the same collection. It
+answers its own opcodes itself and relays anything else to a selected
+device. **[HW]** Receiver opcodes are Bit7. Their replies do not echo the
+opcode.
+
+| opcode | | |
+|---|---|---|
+| `0xF7` | status | reply below |
+| `0xF6` | select relay target | `[0xF6, 10]` keyboard **[HW]**, `5` mouse, `13` both **[JS]** |
+| `0xFC` | release a relayed reply for reading | bare opcode **[HW]** |
+| `0xF1` | receiver id, u16 LE at `[1]` | only receivers in the vendor's own table; `4011` is not in it **[JS]** |
+| `0xF0` | receiver USB version | `[1]`, `[2]` **[JS]** |
+| `0xFB` | receiver RF version | `[3]` **[JS]** |
+
+Status reply:
+
+| byte | |
+|---|---|
+| 0 | `1` when a relayed reply is waiting **[HW]** |
+| 1 | keyboard battery, percent **[HW]** |
+| 2 | mouse battery **[JS]** |
+| 3 | keyboard online when `0` **[HW]** |
+| 4 | mouse online when `0` **[JS]** |
+| 5 | `1` when the receiver will accept a command to relay **[HW]** |
+| 6 | `1` keyboard, `2` mouse, `3` both **[HW]** |
+| 7, 8 | RF boot flags: both `1` in boot, both `0` done **[JS]** |
+
+Relayed exchange **[HW]**:
+
+| step | |
+|---|---|
+| 1 | poll `0xF7` until `[5] == 1` |
+| 2 | `[0xF6, 10]` |
+| 3 | the keyboard packet, with its usual checksum |
+| 4 | poll `0xF7` until `[0] == 1` |
+| 5 | `0xFC` |
+| 6 | GET returns the keyboard's reply, opcode echoed |
+
+The vendor allows five polls of 100 ms at steps 1 and 4 and pauses its
+two-second status loop around each exchange. **[JS]** A reply is ready
+about 100 ms after the send, and the receiver accepts the next packet
+about 70 ms after a write. **[HW]**
+
+Without step 2 a keyboard packet is dropped and a keyboard GET returns
+the receiver's previous reply. A SET leaves no reply waiting.
+
+Round-tripped through the relay on an X86 (yc500), each write read back
+and restored **[HW]**:
+
+| | |
+|---|---|
+| reads | `0x8F`, `0x80`, `0x85`, `0x86`, `0x87`, `0x89` pages, `0x8B` pages, `0x91`, `0x92`, `0x97` |
+| writes | `SET_LEDPARAM`, `SET_PROFILE`, `SET_KEY_ONE`, `SET_MACRO` pages, `SET_DEBOUNCE`, `SET_SLEEPTIME`, `SET_KBOPTION`, `SET_AUTO_OS` |
+| by eye | `SET_USERPIC`, seven pages, shown by mode 13 |
+| not sent | `SET_SLEDPARAM`, screen frames (the X86 has neither), reset |
+
+sharkfin sends screen frames and reset by cable only. The vendor's own app
+disables picture upload in wireless mode. **[JS]** The keyboard itself does
+not care: in the RT100 and X85PRO images, reports from the radio link and
+from USB are copied into one buffer and dispatched through one tree, and the
+announce and page handlers exist once each and test no channel. **[FW]**
+
+`SET_KEY_ONE` through the relay lands only when its profile byte names
+the active profile; aimed at another profile it changes nothing. The
+stall cadence over the relay is not measured.
 
 ## Checksums
 
@@ -565,8 +633,8 @@ Stay in app mode. Bit7 on the command reports, no checksum on the data.
 
 ## Battery
 
-No HID command found. The vendor reads it through a separate helper
-process, suggesting another channel.
+No command on the keyboard's own collection. Over 2.4 GHz the receiver's
+status reply carries it, byte 1. See Transport. **[HW]**
 
 ## Gotchas
 

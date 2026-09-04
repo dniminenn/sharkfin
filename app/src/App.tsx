@@ -7,10 +7,18 @@ import {
   Keyboard,
   Lightbulb,
   ListMusic,
+  Radio,
   Settings2,
   Usb,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
@@ -47,6 +55,7 @@ export default function App() {
   const [unknown, setUnknown] = useState<DiscoveredUnknown | null>(null);
   const [openFailed, setOpenFailed] = useState(false);
   const [stalled, setStalled] = useState(false);
+  const [asleep, setAsleep] = useState(false);
   const [scanning, setScanning] = useState(true);
   const guided = useRef<number | null>(null);
   const guidedUnknown = useRef<string | null>(null);
@@ -75,10 +84,12 @@ export default function App() {
       setUnknown(r.unknown[0] ?? null);
       setOpenFailed(r.openFailed);
       setStalled(r.stalled);
+      setAsleep(r.keyboardOffline);
     } catch {
       setDevice(null);
       setUnknown(null);
       setOpenFailed(false);
+      setAsleep(false);
     } finally {
       setScanning(false);
     }
@@ -122,23 +133,29 @@ export default function App() {
         <div className="mt-auto space-y-2 p-3">
           <div className="rounded-lg border bg-card p-3">
             <div className="flex items-center gap-2">
-              <Usb
-                className={cn(
-                  "h-4 w-4",
-                  device ? "text-(--key-accent)" : "text-muted-foreground",
-                )}
-              />
+              {device?.link === "receiver" ? (
+                <Radio className="h-4 w-4 text-(--key-accent)" />
+              ) : (
+                <Usb
+                  className={cn(
+                    "h-4 w-4",
+                    device ? "text-(--key-accent)" : "text-muted-foreground",
+                  )}
+                />
+              )}
               <div className="min-w-0">
                 <div className="truncate text-sm font-medium">
                   {device
                     ? deviceLabel(device.spec)
                     : stalled
                       ? "Needs a replug"
-                      : unknown
-                        ? unknown.product || "Unrecognized keyboard"
-                        : scanning
-                          ? "Scanning…"
-                          : "No device"}
+                      : asleep
+                        ? t("Keyboard asleep")
+                        : unknown
+                          ? unknown.product || "Unrecognized keyboard"
+                          : scanning
+                            ? "Scanning…"
+                            : "No device"}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {device ? (
@@ -151,13 +168,18 @@ export default function App() {
                     >
                       {readOnly(device)
                         ? t("read-only")
-                        : t("USB · id {id}", { id: device.deviceId })}
+                        : device.link === "receiver"
+                          ? t("2.4 GHz · id {id}", { id: device.deviceId }) +
+                            (device.battery === null ? "" : ` · ${device.battery}%`)
+                          : t("USB · id {id}", { id: device.deviceId })}
                     </Badge>
                   ) : stalled ? (
                     t("Unplug, wait 10s, plug back in")
+                  ) : asleep ? (
+                    t("Press a key, or connect by cable")
                   ) : unknown ? (
                     <Badge variant="outline" className="mt-1">
-                      {unknown.deviceId === null ? t("receiver") : t("not in the registry")}
+                      {unknown.deviceId === null ? t("no answer") : t("not in the registry")}
                     </Badge>
                   ) : (
                     t("Connect by cable")
@@ -167,18 +189,18 @@ export default function App() {
             </div>
           </div>
           <ColorwayPicker />
-          <select
-            aria-label={t("Language")}
-            value={locale}
-            onChange={(e) => setLocale(e.target.value)}
-            className="w-full rounded-md border bg-transparent px-2 py-1 text-xs text-muted-foreground"
-          >
-            {LOCALES.map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+          <Select value={locale} onValueChange={setLocale}>
+            <SelectTrigger aria-label={t("Language")} className="h-8 w-full text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {LOCALES.map(([value, label]) => (
+                <SelectItem key={value} value={value} className="text-xs">
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </aside>
 

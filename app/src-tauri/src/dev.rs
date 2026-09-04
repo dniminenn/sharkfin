@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! Helpers for the hardware-test examples.
-use crate::hid::{discover, DiscoveredDevice, HidError, Transport};
+use crate::hid::{discover, DiscoveredDevice, HidError, Link, Transport};
 use crate::protocol::{cmd, Checksum, LedParam};
 use crate::registry;
 
@@ -20,6 +20,16 @@ pub fn identify_and_read(path: &str) -> Result<String, HidError> {
         spec.map(|s| s.name)
             .unwrap_or_else(|| "UNKNOWN (not in registry)".into())
     );
+    match t.link() {
+        Link::Usb => out.push_str("link: cable\n"),
+        Link::Receiver => {
+            let battery = t
+                .receiver_status()?
+                .map(|s| format!("{}%", s.keyboard_battery))
+                .unwrap_or_else(|| "?".into());
+            out.push_str(&format!("link: 2.4 GHz receiver, battery {battery}\n"));
+        }
+    }
 
     let profile = t.roundtrip(cmd::GET_PROFILE, &[], Checksum::Bit7)?;
     out.push_str(&format!("profile: {}\n", profile[1]));

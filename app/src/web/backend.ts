@@ -52,6 +52,10 @@ export interface ConnectedDevice {
   deviceId: number;
   spec: DeviceSpec;
   readOnly: boolean;
+  /** Cable, or the 2.4 GHz receiver's relay. Factory reset and display pictures need the cable. */
+  link: "usb" | "receiver";
+  /** Percent, receiver link only. */
+  battery: number | null;
 }
 
 export interface DiscoveredUnknown {
@@ -69,6 +73,9 @@ export interface ScanResult {
   openFailed: boolean;
   /** Firmware stalled; nothing is retried until the board is replugged. */
   stalled: boolean;
+  /** A receiver is paired but its keyboard is asleep or off. A key press
+   * wakes it; so does the cable. */
+  keyboardOffline: boolean;
 }
 
 export interface LedParam {
@@ -170,7 +177,13 @@ export async function requestDevice(): Promise<boolean> {
 }
 
 export const scan = async (): Promise<ScanResult> => {
-  const empty = { connected: null, unknown: [], openFailed: false, stalled: false };
+  const empty = {
+    connected: null,
+    unknown: [],
+    openFailed: false,
+    stalled: false,
+    keyboardOffline: false,
+  };
   if (!hidAvailable()) return empty;
   await ensure();
   const st = JSON.parse(core.status() as string) as {
@@ -201,6 +214,7 @@ export const scan = async (): Promise<ScanResult> => {
       try {
         const f = JSON.parse(String(e)) as { kind?: string; deviceId?: number };
         if (f.kind === "stalled") return { ...empty, stalled: true };
+        if (f.kind === "keyboardOffline") return { ...empty, keyboardOffline: true };
         if (f.kind === "openFailed") {
           // Unopenable is not unknown: the board never got to speak.
           openFailed = true;

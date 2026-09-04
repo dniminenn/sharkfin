@@ -47,6 +47,10 @@ export interface ConnectedDevice {
   deviceId: number;
   spec: DeviceSpec;
   readOnly: boolean;
+  /** Cable, or the 2.4 GHz receiver's relay. Factory reset and display pictures need the cable. */
+  link: "usb" | "receiver";
+  /** Percent, receiver link only. */
+  battery: number | null;
 }
 
 export interface DiscoveredUnknown {
@@ -64,6 +68,9 @@ export interface ScanResult {
   openFailed: boolean;
   /** Firmware stalled; nothing is retried until the board is replugged. */
   stalled: boolean;
+  /** A receiver is paired but its keyboard is asleep or off. A key press
+   * wakes it; so does the cable. */
+  keyboardOffline: boolean;
 }
 
 export interface LedParam {

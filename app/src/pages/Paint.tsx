@@ -503,7 +503,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
 
       {!connected && (
         <p className="text-center text-sm text-muted-foreground">
-          {t("Connect the keyboard by USB cable to send this pattern.")}
+          {t("Connect the keyboard to send this pattern.")}
         </p>
       )}
     </div>
