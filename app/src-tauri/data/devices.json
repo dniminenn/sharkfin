@@ -26967,5 +26967,31 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 2570,
+    "name": "fire_phoenix_bk11",
+    "displayName": "BK-11",
+    "company": "Fire Phoenix",
+    "vendor": "Fire Phoenix",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "fire_phoenix_bk11",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   }
 ]

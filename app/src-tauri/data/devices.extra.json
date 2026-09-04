@@ -369,5 +369,33 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #36. Not in any vendor catalogue, so an extraction alone will not add it. The board's own product string is 'Gaming Keyboard'; the owner names it a Fire Phoenix BK-11, sold in Brazil as a tri-mode keyboard and mouse kit with an ABNT2 legend set. The vendor OTA API has no record for id 2570.",
+    "_evidence": "Read sweep from the owner's board (0.4.2 web build, 56aad54). identify 0x8F returns 0x0a0a = 2570. Revision 0x80 answers 0x0102, the same as the X86. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers four u16 (120, 120, 1680, 1680) at bytes 1..8. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86. Debounce 0x91 answers 1 at byte 2, the register the X86 answers 2 on, so debounce is on. Link keys Bluetooth 1 and 2 ([14,0,0,0] and [14,0,1,0]) sit at slots 108 and 114 and the product page lists Bluetooth, 2.4 GHz and cable, so both sleep timers are on.",
+    "_unknown": "keyLayout was not observable from a read sweep; Unknown makes the Keys page match a picture against the board and ask the owner to confirm it. The keymap has 112 populated slots: 103 standard keys, NonUsBackslash at slot 10, an entry 00 00 e3 0f at slot 85, Fn at slots 11 and 71, Fn Lock at 84, consumer 0x0221 and 0x0223 at 78 and 94, and the two link keys. Five keys carry 0x13 in byte 0 instead of 0x00: comma, period, slash, right Alt and keypad plus (slots 58, 59, 64, 70, 87). No picture, firmware or vendor JavaScript explains that byte and the X86 has no such slots, so those five keys stay unmatched until an owner's bundle or firmware says what it means. Common104_CR104 is the closest picture at 99 of 104, missing exactly those five. Profile count was not observable (0x85 shows profile 0), so it is pinned to 1. No knob: the keymap has no volume consumer usages and the product page lists none. Edge light 0x88 answers the same plausible state as the A75 (issue #33) and the K600-B82 (issue #35), and the board has no known edge LEDs, so sideLight stays off. 0xAD echoes the previous reply, so no display.",
+    "id": 2570,
+    "name": "fire_phoenix_bk11",
+    "displayName": "BK-11",
+    "company": "Fire Phoenix",
+    "vendor": "Fire Phoenix",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "fire_phoenix_bk11",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]
