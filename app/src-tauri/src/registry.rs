@@ -63,6 +63,12 @@ pub struct DeviceSpec {
     /// app says so and asks the owner before the first write.
     #[serde(default)]
     pub unregistered: bool,
+    /// The firmware lineage that reads the LEDPARAM flags nibble the other
+    /// way round: 8 is a fixed colour and 7 is the rainbow, and the seven
+    /// preset colours differ. Read out of the Akko ACR75 v2's v3.03 image;
+    /// the X86 lineage keeps 7 fixed, 8 rainbow (docs/PROTOCOL.md).
+    #[serde(default)]
+    pub led_flags_swapped: bool,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

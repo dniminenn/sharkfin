@@ -993,8 +993,34 @@ const COMMON_COLORS: [(u8, u8, u8); 7] = [
     (0xFF, 0x00, 0xFF),
 ];
 
+/// Preset colours 0..6 on the lineage that swaps the flags nibble (Akko
+/// ACR75 v2, firmware 3.03, table at file offset 0x1F158): red, green, blue,
+/// orange, magenta, amber, warm white.
+const COMMON_COLORS_SWAPPED: [(u8, u8, u8); 7] = [
+    (0xFF, 0x00, 0x00),
+    (0x00, 0xFF, 0x00),
+    (0x00, 0x00, 0xFF),
+    (0xFF, 0x55, 0x00),
+    (0xFF, 0x00, 0xFF),
+    (0xFF, 0xBB, 0x00),
+    (0xFF, 0xFF, 0xDD),
+];
+
 impl LedParam {
     pub fn to_packet(self) -> [u8; REPORT_LEN] {
+        self.to_packet_on(false)
+    }
+
+    /// `swapped` selects the lineage whose firmware reads the flags nibble
+    /// the other way round (`DeviceSpec::led_flags_swapped`). Every renderer
+    /// in that image tests the nibble by exact value, so the two constants
+    /// simply trade places; nothing else in the packet moves.
+    pub fn to_packet_on(self, swapped: bool) -> [u8; REPORT_LEN] {
+        let (fixed, dazzle) = if swapped {
+            (FLAG_DAZZLE, FLAG_FIXED)
+        } else {
+            (FLAG_FIXED, FLAG_DAZZLE)
+        };
         let (mut r, mut g, mut b) = floor_black(self.r, self.g, self.b);
         if (r, g, b) == (0xFF, 0xFF, 0xFF) {
             (r, g, b) = (0xFA, 0xFA, 0xFA);
@@ -1006,7 +1032,7 @@ impl LedParam {
             }
             MODE_SCREEN_COLOR => 0,
             MODE_MUSIC_2 | MODE_MUSIC_3 => (self.option << 4) | if self.dazzle { 0 } else { 4 },
-            _ => (self.option << 4) | if self.dazzle { FLAG_DAZZLE } else { FLAG_FIXED },
+            _ => (self.option << 4) | if self.dazzle { dazzle } else { fixed },
         };
         let wire_speed = MAX_SPEED.saturating_sub(self.speed.min(4));
         packet(
@@ -1017,9 +1043,18 @@ impl LedParam {
     }
 
     pub fn from_reply(reply: &[u8]) -> Option<Self> {
+        Self::from_reply_on(reply, false)
+    }
+
+    pub fn from_reply_on(reply: &[u8], swapped: bool) -> Option<Self> {
         if reply.len() < 8 || reply[0] != cmd::GET_LEDPARAM {
             return None;
         }
+        let (fixed, dazzle_flag, presets) = if swapped {
+            (FLAG_DAZZLE, FLAG_FIXED, &COMMON_COLORS_SWAPPED)
+        } else {
+            (FLAG_FIXED, FLAG_DAZZLE, &COMMON_COLORS)
+        };
         let mode = reply[1];
         let flags = reply[4];
         let nibble = flags & 0x0F;
@@ -1029,10 +1064,10 @@ impl LedParam {
         }
         let dazzle = match mode {
             MODE_MUSIC_2 | MODE_MUSIC_3 => nibble == 0,
-            _ => nibble == FLAG_DAZZLE,
+            _ => nibble == dazzle_flag,
         };
-        if !dazzle && nibble != FLAG_FIXED {
-            if let Some(&(pr, pg, pb)) = COMMON_COLORS.get(nibble as usize) {
+        if !dazzle && nibble != fixed {
+            if let Some(&(pr, pg, pb)) = presets.get(nibble as usize) {
                 if !matches!(mode, MODE_MUSIC_2 | MODE_MUSIC_3 | MODE_USER_PICTURE) {
                     (r, g, b) = (pr, pg, pb);
                 }
@@ -1053,6 +1088,48 @@ impl LedParam {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn swapped_lineage_trades_the_two_flag_values() {
+        use super::*;
+        let fixed = LedParam {
+            mode: 1,
+            speed: 2,
+            brightness: 4,
+            option: 0,
+            dazzle: false,
+            r: 0x90,
+            g: 0x13,
+            b: 0xFE,
+        };
+        assert_eq!(fixed.to_packet()[4] & 0x0F, 7);
+        assert_eq!(fixed.to_packet_on(true)[4] & 0x0F, 8);
+        let rainbow = LedParam {
+            dazzle: true,
+            ..fixed
+        };
+        assert_eq!(rainbow.to_packet_on(true)[4] & 0x0F, 7);
+        // The ACR75 v2's own GET reply while showing a solid colour.
+        let reply = [0x87, 1, 4, 3, 0x08, 0x90, 0x13, 0xFE];
+        assert!(
+            LedParam::from_reply(&reply).unwrap().dazzle,
+            "read as the X86 lineage it is rainbow"
+        );
+        let p = LedParam::from_reply_on(&reply, true).unwrap();
+        assert!(!p.dazzle, "read as its own lineage it is fixed");
+        assert_eq!((p.r, p.g, p.b), (0x90, 0x13, 0xFE));
+        let preset = [0x87, 1, 4, 3, 0x01, 0, 0, 0];
+        assert_eq!(
+            LedParam::from_reply_on(&preset, true).unwrap().g,
+            0xFF,
+            "preset 1 is green there"
+        );
+        assert_eq!(
+            LedParam::from_reply(&preset).unwrap().g,
+            0x80,
+            "and orange on the X86"
+        );
+    }
+
     use super::*;
 
     #[test]

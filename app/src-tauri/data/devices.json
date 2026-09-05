@@ -144,6 +144,7 @@
     "profiles": 1,
     "magnetic": false,
     "family": "yc500",
+    "ledFlagsSwapped": true,
     "features": {
       "knob": [],
       "debounce": true,

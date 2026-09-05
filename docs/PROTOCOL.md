@@ -219,7 +219,15 @@ Opcode shared. Packet **[HW]**.
 - Speed on the wire is 1..5. A host scale of 0..4 is stored inverted:
   host 0 → wire 5, host 4 → wire 1. Brightness 0..4 direct.
 - Flags nibble: `7` fixed colour, `8` rainbow. Modes 22/23 invert it
-  (`0` rainbow, `4` fixed). Mode 13 puts a pattern slot in the option
+  (`0` rainbow, `4` fixed). One lineage swaps the two: the Akko ACR75 v2
+  (device 606, firmware 3.03) has `7` rainbow and `8` fixed in every
+  renderer (init `0x1014688` tests 7 for the hue walker where the RT100
+  `0x101C9C0` and X85PRO `0x101C770` test 8; render `0x1015F90` against
+  `0x101F4E4` / `0x101F16A`), all by exact compare. Its preset table is
+  red, green, blue, orange, magenta, amber, warm white, and its SET handler
+  (`0x1019604`) has no RGB clamp and no mode range guard, so it must never
+  be sent a mode above 31. The registry marks such boards
+  `ledFlagsSwapped`. **[FW]** Mode 13 puts a pattern slot in the option
   nibble and forces RGB `(0,200,200)`. That slot is the gen2 USERPIC
   slot; yc500 USERPIC has no slot byte. Mode 21 zeroes the flags byte.
 - White `0xFFFFFF` transmits as `0xFAFAFA`.

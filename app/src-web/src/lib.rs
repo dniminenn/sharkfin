@@ -798,12 +798,12 @@ pub fn clear_stall() {
 pub async fn get_led_param() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
     read_quiet().await;
-    let (t, _) = get_open(false)?;
+    let (t, spec) = get_open(false)?;
     let reply = t
         .roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)
         .await
         .map_err(fail)?;
-    let p = LedParam::from_reply(&reply).ok_or("bad LEDPARAM reply")?;
+    let p = LedParam::from_reply_on(&reply, spec.led_flags_swapped).ok_or("bad LEDPARAM reply")?;
     to_js(&p)
 }
 
@@ -812,8 +812,10 @@ pub async fn set_led_param(param_json: String) -> Result<(), JsValue> {
     let param: LedParam = serde_json::from_str(&param_json).map_err(|e| e.to_string())?;
     gap(|s| &mut s.last_cmd, LIGHT_GAP_MS).await;
     let _busy = acquire().await;
-    let (t, _) = get_open(true)?;
-    t.send(&param.to_packet()).await.map_err(fail)?;
+    let (t, spec) = get_open(true)?;
+    t.send(&param.to_packet_on(spec.led_flags_swapped))
+        .await
+        .map_err(fail)?;
     Ok(())
 }
 
@@ -1246,7 +1248,7 @@ pub async fn write_per_key(colors: Vec<u8>, activate: bool) -> Result<(), JsValu
     // means talking to a board that is still writing flash.
     let needs_mode = activate
         && match t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7).await {
-            Ok(r) => LedParam::from_reply(&r)
+            Ok(r) => LedParam::from_reply_on(&r, spec.led_flags_swapped)
                 .map(|p| p.mode != PER_KEY_MODE)
                 .unwrap_or(true),
             Err(_) => true,
@@ -1404,7 +1406,7 @@ pub async fn export_config() -> Result<JsValue, JsValue> {
         board: spec.label(),
         profiles,
         fn_layers,
-        led: LedParam::from_reply(&led).ok_or("bad LEDPARAM reply")?,
+        led: LedParam::from_reply_on(&led, spec.led_flags_swapped).ok_or("bad LEDPARAM reply")?,
         side_light: sled,
         debounce: deb[fc.debounce_at],
         sleep: SleepTimes::from_reply_expecting(&slp, fc.get_sleeptime, fc.sleep_reply_at)
@@ -1486,7 +1488,9 @@ pub async fn import_config(raw: String) -> Result<JsValue, JsValue> {
     if let (Some(sled), true, Some(_)) = (cfg.side_light, spec.features.side_light, fc.sled) {
         t.send(&sled.to_packet()).await.map_err(fail)?;
     }
-    t.send(&cfg.led.to_packet()).await.map_err(fail)?;
+    t.send(&cfg.led.to_packet_on(spec.led_flags_swapped))
+        .await
+        .map_err(fail)?;
     Ok(format!(
         "restored {keys_written} keys, settings and lighting from {}",
         cfg.board

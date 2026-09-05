@@ -43,6 +43,9 @@ export interface DeviceSpec {
   /** Built from the board's own answers because the registry has no entry
    * for its id. The app says so and asks before the first write. */
   unregistered?: boolean;
+  /** Firmware lineage that reads the lighting flags nibble the other way
+   * round; the backends encode and decode accordingly. */
+  ledFlagsSwapped?: boolean;
 }
 
 export interface ConnectedDevice {
