@@ -130,6 +130,32 @@
     }
   },
   {
+    "id": 606,
+    "name": "akko_acr75_v2",
+    "displayName": "ACR75 v2",
+    "company": "Akko",
+    "vendor": "Akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "akko_acr75_v2",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "owner",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    },
+    "screen": null
+  },
+  {
     "id": 660,
     "name": "yc580_yz1108",
     "displayName": "YZ1108",
