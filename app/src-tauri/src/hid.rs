@@ -10,7 +10,7 @@ use std::time::{Duration, Instant};
 use hidapi::{HidApi, HidDevice};
 use parking_lot::Mutex;
 
-use crate::protocol::{self, receiver, Checksum, REPORT_LEN, USAGE, USAGE_PAGE};
+use crate::protocol::{self, receiver, Checksum, REPORT_LEN, USAGES, USAGE_PAGE};
 
 #[derive(Debug, thiserror::Error)]
 pub enum HidError {
@@ -51,13 +51,15 @@ pub struct DiscoveredDevice {
     pub product_id: u16,
     pub product: String,
     pub manufacturer: String,
+    /// Which usage the settings collection reported on the vendor page.
+    pub usage: u16,
 }
 
 pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
     api.device_list()
         .filter(|d| {
             d.usage_page() == USAGE_PAGE
-                && d.usage() == USAGE
+                && USAGES.contains(&d.usage())
                 && crate::registry::vendor_ids().contains(&d.vendor_id())
         })
         .map(|d| DiscoveredDevice {
@@ -66,6 +68,7 @@ pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
             product_id: d.product_id(),
             product: d.product_string().unwrap_or_default().to_string(),
             manufacturer: d.manufacturer_string().unwrap_or_default().to_string(),
+            usage: d.usage(),
         })
         .collect()
 }

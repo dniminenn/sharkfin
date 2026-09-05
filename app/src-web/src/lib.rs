@@ -60,6 +60,8 @@ extern "C" {
     fn product_id(this: &JsHidDevice) -> u16;
     #[wasm_bindgen(method, getter, js_name = vendorId)]
     fn vendor_id(this: &JsHidDevice) -> u16;
+    #[wasm_bindgen(method, getter)]
+    fn collections(this: &JsHidDevice) -> js_sys::Array;
     #[wasm_bindgen(method)]
     fn open(this: &JsHidDevice) -> js_sys::Promise;
     #[wasm_bindgen(method, js_name = sendFeatureReport)]
@@ -387,6 +389,25 @@ struct Open {
     spec: DeviceSpec,
     /// Reported by the receiver at connect; there is no such number by cable.
     battery: Option<u8>,
+    /// The settings collection's usage on the vendor page, for the bundle.
+    usage: u16,
+}
+
+/// The usage the device's vendor-page collection reports, 0 when none.
+fn vendor_usage(device: &JsHidDevice) -> u16 {
+    for c in device.collections().iter() {
+        let get = |k: &str| {
+            js_sys::Reflect::get(&c, &JsValue::from_str(k))
+                .ok()
+                .and_then(|v| v.as_f64())
+        };
+        if get("usagePage") == Some(f64::from(protocol::USAGE_PAGE)) {
+            if let Some(u) = get("usage") {
+                return u as u16;
+            }
+        }
+    }
+    0
 }
 
 #[derive(Default)]
@@ -591,6 +612,7 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
         device.vendor_id(),
         device.product_id(),
     );
+    let usage = vendor_usage(&device);
     let transport = Transport {
         dev: device,
         last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
@@ -639,6 +661,7 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
                     transport: Rc::new(transport),
                     spec,
                     battery,
+                    usage,
                 });
             });
             to_js(&info)
@@ -1542,6 +1565,7 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
     read_quiet().await;
     let (t, spec) = get_open(false)?;
+    let usage = STATE.with(|s| s.borrow().open.as_ref().map_or(0, |o| o.usage));
     let mut out = String::new();
     let _ = writeln!(out, "```");
     let _ = writeln!(out, "sharkfin {} data bundle (web)", registry::build_id());
@@ -1549,7 +1573,7 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
         let _ = writeln!(out, "board  : {} (not in the registry)", spec.label());
         let _ = writeln!(
             out,
-            "usb    : {:04x}:{:04x}",
+            "usb    : {:04x}:{:04x}  collection usage {usage}",
             spec.vendor_id, spec.product_id
         );
         let _ = writeln!(out, "identify: device id {}", spec.id);
@@ -1558,7 +1582,7 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
         let _ = writeln!(out, "board  : {} (device id {})", spec.label(), spec.id);
         let _ = writeln!(
             out,
-            "usb    : {:04x}:{:04x}  internal {}",
+            "usb    : {:04x}:{:04x}  internal {}  collection usage {usage}",
             spec.vendor_id, spec.product_id, spec.internal_name
         );
         let _ = writeln!(
@@ -1596,6 +1620,7 @@ pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
     let product = device.product_name();
     let vid = device.vendor_id();
     let pid = device.product_id();
+    let usage = vendor_usage(&device);
     let t = Transport {
         dev: device,
         last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
@@ -1611,7 +1636,10 @@ pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
         product
     };
     let _ = writeln!(out, "board  : {product} (not in the registry)");
-    let _ = writeln!(out, "usb    : {vid:04x}:{pid:04x}");
+    let _ = writeln!(
+        out,
+        "usb    : {vid:04x}:{pid:04x}  collection usage {usage}"
+    );
     match t.identify().await {
         Ok(id) => {
             let _ = writeln!(out, "identify: device id {id}");

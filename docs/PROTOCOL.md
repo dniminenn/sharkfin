@@ -26,7 +26,7 @@ v113_oledv106` (Hator HTK4100UA, yc3123). Bootloader: first 20 KB of the
 
 | | |
 |---|---|
-| Collection | usage page `0xFFFF`, usage `2` |
+| Collection | usage page `0xFFFF`, usage `2`; the Akko ACR75 v2 (device 606) reports usage `1` on the same page **[HW]**, and the vendor's own driver filters for both **[JS]** |
 | Reports | 64 bytes, feature, report ID 0, both directions |
 | Link | wired USB, or the 2.4 GHz receiver through the relay below. Bluetooth does not expose the collection **[HW]** |
 

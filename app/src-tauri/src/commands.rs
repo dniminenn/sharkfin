@@ -41,6 +41,8 @@ struct OpenDevice {
     /// Reported by the receiver alongside identify; there is no such number
     /// by cable.
     battery: Option<u8>,
+    /// The settings collection's usage on the vendor page, for the bundle.
+    usage: u16,
 }
 
 impl OpenDevice {
@@ -267,6 +269,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                         spec,
                         last_ok: Instant::now(),
                         battery,
+                        usage: d.usage,
                     };
                     inner.unregistered_ok = false;
                     connected = Some(open.connected(false));
@@ -1337,11 +1340,11 @@ pub fn contribution_bundle(
     path: Option<String>,
 ) -> Result<String, String> {
     use std::fmt::Write;
-    let spec = {
+    let open = {
         let inner = state.inner.lock();
-        inner.open.as_ref().map(|o| o.spec.clone())
+        inner.open.as_ref().map(|o| (o.spec.clone(), o.usage))
     };
-    let Some(spec) = spec else {
+    let Some((spec, usage)) = open else {
         return unregistered_bundle(&state, path.ok_or("no device connected")?);
     };
     with_open(&state, |t, _| {
@@ -1352,7 +1355,7 @@ pub fn contribution_bundle(
             let _ = writeln!(out, "board  : {} (not in the registry)", spec.label());
             let _ = writeln!(
                 out,
-                "usb    : {:04x}:{:04x}",
+                "usb    : {:04x}:{:04x}  collection usage {usage}",
                 spec.vendor_id, spec.product_id
             );
             let _ = writeln!(out, "identify: device id {}", spec.id);
@@ -1361,7 +1364,7 @@ pub fn contribution_bundle(
             let _ = writeln!(out, "board  : {} (device id {})", spec.label(), spec.id);
             let _ = writeln!(
                 out,
-                "usb    : {:04x}:{:04x}  internal {}",
+                "usb    : {:04x}:{:04x}  internal {}  collection usage {usage}",
                 spec.vendor_id, spec.product_id, spec.internal_name
             );
             let _ = writeln!(
@@ -1408,7 +1411,11 @@ fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<S
         &d.product
     };
     let _ = writeln!(out, "board  : {product} (not in the registry)");
-    let _ = writeln!(out, "usb    : {:04x}:{:04x}", d.vendor_id, d.product_id);
+    let _ = writeln!(
+        out,
+        "usb    : {:04x}:{:04x}  collection usage {}",
+        d.vendor_id, d.product_id, d.usage
+    );
     match t.identify() {
         Ok(id) => {
             let _ = writeln!(out, "identify: device id {id}");

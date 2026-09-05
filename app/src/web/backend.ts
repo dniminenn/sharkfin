@@ -129,7 +129,9 @@ export interface DeviceSettings {
 }
 
 const USAGE_PAGE = 0xffff;
-const USAGE = 0x0002;
+// Almost every board reports usage 2 on the vendor page; the Akko ACR75 v2
+// reports 1, and the vendor's own driver looks for both.
+const USAGES = [0x0001, 0x0002];
 
 // Which vendor IDs to look for comes from the registry, not from a constant
 // here: most of these boards are ROYUAN's 0x3151, but a minority ship under
@@ -144,7 +146,7 @@ async function knownVendors(): Promise<number[]> {
 
 const isVendorCollection = (d: HIDDevice, vendors: number[]) =>
   vendors.includes(d.vendorId) &&
-  d.collections.some((c) => c.usagePage === USAGE_PAGE && c.usage === USAGE);
+  d.collections.some((c) => c.usagePage === USAGE_PAGE && USAGES.includes(c.usage ?? -1));
 
 let ready: Promise<void> | null = null;
 
@@ -174,7 +176,9 @@ export async function grantedDevices(): Promise<HIDDevice[]> {
 export async function requestDevice(): Promise<boolean> {
   const vendors = await knownVendors();
   const picked = await navigator.hid.requestDevice({
-    filters: vendors.map((vendorId) => ({ vendorId, usagePage: USAGE_PAGE, usage: USAGE })),
+    filters: vendors.flatMap((vendorId) =>
+      USAGES.map((usage) => ({ vendorId, usagePage: USAGE_PAGE, usage })),
+    ),
   });
   return picked.length > 0;
 }

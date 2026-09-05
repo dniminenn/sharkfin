@@ -10,6 +10,10 @@
 pub const VENDOR_ID: u16 = 0x3151;
 pub const USAGE_PAGE: u16 = 0xFFFF;
 pub const USAGE: u16 = 0x0002;
+/// Usages the settings collection has been seen under on that page. Almost
+/// every board reports `2`; the Akko ACR75 v2 (device 606) reports `1`,
+/// and the vendor's own driver looks for both.
+pub const USAGES: [u16; 2] = [0x0001, 0x0002];
 pub const REPORT_LEN: usize = 64;
 
 /// Bit7: byte7 = 0xFF - sum(bytes 0..=6). Bit8: byte8 over 0..=7.
