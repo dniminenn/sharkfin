@@ -15,8 +15,8 @@ the board itself; blank means the entry rests on the vendor's data.
 |---|---:|
 | total | 1031 |
 | writable | 1027 |
-| drawn | 306 |
-| drawn after confirmation | 692 |
+| drawn | 308 |
+| drawn after confirmation | 691 |
 | confirmed on hardware | 4 |
 
 | board | id | usb | family | write | draw | confirmed |
@@ -71,7 +71,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | akete GT60 V2 | 4151 | 39a8:9016 | gen2 | yes | yes |  |
 | akete k808 | 4138 | 39a8:9016 | gen2 | yes | auto |  |
 | akete K811 | 4161 | 39a8:9016 | gen2 | yes | auto |  |
-| Akko ACR75 v2 | 606 | 3151:4003 | yc500 | yes |  |  |
+| Akko ACR75 v2 | 606 | 3151:4003 | yc500 | yes | yes |  |
 | akko Gem02 | 2619 | 3151:5030 | gen2 | yes | auto |  |
 | akko K0039 | 2881 | 3151:5030 | gen2 | yes | auto |  |
 | akko Mineral01 | 2903 | 3151:5030 | gen2 | yes | auto |  |
@@ -731,7 +731,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | rongyuan SG9068-E | 4195 | 39ab:9016 | gen2 | yes | auto |  |
 | rongyuan SG9077 | 4070 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan SKY-PAD | 3718 | 3151:5056 | gen2 | yes | auto |  |
-| rongyuan SKY75 | 2851 | 3151:5025 | gen2 | yes | auto |  |
+| rongyuan SKY75 | 2851 | 3151:5025 | gen2 | yes | yes |  |
 | rongyuan ST-MKS82 | 3970 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan ST-MKS82 | 4008 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan ST-MKS98 | 3525 | 3151:504c | gen2 | yes | auto |  |
