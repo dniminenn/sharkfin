@@ -1,16 +1,22 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.5.1
+## What changed in 0.6.0
 
-**Darmoshark Top75** is supported (device id 957), drawn out of the box.
-Its owner sent the read sweep and the picture, and the picture matches
-the board's own firmware key for key.
+**A keyboard that is not in the list works anyway.** sharkfin reads which
+command set it speaks off the board's own answers, says so on a notice,
+and writes only after you allow it. The Contribute tab still produces the
+report that gets it a real entry.
 
-**Picture confirmation** offers each keyboard body once, with and without
-the two ISO keys, so the right picture is always in the list. Before,
-the ISO version of one body could push another body out.
+**72 more boards** from the vendor's current list, including the X98PRO
+and K86 revisions, the Darmoshark Top75 and TOP75J, and the VGN Neon75
+Extreme.
 
-The registry is 956 boards, 4 of them confirmed on hardware.
+**306 boards are drawn out of the box**, up from 187. Factory keymaps
+now come from each board's own firmware where the vendor publishes it,
+and a picture shared by boards with different keymaps is split so each
+board gets its own.
+
+The registry is 1029 boards, 4 of them confirmed on hardware.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
