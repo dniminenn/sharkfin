@@ -9,6 +9,7 @@
 import type { BoardLayout, LayoutKey } from "@/lib/layout-loader";
 import type { ConnectedDevice } from "@/lib/backend";
 import { deviceLabel } from "@/lib/brands";
+import { ISO_SUFFIX } from "@/lib/iso";
 
 export interface Inference {
   layout: BoardLayout;
@@ -134,4 +135,42 @@ export function inferSlots(base: BoardLayout, matrix: number[]): Inference {
     profile: 0,
     layoutName: "",
   };
+}
+
+/** The picture a derived name was built from. */
+const bodyOf = (name: string) =>
+  name.endsWith(ISO_SUFFIX) ? name.slice(0, -ISO_SUFFIX.length) : name;
+
+/** Order the pictures offered for a board so each body appears once, its
+ *  variants together, best first. Ranked flat, an ISO derivation beats its
+ *  own ANSI parent on every ANSI board whose keymap parks the two ISO
+ *  usages in unfitted slots, since it explains two more entries at no
+ *  cost; the top of the list is then eight derivations of different
+ *  bodies and the plain picture the board has is never reached. The
+ *  registry's own suggestion leads whichever way it scores. */
+export function rankCandidates(
+  candidates: Inference[],
+  suggested: string,
+  maxBodies: number,
+): Inference[] {
+  const byBody = new Map<string, Inference[]>();
+  for (const c of candidates) {
+    const body = bodyOf(c.layoutName);
+    const list = byBody.get(body);
+    if (list) list.push(c);
+    else byBody.set(body, [c]);
+  }
+  const better = (a: Inference, b: Inference) =>
+    b.f1 - a.f1 || a.ambiguous.length - b.ambiguous.length;
+  const bodies = [...byBody.entries()].map(([body, list]) => {
+    list.sort(better);
+    return { body, list };
+  });
+  const wanted = bodyOf(suggested);
+  bodies.sort(
+    (a, b) =>
+      Number(b.body === wanted) - Number(a.body === wanted) ||
+      better(a.list[0], b.list[0]),
+  );
+  return bodies.slice(0, maxBodies).flatMap((g) => g.list);
 }

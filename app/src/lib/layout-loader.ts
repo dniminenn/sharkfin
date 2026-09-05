@@ -6,7 +6,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import x86 from "@/lib/layouts/x86.json";
 import { readKeymap, type ConnectedDevice } from "@/lib/backend";
-import { agreement, inferSlots, type Inference } from "@/lib/layout-infer";
+import {
+  agreement,
+  inferSlots,
+  rankCandidates,
+  type Inference,
+} from "@/lib/layout-infer";
 import { isoName, isoVariant, looksIso, resolvePicture } from "@/lib/iso";
 
 export interface LayoutKey {
@@ -113,7 +118,8 @@ const MATCH_BAR = 0.9;
  *  worse rather than one better. It also means a layout the board already
  *  agrees with cannot be displaced, since no score exceeds 1. */
 const RETHINK_MARGIN = 0.15;
-/** Candidate pictures offered before giving up on the collection. */
+/** Distinct bodies offered before giving up on the collection. A body's
+ *  ISO derivation rides along with it and does not use up a place. */
 const MAX_CANDIDATES = 8;
 
 async function loadVendor(name: string): Promise<BoardLayout | null> {
@@ -326,19 +332,13 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         const isoInf = bestMatch(iso, isoName(stem), matrices);
         if (isoInf && isoInf.matchRate >= MATCH_BAR) candidates.push(isoInf);
       }
-      candidates.sort(
-        (a, b) =>
-          Number(b.layoutName === name) - Number(a.layoutName === name) ||
-          b.f1 - a.f1 ||
-          a.ambiguous.length - b.ambiguous.length,
-      );
-      candidates.splice(MAX_CANDIDATES);
-      if (!candidates.length) return;
-      candidatesRef.current = candidates;
+      const ranked = rankCandidates(candidates, name, MAX_CANDIDATES);
+      if (!ranked.length) return;
+      candidatesRef.current = ranked;
       indexRef.current = 0;
-      setInference(candidates[0]);
-      setLayout(candidates[0].layout);
-      setRemaining(candidates.length - 1);
+      setInference(ranked[0]);
+      setLayout(ranked[0].layout);
+      setRemaining(ranked.length - 1);
       setPending(true);
     })();
     return () => {
