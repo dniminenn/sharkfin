@@ -753,6 +753,12 @@ def main():
         default=here.parent / "app/src-tauri/data/matrix-evidence.json",
         help="firmware confirmations from tools/verify_matrix.py",
     )
+    ap.add_argument(
+        "--keymap-evidence",
+        type=Path,
+        default=here.parent / "app/src-tauri/data/keymap-evidence.json",
+        help="per-board keymaps read from firmware by tools/firmware_keymaps.py",
+    )
     ap.add_argument("--devices-out", type=Path, default=here.parent / "app/src-tauri/data/devices.json")
     ap.add_argument("--layouts-out", type=Path, default=here.parent / "app/src/lib/layouts/vendor")
     args = ap.parse_args()
@@ -835,10 +841,18 @@ def main():
     stale = sorted(set(overrides) - {d["id"] for d in devices})
 
     devices.sort(key=lambda d: d["id"])
-    args.devices_out.parent.mkdir(parents=True, exist_ok=True)
-    args.devices_out.write_text(
-        json.dumps(devices, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
+
+    def write_devices():
+        args.devices_out.parent.mkdir(parents=True, exist_ok=True)
+        args.devices_out.write_text(
+            json.dumps(devices, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
+
+    # Without builds there is no picture to split, so the list is final here.
+    # With them it is written after the layouts, which may point a board at
+    # a picture variant carrying its own factory keymap.
+    if not args.dist_js:
+        write_devices()
 
     if extras:
         kept = [e["id"] for e in extras if e["id"] not in from_bundle]
@@ -971,23 +985,29 @@ def main():
     evidence = {}
     if args.matrix_evidence and args.matrix_evidence.is_file():
         evidence = json.loads(args.matrix_evidence.read_text(encoding="utf-8"))
+    keymaps = {}
+    if args.keymap_evidence and args.keymap_evidence.is_file():
+        keymaps = json.loads(args.keymap_evidence.read_text(encoding="utf-8"))
 
-    matrices_by_layout = {}
+    # One matrix per board, best source first: the board's own firmware,
+    # then a layout confirmed inside a sibling's firmware, then the vendor's
+    # JavaScript for yc500 alone, whose tables are round-tripped on hardware.
+    matrix_of = {}
+    sources = {"firmware": 0, "layout": 0, "vendor": 0}
     for d in devices:
-        if d["name"] not in loaders:
-            continue
-        if d["family"] != "yc500" and d["keyLayout"] not in evidence:
-            continue
-        mat = first_default_matrix(loaders[d["name"]]["chunks"])
-        if mat:
-            matrices_by_layout.setdefault(d["keyLayout"], set()).add(tuple(mat))
-
-    # A confirmed matrix is the one the firmware carries, so it settles any
-    # disagreement between sibling devices rather than joining it.
-    for name, rec in evidence.items():
-        matrices_by_layout[name] = {tuple(rec["matrix"])}
-    if evidence:
-        print(f"  firmware-confirmed matrices applied: {len(evidence)}")
+        rec = keymaps.get(str(d["id"]))
+        if rec:
+            matrix_of[d["id"]] = tuple(rec["matrix"])
+            sources["firmware"] += 1
+        elif d["keyLayout"] in evidence:
+            matrix_of[d["id"]] = tuple(evidence[d["keyLayout"]]["matrix"])
+            sources["layout"] += 1
+        elif d["family"] == "yc500" and d["name"] in loaders:
+            mat = first_default_matrix(loaders[d["name"]]["chunks"])
+            if mat:
+                matrix_of[d["id"]] = tuple(mat)
+                sources["vendor"] += 1
+    print(f"  boards with a factory keymap: {sum(sources.values())} {sources}")
 
     # Clear stale output: layouts accumulate across runs otherwise, and the
     # committed set must be exactly what the current sources reproduce. A
@@ -1014,33 +1034,62 @@ def main():
             "local layouts share a name with a vendor layout, which would "
             f"replace it for every board pointing there: {clash}"
         )
-    written, no_matrix, ambiguous = [], [], []
+    # Boards sharing a picture do not always share a factory keymap: the
+    # F row sits one column over, the modifiers shift, six keymaps on one
+    # 75% body. One set of slots baked into the shared file is then right
+    # for one sibling and sends the others' remaps to the wrong key. So
+    # each distinct keymap gets its own copy of the picture, `Name~k1`,
+    # `Name~k2`, in order of the lowest board id shipping it, and each
+    # board is pointed at the copy carrying its own keymap. The shared
+    # name keeps the geometry alone for boards whose keymap nobody has.
+    drawable = {k for k, u in ui_map.items() if u in ui_defs} - local - {"Common80_k72x86"}
+    by_layout = {}
+    for d in devices:
+        if d["id"] in matrix_of and d["keyLayout"] in drawable:
+            by_layout.setdefault(d["keyLayout"], {}).setdefault(matrix_of[d["id"]], []).append(d["id"])
+    layout_matrix, variants = {}, {}
+    for name, groups in by_layout.items():
+        if len(groups) == 1:
+            layout_matrix[name] = next(iter(groups))
+            continue
+        for n, (mat, ids) in enumerate(sorted(groups.items(), key=lambda kv: min(kv[1])), 1):
+            variant = f"{name}~k{n}"
+            layout_matrix[variant] = mat
+            variants.setdefault(name, []).append(variant)
+            for d in devices:
+                if d["id"] in ids:
+                    d["keyLayout"] = variant
+    write_devices()
+
+    written, no_matrix, split = [], [], []
     for enum_key, ui_name in sorted(ui_map.items()):
         if enum_key == "Common80_k72x86" or enum_key in local:
             continue
         if ui_name not in ui_defs:
             continue
         ui, _chunk = ui_defs[ui_name]
-        mats = matrices_by_layout.get(enum_key, set())
-        matrix = None
-        if len(mats) == 1:
-            matrix = list(next(iter(mats)))
-        elif len(mats) > 1:
-            ambiguous.append(enum_key)
-        else:
+        if enum_key in variants:
+            split.append(enum_key)
+        elif enum_key not in layout_matrix:
             no_matrix.append(enum_key)
-        report = {}
-        layout = build_layout(ui, hid_table, matrix, report)
-        # A scene whose groups the parser did not recognise yields no keys.
-        # An empty picture is worse than none: the app draws a slot grid
-        # for a board without one and refuses an empty file.
-        if not layout["keys"]:
-            print(f"  {enum_key}: scene parsed to no keys, not written")
+        empty = False
+        for name in [enum_key, *variants.get(enum_key, [])]:
+            matrix = list(layout_matrix[name]) if name in layout_matrix else None
+            report = {}
+            layout = build_layout(ui, hid_table, matrix, report)
+            # A scene whose groups the parser did not recognise yields no
+            # keys. An empty picture is worse than none: the app draws a
+            # slot grid for a board without one and refuses an empty file.
+            if not layout["keys"]:
+                print(f"  {enum_key}: scene parsed to no keys, not written")
+                empty = True
+                break
+            (args.layouts_out / f"{name}.json").write_text(
+                dump_layout(layout), encoding="utf-8"
+            )
+            written.append(name)
+        if empty:
             continue
-        (args.layouts_out / f"{enum_key}.json").write_text(
-            dump_layout(layout), encoding="utf-8"
-        )
-        written.append(enum_key)
         for code in report.get("unmapped_codes", []):
             print(f"  {enum_key}: no hid mapping for UI key {code!r} (matrixEntry=null)")
         if report.get("duplicate_entries"):
@@ -1063,10 +1112,9 @@ def main():
     )
 
     print(f"layouts: {len(written)} written to {args.layouts_out}")
-    print("  matrix indices come from the defaultMatrix of yc500-family devices only")
-    print(f"  geometry+matrix: {len(written) - len(no_matrix) - len(ambiguous)}")
-    print(f"  geometry only (no yc500 device with a resolvable defaultMatrix): {sorted(no_matrix)}")
-    print(f"  geometry only (yc500 devices disagree on defaultMatrix): {sorted(ambiguous)}")
+    print(f"  geometry+matrix: {sum(1 for n in written if n in layout_matrix)}")
+    print(f"  split into per-keymap variants: {len(split)} {sorted(split)}")
+    print(f"  geometry only (no board with a factory keymap): {sorted(no_matrix)}")
     if orphans:
         print(
             "  ui_info objects with no keyLayout mapping, written under their own name "

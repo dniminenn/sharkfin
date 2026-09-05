@@ -15,8 +15,8 @@ the board itself; blank means the entry rests on the vendor's data.
 |---|---:|
 | total | 1029 |
 | writable | 1025 |
-| drawn | 166 |
-| drawn after confirmation | 832 |
+| drawn | 204 |
+| drawn after confirmation | 794 |
 | confirmed on hardware | 4 |
 
 | board | id | usb | family | write | draw | confirmed |
@@ -34,7 +34,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | AciraKB GXT873 Acira | 3589 | 145f:0379 | gen2 | yes | auto |  |
 | AciraKB GXT873 Acira | 3959 | 3151:5056 | gen2 | yes | auto |  |
 | Acrox KM9 | 2893 | 3151:5030 | gen2 | yes | auto |  |
-| Adamantiun Akira SK13 | 3240 | 3151:4015 | yc500 | yes | auto |  |
+| Adamantiun Akira SK13 | 3240 | 3151:4015 | yc500 | yes | yes |  |
 | ADXMK1926 | 3495 | 3151:5056 | gen2 | yes | auto |  |
 | AIM1Keys MATATAKI (JIS coalowl) | 3701 | 3151:5029 | gen2 | yes | auto |  |
 | AIM1Keys MATATAKI (US) | 1921 | 3151:4035 | yc500 | yes | auto |  |
@@ -92,8 +92,8 @@ the board itself; blank means the entry rests on the vendor's data.
 | ASTROMEDA AMGK80-001 | 3536 | 3151:5030 | gen2 | yes | auto |  |
 | ASTROMEDA AMGK80-001 | 3537 | 3151:5030 | gen2 | yes | auto |  |
 | AttackShark Beat75 | 2633 | 3151:5030 | gen2 | yes | auto |  |
-| AttackShark K75RGB | 1343 | 3151:4015 | yc500 | yes | auto |  |
-| AttackShark K75RGB | 1679 | 3151:4015 | yc500 | yes | auto |  |
+| AttackShark K75RGB | 1343 | 3151:4015 | yc500 | yes | yes |  |
+| AttackShark K75RGB | 1679 | 3151:4015 | yc500 | yes | yes |  |
 | AttackShark K85 | 1466 | 3151:502d | yc500 | yes | yes |  |
 | AttackShark K85 | 2552 | 3151:502d | gen2 | yes | yes |  |
 | AttackShark K85 | 3334 | 3151:502d | gen2 | yes | yes |  |
@@ -382,7 +382,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | Hator K2405 | 2806 | 379a:1803 | gen2 | yes | auto |  |
 | Hator K2506 | 3125 | 379a:1803 | gen2 | yes | auto |  |
 | Hator K2506 UK | 3126 | 379a:1803 | gen2 | yes | auto |  |
-| Hawk HK610 | 3702 | 3151:4015 | yc500 | yes | auto |  |
+| Hawk HK610 | 3702 | 3151:4015 | yc500 | yes | yes |  |
 | Hawkgaming HK440 | 3771 | 3151:502c | gen2 | yes | auto |  |
 | Hawkgaming HK550 | 3760 | 3151:502c | gen2 | yes | auto |  |
 | HawkGamingHK610S Hawk Gaming HK610S | 3677 | 3151:5030 | gen2 | yes | auto |  |
@@ -392,13 +392,13 @@ the board itself; blank means the entry rests on the vendor's data.
 | IDEEZ SWIFT X85 | 3481 | 3151:502f | gen2 | yes | auto |  |
 | IDJ H60HE | 3078 | 3151:5029 | gen2 | yes | auto |  |
 | IDJ H60HE | 3079 | 3151:5029 | gen2 | yes | auto |  |
-| ikbc 3MRGB-101 | 1781 | 3151:4015 | yc500 | yes | auto |  |
+| ikbc 3MRGB-101 | 1781 | 3151:4015 | yc500 | yes | yes |  |
 | ikbc 3MRGB-207 | 1812 | 3151:4015 | yc500 | yes | yes |  |
-| ikbc 3MRGB-208 | 2221 | 3151:4015 | yc500 | yes | auto |  |
+| ikbc 3MRGB-208 | 2221 | 3151:4015 | yc500 | yes | yes |  |
 | ikbc 3MRGB-208 | 3102 | 3151:5002 | gen2 | yes | auto |  |
 | ikbc 3MRGB-209 | 2083 | 3151:4015 | yc500 | yes | yes |  |
 | ikbc 3MRGB-209 | 3077 | 3151:5002 | gen2 | yes | auto |  |
-| ikbc 3MRGB-210 | 2248 | 3151:4015 | yc500 | yes | auto |  |
+| ikbc 3MRGB-210 | 2248 | 3151:4015 | yc500 | yes | yes |  |
 | ikbc 3MRGB-210 | 2751 | 3151:5002 | gen2 | yes | auto |  |
 | ikbc 3MRGB-258 | 2809 | 3151:5002 | gen2 | yes | auto |  |
 | ikbc CZ-206 | 2314 | 3151:502d | gen2 | yes |  |  |
@@ -455,10 +455,10 @@ the board itself; blank means the entry rests on the vendor's data.
 | Kiiboom phantom81 V4 | 3455 | 3151:4015 | yc500 | yes | yes |  |
 | KiiBoom64 | 1350 | 3151:4015 | yc500 | yes | yes |  |
 | KiiBoom81 | 954 | 3151:4015 | yc500 | yes | yes |  |
-| kiiboom81 | 2049 | 3151:4015 | yc500 | yes | auto |  |
+| kiiboom81 | 2049 | 3151:4015 | yc500 | yes | yes |  |
 | kiiboom980 | 2029 | 3151:4015 | yc500 | yes | yes |  |
 | KiiP Y87 | 1192 | 3151:4015 | yc500 | yes | auto |  |
-| KMZKeyboardSoftware KOOMZE H71 | 3763 | 3151:4015 | yc500 | yes | auto |  |
+| KMZKeyboardSoftware KOOMZE H71 | 3763 | 3151:4015 | yc500 | yes | yes |  |
 | KMZKeyboardSoftware KOOMZE H75 | 3631 | 3151:5025 | gen2 | yes | auto |  |
 | KMZKeyboardSoftware KOOMZE H98 | 3639 | 3151:5025 | gen2 | yes | auto |  |
 | Koda A68 | 3244 | 3151:5029 | gen2 | yes | auto |  |
@@ -569,21 +569,21 @@ the board itself; blank means the entry rests on the vendor's data.
 | OUSAID MK232-V2 | 3984 | 3151:5029 | gen2 | yes | auto |  |
 | PIIFOXDRIVER DEFENDER 68 | 2499 | 3151:502d | gen2 | yes | auto |  |
 | PIIFOXDRIVER ER 75PRO | 3473 | 3151:5030 | gen2 | yes | auto |  |
-| PIIFOXDRIVER ER75 | 1618 | 3151:4015 | yc500 | yes | auto |  |
+| PIIFOXDRIVER ER75 | 1618 | 3151:4015 | yc500 | yes | yes |  |
 | PIIFOXDRIVER ER95 | 1222 | 3151:4015 | yc500 | yes | yes |  |
 | PIIFOXDRIVER LUNA Grid98 | 4038 | 3151:4015 | yc500 | yes | yes |  |
 | PIIFOXDRIVER Muse65 Pro | 4045 | 3151:504c | gen2 | yes | auto |  |
 | PIIFOXDRIVER Muse75 Pro | 4044 | 3151:504c | gen2 | yes | auto |  |
 | PIIFOXDRIVER Swift68 HE Lite | 4035 | 3151:5029 | gen2 | yes | auto |  |
 | PIIFOXDRIVER Swift68 Knob | 4037 | 3151:4002 | yc500 | yes | yes |  |
-| PIIFOXDRIVER WALKER 75 | 1848 | 3151:4015 | yc500 | yes | auto |  |
-| PIIFOXDRIVER WALKER 75 | 2053 | 3151:4015 | yc500 | yes | auto |  |
+| PIIFOXDRIVER WALKER 75 | 1848 | 3151:4015 | yc500 | yes | yes |  |
+| PIIFOXDRIVER WALKER 75 | 2053 | 3151:4015 | yc500 | yes | yes |  |
 | PIIFOXDRIVER WALKER 75 | 3529 | 3151:504c | gen2 | yes | auto |  |
 | PLUXKB K986 | 3840 | 3151:5074 | gen2 | yes | auto |  |
 | PLUXKB PLUX CST KB | 2817 | 3151:5030 | gen2 | yes | auto |  |
 | PSYCommu PSY P1 | 3425 | 3151:5029 | gen2 | yes | auto |  |
 | QuikFingers Fierce-GK7 | 3358 | 3151:5002 | gen2 | yes | auto |  |
-| QuikFingers Lethal-GK1 | 3469 | 3151:4015 | yc500 | yes | auto |  |
+| QuikFingers Lethal-GK1 | 3469 | 3151:4015 | yc500 | yes | yes |  |
 | RAKKHANAN RAKK HANAN | 3002 | 3151:5030 | gen2 | yes | auto |  |
 | RampageKaisel Rampage Kaisel | 3114 | 3151:5029 | gen2 | yes | auto |  |
 | Redragon K736-PRO-M(PT) 3 Mode gaming keyboard | 3706 | 3151:4015 | yc500 | yes | yes |  |
@@ -770,7 +770,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | SayRoseB67 SayRose B67 | 3612 | 3151:4010 | yc500 | yes | yes |  |
 | ShadowApp ZEUS75 | 3118 | 3151:5002 | gen2 | yes | auto |  |
 | ShadowApp ZEUS75 PRO | 3620 | 3151:5002 | gen2 | yes | auto |  |
-| ShadowApp ZEUS87 | 3337 | 3151:4015 | yc500 | yes | auto |  |
+| ShadowApp ZEUS87 | 3337 | 3151:4015 | yc500 | yes | yes |  |
 | Siukie ACH105W | 3488 | 3151:5041 | gen2 | yes |  |  |
 | SK61HE | 3708 | 3151:5030 | gen2 | yes | auto |  |
 | skillMK231 Magnetic Keyboard | 3578 | 3151:5030 | gen2 | yes | auto |  |
@@ -841,7 +841,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | VKMS VK99 | 2410 | 3151:5030 | gen2 | yes |  |  |
 | VKMS VK99 Gaming | 2831 | 374a:a219 | gen2 | yes | yes |  |
 | VKMS VK99 Ultra | 3165 | 374a:a262 | gen2 | yes | auto |  |
-| VolkanoGaming VG-209-BK | 3450 | 3151:4015 | yc500 | yes | auto |  |
+| VolkanoGaming VG-209-BK | 3450 | 3151:4015 | yc500 | yes | yes |  |
 | VortechKB 971643 | 3413 | 3151:5002 | gen2 | yes | yes |  |
 | WBLVD JRK108Pro Ultra | 3709 | 3151:504c | gen2 | yes | auto |  |
 | WINSTAR RK-X44-67 | 2796 | 3151:502d | gen2 | yes | auto |  |
@@ -854,7 +854,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | WOMIER SK75 TMR | 2518 | 3151:5030 | gen2 | yes | yes |  |
 | WOMIER SK75 TMR | 3804 | 3151:5030 | gen2 | yes | auto |  |
 | Wu06 | 3498 | 3151:4015 | yc500 | yes | yes |  |
-| Wu06 | 3499 | 3151:4015 | yc500 | yes | auto |  |
+| Wu06 | 3499 | 3151:4015 | yc500 | yes | yes |  |
 | XC-1 | 3236 | 3151:5029 | gen2 | yes | auto |  |
 | XciteGeneralTradingCo GK1 | 3501 | 3151:5002 | gen2 | yes | auto |  |
 | XERON MAX K68 | 3950 | 3151:5030 | gen2 | yes | auto |  |
@@ -885,7 +885,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | XinMengK65Keyboard Zero 68 | 3798 | 3151:5029 | gen2 | yes | auto |  |
 | XinMengK65Keyboard Zero 68 | 3799 | 3151:5030 | gen2 | yes | auto |  |
 | XinMengK65Keyboard Zero75 | 3988 | 3151:5030 | gen2 | yes | auto |  |
-| Xpanse Jelly75 | 3526 | 3151:4015 | yc500 | yes | auto |  |
+| Xpanse Jelly75 | 3526 | 3151:4015 | yc500 | yes | yes |  |
 | YINREN C84 | 3561 | 3151:4015 | yc500 | yes | yes |  |
 | YINREN C87P | 3562 | 3151:4015 | yc500 | yes | yes |  |
 | YINREN C98 | 3563 | 3151:4015 | yc500 | yes | yes |  |
@@ -897,10 +897,10 @@ the board itself; blank means the entry rests on the vendor's data.
 | YUNZII AL66 | 2483 | 3151:5025 | gen2 | yes | auto |  |
 | YUNZII AL75 PRO | 2923 | 3151:5002 | gen2 | yes | auto |  |
 | YUNZII AL75PRO | 1876 | 3151:4015 | yc500 | yes | yes |  |
-| YUNZII B75 | 2591 | 3151:4010 | yc500 | yes | auto |  |
+| YUNZII B75 | 2591 | 3151:4010 | yc500 | yes | yes |  |
 | YUNZII B75 | 2687 | 3151:5002 | gen2 | yes | auto |  |
-| YUNZII B75 PRO | 1882 | 3151:4015 | yc500 | yes | auto |  |
-| YUNZII B75 PRO | 1888 | 3151:4015 | yc500 | yes | auto |  |
+| YUNZII B75 PRO | 1882 | 3151:4015 | yc500 | yes | yes |  |
+| YUNZII B75 PRO | 1888 | 3151:4015 | yc500 | yes | yes |  |
 | YUNZII B75 PRO ISO-DE | 4255 | 3151:4015 | yc500 | yes | yes |  |
 | YUNZII B75 PRO ISO-FR | 1887 | 3151:4015 | yc500 | yes | yes |  |
 | YUNZII B75pro | 2555 | 3151:5030 | gen2 | yes | auto |  |
@@ -908,12 +908,12 @@ the board itself; blank means the entry rests on the vendor's data.
 | YUNZII E87 | 3104 | 3151:5002 | gen2 | yes | auto |  |
 | YUNZII Gaming Keyboard | 2834 | 3151:5029 | gen2 | yes | auto |  |
 | YUNZII IF99 PRO | 3843 | 3151:504c | gen2 | yes | auto |  |
-| YUNZII L75 | 1981 | 3151:4015 | yc500 | yes | auto |  |
+| YUNZII L75 | 1981 | 3151:4015 | yc500 | yes | yes |  |
 | YUNZII QL108 | 2644 | 3151:5002 | gen2 | yes | auto |  |
-| YUNZII RT68 | 1725 | 3151:4015 | yc500 | yes | auto |  |
-| YUNZII RT68 | 2300 | 3151:4015 | yc500 | yes | auto |  |
-| YUNZII RT75 | 1753 | 3151:4015 | yc500 | yes | auto |  |
-| YUNZII RT75 | 2573 | 3151:4015 | yc500 | yes | auto |  |
+| YUNZII RT68 | 1725 | 3151:4015 | yc500 | yes | yes |  |
+| YUNZII RT68 | 2300 | 3151:4015 | yc500 | yes | yes |  |
+| YUNZII RT75 | 1753 | 3151:4015 | yc500 | yes | yes |  |
+| YUNZII RT75 | 2573 | 3151:4015 | yc500 | yes | yes |  |
 | YUNZII RT75 PRO | 2445 | 3151:5030 | gen2 | yes | auto |  |
 | YUNZII RT75 PRO | 3100 | 3151:5030 | gen2 | yes | auto |  |
 | YUNZII RT75PRO | 2865 | 39ab:9016 | gen2 | yes | auto |  |
@@ -927,22 +927,22 @@ the board itself; blank means the entry rests on the vendor's data.
 | YUNZII YZ-21 | 790 | 3151:4010 | yc500 | yes | yes |  |
 | YUNZII YZ-21 | 1123 | 3151:4018 | yc500 | yes | yes |  |
 | YUNZII YZ-21 | 1154 | 3151:4010 | yc500 | yes | yes |  |
-| YUNZII YZ1 | 431 | 3151:4002 | yc500 | yes | auto |  |
-| YUNZII YZ1108 | 660 | 3151:4003 | yc500 | yes | auto |  |
-| YUNZII YZ1108 | 1318 | 3151:4003 | yc500 | yes | auto |  |
-| YUNZII YZ166 | 799 | 3151:4010 | yc500 | yes | auto |  |
-| YUNZII YZ166 | 847 | 3151:4003 | yc500 | yes | auto |  |
+| YUNZII YZ1 | 431 | 3151:4002 | yc500 | yes | yes |  |
+| YUNZII YZ1108 | 660 | 3151:4003 | yc500 | yes | yes |  |
+| YUNZII YZ1108 | 1318 | 3151:4003 | yc500 | yes | yes |  |
+| YUNZII YZ166 | 799 | 3151:4010 | yc500 | yes | yes |  |
+| YUNZII YZ166 | 847 | 3151:4003 | yc500 | yes | yes |  |
 | YUNZII YZ184 | 484 | 3151:4002 | yc500 | yes | yes |  |
 | YUNZII YZ19 | 1591 | 3151:4015 | yc500 | yes | yes |  |
 | YUNZII YZ19 | 2598 | 3151:5025 | gen2 | yes | auto |  |
-| YUNZII YZ68 | 244 | 0461:4002 | yc500 | yes | auto |  |
-| YUNZII YZ68 | 1104 | 3151:4015 | yc500 | yes | auto |  |
-| YUNZII YZ68 | 1105 | 3151:4018 | yc500 | yes | auto |  |
+| YUNZII YZ68 | 244 | 0461:4002 | yc500 | yes | yes |  |
+| YUNZII YZ68 | 1104 | 3151:4015 | yc500 | yes | yes |  |
+| YUNZII YZ68 | 1105 | 3151:4018 | yc500 | yes | yes |  |
 | YUNZII YZ75 MAX | 2931 | 3151:5002 | gen2 | yes | auto |  |
-| YUNZII YZ75 Pro | 1181 | 3151:4015 | yc500 | yes | auto |  |
+| YUNZII YZ75 Pro | 1181 | 3151:4015 | yc500 | yes | yes |  |
 | YUNZII YZ84 | 243 | 0461:4002 | yc500 | yes | yes |  |
-| YUNZII YZ84 | 1106 | 3151:4015 | yc500 | yes | auto |  |
-| YUNZII YZ84 pro | 1184 | 3151:4015 | yc500 | yes | auto |  |
+| YUNZII YZ84 | 1106 | 3151:4015 | yc500 | yes | yes |  |
+| YUNZII YZ84 pro | 1184 | 3151:4015 | yc500 | yes | yes |  |
 | ZADEZTECHNOLOGY GK-98N | 3575 | 3151:5025 | gen2 | yes | auto |  |
 | ZENITHPROSoftware ZENITH PRO | 2310 | 3151:502d | gen2 | yes | yes |  |
 | 万能驱 | 9999 | 3151:5029 | gen2 | yes |  |  |
@@ -955,8 +955,8 @@ the board itself; blank means the entry rests on the vendor's data.
 | 凯酷 K21 | 3816 | 3151:5056 | gen2 | yes | yes |  |
 | 凯酷 K21 PRO | 3311 | 3151:5002 | gen2 | yes | auto |  |
 | 凯酷 KC68 | 2344 | 3151:5029 | gen2 | yes | auto |  |
-| 凯酷 KC75 pro | 1244 | 3151:4015 | yc500 | yes | auto |  |
-| 凯酷 KC84 pro | 1242 | 3151:4015 | yc500 | yes | auto |  |
+| 凯酷 KC75 pro | 1244 | 3151:4015 | yc500 | yes | yes |  |
+| 凯酷 KC84 pro | 1242 | 3151:4015 | yc500 | yes | yes |  |
 | 凯酷 KC84 PRO | 2900 | 3151:5002 | gen2 | yes | auto |  |
 | 凯酷 QK66 | 4143 | 39ab:9007 | gen2 | yes | auto |  |
 | 凯酷 QK75 | 3447 | 3151:5056 | gen2 | yes | auto |  |
