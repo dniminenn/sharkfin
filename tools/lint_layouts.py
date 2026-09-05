@@ -40,7 +40,14 @@ CANONICAL = {"Common80_k72x86"}
 
 # Dead keys with no fix the data can evidence. MK18 prints two Print-like
 # keys and only hardware can say which carries the real usage.
-DEAD_KEY_EXCEPTIONS = {("Common108_MK18", "PrtSc")}
+# Keys the vendor's own picture labels but gives no code the HID table knows.
+# FF101 and VK99C call their right Alt "AltLeft_2" since September 2026;
+# attaching it to either Alt usage would be a guess.
+DEAD_KEY_EXCEPTIONS = {
+    ("Common108_MK18", "PrtSc"),
+    ("Common101_FF101", "Alt"),
+    ("Common101_VK99C", "Alt"),
+}
 
 
 def lint_picture(path: Path, errors: list[str]) -> None:

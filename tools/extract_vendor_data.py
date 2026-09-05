@@ -273,9 +273,11 @@ def parse_object_at(text, pos):
 
 
 def ident_name(v):
+    """`c.Common82_SG9000` -> `Common82_SG9000`. The enum object's minified
+    name changes between builds (`c` in July, `u` in September), so strip
+    any single identifier prefix rather than one letter."""
     if isinstance(v, dict) and "$ident" in v:
-        n = v["$ident"]
-        return n[2:] if n.startswith("c.") else n
+        return re.sub(r"^[A-Za-z_$][\w$]*\.", "", v["$ident"])
     return v
 
 
@@ -326,8 +328,10 @@ def extract_enum_ui_map(bundle, dists=()):
 
 
 def extract_enum_keys(bundle):
-    return set(re.findall(r'\(e\.(\w+) =\s*\n?\s*"', bundle)) | set(
-        re.findall(r'\be\.(\w+) = "', bundle)
+    # The enum is built as `(e.Name = "value")` inside an IIFE whose
+    # parameter is minified per build, so match any short identifier.
+    return set(re.findall(r'\(\w{1,2}\.(\w+) =\s*\n?\s*"', bundle)) | set(
+        re.findall(r'\b\w{1,2}\.(\w+) = "', bundle)
     )
 
 
@@ -868,6 +872,10 @@ def main():
     ui_map = extract_enum_ui_map(bundle, args.dist_js or ())
     ui_defs = extract_ui_defs(args.dist_js)
     hid_table = extract_hid_table(bundle)
+    # September's build labels one board's Print Screen key "PrtSc", a code
+    # the vendor's own HID table lacks. It is the same key.
+    if "PrintScreen" in hid_table:
+        hid_table.setdefault("PrtSc", hid_table["PrintScreen"])
     enum_keys = extract_enum_keys(bundle)
 
     # Newer layouts ship as SVG scenes instead of ui_info objects, and a
@@ -1023,6 +1031,12 @@ def main():
             no_matrix.append(enum_key)
         report = {}
         layout = build_layout(ui, hid_table, matrix, report)
+        # A scene whose groups the parser did not recognise yields no keys.
+        # An empty picture is worse than none: the app draws a slot grid
+        # for a board without one and refuses an empty file.
+        if not layout["keys"]:
+            print(f"  {enum_key}: scene parsed to no keys, not written")
+            continue
         (args.layouts_out / f"{enum_key}.json").write_text(
             dump_layout(layout), encoding="utf-8"
         )
@@ -1039,6 +1053,8 @@ def main():
     orphans = sorted(set(ui_defs) - mapped_uis - {"keyboard_80_k72x86_keymappings_ui_info"})
     for ui_name in orphans:
         layout = build_layout(ui_defs[ui_name][0], hid_table, None, {})
+        if not layout["keys"]:
+            continue
         (args.layouts_out / f"{ui_name}.json").write_text(
             dump_layout(layout), encoding="utf-8"
         )

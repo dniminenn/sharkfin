@@ -29,6 +29,9 @@ const TOLERATED = new Set([
   "^..", "> <", ">", "i", "I", "M", "PrtSc", "GG", "Sup", "Conv",
   "Echap", "Pgpr", "Pgsv", "PgPr", "PgSv", "L\nIns", "PS", "SL", "HM",
   "PU", "PD", "YH", "JD",
+  // September 2026 pictures: a UK quote key, Spanish and German Insert and
+  // End, a keypad Fn combo, and a backquote engraved with a stray backslash.
+  "'@", "Inser", "Fin", "Einfg", "Ende", "Fn/C", "\\`~",
 ]);
 
 function tolerated(label: string): boolean {
