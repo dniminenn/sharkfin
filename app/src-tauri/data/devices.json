@@ -2136,6 +2136,31 @@
     }
   },
   {
+    "id": 2045,
+    "name": "typhoon_ultimate_tkl",
+    "displayName": "Ultimate TKL",
+    "company": "Typhoon",
+    "vendor": "Typhoon",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "typhoon_ultimate_tkl",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "owner",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 2049,
     "name": "yc3121_kiiboom81xv3_soc",
     "displayName": "kiiboom81",
