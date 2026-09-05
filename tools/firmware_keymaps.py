@@ -173,6 +173,11 @@ def fetch(dev_id, cache, none):
         try:
             raw = urllib.request.urlopen(DOWNLOAD + m["file_path"], timeout=180).read()
             (cache / f"{dev_id}_{m['version_str']}.pkg").write_bytes(raw)
+            # The channel's record beside the package: company and version
+            # are the only description a board outside the registry has.
+            (cache / f"{dev_id}_{m['version_str']}.json").write_text(
+                json.dumps(m, indent=1) + "\n", encoding="utf-8"
+            )
             return m["version_str"], raw
         except (OSError, ValueError):
             time.sleep(2 * (attempt + 1))
@@ -182,6 +187,8 @@ def fetch(dev_id, cache, none):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", type=int, nargs="*", help="only these device ids")
+    ap.add_argument("--range", type=int, nargs=2, metavar=("FROM", "TO"),
+                    help="every id in FROM..TO, registered or not; a survey of what the channel holds")
     ap.add_argument("--jobs", type=int, default=1)
     ap.add_argument("--delay", type=float, default=1.0, help="seconds between requests")
     ap.add_argument(
@@ -201,13 +208,24 @@ def main():
     loaders = load_loader_maps(args.dist_js) if args.dist_js else {}
 
     devices = {d["id"]: d for d in json.loads(DEVICES.read_text(encoding="utf-8"))}
-    ids = args.ids or sorted(devices)
+    if args.range:
+        ids = list(range(args.range[0], args.range[1] + 1))
+    else:
+        ids = args.ids or sorted(devices)
+    label = lambda i: devices[i]["displayName"] if i in devices else "(not in the registry)"
     records = {}
     if args.out.is_file():
         records = json.loads(args.out.read_text(encoding="utf-8"))
 
     absent, errors, ambiguous, empty, unaligned, found = [], [], [], [], [], []
     methods = {"anchored": 0, "escape": 0}
+    done = 0
+
+    def save_none():
+        none_path.write_text(
+            json.dumps({str(k): v for k, v in sorted(none.items())}, indent=1) + "\n",
+            encoding="utf-8",
+        )
 
     def work(dev_id):
         version, raw = fetch(dev_id, args.cache, none)
@@ -222,10 +240,13 @@ def main():
                 continue
             # Whatever this run decides replaces what an earlier run said.
             records.pop(str(dev_id), None)
+            done += 1
+            if done % 50 == 0:
+                save_none()  # a long sweep must not lose its answers to a kill
             if raw is None:
                 absent.append(dev_id)
                 continue
-            name = devices[dev_id]["name"]
+            name = devices.get(dev_id, {}).get("name")
             js = first_default_matrix(loaders[name]["chunks"]) if name in loaders else None
             members = images(raw)
             tab = member = offset = None
@@ -258,7 +279,7 @@ def main():
                 copies = sum(len(o) for _, _, o in where)
             methods[method] += 1
             records[str(dev_id)] = {
-                "board": devices[dev_id]["displayName"],
+                "board": label(dev_id),
                 "firmware": version,
                 "image": member,
                 "offset": offset,
@@ -267,10 +288,10 @@ def main():
                 "matrix": list(tab),
             }
             found.append(dev_id)
-            print(f"  {dev_id} {devices[dev_id]['displayName']}: {version} {member} "
+            print(f"  {dev_id} {label(dev_id)}: {version} {member} "
                   f"@{offset:#x} x{copies} slots {len(tab)//4} {method}", flush=True)
 
-    none_path.write_text(json.dumps({str(k): v for k, v in sorted(none.items())}, indent=1) + "\n", encoding="utf-8")
+    save_none()
     records = dict(sorted(records.items(), key=lambda kv: int(kv[0])))
     args.out.write_text(json.dumps(records, indent=2) + "\n", encoding="utf-8")
     print(f"{len(found)} boards read from firmware this run, {len(records)} recorded -> {args.out}")
