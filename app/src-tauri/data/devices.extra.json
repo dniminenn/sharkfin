@@ -93,7 +93,7 @@
   {
     "_why": "Reported in issue #10 as not working, which is what an unrecognised board looks like: the registry has no entry, so sharkfin will not write to it. Not in any vendor catalogue.",
     "_evidence": "Read sweep from the owner's board (0.2.2 web build). identify 0x8F returns 0x04A8 = 1192. GET_KEYMATRIX 0x89 decodes as a yc500 keymap, reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers with four u16 (120, 120, 1680, 1680) and auto-OS 0x97 answers. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86.",
-    "_unknown": "Profile count was not observable from the read sweep, so it is pinned to 1. Edge light 0x88 answers, but the flag tracks a layout name the sweep cannot give, so it stays false. Common87_KiiP_Y87 is the owner's own drawing (issue #21), matched 87 of 87 against their keymap; the keymap also carries NonUsBackslash and NonUsHash at ISO positions the physical board does not have, and those stay unmatched.",
+    "_unknown": "Profile count was not observable from the read sweep, so it is pinned to 1. Edge light 0x88 answers, but the flag tracks a layout name the sweep cannot give, so it stays false. Local87_KiiP_Y87 is the owner's own drawing (issue #21), matched 87 of 87 against their keymap; the keymap also carries NonUsBackslash and NonUsHash at ISO positions the physical board does not have, and those stay unmatched.",
     "id": 1192,
     "name": "kiip_y87",
     "displayName": "KiiP Y87",
@@ -102,7 +102,7 @@
     "vendorId": 12625,
     "productId": 16405,
     "internalName": "kiip_y87",
-    "keyLayout": "Common87_KiiP_Y87",
+    "keyLayout": "Local87_KiiP_Y87",
     "lightLayout": "",
     "sideLightLayout": "",
     "profiles": 1,

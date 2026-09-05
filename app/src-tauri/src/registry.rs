@@ -411,6 +411,10 @@ mod tests {
                 include_str!("../../src/lib/layouts/vendor/Local81_DarmosharkTop75.json"),
             ),
             (
+                "Local87_KiiP_Y87",
+                include_str!("../../src/lib/layouts/vendor/Local87_KiiP_Y87.json"),
+            ),
+            (
                 "Local82_K600B82",
                 include_str!("../../src/lib/layouts/vendor/Local82_K600B82.json"),
             ),

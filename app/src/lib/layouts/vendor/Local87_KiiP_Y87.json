@@ -1,4 +1,5 @@
 {
+ "local": true,
  "canvas": {"width":836,"height":295},
  "keys": [
   {"code":"Escape","type":"key","x":1,"y":1,"w":40,"h":40,"text":"Esc","matrixIndex":null,"matrixEntry":[0,0,41,0],"hidUsage":41,"consumerUsage":null},
