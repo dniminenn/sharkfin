@@ -1,22 +1,18 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.6.0
+## What changed in 0.6.1
 
-**A keyboard that is not in the list works anyway.** sharkfin reads which
-command set it speaks off the board's own answers, says so on a notice,
-and writes only after you allow it. The Contribute tab still produces the
-report that gets it a real entry.
+**Boards that were never found.** Almost every board presents its
+settings as usage 2 on the vendor page; the Akko ACR75 v2 presents usage
+1, and sharkfin looked for 2 alone, so it never saw the board. Both are
+accepted now. Any board that showed "No device" with the cable in may
+have been this; try again.
 
-**72 more boards** from the vendor's current list, including the X98PRO
-and K86 revisions, the Darmoshark Top75 and TOP75J, and the VGN Neon75
-Extreme.
+**Akko ACR75 v2** is supported (device id 606). It has no built-in
+picture yet: the Keys page matches one against the board and asks you to
+confirm it.
 
-**306 boards are drawn out of the box**, up from 187. Factory keymaps
-now come from each board's own firmware where the vendor publishes it,
-and a picture shared by boards with different keymaps is split so each
-board gets its own.
-
-The registry is 1029 boards, 4 of them confirmed on hardware.
+The registry is 1030 boards, 4 of them confirmed on hardware.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
