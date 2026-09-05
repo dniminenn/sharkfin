@@ -15,8 +15,8 @@ the board itself; blank means the entry rests on the vendor's data.
 |---|---:|
 | total | 1029 |
 | writable | 1025 |
-| drawn | 204 |
-| drawn after confirmation | 794 |
+| drawn | 306 |
+| drawn after confirmation | 692 |
 | confirmed on hardware | 4 |
 
 | board | id | usb | family | write | draw | confirmed |
@@ -25,27 +25,27 @@ the board itself; blank means the entry rests on the vendor's data.
 | ABKO A0104 | 3904 | 38a9:0017 | gen2 | yes | auto |  |
 | ABKO ACH105 | 3117 | 3151:5041 | gen2 | yes | auto |  |
 | ABKO AO98 | 2656 | 3151:4015 | yc500 | yes | yes |  |
-| ABKO AR108G | 2993 | 3151:5002 | gen2 | yes | auto |  |
+| ABKO AR108G | 2993 | 3151:5002 | gen2 | yes | yes |  |
 | ABKO AR87G | 2500 | 3151:5033 | gen2 | yes | auto |  |
 | ABKO CJ87 | 3227 | 3151:4015 | unknown |  | auto |  |
-| ABKO NX108 | 2973 | 3151:5030 | gen2 | yes | auto |  |
-| AciraKB GXT1873 Revyn | 3364 | 145f:038d | gen2 | yes | auto |  |
+| ABKO NX108 | 2973 | 3151:5030 | gen2 | yes | yes |  |
+| AciraKB GXT1873 Revyn | 3364 | 145f:038d | gen2 | yes | yes |  |
 | AciraKB GXT1873 Revyn | 3608 | 145f:038e | gen2 | yes | auto |  |
 | AciraKB GXT873 Acira | 3589 | 145f:0379 | gen2 | yes | auto |  |
-| AciraKB GXT873 Acira | 3959 | 3151:5056 | gen2 | yes | auto |  |
+| AciraKB GXT873 Acira | 3959 | 3151:5056 | gen2 | yes | yes |  |
 | Acrox KM9 | 2893 | 3151:5030 | gen2 | yes | auto |  |
 | Adamantiun Akira SK13 | 3240 | 3151:4015 | yc500 | yes | yes |  |
 | ADXMK1926 | 3495 | 3151:5056 | gen2 | yes | auto |  |
-| AIM1Keys MATATAKI (JIS coalowl) | 3701 | 3151:5029 | gen2 | yes | auto |  |
+| AIM1Keys MATATAKI (JIS coalowl) | 3701 | 3151:5029 | gen2 | yes | yes |  |
 | AIM1Keys MATATAKI (US) | 1921 | 3151:4035 | yc500 | yes | auto |  |
 | AIM1Keys MATATAKI (US) | 2939 | 3151:5029 | gen2 | yes | auto |  |
-| AIM1Keys MATATAKI - JP | 2421 | 3151:5029 | gen2 | yes | auto |  |
-| AIM1Keys MATATAKI JIS | 3901 | 3151:5030 | gen2 | yes | auto |  |
-| AIM1Keys MATATAKI JIS | 3902 | 3151:5030 | gen2 | yes | auto |  |
+| AIM1Keys MATATAKI - JP | 2421 | 3151:5029 | gen2 | yes | yes |  |
+| AIM1Keys MATATAKI JIS | 3901 | 3151:5030 | gen2 | yes | yes |  |
+| AIM1Keys MATATAKI JIS | 3902 | 3151:5030 | gen2 | yes | yes |  |
 | AIM1Keys MATATAKI US | 3812 | 3151:5030 | gen2 | yes | yes |  |
 | AIM1Keys MATATAKI US | 3948 | 3151:5030 | gen2 | yes | yes |  |
-| AIM1Keys MATATAKI(JIS RIDDLE) | 3140 | 3151:5029 | gen2 | yes | auto |  |
-| AIM1Keys MATATAKI(JIS) | 2670 | 3151:5029 | gen2 | yes | auto |  |
+| AIM1Keys MATATAKI(JIS RIDDLE) | 3140 | 3151:5029 | gen2 | yes | yes |  |
+| AIM1Keys MATATAKI(JIS) | 2670 | 3151:5029 | gen2 | yes | yes |  |
 | AIM1Keys MATATAKI(US Separate) | 3026 | 3151:5029 | gen2 | yes | auto |  |
 | AJAZZ AK820 MAX | 1694 | 3151:4015 | yc500 | yes |  |  |
 | AJAZZMOUSE AK029 V2 | 4106 | 3151:5030 | gen2 | yes | auto |  |
@@ -54,21 +54,21 @@ the board itself; blank means the entry rests on the vendor's data.
 | AJAZZMOUSE AK680 MAX | 2336 | 3151:502f | gen2 | yes | auto |  |
 | AJAZZMOUSE AK680 MAX | 2343 | 3151:502f | gen2 | yes | auto |  |
 | AJAZZMOUSE AK680 MAX | 2371 | 3151:502f | gen2 | yes | auto |  |
-| AJAZZMOUSE AK680MC | 2605 | 3151:5030 | gen2 | yes | auto |  |
-| AJAZZMOUSE AK680MC | 2608 | 3151:5029 | gen2 | yes | auto |  |
-| AJAZZMOUSE AK680MC | 2609 | 3151:5030 | gen2 | yes | auto |  |
-| AJAZZMOUSE ALUX60 | 2621 | 3151:502d | gen2 | yes | auto |  |
-| AJAZZMOUSE ALUX60 | 2622 | 3151:502d | gen2 | yes | auto |  |
-| AJAZZMOUSE ALUX60 | 3218 | 3151:5029 | gen2 | yes | auto |  |
+| AJAZZMOUSE AK680MC | 2605 | 3151:5030 | gen2 | yes | yes |  |
+| AJAZZMOUSE AK680MC | 2608 | 3151:5029 | gen2 | yes | yes |  |
+| AJAZZMOUSE AK680MC | 2609 | 3151:5030 | gen2 | yes | yes |  |
+| AJAZZMOUSE ALUX60 | 2621 | 3151:502d | gen2 | yes | yes |  |
+| AJAZZMOUSE ALUX60 | 2622 | 3151:502d | gen2 | yes | yes |  |
+| AJAZZMOUSE ALUX60 | 3218 | 3151:5029 | gen2 | yes | yes |  |
 | AJAZZMOUSE ALUX68 AIR | 3025 | 3151:5030 | gen2 | yes | auto |  |
 | AJAZZMOUSE ALUX68 PRO | 2592 | 3151:5030 | gen2 | yes | auto |  |
 | AJAZZMOUSE ALUX68 PRO | 2593 | 3151:5030 | gen2 | yes | auto |  |
 | AJAZZMOUSE ALUX68 PRO | 2599 | 3151:5030 | gen2 | yes | auto |  |
-| AJAZZMOUSE NS67 | 2810 | 3151:502d | gen2 | yes | auto |  |
-| AJAZZMOUSE NS67 PRO | 2746 | 3151:502f | gen2 | yes | auto |  |
+| AJAZZMOUSE NS67 | 2810 | 3151:502d | gen2 | yes | yes |  |
+| AJAZZMOUSE NS67 PRO | 2746 | 3151:502f | gen2 | yes | yes |  |
 | AJAZZMOUSE NS87 | 3065 | 3151:5030 | gen2 | yes | auto |  |
 | AJAZZMOUSE NS87 | 3112 | 3151:5030 | gen2 | yes | auto |  |
-| akete GT60 V2 | 4151 | 39a8:9016 | gen2 | yes | auto |  |
+| akete GT60 V2 | 4151 | 39a8:9016 | gen2 | yes | yes |  |
 | akete k808 | 4138 | 39a8:9016 | gen2 | yes | auto |  |
 | akete K811 | 4161 | 39a8:9016 | gen2 | yes | auto |  |
 | akko Gem02 | 2619 | 3151:5030 | gen2 | yes | auto |  |
@@ -79,12 +79,12 @@ the board itself; blank means the entry rests on the vendor's data.
 | akko MOD007 V5 HE | 2453 | 3151:5030 | gen2 | yes | auto |  |
 | akko MOD007B V3-HE(UK) | 2872 | 3151:5030 | gen2 | yes | yes |  |
 | akko MOD007B V3-HE(UK) | 4030 | 3151:5030 | gen2 | yes | yes |  |
-| akko MOD007B V3-HE(US) | 2871 | 3151:5030 | gen2 | yes | yes |  |
-| akko MOD007S V3-HE | 2683 | 3151:5029 | gen2 | yes | yes |  |
+| akko MOD007B V3-HE(US) | 2871 | 3151:5030 | gen2 | yes | auto |  |
+| akko MOD007S V3-HE | 2683 | 3151:5029 | gen2 | yes | auto |  |
 | akko MOD007S V3-HE UK | 2704 | 3151:5029 | gen2 | yes | yes |  |
 | akko RAY68 | 2743 | 3151:5030 | gen2 | yes | auto |  |
 | akko RAY68 | 2924 | 3151:5030 | gen2 | yes | auto |  |
-| akko TAC75 HE | 2782 | 3151:502d | gen2 | yes | auto |  |
+| akko TAC75 HE | 2782 | 3151:502d | gen2 | yes | yes |  |
 | akko TAC87 | 2786 | 3151:5002 | gen2 | yes | auto |  |
 | ANGRYSHARK Final 75 | 3089 | 3151:5029 | gen2 | yes | auto |  |
 | apexkey Votin 84 | 4067 | 3151:504c | gen2 | yes | auto |  |
@@ -95,13 +95,13 @@ the board itself; blank means the entry rests on the vendor's data.
 | AttackShark K75RGB | 1343 | 3151:4015 | yc500 | yes | yes |  |
 | AttackShark K75RGB | 1679 | 3151:4015 | yc500 | yes | yes |  |
 | AttackShark K85 | 1466 | 3151:502d | yc500 | yes | yes |  |
-| AttackShark K85 | 2552 | 3151:502d | gen2 | yes | yes |  |
-| AttackShark K85 | 3334 | 3151:502d | gen2 | yes | yes |  |
-| AttackShark K85PROHE | 2978 | 3151:5030 | gen2 | yes | yes |  |
+| AttackShark K85 | 2552 | 3151:502d | gen2 | yes | auto |  |
+| AttackShark K85 | 3334 | 3151:502d | gen2 | yes | auto |  |
+| AttackShark K85PROHE | 2978 | 3151:5030 | gen2 | yes | auto |  |
 | AttackShark K86 | 1168 | 3151:4015 | yc500 | yes | yes |  |
-| AttackShark K86 | 2730 | 3151:5002 | gen2 | yes | auto |  |
+| AttackShark K86 | 2730 | 3151:5002 | gen2 | yes | yes |  |
 | AttackShark K86 | 4094 | 3151:5056 | gen2 | yes | auto |  |
-| AttackShark M86 | 4012 | 3151:5056 | gen2 | yes | auto |  |
+| AttackShark M86 | 4012 | 3151:5056 | gen2 | yes | yes |  |
 | AttackShark R68HE | 3650 | 3151:502d | gen2 | yes | auto |  |
 | AttackShark R82HE | 2844 | 3151:502d | gen2 | yes | auto |  |
 | AttackShark R82PROHE | 2798 | 3151:502f | gen2 | yes | auto |  |
@@ -121,17 +121,17 @@ the board itself; blank means the entry rests on the vendor's data.
 | AttackShark R98PRO | 3754 | 3151:5029 | gen2 | yes | auto |  |
 | AttackShark R98PROHE | 4068 | 3151:5029 | gen2 | yes | auto |  |
 | AttackShark R98ULTRA | 3737 | 3151:5030 | gen2 | yes | auto |  |
-| AttackShark X60 HE | 2929 | 3151:5029 | gen2 | yes | auto |  |
-| AttackShark X65 | 2942 | 3151:5029 | gen2 | yes | auto |  |
+| AttackShark X60 HE | 2929 | 3151:5029 | gen2 | yes | yes |  |
+| AttackShark X65 | 2942 | 3151:5029 | gen2 | yes | yes |  |
 | AttackShark X65HE | 1025 | 3151:4010 | yc500 | yes |  |  |
-| AttackShark X65HE | 2268 | 3151:502d | gen2 | yes | auto |  |
+| AttackShark X65HE | 2268 | 3151:502d | gen2 | yes | yes |  |
 | AttackShark X65PRO | 2308 | 3151:502f | gen2 | yes | auto |  |
 | AttackShark X65PRO | 2938 | 3151:5030 | gen2 | yes | auto |  |
 | AttackShark X68HE | 2270 | 3151:502d | gen2 | yes | auto |  |
 | AttackShark X68HE | 2472 | 3151:502d | gen2 | yes | auto |  |
 | AttackShark X68HE | 2902 | 3151:502d | gen2 | yes | auto |  |
 | AttackShark X68HE BR | 3957 | 3151:5029 | gen2 | yes | auto |  |
-| AttackShark X68MAX | 2755 | 3151:502d | gen2 | yes | auto |  |
+| AttackShark X68MAX | 2755 | 3151:502d | gen2 | yes | yes |  |
 | AttackShark X68MAX | 3796 | 39ab:9016 | gen2 | yes | auto |  |
 | AttackShark X68PRO HE | 2370 | 3151:502f | gen2 | yes | auto |  |
 | AttackShark X68PRO HE | 2901 | 3151:502f | gen2 | yes | auto |  |
@@ -142,9 +142,9 @@ the board itself; blank means the entry rests on the vendor's data.
 | AttackShark X820UItra | 3461 | 3151:5002 | gen2 | yes | auto |  |
 | AttackShark X820UItra | 3922 | 3151:5002 | gen2 | yes | auto |  |
 | AttackShark X820Ultra | 2804 | 3151:5002 | gen2 | yes | auto |  |
-| AttackShark X82HE | 3086 | 3151:5030 | gen2 | yes | auto |  |
-| AttackShark X82PRO HE | 2356 | 3151:502f | gen2 | yes | auto |  |
-| AttackShark X82PRO HE | 2935 | 3151:5030 | gen2 | yes | auto |  |
+| AttackShark X82HE | 3086 | 3151:5030 | gen2 | yes | yes |  |
+| AttackShark X82PRO HE | 2356 | 3151:502f | gen2 | yes | yes |  |
+| AttackShark X82PRO HE | 2935 | 3151:5030 | gen2 | yes | yes |  |
 | AttackShark X83PRO | 3870 | 3151:5056 | gen2 | yes | auto |  |
 | AttackShark X83PRO | 3886 | 39ab:9016 | gen2 | yes | auto |  |
 | AttackShark X83PRO | 3908 | 39ab:9007 | gen2 | yes |  |  |
@@ -180,8 +180,8 @@ the board itself; blank means the entry rests on the vendor's data.
 | cherry MX8.2 | 2494 | 046a:012d | gen2 | yes |  |  |
 | COLORFUL QY98 Ultra | 3257 | 3151:5030 | gen2 | yes | auto |  |
 | ColorReco CR-F81 | 3825 | 3151:5056 | gen2 | yes | yes |  |
-| COOLKILLER CK75SE | 2395 | 3151:5025 | gen2 | yes | auto |  |
-| COOLKILLER CK75SE | 3720 | 3151:5056 | gen2 | yes | auto |  |
+| COOLKILLER CK75SE | 2395 | 3151:5025 | gen2 | yes | yes |  |
+| COOLKILLER CK75SE | 3720 | 3151:5056 | gen2 | yes | yes |  |
 | DAGK K20PRO | 4126 | 3151:5025 | gen2 | yes | auto |  |
 | DAGK K21 | 4077 | 3151:5056 | gen2 | yes | yes |  |
 | DAGK K21PRO-B | 3789 | 3151:5025 | gen2 | yes | auto |  |
@@ -192,7 +192,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | DARKFORCE Fib(68) | 3055 | 3151:5030 | gen2 | yes | auto |  |
 | Darmoshark Top75 | 957 | 3151:4015 | yc500 | yes | yes | #37 |
 | Darmoshark TOP75J | 3795 | 3151:5030 | gen2 | yes | auto |  |
-| DeadlyInputorDI K1 | 3284 | 3151:5030 | gen2 | yes | auto |  |
+| DeadlyInputorDI K1 | 3284 | 3151:5030 | gen2 | yes | yes |  |
 | DekayThailand MIST75 | 3574 | 3151:5025 | gen2 | yes | auto |  |
 | DELUX RTS1 V2 | 2563 | 3151:5029 | gen2 | yes | auto |  |
 | DEVO MS75 | 3935 | 3151:5030 | gen2 | yes | auto |  |
@@ -201,7 +201,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | DSPIXEL DS KEY | 3189 | 3151:502f | gen2 | yes | auto |  |
 | DSPIXEL DS KEY | 3805 | 3151:502f | gen2 | yes | auto |  |
 | DSPIXEL Magic 80 | 3714 | 3151:5030 | gen2 | yes | auto |  |
-| E7 68 PRO V2 | 3383 | 3151:502d | gen2 | yes | auto |  |
+| E7 68 PRO V2 | 3383 | 3151:502d | gen2 | yes | yes |  |
 | EDRA EK368RT | 2835 | 3151:5030 | gen2 | yes | auto |  |
 | EDRAVN TKG82WD8 | 3482 | 3151:504c | gen2 | yes | yes |  |
 | eleBite ES75 | 3699 | 3151:4015 | yc500 | yes | yes |  |
@@ -213,16 +213,16 @@ the board itself; blank means the entry rests on the vendor's data.
 | EPOMAKER G84 HE JIS | 3703 | 39ab:9016 | gen2 | yes | auto |  |
 | EPOMAKER G84HE  PRO | 4071 | 3151:5030 | gen2 | yes | auto |  |
 | Epomaker Glyph | 3059 | 3151:5002 | gen2 | yes | auto |  |
-| EPOMAKER H60 | 3662 | 3151:5029 | gen2 | yes | auto |  |
-| EPOMAKER HE60 Lite | 3727 | 3151:502c | gen2 | yes | auto |  |
-| EPOMAKER HE60 Lite | 3759 | 3151:502e | gen2 | yes | auto |  |
+| EPOMAKER H60 | 3662 | 3151:5029 | gen2 | yes | yes |  |
+| EPOMAKER HE60 Lite | 3727 | 3151:502c | gen2 | yes | yes |  |
+| EPOMAKER HE60 Lite | 3759 | 3151:502e | gen2 | yes | yes |  |
 | EPOMAKER HE60 Wired | 3691 | 3151:5030 | gen2 | yes | auto |  |
-| EPOMAKER HE60 Wireless | 3692 | 39ab:9016 | gen2 | yes | auto |  |
+| EPOMAKER HE60 Wireless | 3692 | 39ab:9016 | gen2 | yes | yes |  |
 | EPOMAKER HE65 Mag | 2376 | 3151:502f | gen2 | yes | auto |  |
 | EPOMAKER HE65 Mec | 2284 | 3151:5025 | gen2 | yes | auto |  |
 | EPOMAKER HE65 V2 | 3417 | 3151:5030 | gen2 | yes | auto |  |
 | EPOMAKER HE68 Llte | 2761 | 3151:5030 | gen2 | yes | auto |  |
-| EPOMAKER HE68 Llte | 2762 | 3151:5029 | gen2 | yes | auto |  |
+| EPOMAKER HE68 Llte | 2762 | 3151:5029 | gen2 | yes | yes |  |
 | EPOMAKER HE68 Llte | 2883 | 3151:5029 | gen2 | yes | auto |  |
 | EPOMAKER HE68 Llte | 3664 | 3151:5029 | gen2 | yes | auto |  |
 | EPOMAKER HE68 Mag | 2465 | 3151:5029 | gen2 | yes | auto |  |
@@ -233,7 +233,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | EPOMAKER HE75 V2 TMR | 3883 | 3151:5030 | gen2 | yes | auto |  |
 | EPOMAKER KF20 | 4153 | 39ab:9007 | gen2 | yes | auto |  |
 | EPOMAKER KIIBOOM-68C | 2586 | 3151:502d | gen2 | yes | auto |  |
-| Epomaker M65 | 2550 | 3151:502d | unknown |  | auto |  |
+| Epomaker M65 | 2550 | 3151:502d | unknown |  | yes |  |
 | EPOMAKER Phantom30 HE | 4230 | 39ab:9016 | gen2 | yes | auto |  |
 | EPOMAKER RT100 | 1379 | 3151:4015 | yc500 | yes | yes |  |
 | EPOMAKER RT100 PRO | 3152 | 3151:5002 | gen2 | yes | auto |  |
@@ -244,7 +244,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | EPOMAKER TH65 Max | 3674 | 3151:5056 | gen2 | yes | auto |  |
 | EPOMAKER TH80 V2 | 3573 | 3151:5056 | gen2 | yes | auto |  |
 | EPOMAKER TH80 V3 MAX | 3673 | 3151:5056 | gen2 | yes | auto |  |
-| Epomaker_HE60 | 3746 | 3151:5029 | gen2 | yes | auto |  |
+| Epomaker_HE60 | 3746 | 3151:5029 | gen2 | yes | yes |  |
 | EpomakerHE108 | 3365 | 3151:5030 | gen2 | yes | auto |  |
 | EvieStudioController Evie Alice01 | 3306 | 3151:5002 | gen2 | yes | auto |  |
 | EvieStudioController Evie PAD FT02 | 3645 | 3151:5002 | gen2 | yes | auto |  |
@@ -257,12 +257,12 @@ the board itself; blank means the entry rests on the vendor's data.
 | EWEADNV DEEP68 | 2578 | 3151:5025 | gen2 | yes | auto |  |
 | EWEADNV DEEP68 | 2710 | 3151:5030 | gen2 | yes | auto |  |
 | EWEADNV DEEP68 | 2711 | 3151:5029 | gen2 | yes | auto |  |
-| EWEADNV Deep68 | 2955 | 3151:5029 | gen2 | yes | auto |  |
+| EWEADNV Deep68 | 2955 | 3151:5029 | gen2 | yes | yes |  |
 | EWEADNV DEEP80 | 2574 | 3151:5030 | gen2 | yes | auto |  |
 | EWEADNV DEEP80 | 2652 | 3151:5030 | gen2 | yes | auto |  |
 | EWEADNV DEEP80 | 2653 | 3151:5029 | gen2 | yes | auto |  |
 | EWEADNV DEEP80 Pro | 2906 | 3151:502d | gen2 | yes | auto |  |
-| EWEADNV K68 | 2301 | 3151:502d | gen2 | yes | auto |  |
+| EWEADNV K68 | 2301 | 3151:502d | gen2 | yes | yes |  |
 | EWEADNV K75 | 2383 | 3151:5025 | gen2 | yes | auto |  |
 | EWEADNV SEEK75 | 2799 | 3151:5030 | gen2 | yes | auto |  |
 | EWEADNV SEEK75 | 2884 | 3151:5030 | unknown |  | auto |  |
@@ -271,15 +271,15 @@ the board itself; blank means the entry rests on the vendor's data.
 | EWEADNV V99 | 2279 | 3151:5025 | gen2 | yes |  |  |
 | EWEADNV V99 | 2297 | 3151:5025 | gen2 | yes | auto |  |
 | EWEADNV V99 | 2646 | 3151:5025 | gen2 | yes | auto |  |
-| EWEADNV X87S | 3280 | 3151:504c | gen2 | yes | auto |  |
+| EWEADNV X87S | 3280 | 3151:504c | gen2 | yes | yes |  |
 | EWEADNV X87S | 3502 | 3151:504c | gen2 | yes | auto |  |
-| EWEADNV ZAP68 | 2348 | 3151:502d | gen2 | yes | auto |  |
-| EWEADNV ZAP68 | 2426 | 3151:5030 | gen2 | yes | auto |  |
-| EWEADNV ZAP68 | 3035 | 3151:5029 | gen2 | yes | auto |  |
-| EWEADNV ZAP68 | 3036 | 3151:5030 | gen2 | yes | auto |  |
-| EWEADNV ZAP68SE | 3225 | 3151:502c | gen2 | yes | auto |  |
-| EWEADNV ZAP68Ultra | 2510 | 3151:5030 | gen2 | yes | auto |  |
-| EWEADNV ZAP68Ultra | 2554 | 3151:5029 | gen2 | yes | auto |  |
+| EWEADNV ZAP68 | 2348 | 3151:502d | gen2 | yes | yes |  |
+| EWEADNV ZAP68 | 2426 | 3151:5030 | gen2 | yes | yes |  |
+| EWEADNV ZAP68 | 3035 | 3151:5029 | gen2 | yes | yes |  |
+| EWEADNV ZAP68 | 3036 | 3151:5030 | gen2 | yes | yes |  |
+| EWEADNV ZAP68SE | 3225 | 3151:502c | gen2 | yes | yes |  |
+| EWEADNV ZAP68Ultra | 2510 | 3151:5030 | gen2 | yes | yes |  |
+| EWEADNV ZAP68Ultra | 2554 | 3151:5029 | gen2 | yes | yes |  |
 | EWEADNV ZAP87 | 2527 | 3151:5030 | gen2 | yes |  |  |
 | EWEADNV ZAP87 | 3011 | 3151:5030 | gen2 | yes | auto |  |
 | Fire Phoenix BK-11 | 2570 | 3151:4015 | yc500 | yes |  | #36 |
@@ -317,7 +317,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | GAMEPOWER SORA RGB | 4128 | 3151:5056 | gen2 | yes | auto |  |
 | GAMEPOWER TIRUS HE80 | 3108 | 3151:5030 | gen2 | yes | auto |  |
 | GAMEPOWER TIRUS HE80 | 3725 | 3151:5029 | gen2 | yes | auto |  |
-| Gamepro MK160B MAX | 2930 | 3151:502d | gen2 | yes | yes |  |
+| Gamepro MK160B MAX | 2930 | 3151:502d | gen2 | yes | auto |  |
 | GamingGenTR Force98 | 3649 | 3151:4015 | yc500 | yes | yes |  |
 | GamingKeyboard KB900L | 3570 | 3151:5029 | gen2 | yes | auto |  |
 | GamingKeyboard KB904L | 3588 | 3151:5029 | gen2 | yes | auto |  |
@@ -326,7 +326,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | Gconic RO-MJ-97C | 3554 | 3151:5025 | gen2 | yes | auto |  |
 | GeekStar GKG108-MK921 | 3186 | 3151:5002 | gen2 | yes | auto |  |
 | GeekStar GKG87-MK813 | 3071 | 3151:5002 | gen2 | yes | auto |  |
-| GEEKSTARControls GKG108 | 2888 | 3151:5041 | gen2 | yes | auto |  |
+| GEEKSTARControls GKG108 | 2888 | 3151:5041 | gen2 | yes | yes |  |
 | GenesisMagni Magni 330 | 3676 | 3151:5029 | gen2 | yes | auto |  |
 | GenesisMagni Magni XV | 3989 | 3151:5029 | gen2 | yes | auto |  |
 | GK505 Eon | 3302 | 3151:502c | gen2 | yes | auto |  |
@@ -335,50 +335,50 @@ the board itself; blank means the entry rests on the vendor's data.
 | GKX68MAGNUM GKX68 | 2790 | 3151:502c | gen2 | yes | auto |  |
 | GT60 | 2773 | 3151:5029 | gen2 | yes | auto |  |
 | GTUNE GMK82 | 2912 | 3151:5029 | gen2 | yes | yes |  |
-| GVSTONE GV10M-8K | 2727 | 3151:5033 | gen2 | yes | auto |  |
-| GVSTONE GV10M-8K | 3624 | 3151:504c | gen2 | yes | auto |  |
+| GVSTONE GV10M-8K | 2727 | 3151:5033 | gen2 | yes | yes |  |
+| GVSTONE GV10M-8K | 3624 | 3151:504c | gen2 | yes | yes |  |
 | GVSTONE GV10M-8K | 4239 | 39ab:9016 | gen2 | yes | auto |  |
-| GVSTONE GV8M-8K | 2801 | 3151:5033 | gen2 | yes | auto |  |
-| GVSTONE GV8M-8K | 3747 | 3151:504c | gen2 | yes | auto |  |
+| GVSTONE GV8M-8K | 2801 | 3151:5033 | gen2 | yes | yes |  |
+| GVSTONE GV8M-8K | 3747 | 3151:504c | gen2 | yes | yes |  |
 | GY-01 | 3670 | 3151:5029 | gen2 | yes | auto |  |
 | Hammerwolf | 3088 | 2ea8:2124 | gen2 | yes | auto |  |
 | HANSON 218 | 3415 | 3151:5041 | gen2 | yes | auto |  |
 | Hator GEO65HE | 2791 | 379a:1803 | gen2 | yes | auto |  |
 | Hator HTK1100 | 3318 | 379a:1806 | gen2 | yes | auto |  |
 | Hator HTK1100UA | 3058 | 3151:5002 | gen2 | yes | auto |  |
-| Hator HTK1160 | 3049 | 3151:5002 | gen2 | yes | auto |  |
+| Hator HTK1160 | 3049 | 3151:5002 | gen2 | yes | yes |  |
 | Hator HTK1160UA | 2909 | 379a:1805 | gen2 | yes | auto |  |
-| Hator HTK1160UA | 3048 | 379a:1806 | gen2 | yes | auto |  |
+| Hator HTK1160UA | 3048 | 379a:1806 | gen2 | yes | yes |  |
 | Hator HTK1180 | 3174 | 379a:1806 | gen2 | yes | auto |  |
-| Hator HTK1180UA | 2774 | 379a:1805 | gen2 | yes | auto |  |
-| Hator HTK1180UA | 3175 | 379a:1806 | gen2 | yes | auto |  |
+| Hator HTK1180UA | 2774 | 379a:1805 | gen2 | yes | yes |  |
+| Hator HTK1180UA | 3175 | 379a:1806 | gen2 | yes | yes |  |
 | Hator HTK1181 | 3176 | 379a:1806 | gen2 | yes | auto |  |
-| Hator HTK1860 | 2918 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK1860UA | 2917 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK1880 | 2856 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK1880UA | 2853 | 379a:1803 | gen2 | yes | auto |  |
+| Hator HTK1860 | 2918 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK1860UA | 2917 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK1880 | 2856 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK1880UA | 2853 | 379a:1803 | gen2 | yes | yes |  |
 | Hator HTK3100 | 3319 | 379a:1806 | gen2 | yes | auto |  |
 | Hator HTK3100UA | 3057 | 3151:5002 | gen2 | yes | auto |  |
-| Hator HTK3160 | 3051 | 379a:1806 | gen2 | yes | auto |  |
+| Hator HTK3160 | 3051 | 379a:1806 | gen2 | yes | yes |  |
 | Hator HTK3160UA | 2823 | 379a:1805 | gen2 | yes | auto |  |
-| Hator HTK3160UA | 3050 | 379a:1806 | gen2 | yes | auto |  |
-| Hator HTK3180 | 3045 | 379a:1805 | gen2 | yes | auto |  |
-| Hator HTK3180UA | 2759 | 379a:1805 | gen2 | yes | auto |  |
-| Hator HTK3860 | 2919 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK3860EU | 2920 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK3860UA | 2876 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK3880 | 2857 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK3880EU | 2858 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK3880UA | 2800 | 379a:1803 | gen2 | yes | auto |  |
-| Hator HTK4100 | 3320 | 379a:1806 | gen2 | yes | auto |  |
+| Hator HTK3160UA | 3050 | 379a:1806 | gen2 | yes | yes |  |
+| Hator HTK3180 | 3045 | 379a:1805 | gen2 | yes | yes |  |
+| Hator HTK3180UA | 2759 | 379a:1805 | gen2 | yes | yes |  |
+| Hator HTK3860 | 2919 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK3860EU | 2920 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK3860UA | 2876 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK3880 | 2857 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK3880EU | 2858 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK3880UA | 2800 | 379a:1803 | gen2 | yes | yes |  |
+| Hator HTK4100 | 3320 | 379a:1806 | gen2 | yes | yes |  |
 | Hator HTK4100UA | 2936 | 3151:5002 | gen2 | yes | yes |  |
-| Hator HTK4100UA | 3205 | 379a:1806 | gen2 | yes | auto |  |
+| Hator HTK4100UA | 3205 | 379a:1806 | gen2 | yes | yes |  |
 | Hator HTK4160 | 3047 | 3151:5002 | gen2 | yes | auto |  |
 | Hator HTK4160EU | 3217 | 379a:1806 | gen2 | yes | auto |  |
 | Hator HTK4160UA | 2910 | 379a:1806 | gen2 | yes | auto |  |
-| Hator HTK4180 | 3046 | 379a:1805 | gen2 | yes | auto |  |
-| Hator HTK4180EU | 2862 | 379a:1805 | gen2 | yes | auto |  |
-| Hator HTK4180UA | 2861 | 379a:1806 | gen2 | yes | auto |  |
+| Hator HTK4180 | 3046 | 379a:1805 | gen2 | yes | yes |  |
+| Hator HTK4180EU | 2862 | 379a:1805 | gen2 | yes | yes |  |
+| Hator HTK4180UA | 2861 | 379a:1806 | gen2 | yes | yes |  |
 | Hator K2405 | 2806 | 379a:1803 | gen2 | yes | auto |  |
 | Hator K2506 | 3125 | 379a:1803 | gen2 | yes | auto |  |
 | Hator K2506 UK | 3126 | 379a:1803 | gen2 | yes | auto |  |
@@ -420,7 +420,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | K114RProKeyboard K114R | 3924 | 14a5:c046 | gen2 | yes | auto |  |
 | K98Pro | 2821 | 3151:5025 | gen2 | yes | auto |  |
 | Kanabo K6 | 2763 | 331a:3010 | gen2 | yes | auto |  |
-| KB AGX60 | 3567 | 3151:5030 | gen2 | yes | auto |  |
+| KB AGX60 | 3567 | 3151:5030 | gen2 | yes | yes |  |
 | KBDIY K19-1K | 4202 | 3151:5056 | gen2 | yes | yes |  |
 | KBDIY K21-1K | 4201 | 3151:5056 | gen2 | yes | yes |  |
 | KBDIY KC84pro | 4196 | 3151:5002 | gen2 | yes | auto |  |
@@ -440,8 +440,8 @@ the board itself; blank means the entry rests on the vendor's data.
 | Keydous NJ68-AP700 | 4169 | 3151:5056 | gen2 | yes | auto |  |
 | Keydous NJ80-AP800 | 3521 | 39ab:9008 | gen2 | yes | yes |  |
 | Keydous NJ80-CP V3 | 3466 | 3151:5030 | gen2 | yes | yes |  |
-| Keydous NJ81-CP | 2454 | 3151:5030 | gen2 | yes | auto |  |
-| Keydous NJ81-CP V3 | 3459 | 3151:5030 | gen2 | yes | auto |  |
+| Keydous NJ81-CP | 2454 | 3151:5030 | gen2 | yes | yes |  |
+| Keydous NJ81-CP V3 | 3459 | 3151:5030 | gen2 | yes | yes |  |
 | Keydous NJ81-MAX | 4140 | 3151:504c | gen2 | yes | auto |  |
 | Keydous NJ81-MAX CP | 4207 | 39ab:9016 | gen2 | yes | auto |  |
 | Keydous NJ98-CP | 1259 | 3151:4015 | yc500 | yes |  |  |
@@ -464,7 +464,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | Koda A68 | 3244 | 3151:5029 | gen2 | yes | auto |  |
 | Kreo Swarm 65 | 3148 | 3151:5002 | gen2 | yes | auto |  |
 | KUSkillKorp K20 | 1766 | 3151:4015 | yc500 | yes | yes |  |
-| KYSONASpaceSeries KM82 HE | 3340 | 3151:502d | gen2 | yes | yes |  |
+| KYSONASpaceSeries KM82 HE | 3340 | 3151:502d | gen2 | yes | auto |  |
 | LBHAVOC75 HAVOC 75 | 3552 | 3151:5002 | gen2 | yes | auto |  |
 | Legion K98 | 3427 | 3151:5030 | gen2 | yes | auto |  |
 | leku stars21v2 | 4115 | 3151:5056 | gen2 | yes | auto |  |
@@ -488,12 +488,12 @@ the board itself; blank means the entry rests on the vendor's data.
 | MageGee MK25020 | 3380 | 3151:5030 | gen2 | yes | auto |  |
 | MageGee MK25022 | 2712 | 3151:5030 | gen2 | yes | auto |  |
 | MageGee MK25072 | 3419 | 3151:5056 | gen2 | yes | auto |  |
-| Mambasnake M82HE | 2335 | 3151:502d | gen2 | yes | auto |  |
+| Mambasnake M82HE | 2335 | 3151:502d | gen2 | yes | yes |  |
 | Mambasnake X60HE | 2368 | 3151:502f | gen2 | yes |  |  |
 | Maorbeng M75pro | 3476 | 3151:5002 | gen2 | yes | yes |  |
 | Mechlands M75 | 2496 | 3151:502d | gen2 | yes |  |  |
 | MEETION Magic A68 | 3362 | 3151:502d | gen2 | yes | auto |  |
-| MEETION Magic A75 | 3367 | 3151:5029 | gen2 | yes | yes |  |
+| MEETION Magic A75 | 3367 | 3151:5029 | gen2 | yes | auto |  |
 | MEETION MK12 | 1767 | 3151:4015 | yc500 | yes | yes |  |
 | MEETION MK12 | 1884 | 3151:4015 | yc500 | yes | yes |  |
 | MEETION MK14 | 1942 | 3151:4015 | yc500 | yes | yes |  |
@@ -503,7 +503,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | MICROPACK GK-A68MW | 4145 | 39ab:9016 | gen2 | yes | auto |  |
 | MICROPACK K-68M | 2546 | 3151:502d | gen2 | yes | auto |  |
 | MiningBaseCoLtd AMGK80-001 | 3389 | 3151:5030 | gen2 | yes | auto |  |
-| MKB GMK65 | 4252 | 39ab:9007 | gen2 | yes | auto |  |
+| MKB GMK65 | 4252 | 39ab:9007 | gen2 | yes | yes |  |
 | MKB GMK80 | 3354 | 3151:5056 | gen2 | yes | auto |  |
 | MKKB021 | 4051 | 3151:5030 | gen2 | yes | auto |  |
 | MMD FIT68 | 1041 | 3151:4015 | yc500 | yes | yes |  |
@@ -515,13 +515,13 @@ the board itself; blank means the entry rests on the vendor's data.
 | MonsGeek FUN60 PRO | 2600 | 3151:5029 | gen2 | yes | auto |  |
 | MonsGeek FUN60 PRO | 2785 | 3151:5030 | gen2 | yes | auto |  |
 | MonsGeek FUN68 | 2811 | 3151:5030 | gen2 | yes | auto |  |
-| MonsGeek FUN75 | 2648 | 3151:502d | gen2 | yes | auto |  |
-| MonsGeek M1 V5 HE | 2819 | 3151:5030 | gen2 | yes | yes |  |
+| MonsGeek FUN75 | 2648 | 3151:502d | gen2 | yes | yes |  |
+| MonsGeek M1 V5 HE | 2819 | 3151:5030 | gen2 | yes | auto |  |
 | MonsGeek M1 V5 TMR | 2949 | 3151:5030 | gen2 | yes | yes |  |
 | MonsGeek M2 V5 | 2601 | 3151:5030 | gen2 | yes | auto |  |
 | MonsGeek M2 V5 HE | 2845 | 3151:5030 | gen2 | yes | auto |  |
 | MonsGeek M3 V5 | 2585 | 3151:5030 | gen2 | yes | auto |  |
-| MonsGeek M3 V5 HE | 2874 | 3151:5030 | gen2 | yes | auto |  |
+| MonsGeek M3 V5 HE | 2874 | 3151:5030 | gen2 | yes | yes |  |
 | MonsGeek MG108B | 2739 | 3151:5002 | gen2 | yes | yes |  |
 | MONSTAR X500PRO | 3135 | 3151:5025 | gen2 | yes | auto |  |
 | MSI STRIKE 700 HE | 3409 | 0db0:32c0 | gen2 | yes | auto |  |
@@ -538,7 +538,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | NOPPOO C98 | 853 | 3151:4015 | yc500 | yes | yes |  |
 | NOPPOO C98 Pro | 1220 | 3151:4015 | yc500 | yes | yes |  |
 | NOPPOO C98 Pro | 2694 | 3151:5025 | gen2 | yes | yes |  |
-| NOPPOO C98D | 3293 | 3151:5002 | gen2 | yes | yes |  |
+| NOPPOO C98D | 3293 | 3151:5002 | gen2 | yes | auto |  |
 | NOPPOO Choc 68 | 2231 | 3151:5025 | gen2 | yes | auto |  |
 | NOPPOO F108 | 888 | 3151:4015 | yc500 | yes | yes |  |
 | NOPPOO F108 | 2688 | 3151:5025 | gen2 | yes | yes |  |
@@ -549,12 +549,12 @@ the board itself; blank means the entry rests on the vendor's data.
 | NyfterUG DK84 | 3615 | 3151:5025 | gen2 | yes | auto |  |
 | NyfterUG DK84 | 3616 | 3151:5025 | gen2 | yes | auto |  |
 | NyfterUG Nyf HE 61K | 2960 | 3151:5029 | gen2 | yes | auto |  |
-| NyfterUG Nyf HE 82K | 2752 | 3151:502f | gen2 | yes | auto |  |
+| NyfterUG Nyf HE 82K | 2752 | 3151:502f | gen2 | yes | yes |  |
 | ObsiCore OBSIDIAN II | 3206 | 3151:5025 | gen2 | yes | auto |  |
 | Oniverse Maegnus Magnetic Keyboard | 3267 | 3151:5029 | gen2 | yes | auto |  |
 | Oniverse Maegnus Magnetic Keyboard | 3968 | 3151:5029 | gen2 | yes | auto |  |
 | OUSAID DK82HE UK | 3814 | 3151:5029 | gen2 | yes | auto |  |
-| OUSAID DK82HE US | 4048 | 3151:5029 | gen2 | yes | yes |  |
+| OUSAID DK82HE US | 4048 | 3151:5029 | gen2 | yes | auto |  |
 | OUSAID DK968 | 3817 | 3151:5029 | gen2 | yes | auto |  |
 | OUSAID DK968 | 3837 | 3151:5025 | gen2 | yes | auto |  |
 | OUSAID HE61 | 4079 | 3151:5030 | gen2 | yes | auto |  |
@@ -564,7 +564,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | OUSAID HG68 HE | 3316 | 3151:5030 | gen2 | yes | auto |  |
 | OUSAID HG68HE | 3414 | 3151:5029 | gen2 | yes | auto |  |
 | OUSAID KY-MK231 | 3931 | 3151:5029 | gen2 | yes | auto |  |
-| OUSAID KY-MK231 | 3953 | 3151:5029 | gen2 | yes | yes |  |
+| OUSAID KY-MK231 | 3953 | 3151:5029 | gen2 | yes | auto |  |
 | OUSAID MK230 | 4004 | 3151:5029 | gen2 | yes | auto |  |
 | OUSAID MK232-V2 | 3984 | 3151:5029 | gen2 | yes | auto |  |
 | PIIFOXDRIVER DEFENDER 68 | 2499 | 3151:502d | gen2 | yes | auto |  |
@@ -579,8 +579,8 @@ the board itself; blank means the entry rests on the vendor's data.
 | PIIFOXDRIVER WALKER 75 | 1848 | 3151:4015 | yc500 | yes | yes |  |
 | PIIFOXDRIVER WALKER 75 | 2053 | 3151:4015 | yc500 | yes | yes |  |
 | PIIFOXDRIVER WALKER 75 | 3529 | 3151:504c | gen2 | yes | auto |  |
-| PLUXKB K986 | 3840 | 3151:5074 | gen2 | yes | auto |  |
-| PLUXKB PLUX CST KB | 2817 | 3151:5030 | gen2 | yes | auto |  |
+| PLUXKB K986 | 3840 | 3151:5074 | gen2 | yes | yes |  |
+| PLUXKB PLUX CST KB | 2817 | 3151:5030 | gen2 | yes | yes |  |
 | PSYCommu PSY P1 | 3425 | 3151:5029 | gen2 | yes | auto |  |
 | QuikFingers Fierce-GK7 | 3358 | 3151:5002 | gen2 | yes | auto |  |
 | QuikFingers Lethal-GK1 | 3469 | 3151:4015 | yc500 | yes | yes |  |
@@ -609,7 +609,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | rongyuan CR104 | 4057 | 3151:5056 | gen2 | yes | auto |  |
 | rongyuan CX68-2 | 3087 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan CX77 | 4131 | 3121:5056 | gen2 | yes | auto |  |
-| rongyuan DK68 HE | 3290 | 3151:5030 | gen2 | yes | auto |  |
+| rongyuan DK68 HE | 3290 | 3151:5030 | gen2 | yes | yes |  |
 | rongyuan DK68HE-UK | 3735 | 3151:502f | gen2 | yes | auto |  |
 | rongyuan DK82 HE | 2690 | 3151:502f | gen2 | yes | auto |  |
 | rongyuan DK82HE | 3734 | 3151:5029 | gen2 | yes | auto |  |
@@ -644,16 +644,16 @@ the board itself; blank means the entry rests on the vendor's data.
 | rongyuan GM870Pro | 2981 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan GS75B | 3937 | 3151:5056 | gen2 | yes | auto |  |
 | rongyuan GS75B | 4190 | 3151:5056 | gen2 | yes | auto |  |
-| rongyuan H60 | 3342 | 3151:5029 | gen2 | yes | auto |  |
+| rongyuan H60 | 3342 | 3151:5029 | gen2 | yes | yes |  |
 | rongyuan HHKB | 2321 | 3151:4015 | yc500 | yes | yes |  |
 | rongyuan IK75 | 2613 | 3151:5025 | gen2 | yes | auto |  |
 | rongyuan IK75 | 3215 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan IK75 | 3986 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan IROK ND_63 | 3115 | 3151:502d | gen2 | yes | auto |  |
-| rongyuan JK61 | 3103 | 145f:0379 | gen2 | yes | auto |  |
-| rongyuan JK61 | 3142 | 3151:5002 | gen2 | yes | auto |  |
+| rongyuan JK61 | 3103 | 145f:0379 | gen2 | yes | yes |  |
+| rongyuan JK61 | 3142 | 3151:5002 | gen2 | yes | yes |  |
 | rongyuan JP-K98 | 4130 | 3151:5025 | gen2 | yes | auto |  |
-| rongyuan K004 | 4217 | 39ab:9016 | gen2 | yes | yes |  |
+| rongyuan K004 | 4217 | 39ab:9016 | gen2 | yes | auto |  |
 | rongyuan K1 | 4096 | 54ab:d022 | gen2 | yes | auto |  |
 | rongyuan K60 | 3548 | 3151:5025 | gen2 | yes | auto |  |
 | rongyuan K67 | 2723 | 3151:5029 | gen2 | yes | auto |  |
@@ -671,7 +671,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | rongyuan KF068 | 2338 | 3151:5029 | gen2 | yes |  |  |
 | rongyuan KF109-72 | 3356 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan KF210-B | 3705 | 3151:5030 | gen2 | yes | auto |  |
-| rongyuan KF211 | 2921 | 3151:5029 | gen2 | yes | auto |  |
+| rongyuan KF211 | 2921 | 3151:5029 | gen2 | yes | yes |  |
 | rongyuan KG183 | 4076 | 39ab:9007 | gen2 | yes | auto |  |
 | rongyuan KG25 | 4086 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan Krux Morr | 3576 | 3299:273f | gen2 | yes | auto |  |
@@ -682,9 +682,9 @@ the board itself; blank means the entry rests on the vendor's data.
 | rongyuan Mage x ZM | 2969 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan MG108B | 3330 | 3151:5056 | gen2 | yes | yes |  |
 | rongyuan MG75 | 3203 | 374a:a236 | gen2 | yes | auto |  |
-| rongyuan MJ-82G | 4194 | 39ab:9016 | gen2 | yes | yes |  |
+| rongyuan MJ-82G | 4194 | 39ab:9016 | gen2 | yes | auto |  |
 | rongyuan MJ-98G | 4223 | 39ab:9016 | gen2 | yes | auto |  |
-| rongyuan MK-23 | 2766 | 3151:5030 | gen2 | yes | yes |  |
+| rongyuan MK-23 | 2766 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan MK10 | 3675 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan MK100 | 3569 | 3151:5056 | gen2 | yes | auto |  |
 | rongyuan MK1061C | 3856 | 3151:5029 | gen2 | yes | auto |  |
@@ -693,7 +693,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | rongyuan MK11 | 3222 | 3151:4015 | yc500 | yes | yes |  |
 | rongyuan MK132 | 3343 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan MK15 | 4191 | 39ab:9007 | gen2 | yes | auto |  |
-| rongyuan MK20C | 3122 | 3151:5030 | gen2 | yes | yes |  |
+| rongyuan MK20C | 3122 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan MK25001 | 3503 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan MK25075 | 3363 | 3151:5002 | gen2 | yes | yes |  |
 | rongyuan MK25076 | 3339 | 3151:5002 | gen2 | yes | yes |  |
@@ -710,20 +710,20 @@ the board itself; blank means the entry rests on the vendor's data.
 | rongyuan Phantom X68PG | 3044 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan Phantom X68RB | 3037 | 3151:502c | gen2 | yes | auto |  |
 | rongyuan Phantom X68RB | 3043 | 3151:5029 | gen2 | yes | auto |  |
-| rongyuan PL108W | 3211 | 3151:504f | gen2 | yes | auto |  |
+| rongyuan PL108W | 3211 | 3151:504f | gen2 | yes | yes |  |
 | rongyuan PV82-V9 | 3728 | 3151:502f | gen2 | yes | auto |  |
 | rongyuan R701 | 3388 | 3151:5030 | gen2 | yes | yes |  |
-| rongyuan Rampage Fushi | 2986 | 39ab:9016 | gen2 | yes | yes |  |
+| rongyuan Rampage Fushi | 2986 | 39ab:9016 | gen2 | yes | auto |  |
 | rongyuan RxD 60% HE | 1905 | 3151:4035 | yc500 | yes | yes |  |
 | rongyuan SG8905 | 2776 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan SG8905 | 2972 | 3151:5030 | gen2 | yes | auto |  |
-| rongyuan SG8948 | 3946 | 3151:5056 | gen2 | yes | yes |  |
+| rongyuan SG8948 | 3946 | 3151:5056 | gen2 | yes | auto |  |
 | rongyuan SG8948 UK | 3981 | 3151:5056 | gen2 | yes | auto |  |
-| rongyuan SG8992 | 2772 | 3151:5030 | gen2 | yes | auto |  |
-| rongyuan SG8992 | 2966 | 3151:5030 | gen2 | yes | auto |  |
+| rongyuan SG8992 | 2772 | 3151:5030 | gen2 | yes | yes |  |
+| rongyuan SG8992 | 2966 | 3151:5030 | gen2 | yes | yes |  |
 | rongyuan SG9000 UK | 3947 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan SG9002 UK | 4250 | 39ab:9007 | gen2 | yes | auto |  |
-| rongyuan SG9002 US | 3921 | 3151:5056 | gen2 | yes | yes |  |
+| rongyuan SG9002 US | 3921 | 3151:5056 | gen2 | yes | auto |  |
 | rongyuan SG9004 | 3992 | 3151:5029 | gen2 | yes | auto |  |
 | rongyuan SG9068 | 3823 | 39ab:9016 | gen2 | yes | auto |  |
 | rongyuan SG9068 | 3911 | 39ab:9016 | gen2 | yes | auto |  |
@@ -753,10 +753,10 @@ the board itself; blank means the entry rests on the vendor's data.
 | rongyuan XXY-820 UK | 3156 | 3151:5002 | gen2 | yes | auto |  |
 | rongyuan YC100 | 2624 | 3151:5030 | gen2 | yes | auto |  |
 | rongyuan YG102C | 3744 | 3151:5056 | gen2 | yes | auto |  |
-| rongyuan Z68A | 3159 | 3151:5029 | gen2 | yes | auto |  |
+| rongyuan Z68A | 3159 | 3151:5029 | gen2 | yes | yes |  |
 | ROYALAXE L98 | 768 | 3151:4015 | yc500 | yes |  |  |
 | ROYALAXE VK63 | 3845 | 3151:5029 | gen2 | yes | auto |  |
-| ROYALAXE X68 | 2485 | 3151:502d | gen2 | yes | auto |  |
+| ROYALAXE X68 | 2485 | 3151:502d | gen2 | yes | yes |  |
 | ROYALAXE XL75 | 4105 | 39ab:9008 | gen2 | yes | auto |  |
 | ROYALAXE XL98 | 2925 | 3151:5002 | gen2 | yes | auto |  |
 | ROYALAXE XL98-V2 | 3721 | 3151:504c | gen2 | yes | auto |  |
@@ -765,33 +765,33 @@ the board itself; blank means the entry rests on the vendor's data.
 | SALPIDO SHOT209 | 2932 | 3151:502c | gen2 | yes | auto |  |
 | SARU KX69HE | 3166 | 3151:5029 | gen2 | yes | auto |  |
 | SARU KX78HE | 3243 | 3151:5030 | gen2 | yes | auto |  |
-| SAVIO_ASTRAL ASTRAL | 3151 | 3151:5029 | gen2 | yes | yes |  |
+| SAVIO_ASTRAL ASTRAL | 3151 | 3151:5029 | gen2 | yes | auto |  |
 | SayRoseB67 B67 | 882 | 3151:4010 | yc500 | yes | yes |  |
 | SayRoseB67 SayRose B67 | 3612 | 3151:4010 | yc500 | yes | yes |  |
 | ShadowApp ZEUS75 | 3118 | 3151:5002 | gen2 | yes | auto |  |
 | ShadowApp ZEUS75 PRO | 3620 | 3151:5002 | gen2 | yes | auto |  |
 | ShadowApp ZEUS87 | 3337 | 3151:4015 | yc500 | yes | yes |  |
 | Siukie ACH105W | 3488 | 3151:5041 | gen2 | yes |  |  |
-| SK61HE | 3708 | 3151:5030 | gen2 | yes | auto |  |
+| SK61HE | 3708 | 3151:5030 | gen2 | yes | yes |  |
 | skillMK231 Magnetic Keyboard | 3578 | 3151:5030 | gen2 | yes | auto |  |
 | skillMK231 Magnetic Keyboard | 3757 | 3151:5029 | gen2 | yes | auto |  |
-| Skyloong GK61 | 2674 | 3151:5029 | gen2 | yes | auto |  |
-| Skyloong GK61 | 2999 | 3151:5030 | gen2 | yes | auto |  |
+| Skyloong GK61 | 2674 | 3151:5029 | gen2 | yes | yes |  |
+| Skyloong GK61 | 2999 | 3151:5030 | gen2 | yes | yes |  |
 | Skyloong GK68 | 2681 | 3151:5029 | gen2 | yes | auto |  |
 | Skyloong GK68 | 2967 | 3151:5030 | gen2 | yes | auto |  |
 | Skyloong GK75 | 2450 | 3151:502d | gen2 | yes | yes |  |
 | Skyloong GK75 | 2507 | 3151:502d | gen2 | yes | yes |  |
-| SPMControls PL108W | 2367 | 3151:5041 | gen2 | yes | auto |  |
-| SPMControls PL108W | 2873 | 3151:5041 | gen2 | yes | auto |  |
-| SPMControls PL108W | 4179 | 3151:5041 | gen2 | yes | auto |  |
+| SPMControls PL108W | 2367 | 3151:5041 | gen2 | yes | yes |  |
+| SPMControls PL108W | 2873 | 3151:5041 | gen2 | yes | yes |  |
+| SPMControls PL108W | 4179 | 3151:5041 | gen2 | yes | yes |  |
 | SPMControls SPM PL87WA | 2953 | 3151:5041 | gen2 | yes | auto |  |
-| SPYSELF H60 | 2866 | 3151:5029 | gen2 | yes | auto |  |
+| SPYSELF H60 | 2866 | 3151:5029 | gen2 | yes | yes |  |
 | strayfe 75% HE Pro | 3144 | 3984:03e9 | gen2 | yes | yes |  |
 | strayfe 75% HE Pro | 3474 | 3984:03ea | gen2 | yes | yes |  |
 | SUNROSE JK82-1 | 2916 | 3151:5030 | gen2 | yes | auto |  |
 | SUNROSE JK82-2 | 3062 | 3151:5002 | gen2 | yes | auto |  |
-| sunsonny N-J100 | 2780 | 3151:502d | gen2 | yes | yes |  |
-| sunsonny N-J100 V1 | 3294 | 3151:502d | gen2 | yes | yes |  |
+| sunsonny N-J100 | 2780 | 3151:502d | gen2 | yes | auto |  |
+| sunsonny N-J100 V1 | 3294 | 3151:502d | gen2 | yes | auto |  |
 | SUPER68 | 2879 | 3151:5029 | gen2 | yes | auto |  |
 | SUPER68 SUPER75 | 2802 | 3151:5029 | gen2 | yes | auto |  |
 | Syntech Chronos 68 | 2446 | 3151:502d | gen2 | yes | yes |  |
@@ -820,7 +820,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | VGNNEON Neon75 | 2905 | 3151:502f | gen2 | yes | auto |  |
 | VGNNEON Neon75 | 3237 | 3151:5054 | gen2 | yes | auto |  |
 | VGNNEON X128B | 3349 | 3151:504c | gen2 | yes | auto |  |
-| VKMS MAG75 Max | 2398 | 3151:5030 | gen2 | yes | auto |  |
+| VKMS MAG75 Max | 2398 | 3151:5030 | gen2 | yes | yes |  |
 | VKMS Mecha 75 | 2700 | 374a:a242 | gen2 | yes | auto |  |
 | VKMS NB68 | 2560 | 374a:a228 | gen2 | yes | auto |  |
 | VKMS NB68 Max | 2757 | 374a:a236 | gen2 | yes | auto |  |
@@ -833,10 +833,10 @@ the board itself; blank means the entry rests on the vendor's data.
 | VKMS VK Cyber 68PRO | 3289 | 374a:a264 | gen2 | yes | auto |  |
 | VKMS VK MAG 68 | 3390 | 374a:a232 | gen2 | yes | auto |  |
 | VKMS VK MAG 68 Max | 3194 | 374a:a233 | gen2 | yes | auto |  |
-| VKMS VK MAG 75 | 2246 | 374a:a216 | gen2 | yes | auto |  |
+| VKMS VK MAG 75 | 2246 | 374a:a216 | gen2 | yes | yes |  |
 | VKMS VK MAG68 | 2320 | 374a:a225 | gen2 | yes |  |  |
 | VKMS VK MAG75 Lite | 2234 | 374a:a213 | gen2 | yes |  |  |
-| VKMS VK MAG75 Pro | 2227 | 374a:a216 | gen2 | yes | auto |  |
+| VKMS VK MAG75 Pro | 2227 | 374a:a216 | gen2 | yes | yes |  |
 | VKMS VK NB 68 Max | 3111 | 374a:a236 | gen2 | yes | auto |  |
 | VKMS VK99 | 2410 | 3151:5030 | gen2 | yes |  |  |
 | VKMS VK99 Gaming | 2831 | 374a:a219 | gen2 | yes | yes |  |
@@ -844,14 +844,14 @@ the board itself; blank means the entry rests on the vendor's data.
 | VolkanoGaming VG-209-BK | 3450 | 3151:4015 | yc500 | yes | yes |  |
 | VortechKB 971643 | 3413 | 3151:5002 | gen2 | yes | yes |  |
 | WBLVD JRK108Pro Ultra | 3709 | 3151:504c | gen2 | yes | auto |  |
-| WINSTAR RK-X44-67 | 2796 | 3151:502d | gen2 | yes | auto |  |
+| WINSTAR RK-X44-67 | 2796 | 3151:502d | gen2 | yes | yes |  |
 | WINSTAR RK-X44-68 | 3379 | 3151:5030 | gen2 | yes | auto |  |
 | WOMIER FK51H4 HE | 3678 | 3151:5030 | gen2 | yes | yes |  |
 | WOMIER K75TMR | 3933 | 38a9:0015 | gen2 | yes | yes |  |
 | WOMIER KF112 | 3097 | 3151:5002 | gen2 | yes | auto |  |
 | WOMIER KF305 | 3404 | 3151:5030 | gen2 | yes | auto |  |
-| WOMIER M68 HE PRO | 3719 | 39ab:9016 | gen2 | yes | auto |  |
-| WOMIER SK75 TMR | 2518 | 3151:5030 | gen2 | yes | yes |  |
+| WOMIER M68 HE PRO | 3719 | 39ab:9016 | gen2 | yes | yes |  |
+| WOMIER SK75 TMR | 2518 | 3151:5030 | gen2 | yes | auto |  |
 | WOMIER SK75 TMR | 3804 | 3151:5030 | gen2 | yes | auto |  |
 | Wu06 | 3498 | 3151:4015 | yc500 | yes | yes |  |
 | Wu06 | 3499 | 3151:4015 | yc500 | yes | yes |  |
@@ -861,29 +861,29 @@ the board itself; blank means the entry rests on the vendor's data.
 | XinMengK65Keyboard Beat65-keyboard | 2326 | 3151:502d | gen2 | yes | auto |  |
 | XinMengK65Keyboard Beat65-keyboard | 2436 | 3151:502f | gen2 | yes | auto |  |
 | XinMengK65Keyboard Beat65-keyboard | 2535 | 3151:502d | gen2 | yes | auto |  |
-| XinMengK65Keyboard Beat68-keyboard | 2589 | 3151:502d | gen2 | yes | auto |  |
-| XinMengK65Keyboard Beat68-keyboard | 2590 | 3151:502f | gen2 | yes | auto |  |
-| XinMengK65Keyboard Beat68-keyboard | 2671 | 3151:5030 | gen2 | yes | auto |  |
-| XinMengK65Keyboard Beat68-keyboard | 2680 | 3151:502f | gen2 | yes | auto |  |
+| XinMengK65Keyboard Beat68-keyboard | 2589 | 3151:502d | gen2 | yes | yes |  |
+| XinMengK65Keyboard Beat68-keyboard | 2590 | 3151:502f | gen2 | yes | yes |  |
+| XinMengK65Keyboard Beat68-keyboard | 2671 | 3151:5030 | gen2 | yes | yes |  |
+| XinMengK65Keyboard Beat68-keyboard | 2680 | 3151:502f | gen2 | yes | yes |  |
 | XinMengK65Keyboard Beat75 | 2770 | 3151:5030 | gen2 | yes | auto |  |
 | XinMengK65Keyboard Beat75 | 2797 | 3151:502d | gen2 | yes | auto |  |
-| XinMengK65Keyboard K68 | 3867 | 3151:5030 | gen2 | yes | auto |  |
-| XinMengK65Keyboard K68 | 3872 | 3151:5029 | gen2 | yes | auto |  |
+| XinMengK65Keyboard K68 | 3867 | 3151:5030 | gen2 | yes | yes |  |
+| XinMengK65Keyboard K68 | 3872 | 3151:5029 | gen2 | yes | yes |  |
 | XinMengK65Keyboard K980 | 2795 | 3151:5030 | gen2 | yes | auto |  |
 | XinMengK65Keyboard K982D | 2731 | 3151:5030 | gen2 | yes | auto |  |
 | XinMengK65Keyboard M101 | 3492 | 3151:504c | gen2 | yes | auto |  |
 | XinMengK65Keyboard M101 | 3493 | 3151:5056 | gen2 | yes | auto |  |
-| XinMengK65Keyboard S87 Pro | 3198 | 3151:504c | gen2 | yes | auto |  |
+| XinMengK65Keyboard S87 Pro | 3198 | 3151:504c | gen2 | yes | yes |  |
 | XinMengK65Keyboard S98 | 3445 | 3151:504c | gen2 | yes | yes |  |
 | XinMengK65Keyboard S98 Max | 3726 | 3151:504c | gen2 | yes | auto |  |
 | XinMengK65Keyboard X87 | 3486 | 3151:5030 | gen2 | yes | auto |  |
 | XinMengK65Keyboard X98 V3 | 3277 | 3151:5030 | gen2 | yes | auto |  |
-| XinMengK65Keyboard Zero 68 | 3587 | 3151:5029 | gen2 | yes | auto |  |
-| XinMengK65Keyboard Zero 68 | 3598 | 3151:5029 | gen2 | yes | auto |  |
-| XinMengK65Keyboard Zero 68 | 3609 | 3151:5030 | gen2 | yes | auto |  |
-| XinMengK65Keyboard Zero 68 | 3611 | 3151:5029 | gen2 | yes | auto |  |
-| XinMengK65Keyboard Zero 68 | 3798 | 3151:5029 | gen2 | yes | auto |  |
-| XinMengK65Keyboard Zero 68 | 3799 | 3151:5030 | gen2 | yes | auto |  |
+| XinMengK65Keyboard Zero 68 | 3587 | 3151:5029 | gen2 | yes | yes |  |
+| XinMengK65Keyboard Zero 68 | 3598 | 3151:5029 | gen2 | yes | yes |  |
+| XinMengK65Keyboard Zero 68 | 3609 | 3151:5030 | gen2 | yes | yes |  |
+| XinMengK65Keyboard Zero 68 | 3611 | 3151:5029 | gen2 | yes | yes |  |
+| XinMengK65Keyboard Zero 68 | 3798 | 3151:5029 | gen2 | yes | yes |  |
+| XinMengK65Keyboard Zero 68 | 3799 | 3151:5030 | gen2 | yes | yes |  |
 | XinMengK65Keyboard Zero75 | 3988 | 3151:5030 | gen2 | yes | auto |  |
 | Xpanse Jelly75 | 3526 | 3151:4015 | yc500 | yes | yes |  |
 | YINREN C84 | 3561 | 3151:4015 | yc500 | yes | yes |  |
@@ -944,7 +944,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | YUNZII YZ84 | 1106 | 3151:4015 | yc500 | yes | yes |  |
 | YUNZII YZ84 pro | 1184 | 3151:4015 | yc500 | yes | yes |  |
 | ZADEZTECHNOLOGY GK-98N | 3575 | 3151:5025 | gen2 | yes | auto |  |
-| ZENITHPROSoftware ZENITH PRO | 2310 | 3151:502d | gen2 | yes | yes |  |
+| ZENITHPROSoftware ZENITH PRO | 2310 | 3151:502d | gen2 | yes | auto |  |
 | 万能驱 | 9999 | 3151:5029 | gen2 | yes |  |  |
 | 凯酷 CZ75 | 1932 | 3151:4035 | yc500 | yes | yes |  |
 | 凯酷 K19 | 1326 | 3151:4015 | yc500 | yes | yes |  |
@@ -981,16 +981,16 @@ the board itself; blank means the entry rests on the vendor's data.
 | 咪星人 H60 | 3033 | 3151:5029 | gen2 | yes | auto |  |
 | 咪星人 H60 | 3242 | 3151:5029 | gen2 | yes | auto |  |
 | 咪星人 H60 PRO UK | 3949 | 3151:5029 | gen2 | yes | auto |  |
-| 咪星人 H60-C | 3864 | 3151:5056 | gen2 | yes | auto |  |
-| 咪星人 H60-Pro | 3436 | 3151:5029 | gen2 | yes | auto |  |
-| 咪星人 H60-Pro | 3467 | 3151:5030 | gen2 | yes | auto |  |
-| 咪星人 H60-Pro | 3468 | 3151:5029 | gen2 | yes | auto |  |
+| 咪星人 H60-C | 3864 | 3151:5056 | gen2 | yes | yes |  |
+| 咪星人 H60-Pro | 3436 | 3151:5029 | gen2 | yes | yes |  |
+| 咪星人 H60-Pro | 3467 | 3151:5030 | gen2 | yes | yes |  |
+| 咪星人 H60-Pro | 3468 | 3151:5029 | gen2 | yes | yes |  |
 | 咪星人 H64 Pro | 3464 | 3151:5030 | gen2 | yes | auto |  |
 | 咪星人 H64 Pro | 3465 | 3151:5029 | gen2 | yes | auto |  |
 | 咪星人 K84-CZ | 3487 | 3151:5030 | gen2 | yes | auto |  |
-| 咪星人 Mi60 | 3431 | 3151:5030 | gen2 | yes | auto |  |
+| 咪星人 Mi60 | 3431 | 3151:5030 | gen2 | yes | yes |  |
 | 咪星人 YK68 Pro | 3710 | 3151:5056 | gen2 | yes | auto |  |
-| 腹灵 Air 108 metallic | 3980 | 3151:5002 | gen2 | yes | auto |  |
+| 腹灵 Air 108 metallic | 3980 | 3151:5002 | gen2 | yes | yes |  |
 | 腹灵 Air 108 metallic | 4112 | 38a9:0017 | gen2 | yes | auto |  |
 | 腹灵 Air87 | 3022 | 3151:5002 | gen2 | yes | auto |  |
 | 腹灵 Alpha75HE | 3756 | 3151:502c | gen2 | yes | auto |  |
@@ -1016,8 +1016,8 @@ the board itself; blank means the entry rests on the vendor's data.
 | 腹灵 MK100T | 3430 | 3151:4015 | yc500 | yes | yes |  |
 | 腹灵 MK870 HE | 2703 | 3151:5030 | gen2 | yes | auto |  |
 | 腹灵 MK980 | 3516 | 3151:5002 | gen2 | yes | auto |  |
-| 腹灵 NX108 | 3012 | 3151:5030 | gen2 | yes | auto |  |
-| 腹灵 NX108HE | 3336 | 3151:5029 | gen2 | yes | auto |  |
+| 腹灵 NX108 | 3012 | 3151:5030 | gen2 | yes | yes |  |
+| 腹灵 NX108HE | 3336 | 3151:5029 | gen2 | yes | yes |  |
 | 腹灵 NX68pro | 2447 | 3151:5030 | gen2 | yes | auto |  |
 | 腹灵 NX87 | 3732 | 38a9:0017 | gen2 | yes | auto |  |
 | 腹灵 NX87PRO | 2943 | 3151:5002 | gen2 | yes | auto |  |
@@ -1032,19 +1032,19 @@ the board itself; blank means the entry rests on the vendor's data.
 | 腹灵 TX87 | 3654 | 3151:5056 | gen2 | yes | auto |  |
 | 腹灵 TX87PRO | 3655 | 3151:504c | gen2 | yes | auto |  |
 | 腹灵 X80HE | 2988 | 3151:5030 | gen2 | yes | auto |  |
-| 腹灵 X80HE | 3335 | 3151:5029 | gen2 | yes | auto |  |
+| 腹灵 X80HE | 3335 | 3151:5029 | gen2 | yes | yes |  |
 | 虎八兔 HKS21 | 3803 | 3151:5056 | gen2 | yes | auto |  |
 | 蚂蚁电竞 AGK75 | 1846 | 3151:5009 | yc500 | yes | yes |  |
 | 蚂蚁电竞 AGK75 | 2516 | 3151:4035 | yc500 | yes | yes |  |
-| 蚂蚁电竞 AGK75 PRO | 2328 | 3151:5030 | gen2 | yes | yes |  |
+| 蚂蚁电竞 AGK75 PRO | 2328 | 3151:5030 | gen2 | yes | auto |  |
 | 蚂蚁电竞 AGK75 PRO | 2425 | 3151:502f | gen2 | yes | yes |  |
-| 蚂蚁电竞 AGK75 PRO | 2629 | 3151:502f | gen2 | yes | yes |  |
+| 蚂蚁电竞 AGK75 PRO | 2629 | 3151:502f | gen2 | yes | auto |  |
 | 蚂蚁电竞 AGK75 PRO | 2651 | 3151:502f | gen2 | yes | yes |  |
 | 蚂蚁电竞 AGK75 U2 | 2281 | 3151:502f | gen2 | yes | yes |  |
-| 蚂蚁电竞 AGK75 U2 | 2642 | 3151:5030 | gen2 | yes | yes |  |
-| 蚂蚁电竞 AGK75 U2 | 3005 | 3151:5030 | gen2 | yes | yes |  |
-| 蚂蚁电竞 AGK75 U2 | 3064 | 3151:502f | gen2 | yes | yes |  |
-| 蚂蚁电竞 AGK75 U2 | 3512 | 3151:5030 | gen2 | yes | yes |  |
+| 蚂蚁电竞 AGK75 U2 | 2642 | 3151:5030 | gen2 | yes | auto |  |
+| 蚂蚁电竞 AGK75 U2 | 3005 | 3151:5030 | gen2 | yes | auto |  |
+| 蚂蚁电竞 AGK75 U2 | 3064 | 3151:502f | gen2 | yes | auto |  |
+| 蚂蚁电竞 AGK75 U2 | 3512 | 3151:5030 | gen2 | yes | auto |  |
 | 蚂蚁电竞 AGK87 | 2114 | 3151:5029 | gen2 | yes | auto |  |
 | 蚂蚁电竞 AGK87 | 2330 | 3151:5029 | gen2 | yes | auto |  |
 | 蝴蝶 B75 | 2928 | 3151:502d | gen2 | yes | auto |  |

@@ -115,6 +115,8 @@ def lint_registry(errors: list[str], warnings: list[str]) -> None:
         for field, value in x.items():
             if field.startswith("_"):
                 continue
+            if field == "keyLayout" and str(d.get(field)).startswith(f"{value}~k"):
+                continue  # the extractor pointed the board at its keymap's copy
             if d.get(field) != value:
                 errors.append(
                     f"devices.extra.json id {x['id']} field {field}: "

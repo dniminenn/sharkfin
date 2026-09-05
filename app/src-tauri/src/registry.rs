@@ -388,7 +388,10 @@ mod tests {
                 assert_eq!(got.family, want.family, "device {id} family");
                 assert_eq!(got.vendor_id, want.vendor_id, "device {id} vendor id");
                 assert_eq!(got.product_id, want.product_id, "device {id} product id");
-                assert_eq!(got.key_layout, want.key_layout, "device {id} layout");
+                // The extractor may point a board at its own keymap's copy of
+                // the picture the entry names, `Name~k2`; the name still holds.
+                let base = got.key_layout.split("~k").next().unwrap_or("");
+                assert_eq!(base, want.key_layout, "device {id} layout");
             }
         }
         assert!(wholes > 0 && overrides > 0, "expected both kinds of entry");

@@ -1042,7 +1042,7 @@ def main():
     # `Name~k2`, in order of the lowest board id shipping it, and each
     # board is pointed at the copy carrying its own keymap. The shared
     # name keeps the geometry alone for boards whose keymap nobody has.
-    drawable = {k for k, u in ui_map.items() if u in ui_defs} - local - {"Common80_k72x86"}
+    drawable = {k for k, u in ui_map.items() if u in ui_defs} - local - {"Common80_k72x86", "Unknown"}
     by_layout = {}
     for d in devices:
         if d["id"] in matrix_of and d["keyLayout"] in drawable:

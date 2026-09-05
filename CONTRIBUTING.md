@@ -124,9 +124,16 @@ The script:
   SVG scenes newer builds ship instead. A layout named for a revision
   (`_v2`) falls back to the base revision's drawing, which is what the
   vendor's own component does.
-- Fills in slot indices from a layout's `defaultMatrix`, for yc500
-  devices and for layouts confirmed against firmware (below). Omitted
-  when nothing resolves or the devices disagree.
+- Fills in slot indices from each board's factory keymap, best source
+  first: the board's own firmware (`keymap-evidence.json`, below), a
+  layout confirmed inside a sibling's firmware (`matrix-evidence.json`),
+  then the vendor's `defaultMatrix` for yc500 boards alone. Omitted when
+  nothing resolves.
+- Splits a picture whose boards ship different factory keymaps into one
+  copy per keymap, `Name~k1`, `Name~k2`, numbered by the lowest board id
+  shipping each, and points every board at the copy carrying its own
+  keymap. The shared name keeps the geometry alone, for boards whose
+  keymap nobody has.
 
 A build with no `defaultMatrix` yields geometry-only layouts. Copying
 those over layouts that have `matrixIndex` loses it silently, so diff the
@@ -135,35 +142,48 @@ layout output before copying it in.
 `app/src/lib/layouts/x86.json` is hand-maintained as the canonical layout for
 `Common80_k72x86` and is never regenerated.
 
-### Confirming a keymap against firmware
+### Reading keymaps from firmware
 
-Which physical key a write lands on comes from the layout's factory
+Which physical key a write lands on comes from the board's factory
 keymap, so that keymap needs better evidence than the vendor's
-JavaScript. The vendor publishes each board's firmware, and the same
-keymap sits inside it. Finding it there is the evidence.
+JavaScript. The vendor publishes firmware per board, and the keyboard
+image carries the factory keymap as a table of 4-byte slot entries, the
+same bytes `GET_KEYMATRIX` returns, with copies in the settings area.
+Where both exist they agree on 79 boards of 84; on the other five the
+firmware carries a few entries the JavaScript lacks, a knob or a spare
+key, and the firmware's version is the one recorded.
 
 ```sh
-python3 tools/verify_matrix.py --dist-js <build>/dist/js
+python3 tools/firmware_keymaps.py
 ```
 
-It records the board, its firmware version and where the keymap was found
-in `app/src-tauri/data/matrix-evidence.json`, which is committed, so
-regenerating the registry downloads nothing. Delete an entry to retire a
-claim.
+It downloads each board's package once (cached under
+`~/vendor-builds/firmware/pkg`, with the channel's "nothing for this id"
+answers cached beside them), finds the table in the image, and records
+the board, firmware version, image member, offset, copy count, how the
+table was located and the table itself in
+`app/src-tauri/data/keymap-evidence.json`, which is committed, so
+regenerating the registry downloads nothing. Pass the vendor builds with
+`--dist-js`: where the JavaScript carries a keymap for the board, its
+bytes locate the table in the image, which settles where slot 0 is. A
+table found from its Escape entry alone is recorded only when the slot
+before it is not empty, since a board whose first slot is empty would
+otherwise be read one slot late. The channel answers a bare 400 to a
+burst of requests, which the tool refuses to read as "no firmware"; wait
+and rerun, the cache keeps what landed.
 
-Two rules keep it honest. A board that publishes no firmware confirms
-nothing. And when boards sharing a layout ship different factory keymaps,
-no single board's firmware settles it, so the layout is left alone: the
-Keys page matches each board's own keymap instead, which is right per
-board where one file cannot be.
+`tools/verify_matrix.py` is the older check: it confirms a layout's
+vendor `defaultMatrix` byte for byte inside a board's firmware and
+records it in `matrix-evidence.json`. It still counts as a source for
+boards without their own record.
 
-That second rule is not theoretical. `Common68_ZAP68` is shared by 33
+A board that publishes no firmware confirms nothing. And boards sharing a
+picture do not always share a keymap. `Common68_ZAP68` is shared by 33
 boards, and their own factory keymaps show 5 with a Right Ctrl and 26
-without. `Common68_DK68HE` is the same picture plus that key, and the two
-boards nearest it disagree further: Home and Delete are swapped, and one
-has a knob the other does not. A bundle from any one of them would have
-baked slot data that was wrong for the rest. Check what the other boards'
-keymaps say before baking a layout they share.
+without. `Common82_NBD_IK75` carries six distinct keymaps, differing by
+whole columns. That is what the per-keymap variants above are for: each
+board is drawn with its own keymap, and a board with none is matched at
+runtime instead of drawn from a sibling's.
 
 `tools/coverage.py` reports how many boards have a rendered layout and
 which layouts the writable boards still need.
