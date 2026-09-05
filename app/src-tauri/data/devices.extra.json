@@ -433,5 +433,37 @@
       "screen": true,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #38. A new revision of the VGN Neon75: the vendor tables carry five Neon75 ids (2781, 2859, 2904, 2905, 3237) and the GK8640GW PRO, Air and Turbo, but not 3288, so an extraction alone will not add it. The board's product string is 'VGN Neon75 Extreme Tri-mode Keyboard'; the owner names it the Neon Super Competitive Edition with Tianba magnetic switches. The vendor OTA API has no record for 3288 or for any Neon75 id. Fields other than the layout copy 3237, which shares 3151:5054.",
+    "_evidence": "Read sweep from the owner's board (0.5.1 web build, e453665). identify 0x8F returns 0x0cd8 = 3288 in the gen2 shape. GET_KEYMATRIX 0x8A returns a gen2 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the yc500 reads 0x89 and 0x92 answer only the opcode; the gen2 sleep read 0x91 answers four u16 (180, 180, 1620, 1620) at bytes 8..15 and 0x84 answers profile 2. That fixes the family as gen2. The keymap fills 84 slots: 80 keys, Fn at 71, and a knob as consumer Vol- , Vol+ and Mute at 90, 91 and 92. Common82_GK8640GW explains all 84 by entry; the siblings' Common82_GK8640 explains 81 and leaves the knob undrawn, so the Air and Turbo picture is the suggestion here. Neither file has slot data, so the Keys page asks the owner to confirm the picture, and the bundle it produces is what bakes the slots.",
+    "_unknown": "Slot order was not observable from a read sweep, so the picture is offered, not drawn, until the owner confirms it. Debounce 0x86 answers 0 at byte 1 and the siblings say no debounce, so debounce is off. Edge light 0x88 answers a plausible state and the siblings declare side LEDs, so sideLight stays on as the vendor has it. 0xAD answers version 0 and the siblings have no screen. Profiles are pinned to 4 with the siblings; the board was on profile 2 when read.",
+    "id": 3288,
+    "name": "vgn_neon75_extreme",
+    "displayName": "Neon75 Extreme",
+    "company": "VGN",
+    "vendor": "VGN",
+    "vendorId": 12625,
+    "productId": 20564,
+    "internalName": "vgn_neon75_extreme",
+    "keyLayout": "Common82_GK8640GW",
+    "lightLayout": "S",
+    "sideLightLayout": "Yt",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
   }
 ]
