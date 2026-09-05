@@ -40,6 +40,9 @@ export interface DeviceSpec {
   features: DeviceFeatures;
   /** An owner's read sweep from this board is on file. */
   confirmed?: { issue: number; version: string } | null;
+  /** Built from the board's own answers because the registry has no entry
+   * for its id. The app says so and asks before the first write. */
+  unregistered?: boolean;
 }
 
 export interface ConnectedDevice {
@@ -121,6 +124,8 @@ export interface DeviceSettings {
 }
 
 export const scan = () => invoke<ScanResult>("scan");
+/** The owner allows writes to a board the registry does not know, this session. */
+export const allowUnregistered = () => invoke<void>("allow_unregistered");
 /** Version and commit of this build. */
 export const buildId = () => invoke<string>("build_id");
 export const getSettings = () => invoke<DeviceSettings>("get_settings");

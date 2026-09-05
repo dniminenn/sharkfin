@@ -8,6 +8,8 @@
 //! and live here rather than in the UI, so no caller can wedge a keyboard.
 #![allow(dead_code)]
 
+#[path = "../../src-tauri/src/derive.rs"]
+mod derive;
 #[path = "../../src-tauri/src/protocol.rs"]
 mod protocol;
 #[path = "../../src-tauri/src/registry.rs"]
@@ -392,6 +394,9 @@ struct AppState {
     open: Option<Open>,
     stalled: bool,
     busy: bool,
+    /// The owner of a board the registry does not know has confirmed the
+    /// detected family and allowed writes. Cleared with the session.
+    unregistered_ok: bool,
     last_flash: Option<(f64, f64)>,
     /// One clock for every command write: when the last one was claimed,
     /// and the floor its class asked for. Both halves matter, since the
@@ -442,6 +447,12 @@ fn get_open(require_writable: bool) -> Result<(Rc<Transport>, DeviceSpec), Strin
                 open.spec.family,
                 open.spec.label(),
             ));
+        }
+        if require_writable && open.spec.unregistered && !s.unregistered_ok {
+            return Err(
+                "This keyboard is not in sharkfin's list. Allow changes on the notice above first."
+                    .into(),
+            );
         }
         Ok((open.transport.clone(), open.spec.clone()))
     })
@@ -575,6 +586,11 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
             .await
             .map_err(|e| connect_err("openFailed", None, js_err_text(e)))?;
     }
+    let (product, vid, pid) = (
+        device.product_name(),
+        device.vendor_id(),
+        device.product_id(),
+    );
     let transport = Transport {
         dev: device,
         last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
@@ -592,7 +608,11 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
         }
         Err(e) => return Err(connect_err("noHandshake", None, e.to_string())),
     };
-    match registry::by_id(id) {
+    let spec = match registry::by_id(id) {
+        Some(spec) => Some(spec),
+        None => derive_from_board(&transport, id, vid, pid, &product).await,
+    };
+    match spec {
         Some(spec) => {
             let battery = if transport.link() == Link::Receiver {
                 transport
@@ -607,13 +627,15 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
             let info = ConnectedInfo {
                 path: "webhid".into(),
                 device_id: id,
-                read_only: !spec.writes_supported(),
+                read_only: !spec.writes_supported() || spec.unregistered,
                 spec: spec.clone(),
                 link: transport.link(),
                 battery,
             };
             STATE.with(|s| {
-                s.borrow_mut().open = Some(Open {
+                let mut s = s.borrow_mut();
+                s.unregistered_ok = false;
+                s.open = Some(Open {
                     transport: Rc::new(transport),
                     spec,
                     battery,
@@ -627,6 +649,69 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
             format!("device id {id} is not in the registry"),
         )),
     }
+}
+
+/// A registry entry for a board that has none, from the same read-only
+/// probes the data bundle collects (`derive.rs`); mirrors
+/// commands.rs::derive_from_board. `None` leaves the board an unknown row.
+async fn derive_from_board(
+    t: &Transport,
+    id: u32,
+    vid: u16,
+    pid: u16,
+    product: &str,
+) -> Option<DeviceSpec> {
+    let r89 = t.read_raw_page(0x89, &[0, 0], Checksum::Bit7).await.ok()?;
+    let r8a = t
+        .read_raw_page(0x8A, &[0, 0xFF, 0, 0], Checksum::Bit7)
+        .await
+        .ok()?;
+    let r91 = t.read_raw_page(0x91, &[], Checksum::Bit7).await.ok()?;
+    let r92 = t.read_raw_page(0x92, &[], Checksum::Bit7).await.ok()?;
+    let family = derive::detect_family(&r89, &r8a, &r91, &r92)?;
+    let mut keymap = Vec::with_capacity(512);
+    for page in 0..8u8 {
+        let reply = if family == "gen2" {
+            let payload = protocol::gen2::keymatrix_read_payload(0, page);
+            t.read_raw_page(0x8A, &payload, Checksum::Bit7).await.ok()?
+        } else {
+            t.read_raw_page(0x89, &[0, page], Checksum::Bit7)
+                .await
+                .ok()?
+        };
+        keymap.extend_from_slice(&reply);
+    }
+    let before = t.read_raw_page(0x97, &[], Checksum::Bit7).await.ok()?;
+    let oled = t.read_raw_page(0xAD, &[], Checksum::Bit7).await.ok()?;
+    let sweep = derive::Sweep {
+        r89: &r89,
+        r8a: &r8a,
+        r91: &r91,
+        r92: &r92,
+        oled: &oled,
+        before_oled: &before,
+        keymap: &keymap,
+    };
+    Some(derive::derive_spec(id, vid, pid, product, family, &sweep))
+}
+
+/// The owner has read what was detected about a board the registry does
+/// not know and allows writes to it for this session.
+#[wasm_bindgen]
+pub fn allow_unregistered() -> Result<(), JsValue> {
+    STATE.with(|s| {
+        let mut s = s.borrow_mut();
+        match &s.open {
+            Some(open) if open.spec.unregistered => {
+                s.unregistered_ok = true;
+                Ok(())
+            }
+            Some(_) => Err(JsValue::from(
+                "this board is in the registry; nothing to allow",
+            )),
+            None => Err(JsValue::from("no device connected")),
+        }
+    })
 }
 
 /// Which build this is, for the UI to show and a reporter to quote.
@@ -659,7 +744,8 @@ pub fn status() -> Result<JsValue, JsValue> {
             connected: s.open.as_ref().map(|o| ConnectedInfo {
                 path: "webhid".into(),
                 device_id: o.spec.id,
-                read_only: !o.spec.writes_supported(),
+                read_only: !o.spec.writes_supported()
+                    || (o.spec.unregistered && !s.unregistered_ok),
                 spec: o.spec.clone(),
                 link: o.transport.link(),
                 battery: o.battery,
@@ -1459,22 +1545,33 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
     let mut out = String::new();
     let _ = writeln!(out, "```");
     let _ = writeln!(out, "sharkfin {} data bundle (web)", registry::build_id());
-    let _ = writeln!(out, "board  : {} (device id {})", spec.label(), spec.id);
-    let _ = writeln!(
-        out,
-        "usb    : {:04x}:{:04x}  internal {}",
-        spec.vendor_id, spec.product_id, spec.internal_name
-    );
-    let _ = writeln!(
-        out,
-        "family : {} (writes {})",
-        spec.family,
-        if spec.writes_supported() {
-            "yes"
-        } else {
-            "read-only"
-        }
-    );
+    if spec.unregistered {
+        let _ = writeln!(out, "board  : {} (not in the registry)", spec.label());
+        let _ = writeln!(
+            out,
+            "usb    : {:04x}:{:04x}",
+            spec.vendor_id, spec.product_id
+        );
+        let _ = writeln!(out, "identify: device id {}", spec.id);
+        let _ = writeln!(out, "family : {} (detected from this sweep)", spec.family);
+    } else {
+        let _ = writeln!(out, "board  : {} (device id {})", spec.label(), spec.id);
+        let _ = writeln!(
+            out,
+            "usb    : {:04x}:{:04x}  internal {}",
+            spec.vendor_id, spec.product_id, spec.internal_name
+        );
+        let _ = writeln!(
+            out,
+            "family : {} (writes {})",
+            spec.family,
+            if spec.writes_supported() {
+                "yes"
+            } else {
+                "read-only"
+            }
+        );
+    }
     probe_sweep(&t, &mut out).await?;
     let _ = writeln!(out, "```");
     Ok(out.into())

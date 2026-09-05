@@ -45,6 +45,9 @@ export interface DeviceSpec {
   features: DeviceFeatures;
   /** An owner's read sweep from this board is on file. */
   confirmed?: { issue: number; version: string } | null;
+  /** Built from the board's own answers because the registry has no entry
+   * for its id. The app says so and asks before the first write. */
+  unregistered?: boolean;
 }
 
 export interface ConnectedDevice {
@@ -243,6 +246,12 @@ const withCore = async <T>(f: () => Promise<T>): Promise<T> => {
 /** Version and commit of this build. */
 export const buildId = (): Promise<string> =>
   withCore(async () => core.build_id());
+
+/** The owner allows writes to a board the registry does not know, this session. */
+export const allowUnregistered = (): Promise<void> =>
+  withCore(async () => {
+    core.allow_unregistered();
+  });
 export const getSettings = (): Promise<DeviceSettings> =>
   withCore(async () => JSON.parse((await core.get_settings()) as string));
 export const setDebounce = (value: number) => withCore(() => core.set_debounce(value));

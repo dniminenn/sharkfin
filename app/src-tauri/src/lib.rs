@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 mod commands;
+pub mod derive;
 pub mod dev;
 pub mod hid;
 pub mod protocol;
@@ -32,6 +33,7 @@ pub fn run() {
         .manage(AppState::default())
         .invoke_handler(tauri::generate_handler![
             commands::scan,
+            commands::allow_unregistered,
             commands::build_id,
             commands::get_led_param,
             commands::set_led_param,

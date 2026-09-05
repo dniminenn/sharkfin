@@ -44,6 +44,11 @@ files: the picture is matched against your board's keymap and stays
 read-only until you confirm it. A picture ships built in only when every
 board sharing it agrees.
 
+A board that is not in the list still works. sharkfin reads which command
+set it speaks off the board's own answers, says so, and asks before it
+writes anything. Send a report from the Contribute tab and it gets a real
+entry.
+
 If your board shows the grid, or the picture is wrong, draw it on
 [keyboard-layout-editor.com](http://www.keyboard-layout-editor.com) and
 paste the drawing into the Keys page. Sending the result back gets the

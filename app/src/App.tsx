@@ -29,6 +29,7 @@ import ColorwayPicker from "@/components/ColorwayPicker";
 import SharkfinLogo from "@/components/SharkfinLogo";
 import PermissionNotice from "@/components/PermissionNotice";
 import ReadOnlyNotice from "@/components/ReadOnlyNotice";
+import UnregisteredNotice from "@/components/UnregisteredNotice";
 import LightingPage from "@/pages/Lighting";
 import KeymapPage from "@/pages/Keymap";
 import DevicePage from "@/pages/Device";
@@ -166,9 +167,11 @@ export default function App() {
                         !readOnly(device) && "text-(--key-accent)",
                       )}
                     >
-                      {readOnly(device)
-                        ? t("read-only")
-                        : device.link === "receiver"
+                      {device.spec.unregistered
+                        ? t("not in the registry · {family}", { family: device.spec.family ?? "" })
+                        : readOnly(device)
+                          ? t("read-only")
+                          : device.link === "receiver"
                           ? t("2.4 GHz · id {id}", { id: device.deviceId }) +
                             (device.battery === null ? "" : ` · ${device.battery}%`)
                           : t("USB · id {id}", { id: device.deviceId })}
@@ -205,8 +208,16 @@ export default function App() {
       </aside>
 
       <main className="flex flex-1 flex-col overflow-hidden">
-        {device && readOnly(device) && (
-          <ReadOnlyNotice onContribute={() => setPage("contribute")} />
+        {device && device.spec.unregistered ? (
+          <UnregisteredNotice
+            device={device}
+            onAllowed={doScan}
+            onContribute={() => setPage("contribute")}
+          />
+        ) : (
+          device && readOnly(device) && (
+            <ReadOnlyNotice onContribute={() => setPage("contribute")} />
+          )
         )}
         <div className="flex-1 overflow-auto">
           {page === "lighting" && <LightingPage connected={!!device} />}

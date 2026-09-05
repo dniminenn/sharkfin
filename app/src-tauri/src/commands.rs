@@ -27,6 +27,9 @@ struct Inner {
     /// recover it and the extra traffic keeps it pinned, so scanning stops
     /// until the hardware disappears from the bus, i.e. someone replugs.
     stalled: bool,
+    /// The owner of a board the registry does not know has confirmed the
+    /// detected family and allowed writes. Cleared with the handle.
+    unregistered_ok: bool,
 }
 
 struct OpenDevice {
@@ -41,11 +44,12 @@ struct OpenDevice {
 }
 
 impl OpenDevice {
-    fn connected(&self) -> ConnectedDevice {
+    fn connected(&self, unregistered_ok: bool) -> ConnectedDevice {
         ConnectedDevice {
             path: self.path.clone(),
             device_id: self.spec.id,
-            read_only: !self.spec.writes_supported(),
+            read_only: !self.spec.writes_supported()
+                || (self.spec.unregistered && !unregistered_ok),
             spec: self.spec.clone(),
             link: self.transport.link(),
             battery: self.battery,
@@ -110,6 +114,7 @@ impl Default for AppState {
                 last_flash: None,
                 last_write: None,
                 stalled: false,
+                unregistered_ok: false,
             }),
         }
     }
@@ -200,8 +205,9 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                 // nothing; the number drifts while the board charges.
                 open.battery = receiver_battery(&open.transport);
             }
+            let ok = inner.unregistered_ok;
             return Ok(ScanResult {
-                connected: Some(open.connected()),
+                connected: Some(inner.open.as_ref().unwrap().connected(ok)),
                 unknown: vec![],
                 open_failed: false,
                 stalled: false,
@@ -248,7 +254,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
             }
         };
         match transport.identify() {
-            Ok(id) => match registry::by_id(id) {
+            Ok(id) => match registry::by_id(id).or_else(|| derive_from_board(&transport, id, &d)) {
                 Some(spec) => {
                     let battery = if transport.link() == Link::Receiver {
                         receiver_battery(&transport)
@@ -262,7 +268,8 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                         last_ok: Instant::now(),
                         battery,
                     };
-                    connected = Some(open.connected());
+                    inner.unregistered_ok = false;
+                    connected = Some(open.connected(false));
                     inner.open = Some(open);
                     break;
                 }
@@ -290,6 +297,65 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
         stalled: false,
         keyboard_offline,
     })
+}
+
+/// A registry entry for a board that has none, from the same read-only
+/// probes the data bundle collects (`derive.rs`). `None` when the answers
+/// do not settle the family, and the board stays an unknown row.
+fn derive_from_board(t: &Transport, id: u32, d: &hid::DiscoveredDevice) -> Option<DeviceSpec> {
+    let read = |op: u8, payload: &[u8]| t.read_raw_page(op, payload, Checksum::Bit7).ok();
+    let r89 = read(0x89, &[0, 0])?;
+    let r8a = read(0x8A, &[0, 0xFF, 0, 0])?;
+    let r91 = read(0x91, &[])?;
+    let r92 = read(0x92, &[])?;
+    let family = crate::derive::detect_family(&r89, &r8a, &r91, &r92)?;
+    let mut keymap = Vec::with_capacity(512);
+    for page in 0..8u8 {
+        let reply = if family == "gen2" {
+            read(
+                0x8A,
+                &crate::protocol::gen2::keymatrix_read_payload(0, page),
+            )?
+        } else {
+            read(0x89, &[0, page])?
+        };
+        keymap.extend_from_slice(&reply);
+    }
+    let before = read(0x97, &[])?;
+    let oled = read(0xAD, &[])?;
+    let sweep = crate::derive::Sweep {
+        r89: &r89,
+        r8a: &r8a,
+        r91: &r91,
+        r92: &r92,
+        oled: &oled,
+        before_oled: &before,
+        keymap: &keymap,
+    };
+    log::info!("device id {id} is not in the registry; answers as {family}");
+    Some(crate::derive::derive_spec(
+        id,
+        d.vendor_id,
+        d.product_id,
+        &d.product,
+        family,
+        &sweep,
+    ))
+}
+
+/// The owner has read what was detected about a board the registry does
+/// not know and allows writes to it for this session.
+#[tauri::command(async)]
+pub fn allow_unregistered(state: tauri::State<AppState>) -> Result<(), String> {
+    let mut inner = state.inner.lock();
+    match &inner.open {
+        Some(open) if open.spec.unregistered => {
+            inner.unregistered_ok = true;
+            Ok(())
+        }
+        Some(_) => Err("this board is in the registry; nothing to allow".into()),
+        None => Err("no device connected".into()),
+    }
 }
 
 fn receiver_battery(t: &Transport) -> Option<u8> {
@@ -345,6 +411,7 @@ fn run<T>(
             }
         }
     }
+    let unregistered_ok = inner.unregistered_ok;
     let open = inner.open.as_mut().ok_or("no device connected")?;
     if require_writable && !open.spec.writes_supported() {
         return Err(format!(
@@ -352,6 +419,12 @@ fn run<T>(
             open.spec.family,
             open.spec.label(),
         ));
+    }
+    if require_writable && open.spec.unregistered && !unregistered_ok {
+        return Err(
+            "This keyboard is not in sharkfin's list. Allow changes on the notice above first."
+                .into(),
+        );
     }
     let fc = family_cmds(&open.spec.family);
     match f(&open.transport, fc) {
@@ -1275,22 +1348,33 @@ pub fn contribution_bundle(
         let mut out = String::new();
         let _ = writeln!(out, "```");
         let _ = writeln!(out, "sharkfin {} data bundle", registry::build_id());
-        let _ = writeln!(out, "board  : {} (device id {})", spec.label(), spec.id);
-        let _ = writeln!(
-            out,
-            "usb    : {:04x}:{:04x}  internal {}",
-            spec.vendor_id, spec.product_id, spec.internal_name
-        );
-        let _ = writeln!(
-            out,
-            "family : {} (writes {})",
-            spec.family,
-            if spec.writes_supported() {
-                "yes"
-            } else {
-                "read-only"
-            }
-        );
+        if spec.unregistered {
+            let _ = writeln!(out, "board  : {} (not in the registry)", spec.label());
+            let _ = writeln!(
+                out,
+                "usb    : {:04x}:{:04x}",
+                spec.vendor_id, spec.product_id
+            );
+            let _ = writeln!(out, "identify: device id {}", spec.id);
+            let _ = writeln!(out, "family : {} (detected from this sweep)", spec.family);
+        } else {
+            let _ = writeln!(out, "board  : {} (device id {})", spec.label(), spec.id);
+            let _ = writeln!(
+                out,
+                "usb    : {:04x}:{:04x}  internal {}",
+                spec.vendor_id, spec.product_id, spec.internal_name
+            );
+            let _ = writeln!(
+                out,
+                "family : {} (writes {})",
+                spec.family,
+                if spec.writes_supported() {
+                    "yes"
+                } else {
+                    "read-only"
+                }
+            );
+        }
         probe_sweep(t, &mut out);
         let _ = writeln!(out, "```");
         Ok(out)

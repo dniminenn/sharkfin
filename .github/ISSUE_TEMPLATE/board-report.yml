@@ -23,6 +23,18 @@ body:
         - Everything I tried worked
         - Mostly works, something is off
         - Does not work
+        - sharkfin says it is not in its list
+    validations:
+      required: true
+  - type: dropdown
+    id: edge
+    attributes:
+      label: Edge lighting
+      description: Lights along the sides or underneath, apart from the keys.
+      options:
+        - "No"
+        - "Yes"
+        - Not sure
     validations:
       required: true
   - type: textarea
@@ -33,6 +45,11 @@ body:
       render: text
     validations:
       required: true
+  - type: textarea
+    id: photo
+    attributes:
+      label: Photo
+      description: A photo of the whole board from above, dropped here. It settles the key layout faster than anything else.
   - type: textarea
     id: notes
     attributes:

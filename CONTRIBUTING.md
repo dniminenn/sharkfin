@@ -58,6 +58,21 @@ Style notes:
 - Pacing and rate limits belong in the core, next to the packet builders, so
   both builds inherit them. The browser has no backend to put them behind.
 
+## Boards the registry does not know
+
+A board whose id is in no entry is not refused. `app/src-tauri/src/derive.rs`
+reads the same probes the data bundle collects and settles the family the
+way every hand-added board's was settled: yc500 answers its keymap on
+`0x89` and a fixed all-0xFF table on `0x8A`, gen2 answers options on
+`0x89` and its keymap on `0x8A`, and the sleep timers sit at different
+bytes in each, which serves as a contradiction check. Anything that fits
+both ways or neither stays unknown and read-only. The derived entry takes
+its name from the USB product string, `Unknown` for the picture so the Keys
+page matches one against the board, and its features off the sweep. The
+app marks it `unregistered`, shows what it detected, and writes only after
+the owner allows it for the session. The bundle still says "not in the
+registry", so the report that adds a real entry is unchanged.
+
 ## Adding a read-only board
 
 Four boards in the registry resolve to no known command family, so

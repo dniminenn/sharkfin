@@ -58,6 +58,11 @@ pub struct DeviceSpec {
     /// (`data/confirmed.json`). The vendor's data alone never sets it.
     #[serde(default)]
     pub confirmed: Option<Confirmation>,
+    /// Built from the board's own answers because the registry has no
+    /// entry for its id (`derive.rs`). Never true for a shipped entry. The
+    /// app says so and asks the owner before the first write.
+    #[serde(default)]
+    pub unregistered: bool,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

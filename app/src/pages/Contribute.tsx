@@ -110,7 +110,11 @@ export default function ContributePage({
           </CardTitle>
           {device ? (
             <Badge variant="outline">
-              {device.readOnly ? t("read-only") : t("id {id}", { id: device.deviceId })}
+              {device.spec.unregistered
+                ? t("not in the registry")
+                : device.readOnly
+                  ? t("read-only")
+                  : t("id {id}", { id: device.deviceId })}
             </Badge>
           ) : (
             unknown && (
@@ -121,10 +125,16 @@ export default function ContributePage({
           )}
         </CardHeader>
         <CardContent className="space-y-4">
-          {device?.readOnly && (
+          {device?.spec.unregistered ? (
             <p className="text-sm text-muted-foreground">
-              {t("This board stays read-only until its command set is known. A bundle is the first step.")}
+              {t("sharkfin does not know this board yet. It answers like a {family} board, so it can be used. A bundle adds it to the list.", { family: device.spec.family ?? "" })}
             </p>
+          ) : (
+            device?.readOnly && (
+              <p className="text-sm text-muted-foreground">
+                {t("This board stays read-only until its command set is known. A bundle is the first step.")}
+              </p>
+            )
           )}
           {confirmed && (
             <p className="text-sm text-muted-foreground">
