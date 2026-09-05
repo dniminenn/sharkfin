@@ -361,7 +361,11 @@
     "magnetic": false,
     "family": "yc500",
     "features": {
-      "knob": [],
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
       "debounce": false,
       "sleep24": true,
       "sleepBT": true,

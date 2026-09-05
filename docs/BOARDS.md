@@ -17,7 +17,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | writable | 952 |
 | drawn | 187 |
 | drawn after confirmation | 739 |
-| confirmed on hardware | 2 |
+| confirmed on hardware | 4 |
 
 | board | id | usb | family | write | draw | confirmed |
 |---|---|---|---|---|---|---|
@@ -271,7 +271,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | EWEADNV ZAP68Ultra | 2554 | 3151:5029 | gen2 | yes | auto |  |
 | EWEADNV ZAP87 | 2527 | 3151:5030 | gen2 | yes |  |  |
 | EWEADNV ZAP87 | 3011 | 3151:5030 | gen2 | yes | auto |  |
-| Fire Phoenix BK-11 | 2570 | 3151:4015 | yc500 | yes |  |  |
+| Fire Phoenix BK-11 | 2570 | 3151:4015 | yc500 | yes |  | #36 |
 | FREEWOLF F68 | 2634 | 3151:5030 | gen2 | yes | auto |  |
 | FREEWOLF F68 PRO | 2594 | 3151:5030 | gen2 | yes | auto |  |
 | FREEWOLF K13 | 3733 | 3151:502c | gen2 | yes | auto |  |
@@ -442,7 +442,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | LTCFn KF202 | 2397 | 3151:5025 | gen2 | yes | auto |  |
 | Luoyika K98 | 3532 | 3151:5025 | gen2 | yes | auto |  |
 | M4G MAG 68 HE | 3017 | 3151:5029 | gen2 | yes | auto |  |
-| Machenike K600-B82 | 1721 | 3151:4015 | yc500 | yes | yes |  |
+| Machenike K600-B82 | 1721 | 3151:4015 | yc500 | yes | yes | #35 |
 | MageGee AIR68 | 3146 | 3151:5030 | gen2 | yes | auto |  |
 | MageGee CAPTAIN87 | 2789 | 3151:5030 | gen2 | yes | auto |  |
 | MageGee Gaming Keyboard | 2677 | 3151:5030 | gen2 | yes | auto |  |
