@@ -20,10 +20,15 @@ use crate::registry::{DeviceFeatures, DeviceSpec};
 
 pub const REPORT_LEN: usize = 64;
 
+/// The 4-byte slot entries of a keymap page or table, in order.
+fn entries(bytes: &[u8]) -> impl Iterator<Item = &[u8]> {
+    (0..bytes.len() / 4).map(move |i| &bytes[i * 4..i * 4 + 4])
+}
+
 /// Entries in a 64-byte keymap page that read as a plain key: type 0, a
 /// keyboard usage in 4..=0xE7, nothing in the modifier or combo bytes.
 fn plain_keys(page: &[u8]) -> usize {
-    page.chunks_exact(4)
+    entries(page)
         .filter(|e| e[0] == 0 && e[1] == 0 && (4..=0xE7).contains(&e[2]) && e[3] == 0)
         .count()
 }
@@ -83,11 +88,8 @@ pub fn sleep_timers(family: &str, r91: &[u8], r92: &[u8]) -> Option<[u16; 4]> {
 /// Volume knob turns and press, as the vendor names them, when the base
 /// keymap carries the consumer usages a knob ships with.
 fn knob(keymap: &[u8]) -> Vec<String> {
-    let has = |usage: u8| {
-        keymap
-            .chunks_exact(4)
-            .any(|e| e[0] == 3 && e[1] == 0 && e[2] == usage && e[3] == 0)
-    };
+    let has =
+        |usage: u8| entries(keymap).any(|e| e[0] == 3 && e[1] == 0 && e[2] == usage && e[3] == 0);
     if has(0xE9) && has(0xEA) {
         vec![
             "AudioVolumeDown".into(),
