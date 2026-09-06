@@ -236,8 +236,11 @@ impl DeviceSpec {
     /// lineages share the family, not the evidence.
     pub fn hall_writes(&self, revision: Option<u16>) -> bool {
         self.hall_reads(revision)
-            && (self.internal_name.starts_with("ry5088_")
-                || self.internal_name.starts_with("yc3121_"))
+            && match self.family.as_str() {
+                "gen2" => self.internal_name.starts_with("ry5088_"),
+                "yc500" => self.internal_name.starts_with("yc3121_"),
+                _ => false,
+            }
     }
 
     /// A yc500 magnetic board below 2.00 keeps one board-wide record
@@ -397,6 +400,27 @@ mod tests {
         );
         assert!(x86.writes_supported());
         assert_eq!(x86.label(), "AttackShark X86");
+    }
+
+    /// The write gate is per family and lineage together. A `yc3121_` name
+    /// on a gen2 board (the JEDEL KL166, issue #41) is not the yc500 lineage
+    /// whose image was read, and 0.7.1 let it through.
+    #[test]
+    fn switch_writes_need_the_lineage_in_its_own_family() {
+        let kl166 = by_id(2729).expect("KL166 present");
+        assert_eq!(kl166.family, "gen2");
+        assert!(kl166.internal_name.starts_with("yc3121_"));
+        assert!(kl166.hall_reads(Some(0x0300)));
+        assert!(!kl166.hall_writes(Some(0x0300)));
+        let er75 = by_id(1618).expect("ER75 present");
+        assert!(er75.hall_writes(Some(0x0200)));
+        assert!(!er75.hall_writes(Some(0x0107)));
+        assert!(!er75.hall_reads(None));
+        let x65 = all()
+            .into_iter()
+            .find(|d| d.id == 2268)
+            .expect("X65HE present");
+        assert!(x65.hall_writes(None));
     }
 
     /// The vendor's light table names every layout the registry uses, bar
