@@ -266,7 +266,7 @@
  "{n} events": "{n} eventos",
  "{n} keys share a factory function with another key, so each pair may be swapped. Check those first.": "{n} teclas compartilham a função de fábrica com outra tecla, então cada par pode estar trocado. Confira essas primeiro.",
  "{w} by {h}": "{w} por {h}",
- "This keyboard is not in sharkfin's list. It answers like a {family} board, so sharkfin can read it. Allow changes to write to it, and please send a report so it can be added.": "Este teclado não está na lista do sharkfin. Ele responde como uma placa {family}, então o sharkfin consegue lê-lo. Permita alterações para gravar nele, e envie um relatório para que ele seja adicionado.",
+ "sharkfin has no command set on file for this keyboard. It answers like a {family} board, so sharkfin can read it. Allow changes to write to it, and please send a report so its entry can be completed.": "O sharkfin não tem o conjunto de comandos deste teclado registrado. Ele responde como uma placa {family}, então o sharkfin consegue lê-lo. Permita alterações para gravar nele, e envie um relatório para que a entrada dele seja completada.",
  "Changes allowed for this session. Please send a report so this board can be added.": "Alterações permitidas nesta sessão. Envie um relatório para que esta placa seja adicionada.",
  "Allow changes": "Permitir alterações",
  "not in the registry · {family}": "fora do registro · {family}",

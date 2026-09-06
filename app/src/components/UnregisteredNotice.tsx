@@ -43,7 +43,7 @@ export default function UnregisteredNotice({
       <span className="min-w-0 flex-1 text-muted-foreground">
         {device.readOnly
           ? t(
-              "This keyboard is not in sharkfin's list. It answers like a {family} board, so sharkfin can read it. Allow changes to write to it, and please send a report so it can be added.",
+              "sharkfin has no command set on file for this keyboard. It answers like a {family} board, so sharkfin can read it. Allow changes to write to it, and please send a report so its entry can be completed.",
               { family },
             )
           : t(

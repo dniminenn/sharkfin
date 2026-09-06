@@ -266,7 +266,7 @@
  "{n} events": "{n} event",
  "{n} keys share a factory function with another key, so each pair may be swapped. Check those first.": "{n} tombol berbagi fungsi pabrik dengan tombol lain, jadi tiap pasangan mungkin tertukar. Periksa itu dulu.",
  "{w} by {h}": "{w} x {h}",
- "This keyboard is not in sharkfin's list. It answers like a {family} board, so sharkfin can read it. Allow changes to write to it, and please send a report so it can be added.": "Keyboard ini belum ada di daftar sharkfin. Ia menjawab seperti board {family}, jadi sharkfin bisa membacanya. Izinkan perubahan untuk menulis ke keyboard, dan tolong kirim laporan supaya bisa ditambahkan.",
+ "sharkfin has no command set on file for this keyboard. It answers like a {family} board, so sharkfin can read it. Allow changes to write to it, and please send a report so its entry can be completed.": "sharkfin belum punya set perintah untuk keyboard ini. Ia menjawab seperti board {family}, jadi sharkfin bisa membacanya. Izinkan perubahan untuk menulis ke keyboard, dan tolong kirim laporan supaya entrinya bisa dilengkapi.",
  "Changes allowed for this session. Please send a report so this board can be added.": "Perubahan diizinkan untuk sesi ini. Tolong kirim laporan supaya board ini bisa ditambahkan.",
  "Allow changes": "Izinkan perubahan",
  "not in the registry · {family}": "belum di registri · {family}",

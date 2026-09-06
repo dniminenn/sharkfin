@@ -116,6 +116,22 @@ pub struct Sweep<'a> {
     pub keymap: &'a [u8],
 }
 
+/// A registered board whose entry does not know its family takes the family
+/// its own answers settle on, and the same consent gate as a board with no
+/// entry: the identity is on file, the command set is the board's word.
+/// Features the entry left blank fill from the sweep.
+pub fn settle_family(mut spec: DeviceSpec, derived: &DeviceSpec) -> DeviceSpec {
+    spec.family = derived.family.clone();
+    spec.unregistered = true;
+    if spec.features.knob.is_empty() {
+        spec.features.knob = derived.features.knob.clone();
+    }
+    spec.features.sleep24 |= derived.features.sleep24;
+    spec.features.sleep_bt |= derived.features.sleep_bt;
+    spec.features.screen |= derived.features.screen;
+    spec
+}
+
 /// A registry entry for a board that has none, marked `unregistered` so
 /// the app can say so and ask before it writes. The picture is `Unknown`,
 /// which makes the Keys page match one against the board and ask the owner

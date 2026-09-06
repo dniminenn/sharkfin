@@ -257,7 +257,21 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
             }
         };
         match transport.identify() {
-            Ok(id) => match registry::by_id(id).or_else(|| derive_from_board(&transport, id, &d)) {
+            Ok(id) => match registry::by_id(id)
+                .map(|spec| {
+                    // An entry from the vendor's older table knows the board
+                    // but not its command set; the board says which.
+                    if spec.family == "unknown" {
+                        match derive_from_board(&transport, id, &d) {
+                            Some(derived) => crate::derive::settle_family(spec, &derived),
+                            None => spec,
+                        }
+                    } else {
+                        spec
+                    }
+                })
+                .or_else(|| derive_from_board(&transport, id, &d))
+            {
                 Some(spec) => {
                     let battery = if transport.link() == Link::Receiver {
                         receiver_battery(&transport)

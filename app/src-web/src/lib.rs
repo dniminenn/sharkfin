@@ -632,6 +632,14 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
         Err(e) => return Err(connect_err("noHandshake", None, e.to_string())),
     };
     let spec = match registry::by_id(id) {
+        Some(spec) if spec.family == "unknown" => {
+            // An entry from the vendor's older table knows the board but not
+            // its command set; the board says which.
+            match derive_from_board(&transport, id, vid, pid, &product).await {
+                Some(derived) => Some(derive::settle_family(spec, &derived)),
+                None => Some(spec),
+            }
+        }
         Some(spec) => Some(spec),
         None => derive_from_board(&transport, id, vid, pid, &product).await,
     };
