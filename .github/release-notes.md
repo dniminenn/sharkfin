@@ -1,5 +1,14 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.3
+
+**Switch writes closed on 23 gen2 boards.** 0.7.1 let boards whose internal
+name starts with `yc3121_` write their switch settings whatever their
+command set. That prefix names the yc500 lineage whose firmware was read;
+on gen2 (the JEDEL KL166 and 22 siblings) no image has been read, and the
+KL166's firmware does not take the packets. Those boards are read-only
+again until one is. Reported in issue #41.
+
 ## What changed in 0.7.2
 
 **Lighting per board.** The Lighting page now offers the effects your
