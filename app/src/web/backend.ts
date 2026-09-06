@@ -101,6 +101,24 @@ export interface ScanResult {
   keyboardOffline: boolean;
 }
 
+/** One key's magnetic-switch settings, millimetres. */
+export interface KeySwitch {
+  slot: number;
+  /** Bits 0..6 of the mode byte; 0 is a plain key. */
+  kind: number;
+  rapidTrigger: boolean;
+  travel: number;
+  lift: number;
+  rtPress: number;
+  rtLift: number;
+  deadBottom: number;
+}
+
+export interface SwitchSettings {
+  unitMm: number;
+  keys: KeySwitch[];
+}
+
 export interface LedParam {
   mode: number;
   speed: number;
@@ -276,6 +294,13 @@ export const allowUnregistered = (): Promise<void> =>
   withCore(async () => {
     core.allow_unregistered();
   });
+
+export const getSwitches = (): Promise<SwitchSettings> =>
+  withCore(async () => JSON.parse((await core.get_switches()) as string) as SwitchSettings);
+export const setSwitchKey = (key: KeySwitch): Promise<void> =>
+  withCore(() => core.set_switch_key(JSON.stringify(key)));
+export const setSwitchesAll = (key: KeySwitch): Promise<void> =>
+  withCore(() => core.set_switches_all(JSON.stringify(key)));
 export const getSettings = (): Promise<DeviceSettings> =>
   withCore(async () => JSON.parse((await core.get_settings()) as string));
 export const setDebounce = (value: number) => withCore(() => core.set_debounce(value));

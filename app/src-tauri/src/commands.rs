@@ -6,6 +6,7 @@ use parking_lot::Mutex;
 use serde::Serialize;
 
 use crate::hid::{self, HidError, Link, Transport};
+use crate::protocol::hall;
 use crate::protocol::{
     cmd, family_cmds, Checksum, FamilyCmds, KbOptions, LedParam, Macro, SledParam, SleepTimes,
 };
@@ -1050,6 +1051,99 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
         for page in crate::protocol::screen_page_packets(page_op, 0, 1, 0, &data) {
             t.send(&page)?;
             std::thread::sleep(SCREEN_PAGE_GAP);
+        }
+        std::thread::sleep(FLASH_SETTLE);
+        Ok(())
+    });
+    stamp_write(&state);
+    out
+}
+
+/// Magnetic-switch settings for every slot: the mode column and the five
+/// travel columns, raw pages assembled into millimetres.
+#[tauri::command(async)]
+pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSettings, String> {
+    {
+        let inner = state.inner.lock();
+        let spec = &inner.open.as_ref().ok_or("no device connected")?.spec;
+        if !spec.hall_reads() {
+            return Err(format!(
+                "{} has no magnetic switches sharkfin can read",
+                spec.label()
+            ));
+        }
+    }
+    with_open(&state, |t, _| {
+        let column = |subop: u8| -> Result<Vec<u8>, HidError> {
+            let mut out = Vec::with_capacity(256);
+            for page in 0..hall::get_pages(subop) {
+                out.extend_from_slice(&t.read_raw_page(
+                    hall::GET,
+                    &hall::get_payload(subop, page),
+                    Checksum::Bit7,
+                )?);
+            }
+            Ok(out)
+        };
+        let mode = column(hall::MODE)?;
+        let travel = hall::decode_wide(&column(hall::TRAVEL)?);
+        let lift = hall::decode_wide(&column(hall::LIFT)?);
+        let rt_press = hall::decode_wide(&column(hall::RT_PRESS)?);
+        let rt_lift = hall::decode_wide(&column(hall::RT_LIFT)?);
+        let dead = hall::decode_wide(&column(hall::DEAD_BOTTOM)?);
+        Ok(hall::assemble(
+            &mode, &travel, &lift, &rt_press, &rt_lift, &dead,
+        ))
+    })
+}
+
+fn require_hall_writes(state: &tauri::State<AppState>) -> Result<(), String> {
+    let inner = state.inner.lock();
+    let spec = &inner.open.as_ref().ok_or("no device connected")?.spec;
+    if !spec.hall_writes() {
+        return Err(format!(
+            "sharkfin has not read {}'s firmware for its switch settings, so it will not write them",
+            spec.label()
+        ));
+    }
+    Ok(())
+}
+
+/// One key's switch settings. Six single-slot packets, the last one flagged
+/// so the firmware saves the block and applies it; that save is a flash
+/// erase and program, so it takes the flash cooldown.
+#[tauri::command(async)]
+pub fn set_switch_key(state: tauri::State<AppState>, key: hall::KeySwitch) -> Result<(), String> {
+    require_hall_writes(&state)?;
+    flash_cooldown(&state);
+    let out = with_writable(&state, |t, _| {
+        let n = hall::WRITE_COLUMNS.len();
+        for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
+            let pkt = hall::set_one(subop, key.slot, i + 1 == n, key.wire(subop))
+                .ok_or_else(|| HidError::Protocol("slot out of range".into()))?;
+            t.send(&pkt)?;
+        }
+        std::thread::sleep(FLASH_SETTLE);
+        Ok(())
+    });
+    stamp_write(&state);
+    out
+}
+
+/// The same settings on every key. Six columns in bulk pages, the final
+/// page of the final column flagged.
+#[tauri::command(async)]
+pub fn set_switches_all(state: tauri::State<AppState>, key: hall::KeySwitch) -> Result<(), String> {
+    require_hall_writes(&state)?;
+    flash_cooldown(&state);
+    let out = with_writable(&state, |t, _| {
+        let n = hall::WRITE_COLUMNS.len();
+        for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
+            let values = [key.wire(subop); hall::SLOTS];
+            for pkt in hall::set_all(subop, &values, i + 1 == n) {
+                t.send(&pkt)?;
+                std::thread::sleep(FLASH_PAGE_GAP);
+            }
         }
         std::thread::sleep(FLASH_SETTLE);
         Ok(())

@@ -22,6 +22,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
 
+use protocol::hall;
 use protocol::{
     cmd, family_cmds, receiver, Checksum, FamilyCmds, KbOptions, LedParam, Macro, SledParam,
     SleepTimes, REPORT_LEN,
@@ -1336,6 +1337,89 @@ pub async fn write_macro(slot: u8, data_json: String) -> Result<(), JsValue> {
         .await
         .map_err(fail)?;
     }
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// Magnetic switches, mirroring commands.rs one for one.
+
+#[wasm_bindgen]
+pub async fn get_switches() -> Result<JsValue, JsValue> {
+    let _busy = acquire().await;
+    read_quiet().await;
+    let (t, spec) = get_open(false)?;
+    if !spec.hall_reads() {
+        return Err(JsValue::from(format!(
+            "{} has no magnetic switches sharkfin can read",
+            spec.label()
+        )));
+    }
+    async fn column(t: &Transport, subop: u8) -> Result<Vec<u8>, JsValue> {
+        let mut out = Vec::with_capacity(256);
+        for page in 0..hall::get_pages(subop) {
+            out.extend_from_slice(
+                &t.read_raw_page(hall::GET, &hall::get_payload(subop, page), Checksum::Bit7)
+                    .await
+                    .map_err(fail)?,
+            );
+        }
+        Ok(out)
+    }
+    let mode = column(&t, hall::MODE).await?;
+    let travel = hall::decode_wide(&column(&t, hall::TRAVEL).await?);
+    let lift = hall::decode_wide(&column(&t, hall::LIFT).await?);
+    let rt_press = hall::decode_wide(&column(&t, hall::RT_PRESS).await?);
+    let rt_lift = hall::decode_wide(&column(&t, hall::RT_LIFT).await?);
+    let dead = hall::decode_wide(&column(&t, hall::DEAD_BOTTOM).await?);
+    to_js(&hall::assemble(
+        &mode, &travel, &lift, &rt_press, &rt_lift, &dead,
+    ))
+}
+
+fn require_hall_writes(spec: &DeviceSpec) -> Result<(), JsValue> {
+    if spec.hall_writes() {
+        Ok(())
+    } else {
+        Err(JsValue::from(format!(
+            "sharkfin has not read {}'s firmware for its switch settings, so it will not write them",
+            spec.label()
+        )))
+    }
+}
+
+#[wasm_bindgen]
+pub async fn set_switch_key(key_json: String) -> Result<(), JsValue> {
+    let key: hall::KeySwitch = serde_json::from_str(&key_json).map_err(|e| e.to_string())?;
+    flash_cooldown().await;
+    let _busy = acquire().await;
+    let (t, spec) = get_open(true)?;
+    require_hall_writes(&spec)?;
+    let n = hall::WRITE_COLUMNS.len();
+    for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
+        let pkt = hall::set_one(subop, key.slot, i + 1 == n, key.wire(subop))
+            .ok_or("slot out of range")?;
+        t.send(&pkt).await.map_err(fail)?;
+    }
+    sleep_ms(FLASH_SETTLE_MS).await;
+    Ok(())
+}
+
+#[wasm_bindgen]
+pub async fn set_switches_all(key_json: String) -> Result<(), JsValue> {
+    let key: hall::KeySwitch = serde_json::from_str(&key_json).map_err(|e| e.to_string())?;
+    flash_cooldown().await;
+    let _busy = acquire().await;
+    let (t, spec) = get_open(true)?;
+    require_hall_writes(&spec)?;
+    let n = hall::WRITE_COLUMNS.len();
+    for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
+        let values = [key.wire(subop); hall::SLOTS];
+        for pkt in hall::set_all(subop, &values, i + 1 == n) {
+            t.send(&pkt).await.map_err(fail)?;
+            sleep_ms(FLASH_PAGE_GAP_MS).await;
+        }
+    }
+    sleep_ms(FLASH_SETTLE_MS).await;
     Ok(())
 }
 

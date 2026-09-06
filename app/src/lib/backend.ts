@@ -96,6 +96,24 @@ export interface ScanResult {
   keyboardOffline: boolean;
 }
 
+/** One key's magnetic-switch settings, millimetres. */
+export interface KeySwitch {
+  slot: number;
+  /** Bits 0..6 of the mode byte; 0 is a plain key. */
+  kind: number;
+  rapidTrigger: boolean;
+  travel: number;
+  lift: number;
+  rtPress: number;
+  rtLift: number;
+  deadBottom: number;
+}
+
+export interface SwitchSettings {
+  unitMm: number;
+  keys: KeySwitch[];
+}
+
 export interface LedParam {
   mode: number;
   speed: number;
@@ -146,6 +164,9 @@ export interface DeviceSettings {
 export const scan = () => invoke<ScanResult>("scan");
 /** The owner allows writes to a board the registry does not know, this session. */
 export const allowUnregistered = () => invoke<void>("allow_unregistered");
+export const getSwitches = () => invoke<SwitchSettings>("get_switches");
+export const setSwitchKey = (key: KeySwitch) => invoke<void>("set_switch_key", { key });
+export const setSwitchesAll = (key: KeySwitch) => invoke<void>("set_switches_all", { key });
 /** Version and commit of this build. */
 export const buildId = () => invoke<string>("build_id");
 export const getSettings = () => invoke<DeviceSettings>("get_settings");

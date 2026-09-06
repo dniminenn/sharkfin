@@ -10,6 +10,7 @@ import {
   Radio,
   Settings2,
   Usb,
+  Magnet,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -24,7 +25,11 @@ import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { t, LOCALES, locale, setLocale } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
-import { scan, type ConnectedDevice, type DiscoveredUnknown } from "@/lib/backend";
+import {
+  scan,
+  type ConnectedDevice,
+  type DiscoveredUnknown,
+} from "@/lib/backend";
 import ColorwayPicker from "@/components/ColorwayPicker";
 import SharkfinLogo from "@/components/SharkfinLogo";
 import PermissionNotice from "@/components/PermissionNotice";
@@ -36,8 +41,16 @@ import DevicePage from "@/pages/Device";
 import PaintPage from "@/pages/Paint";
 import MacrosPage from "@/pages/Macros";
 import ContributePage from "@/pages/Contribute";
+import SwitchesPage, { hasSwitches } from "@/pages/Switches";
 
-type Page = "lighting" | "paint" | "keymap" | "macros" | "settings" | "contribute";
+type Page =
+  | "lighting"
+  | "paint"
+  | "keymap"
+  | "switches"
+  | "macros"
+  | "settings"
+  | "contribute";
 
 const readOnly = (d: ConnectedDevice) => d.readOnly;
 
@@ -45,6 +58,7 @@ const NAV: { id: Page; label: string; icon: typeof Lightbulb }[] = [
   { id: "lighting", label: "Lighting", icon: Lightbulb },
   { id: "paint", label: "Paint", icon: Brush },
   { id: "keymap", label: "Keys", icon: Keyboard },
+  { id: "switches", label: "Switches", icon: Magnet },
   { id: "macros", label: "Macros", icon: ListMusic },
   { id: "settings", label: "Device", icon: Settings2 },
   { id: "contribute", label: "Contribute", icon: HeartHandshake },
@@ -115,21 +129,23 @@ export default function App() {
         </div>
         <Separator />
         <nav className="flex flex-col gap-1 p-2">
-          {NAV.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setPage(id)}
-              className={cn(
-                "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
-                page === id
-                  ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
-                  : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground",
-              )}
-            >
-              <Icon className="h-4 w-4" />
-              {t(label)}
-            </button>
-          ))}
+          {NAV.filter(({ id }) => id !== "switches" || hasSwitches(device)).map(
+            ({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => setPage(id)}
+                className={cn(
+                  "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
+                  page === id
+                    ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                    : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground",
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {t(label)}
+              </button>
+            ),
+          )}
         </nav>
         <div className="mt-auto space-y-2 p-3">
           <div className="rounded-lg border bg-card p-3">
@@ -168,13 +184,17 @@ export default function App() {
                       )}
                     >
                       {device.spec.unregistered
-                        ? t("not in the registry · {family}", { family: device.spec.family ?? "" })
+                        ? t("not in the registry · {family}", {
+                            family: device.spec.family ?? "",
+                          })
                         : readOnly(device)
                           ? t("read-only")
                           : device.link === "receiver"
-                          ? t("2.4 GHz · id {id}", { id: device.deviceId }) +
-                            (device.battery === null ? "" : ` · ${device.battery}%`)
-                          : t("USB · id {id}", { id: device.deviceId })}
+                            ? t("2.4 GHz · id {id}", { id: device.deviceId }) +
+                              (device.battery === null
+                                ? ""
+                                : ` · ${device.battery}%`)
+                            : t("USB · id {id}", { id: device.deviceId })}
                     </Badge>
                   ) : stalled ? (
                     t("Unplug, wait 10s, plug back in")
@@ -182,7 +202,9 @@ export default function App() {
                     t("Press a key, or connect by cable")
                   ) : unknown ? (
                     <Badge variant="outline" className="mt-1">
-                      {unknown.deviceId === null ? t("no answer") : t("not in the registry")}
+                      {unknown.deviceId === null
+                        ? t("no answer")
+                        : t("not in the registry")}
                     </Badge>
                   ) : (
                     t("Connect by cable")
@@ -193,7 +215,10 @@ export default function App() {
           </div>
           <ColorwayPicker />
           <Select value={locale} onValueChange={setLocale}>
-            <SelectTrigger aria-label={t("Language")} className="h-8 w-full text-xs">
+            <SelectTrigger
+              aria-label={t("Language")}
+              className="h-8 w-full text-xs"
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -215,7 +240,8 @@ export default function App() {
             onContribute={() => setPage("contribute")}
           />
         ) : (
-          device && readOnly(device) && (
+          device &&
+          readOnly(device) && (
             <ReadOnlyNotice onContribute={() => setPage("contribute")} />
           )
         )}
@@ -223,9 +249,12 @@ export default function App() {
           {page === "lighting" && <LightingPage connected={!!device} />}
           {page === "paint" && <PaintPage device={device} />}
           {page === "keymap" && <KeymapPage device={device} />}
+          {page === "switches" && <SwitchesPage device={device} />}
           {page === "macros" && <MacrosPage device={device} />}
           {page === "settings" && <DevicePage device={device} />}
-          {page === "contribute" && <ContributePage device={device} unknown={unknown} />}
+          {page === "contribute" && (
+            <ContributePage device={device} unknown={unknown} />
+          )}
         </div>
       </main>
       {!device && openFailed && <PermissionNotice />}

@@ -441,6 +441,261 @@ impl SledParam {
 }
 
 // ---------------------------------------------------------------------------
+// Magnetic switches
+//
+// Per-key travel settings on the gen2 ry5088 lineage, read out of three of
+// its images (2268 X65HE, 2116 TITAN68HE, 3708 SK61HE) and matching the
+// vendor's driver. Settings are columns of 128 slots, one column per
+// sub-op; the GET returns raw 64-byte pages, the SET takes 56-byte pages or
+// one slot. Values are hundredths of a millimetre, u16 little-endian for the
+// travel columns and a byte for the rest. The handler checks nothing: a page
+// past the column or a slot past 127 writes into the neighbouring arrays, so
+// the bounds live here and are the whole protection. The `last` flag on the
+// final packet makes the firmware save the block to flash (an erase and a
+// 4 KB program) and apply it; packets without it sit in RAM unapplied.
+// docs/PROTOCOL.md, "Magnetic switches". **[FW]**
+pub mod hall {
+    use super::{packet, Checksum, REPORT_LEN};
+    use serde::{Deserialize, Serialize};
+
+    pub const GET: u8 = 0xE5;
+    pub const SET: u8 = 0x65;
+    pub const SLOTS: usize = 128;
+    /// Wire unit for every travel column.
+    pub const UNIT_MM: f64 = 0.01;
+
+    // Sub-ops, byte 1 of both opcodes.
+    pub const TRAVEL: u8 = 0;
+    pub const LIFT: u8 = 1;
+    pub const RT_PRESS: u8 = 2;
+    pub const RT_LIFT: u8 = 3;
+    pub const DEAD_BOTTOM: u8 = 6;
+    pub const MODE: u8 = 7;
+
+    /// Bit 7 of the mode byte: rapid trigger on. Bits 0..6 pick the key's
+    /// kind: 0 normal, 2 dynamic keystroke, 3 mod-tap, 4 and 5 toggles,
+    /// 7 snap. Only normal keys are written here; the rest are shown as read.
+    pub const MODE_RAPID_TRIGGER: u8 = 0x80;
+
+    /// Firmware clamps at apply, mirrored so the picture never lies: travel
+    /// below 0.10 mm becomes 0.15, a zero rapid-trigger step becomes 0.01, a
+    /// dead zone past 3.40 mm becomes 0.30.
+    pub const MIN_TRAVEL_MM: f64 = 0.10;
+    pub const MIN_RT_MM: f64 = 0.01;
+    pub const MAX_DEAD_MM: f64 = 3.40;
+
+    pub fn is_wide(subop: u8) -> bool {
+        matches!(subop, TRAVEL | LIFT | RT_PRESS | RT_LIFT | 4 | DEAD_BOTTOM)
+    }
+
+    /// Pages a GET of this column takes: u16 columns are 256 bytes, bytes 128.
+    pub fn get_pages(subop: u8) -> u8 {
+        if is_wide(subop) {
+            4
+        } else {
+            2
+        }
+    }
+
+    pub fn get_payload(subop: u8, page: u8) -> [u8; 3] {
+        [subop, 1, page]
+    }
+
+    /// 128 little-endian u16 out of four raw pages.
+    pub fn decode_wide(pages: &[u8]) -> Vec<u16> {
+        pages
+            .chunks_exact(2)
+            .take(SLOTS)
+            .map(|p| u16::from_le_bytes([p[0], p[1]]))
+            .collect()
+    }
+
+    pub fn to_wire(mm: f64) -> u16 {
+        (mm / UNIT_MM).round().clamp(0.0, 65535.0) as u16
+    }
+
+    pub fn to_mm(wire: u16) -> f64 {
+        f64::from(wire) * UNIT_MM
+    }
+
+    /// One slot of one column. `value` is the u16 (wide) or the byte.
+    pub fn set_one(subop: u8, slot: u8, last: bool, value: u16) -> Option<[u8; REPORT_LEN]> {
+        if usize::from(slot) >= SLOTS {
+            return None;
+        }
+        let mut buf = packet(SET, &[subop, 0, slot, last as u8], Checksum::Bit7);
+        let bytes = value.to_le_bytes();
+        buf[8] = bytes[0];
+        if is_wide(subop) {
+            buf[9] = bytes[1];
+        }
+        Some(buf)
+    }
+
+    /// A whole column of 128 values as bulk pages: 28 u16 or 56 bytes a
+    /// page, the last page short, the `last` flag on the final page only.
+    pub fn set_all(subop: u8, values: &[u16; SLOTS], last: bool) -> Vec<[u8; REPORT_LEN]> {
+        let wire: Vec<u8> = if is_wide(subop) {
+            values.iter().flat_map(|v| v.to_le_bytes()).collect()
+        } else {
+            values.iter().map(|v| *v as u8).collect()
+        };
+        let pages = wire.chunks(56).collect::<Vec<_>>();
+        let n = pages.len();
+        pages
+            .into_iter()
+            .enumerate()
+            .map(|(i, chunk)| {
+                let final_page = i + 1 == n;
+                let mut buf = packet(
+                    SET,
+                    &[subop, 1, i as u8, (last && final_page) as u8],
+                    Checksum::Bit7,
+                );
+                buf[8..8 + chunk.len()].copy_from_slice(chunk);
+                buf
+            })
+            .collect()
+    }
+
+    /// One key as the owner sees it, millimetres.
+    #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    pub struct KeySwitch {
+        pub slot: u8,
+        /// Bits 0..6 of the mode byte; 0 is a plain key.
+        pub kind: u8,
+        pub rapid_trigger: bool,
+        pub travel: f64,
+        pub lift: f64,
+        pub rt_press: f64,
+        pub rt_lift: f64,
+        pub dead_bottom: f64,
+    }
+
+    impl KeySwitch {
+        pub fn mode_byte(&self) -> u8 {
+            (self.kind & 0x7F)
+                | if self.rapid_trigger {
+                    MODE_RAPID_TRIGGER
+                } else {
+                    0
+                }
+        }
+
+        /// Column value for a sub-op, clamped the way the firmware would.
+        pub fn wire(&self, subop: u8) -> u16 {
+            match subop {
+                MODE => u16::from(self.mode_byte()),
+                TRAVEL => to_wire(self.travel.max(MIN_TRAVEL_MM)),
+                LIFT => to_wire(self.lift.max(MIN_TRAVEL_MM)),
+                RT_PRESS => to_wire(self.rt_press.max(MIN_RT_MM)),
+                RT_LIFT => to_wire(self.rt_lift.max(MIN_RT_MM)),
+                DEAD_BOTTOM => to_wire(self.dead_bottom.clamp(0.0, MAX_DEAD_MM)),
+                _ => 0,
+            }
+        }
+    }
+
+    /// The columns a write touches, in the vendor's order, mode first.
+    pub const WRITE_COLUMNS: [u8; 6] = [MODE, TRAVEL, LIFT, RT_PRESS, RT_LIFT, DEAD_BOTTOM];
+
+    #[derive(Clone, Debug, Serialize, Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    pub struct SwitchSettings {
+        pub unit_mm: f64,
+        pub keys: Vec<KeySwitch>,
+    }
+
+    /// Columns as read into per-key records; `mode` is 128 bytes, the rest
+    /// 128 u16 each.
+    pub fn assemble(
+        mode: &[u8],
+        travel: &[u16],
+        lift: &[u16],
+        rt_press: &[u16],
+        rt_lift: &[u16],
+        dead: &[u16],
+    ) -> SwitchSettings {
+        let keys = (0..SLOTS)
+            .map(|s| KeySwitch {
+                slot: s as u8,
+                kind: mode.get(s).copied().unwrap_or(0) & 0x7F,
+                rapid_trigger: mode.get(s).is_some_and(|m| m & MODE_RAPID_TRIGGER != 0),
+                travel: to_mm(travel.get(s).copied().unwrap_or(0)),
+                lift: to_mm(lift.get(s).copied().unwrap_or(0)),
+                rt_press: to_mm(rt_press.get(s).copied().unwrap_or(0)),
+                rt_lift: to_mm(rt_lift.get(s).copied().unwrap_or(0)),
+                dead_bottom: to_mm(dead.get(s).copied().unwrap_or(0)),
+            })
+            .collect();
+        SwitchSettings {
+            unit_mm: UNIT_MM,
+            keys,
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn single_slot_packet_matches_the_handler() {
+            let p = set_one(TRAVEL, 5, true, 200).unwrap();
+            assert_eq!(&p[..5], &[SET, TRAVEL, 0, 5, 1]);
+            assert_eq!((p[8], p[9]), (200, 0));
+            assert_eq!(
+                p[7],
+                0xFF - (p[..7].iter().map(|&b| u32::from(b)).sum::<u32>() & 0xFF) as u8
+            );
+            assert!(
+                set_one(TRAVEL, 128, true, 1).is_none(),
+                "slot 128 would hit the hi array"
+            );
+            let m = set_one(MODE, 3, false, 0x80).unwrap();
+            assert_eq!((m[4], m[8], m[9]), (0, 0x80, 0));
+        }
+
+        #[test]
+        fn bulk_pages_are_28_wide_or_56_narrow_with_last_on_the_final_page() {
+            let vals = [200u16; SLOTS];
+            let wide = set_all(TRAVEL, &vals, true);
+            assert_eq!(wide.len(), 5);
+            assert_eq!(wide[4][3], 4);
+            assert!(wide[..4].iter().all(|p| p[4] == 0) && wide[4][4] == 1);
+            assert_eq!(&wide[0][8..12], &[200, 0, 200, 0]);
+            let narrow = set_all(MODE, &[0x80; SLOTS], false);
+            assert_eq!(narrow.len(), 3);
+            assert!(narrow.iter().all(|p| p[4] == 0));
+            assert_eq!(narrow[2][8 + 15], 0x80);
+            assert_eq!(narrow[2][8 + 16], 0);
+        }
+
+        #[test]
+        fn units_and_clamps_follow_the_firmware() {
+            assert_eq!(to_wire(2.0), 200);
+            assert_eq!(to_mm(50), 0.5);
+            let k = KeySwitch {
+                slot: 0,
+                kind: 0,
+                rapid_trigger: true,
+                travel: 0.05,
+                lift: 1.0,
+                rt_press: 0.0,
+                rt_lift: 0.3,
+                dead_bottom: 9.0,
+            };
+            assert_eq!(k.wire(TRAVEL), 10);
+            assert_eq!(k.wire(RT_PRESS), 1);
+            assert_eq!(k.wire(DEAD_BOTTOM), 340);
+            assert_eq!(k.wire(MODE), 0x80);
+            let pages = [0u8; 256];
+            assert_eq!(decode_wide(&pages).len(), 128);
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Displays
 //
 // Evidenced against two boards' own firmware, one per pixel mode: an RT100

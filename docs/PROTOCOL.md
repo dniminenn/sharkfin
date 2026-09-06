@@ -387,6 +387,68 @@ re-enumeration. Individual reports needed ~12 ms spacing. **[HW]**
 This cadence is not evidenced on gen2. The gen2 commit-to-flash behaviour
 above is.
 
+## Magnetic switches [FW]
+
+gen2, ry5088 lineage. Read out of three images: 2268 X65HE `v309`
+(handlers `0xE5` at `0x08006414`, `0x65` at `0x08006770`, save path
+`0x0800d954`, apply `0x0800dc1c`), 2116 TITAN68HE `v304` and 3708 SK61HE
+`v507`, which match in shape. The vendor's driver builds the same packets.
+
+Settings are columns of 128 slots, one column per sub-op, indexed like the
+keymap. Values are hundredths of a millimetre: u16 little-endian for the
+travel columns, one byte for the rest.
+
+| | layout |
+|---|---|
+| read `0xE5` | `[subop, 1, page]`, Bit7; reply is the raw page, no echo. u16 columns 4 pages of 32 values, byte columns 2 pages |
+| write one `0x65` | `[subop, 0, slot, last]`, Bit7, value at 8 (lo) and 9 (hi) |
+| write all `0x65` | `[subop, 1, page, last]`, Bit7, 56 bytes at 8: 28 u16 a page over pages 0..4 (page 4 holds 16), or 56 bytes over pages 0..2 (page 2 holds 16) |
+
+| sub-op | column | width |
+|---|---|---|
+| 0 | actuation travel | u16 |
+| 1 | release travel | u16 |
+| 2 | rapid trigger press step | u16 |
+| 3 | rapid trigger release step | u16 |
+| 4 | dynamic keystroke start | u16 |
+| 5 | mod-tap hold time, 10 ms units | u8 |
+| 6 | bottom dead zone | u16 |
+| 7 | key mode: bit 7 rapid trigger on; bits 0..6 = 0 normal, 2 dynamic keystroke, 3 mod-tap, 4 and 5 toggle, 7 snap | u8 |
+| 8 | dynamic keystroke actions, four bytes, write one slot only | 4 x u8 |
+| 9 | snap partner slot | u8 |
+| 10 | every key's dynamic keystroke actions, read only, 8 pages | 4 x 128 u8 |
+| 251 | top dead zone, 3708 only | u8 |
+| 252 | switch type, values 0..5, anything else stored as 0 | u8 |
+| 254 | live press travel, read only | u16 |
+
+The handler checks nothing else. A bulk page past the column or a slot past
+127 writes into the neighbouring column, so the bounds are the host's job.
+`last` set on a packet raises a flag; a deferred routine then erases the
+block at `0x08033800 + profile << 12` and the page after it, programs
+4096 bytes from the mode column through a `55 AA` marker, and re-runs the
+apply. Packets without `last` sit in RAM unapplied and unsaved. The apply
+clamps: travel below 10 becomes 15, a rapid-trigger step of 0 becomes 1,
+a bottom dead zone above 340 becomes 30. Defaults are 200 travel, 280
+release, 50 for both steps, 30 dead zone.
+
+`0xE6` (the vendor's precision read) is not handled by any of the three
+images; the reply is the echoed request. The vendor's driver falls back to
+0.01 mm for such boards, which is what the firmware uses.
+
+Never sent: `0x1C` and `0x1E` are sensor calibration. On, they zero the
+stored travel tables in RAM; off, they save them to flash, so on-then-off
+without pressing every key commits zeroed tables. `0x7F 55 AA 55 AA` erases
+the keymap block and the switch-settings block and enters the bootloader.
+
+yc500 magnetic boards are not covered. Two of their images differ from each
+other: the K85 (1466 `v107`) has no per-key opcodes at all, only a global
+configuration on `0x1A`/`0x1F` and presets on `0x1D`/`0x9D`; the ER75
+(1618 `v200`) has `0x65`/`0xE5` with byte columns of 126 and no bounds
+checks, and `0xAC` there sets a pending-flash bit whose consumer was not
+located. The vendor's driver sends yc500 travel as tenths of a millimetre
+with fixed offsets that the handlers do not show, so the arithmetic sits in
+its apply routine and is unverified.
+
 ## Destructive opcodes
 
 Live writes. Do not send on an unknown family. Do not send them as a

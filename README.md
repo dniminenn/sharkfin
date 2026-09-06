@@ -44,6 +44,11 @@ files: the picture is matched against your board's keymap and stays
 read-only until you confirm it. A picture ships built in only when every
 board sharing it agrees.
 
+Boards with magnetic switches get a Switches page: actuation and release
+point, rapid trigger and its sensitivities, dead zone, per key or for the
+whole board. Written only on boards whose own firmware has been read for
+it, which is the ry5088 lineage today, and shown read-only elsewhere.
+
 A board that is not in the list still works. sharkfin reads which command
 set it speaks off the board's own answers, says so, and asks before it
 writes anything. Send a report from the Contribute tab and it gets a real

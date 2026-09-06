@@ -165,6 +165,19 @@ impl DeviceSpec {
         KNOWN_FAMILIES.contains(&self.family.as_str())
     }
 
+    /// Whether the magnetic-switch settings can be read: a magnetic gen2
+    /// board. The read is a raw page copy with no side effects.
+    pub fn hall_reads(&self) -> bool {
+        self.magnetic && self.family == "gen2"
+    }
+
+    /// Whether they can be written: only the ry5088 lineage, whose handler
+    /// and save path were read out of three of its images. The other gen2
+    /// lineages share the family, not the evidence.
+    pub fn hall_writes(&self) -> bool {
+        self.hall_reads() && self.internal_name.starts_with("ry5088_")
+    }
+
     /// What drawing is allowed on this board's display, or `None` when the
     /// path is not evidenced. The board's own firmware must be known to
     /// parse frames itself; most gen2 boards instead hand the request to a
