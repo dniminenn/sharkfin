@@ -1,18 +1,28 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.6.1
+## What changed in 0.7.0
 
-**Boards that were never found.** Almost every board presents its
-settings as usage 2 on the vendor page; the Akko ACR75 v2 presents usage
-1, and sharkfin looked for 2 alone, so it never saw the board. Both are
-accepted now. Any board that showed "No device" with the cable in may
-have been this; try again.
+**Magnetic switches.** Boards with hall-effect switches get a Switches
+page: actuation and release point, rapid trigger with its two
+sensitivities, and the bottom dead zone, for one key or the whole board.
+Written on the ry5088 lineage, 551 boards, whose own firmware was read for
+it; shown read-only on the other magnetic boards. Not yet: yc500 magnetic
+boards, and editing of dynamic keystroke, mod-tap, toggle and snap keys,
+which the page shows and leaves alone. No owner has tried a write yet.
+If yours misbehaves, a data bundle from the Contribute tab says why.
 
-**Akko ACR75 v2** is supported (device id 606). It has no built-in
-picture yet: the Keys page matches one against the board and asks you to
-confirm it.
+**122 boards the vendor dropped from its list** are back, named, with
+their factory keymaps read from firmware. Akko, Keydous, RoyalAxe,
+Epomaker, MonsGeek and others. Their entries do not say which command set
+they speak; the app asks the board at connect and writes once you allow
+it, as it does for a board with no entry at all.
 
-The registry is 1030 boards, 4 of them confirmed on hardware.
+**Akko ACR75 v2 and Typhoon Ultimate TKL** are supported (device ids 606
+and 2045). The ACR75 v2's firmware reads the lighting's rainbow flag the
+other way round from every other board, so its rainbow switch now does
+what it says.
+
+The registry is 1153 boards, 4 of them confirmed on hardware.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
