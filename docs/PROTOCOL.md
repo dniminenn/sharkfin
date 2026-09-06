@@ -216,8 +216,12 @@ Opcode shared. Packet **[HW]**.
 [op, mode, speed, brightness, (option<<4)|flags, R, G, B, ck8]
 ```
 
-- Speed on the wire is 1..5. A host scale of 0..4 is stored inverted:
-  host 0 → wire 5, host 4 → wire 1. Brightness 0..4 direct.
+- Speed is a frame divider, inverted from the host's 0..4 scale. yc500
+  takes 1..5: host 0 → wire 5, host 4 → wire 1 **[HW]**. gen2 takes 0..4:
+  host 4 → wire 0. The 2268 renderer (`0x080083e8`) counts frames up to
+  the byte before it advances, so 0 advances every frame and is the
+  fastest; the vendor's gen2 class never sends 5 **[FW]**. Brightness
+  direct, 0..4 on most boards; the light table says where it is wider.
 - Flags nibble: `7` fixed colour, `8` rainbow. Modes 22/23 invert it
   (`0` rainbow, `4` fixed). One lineage swaps the two: the Akko ACR75 v2
   (device 606, firmware 3.03) has `7` rainbow and `8` fixed in every

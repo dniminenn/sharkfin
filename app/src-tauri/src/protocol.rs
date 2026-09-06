@@ -1609,7 +1609,35 @@ const MODE_SCREEN_COLOR: u8 = 21;
 const MODE_MUSIC_2: u8 = 22;
 // 20 in both device classes' tables; 23 is Train, an ordinary effect.
 const MODE_MUSIC_3: u8 = 20;
-const MAX_SPEED: u8 = 5;
+/// How a board's firmware reads a LEDPARAM packet beyond the shared layout.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct LedWire {
+    /// The lineage whose firmware reads the flags nibble the other way round
+    /// (`DeviceSpec::led_flags_swapped`).
+    pub swapped: bool,
+    /// The wire value for host speed 0, the slowest; host speed `s` goes out
+    /// as `speed_max - s`. yc500 is 5, so the wire runs 1..5 **[HW]** (X86).
+    /// gen2 is 4, so the wire runs 0..4: the 2268 renderer (`0x080083e8`)
+    /// counts frames up to the byte before it advances, so 0 is fastest and
+    /// a 5 is one step slower than the vendor ever sends **[FW]**.
+    pub speed_max: u8,
+    /// Highest brightness the board takes: the vendor's light table, 4 on
+    /// most boards, 7 on the MK12 and MK14.
+    pub brightness_max: u8,
+}
+
+impl LedWire {
+    pub const YC500: LedWire = LedWire {
+        swapped: false,
+        speed_max: 5,
+        brightness_max: 4,
+    };
+    pub const GEN2: LedWire = LedWire {
+        swapped: false,
+        speed_max: 4,
+        brightness_max: 4,
+    };
+}
 
 const COMMON_COLORS: [(u8, u8, u8); 7] = [
     (0xFF, 0x00, 0x00),
@@ -1636,15 +1664,23 @@ const COMMON_COLORS_SWAPPED: [(u8, u8, u8); 7] = [
 
 impl LedParam {
     pub fn to_packet(self) -> [u8; REPORT_LEN] {
-        self.to_packet_on(false)
+        self.to_packet_for(LedWire::YC500)
     }
 
-    /// `swapped` selects the lineage whose firmware reads the flags nibble
-    /// the other way round (`DeviceSpec::led_flags_swapped`). Every renderer
-    /// in that image tests the nibble by exact value, so the two constants
-    /// simply trade places; nothing else in the packet moves.
+    /// The swapped-nibble lineage on yc500 wire ranges.
     pub fn to_packet_on(self, swapped: bool) -> [u8; REPORT_LEN] {
-        let (fixed, dazzle) = if swapped {
+        self.to_packet_for(LedWire {
+            swapped,
+            ..LedWire::YC500
+        })
+    }
+
+    /// `wire.swapped` selects the lineage whose firmware reads the flags
+    /// nibble the other way round. Every renderer in that image tests the
+    /// nibble by exact value, so the two constants simply trade places;
+    /// nothing else in the packet moves.
+    pub fn to_packet_for(self, wire: LedWire) -> [u8; REPORT_LEN] {
+        let (fixed, dazzle) = if wire.swapped {
             (FLAG_DAZZLE, FLAG_FIXED)
         } else {
             (FLAG_FIXED, FLAG_DAZZLE)
@@ -1662,23 +1698,41 @@ impl LedParam {
             MODE_MUSIC_2 | MODE_MUSIC_3 => (self.option << 4) | if self.dazzle { 0 } else { 4 },
             _ => (self.option << 4) | if self.dazzle { dazzle } else { fixed },
         };
-        let wire_speed = MAX_SPEED.saturating_sub(self.speed.min(4));
+        let wire_speed = wire.speed_max.saturating_sub(self.speed.min(4));
         packet(
             cmd::SET_LEDPARAM,
-            &[self.mode, wire_speed, self.brightness, flags4, r, g, b],
+            &[
+                self.mode,
+                wire_speed,
+                self.brightness.min(wire.brightness_max),
+                flags4,
+                r,
+                g,
+                b,
+            ],
             Checksum::Bit8,
         )
     }
 
     pub fn from_reply(reply: &[u8]) -> Option<Self> {
-        Self::from_reply_on(reply, false)
+        Self::from_reply_for(reply, LedWire::YC500)
     }
 
     pub fn from_reply_on(reply: &[u8], swapped: bool) -> Option<Self> {
+        Self::from_reply_for(
+            reply,
+            LedWire {
+                swapped,
+                ..LedWire::YC500
+            },
+        )
+    }
+
+    pub fn from_reply_for(reply: &[u8], wire: LedWire) -> Option<Self> {
         if reply.len() < 8 || reply[0] != cmd::GET_LEDPARAM {
             return None;
         }
-        let (fixed, dazzle_flag, presets) = if swapped {
+        let (fixed, dazzle_flag, presets) = if wire.swapped {
             (FLAG_DAZZLE, FLAG_FIXED, &COMMON_COLORS_SWAPPED)
         } else {
             (FLAG_FIXED, FLAG_DAZZLE, &COMMON_COLORS)
@@ -1703,8 +1757,8 @@ impl LedParam {
         }
         Some(LedParam {
             mode,
-            speed: MAX_SPEED.saturating_sub(reply[2]).min(4),
-            brightness: reply[3].min(4),
+            speed: wire.speed_max.saturating_sub(reply[2]).min(4),
+            brightness: reply[3].min(wire.brightness_max),
             option: flags >> 4,
             dazzle,
             r,
@@ -1716,6 +1770,44 @@ impl LedParam {
 
 #[cfg(test)]
 mod tests {
+    /// gen2 speed is a frame divider that starts at 0; yc500 starts at 1.
+    #[test]
+    fn speed_range_follows_the_family() {
+        use super::*;
+        let p = LedParam {
+            mode: 4,
+            speed: 4,
+            brightness: 7,
+            option: 0,
+            dazzle: false,
+            r: 1,
+            g: 2,
+            b: 3,
+        };
+        assert_eq!(p.to_packet_for(LedWire::GEN2)[2], 0);
+        assert_eq!(p.to_packet_for(LedWire::YC500)[2], 1);
+        assert_eq!(
+            p.to_packet_for(LedWire::GEN2)[3],
+            4,
+            "brightness clamps to the table"
+        );
+        let wide = LedWire {
+            brightness_max: 7,
+            ..LedWire::YC500
+        };
+        assert_eq!(p.to_packet_for(wide)[3], 7);
+        let mut reply = [0u8; 64];
+        reply[0] = cmd::GET_LEDPARAM;
+        reply[1] = 4;
+        reply[2] = 0;
+        reply[3] = 6;
+        reply[4] = 7;
+        let g = LedParam::from_reply_for(&reply, LedWire::GEN2).unwrap();
+        assert_eq!((g.speed, g.brightness), (4, 4));
+        let w = LedParam::from_reply_for(&reply, wide).unwrap();
+        assert_eq!((w.speed, w.brightness), (4, 6));
+    }
+
     #[test]
     fn swapped_lineage_trades_the_two_flag_values() {
         use super::*;

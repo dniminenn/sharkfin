@@ -541,23 +541,24 @@ fn scaled_profiles(state: &tauri::State<AppState>) -> bool {
     inner.open.as_ref().is_some_and(|o| o.scaled_profiles())
 }
 
-/// Whether the open board's firmware reads the LEDPARAM flags nibble the
-/// swapped way (`DeviceSpec::led_flags_swapped`). False with no board open;
-/// the command then fails on the missing device anyway.
-fn led_swapped(state: &tauri::State<AppState>) -> bool {
+/// How the open board reads a LEDPARAM packet (`DeviceSpec::led_wire`).
+/// The yc500 defaults with no board open; the command then fails on the
+/// missing device anyway.
+fn led_wire(state: &tauri::State<AppState>) -> crate::protocol::LedWire {
     let inner = state.inner.lock();
     inner
         .open
         .as_ref()
-        .is_some_and(|o| o.spec.led_flags_swapped)
+        .map(|o| o.spec.led_wire())
+        .unwrap_or(crate::protocol::LedWire::YC500)
 }
 
 #[tauri::command(async)]
 pub fn get_led_param(state: tauri::State<AppState>) -> Result<LedParam, String> {
-    let swapped = led_swapped(&state);
+    let wire = led_wire(&state);
     with_open(&state, |t, _| {
         let reply = t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)?;
-        LedParam::from_reply_on(&reply, swapped)
+        LedParam::from_reply_for(&reply, wire)
             .ok_or_else(|| HidError::Protocol("bad LEDPARAM reply".into()))
     })
 }
@@ -565,9 +566,9 @@ pub fn get_led_param(state: tauri::State<AppState>) -> Result<LedParam, String> 
 #[tauri::command(async)]
 pub fn set_led_param(state: tauri::State<AppState>, param: LedParam) -> Result<(), String> {
     light_gap(&state);
-    let swapped = led_swapped(&state);
+    let wire = led_wire(&state);
     with_writable(&state, |t, _| {
-        t.send(&param.to_packet_on(swapped))?;
+        t.send(&param.to_packet_for(wire))?;
         Ok(())
     })
 }
@@ -1035,7 +1036,7 @@ pub fn write_per_key(
         ));
     }
     flash_cooldown(&state);
-    let swapped = led_swapped(&state);
+    let wire = led_wire(&state);
     let out = with_writable(&state, |t, fc| {
         let fc = need(fc)?;
         // Decide about the mode switch before the upload: asking afterwards
@@ -1043,7 +1044,7 @@ pub fn write_per_key(
         let needs_mode = activate
             && t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)
                 .ok()
-                .and_then(|r| LedParam::from_reply_on(&r, swapped))
+                .and_then(|r| LedParam::from_reply_for(&r, wire))
                 .map(|p| p.mode != PER_KEY_MODE)
                 .unwrap_or(true);
 
@@ -1549,7 +1550,7 @@ pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             board: spec.label(),
             profiles,
             fn_layers,
-            led: LedParam::from_reply_on(&led, spec.led_flags_swapped)
+            led: LedParam::from_reply_for(&led, spec.led_wire())
                 .ok_or_else(|| HidError::Protocol("bad LEDPARAM reply".into()))?,
             side_light: sled,
             debounce: deb[fc.debounce_at],
@@ -1644,7 +1645,7 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             t.send(&sled.to_packet())?;
             std::thread::sleep(KEY_GAP);
         }
-        t.send(&cfg.led.to_packet_on(spec.led_flags_swapped))?;
+        t.send(&cfg.led.to_packet_for(spec.led_wire()))?;
         Ok(format!(
             "restored {keys_written} keys, settings and lighting from {}",
             cfg.board

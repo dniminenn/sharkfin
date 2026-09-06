@@ -193,6 +193,21 @@ impl DeviceSpec {
         }
     }
 
+    /// How this board reads a LEDPARAM packet: the flags-nibble lineage, the
+    /// family's speed range and the light table's brightness range.
+    pub fn led_wire(&self) -> crate::protocol::LedWire {
+        crate::protocol::LedWire {
+            swapped: self.led_flags_swapped,
+            speed_max: if self.family == "gen2" { 4 } else { 5 },
+            brightness_max: self
+                .light
+                .as_ref()
+                .map(|l| l.brightness_max)
+                .unwrap_or(4)
+                .max(1),
+        }
+    }
+
     pub fn writes_supported(&self) -> bool {
         KNOWN_FAMILIES.contains(&self.family.as_str())
     }
