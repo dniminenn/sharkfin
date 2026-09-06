@@ -781,6 +781,12 @@ def main():
         help="firmware confirmations from tools/verify_matrix.py",
     )
     ap.add_argument(
+        "--legacy",
+        type=Path,
+        default=here.parent / "app/src-tauri/data/devices.legacy.json",
+        help="boards from the vendor's older table (tools/legacy_table.py), added when the bundle lacks them",
+    )
+    ap.add_argument(
         "--keymap-evidence",
         type=Path,
         default=here.parent / "app/src-tauri/data/keymap-evidence.json",
@@ -858,6 +864,17 @@ def main():
     from_bundle = {d["id"] for d in devices}
     redundant = [e["id"] for e in extras if e["id"] in from_bundle]
     devices.extend(e for e in extras if e["id"] not in from_bundle)
+    # Boards from the vendor's older table (tools/legacy_table.py): identity
+    # and firmware keymap known, family left for the board to declare.
+    legacy_added = []
+    if args.legacy and args.legacy.is_file():
+        have = {d["id"] for d in devices}
+        for e in json.loads(args.legacy.read_text(encoding="utf-8")):
+            if e["id"] not in have:
+                devices.append({k: v for k, v in e.items() if not k.startswith("_")})
+                legacy_added.append(e["id"])
+    if legacy_added:
+        print(f"  legacy boards merged from {args.legacy.name}: {len(legacy_added)}")
 
     applied = []
     for d in devices:

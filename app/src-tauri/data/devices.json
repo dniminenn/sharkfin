@@ -56,6 +56,62 @@
     }
   },
   {
+    "id": 413,
+    "name": "yc200_pc75b",
+    "displayName": "PC75B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc200_pc75b",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 425,
+    "name": "yc300_t98",
+    "displayName": "T98",
+    "company": "首席玩家",
+    "vendor": "首席玩家",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_t98",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 431,
     "name": "yzw_yz1",
     "displayName": "YZ1",
@@ -82,6 +138,118 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 455,
+    "name": "yc300_5108s_dm",
+    "displayName": "5108S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_5108s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 457,
+    "name": "yc300_3084s_dm",
+    "displayName": "3084S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_3084s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 458,
+    "name": "yc300_5087s_dm",
+    "displayName": "5087S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_5087s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 459,
+    "name": "yc300_5075s_dm",
+    "displayName": "5075S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_5075s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 478,
@@ -140,6 +308,226 @@
     }
   },
   {
+    "id": 494,
+    "name": "yc300_kc108",
+    "displayName": "KC108",
+    "company": "凯酷",
+    "vendor": "凯酷",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_kc108",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 554,
+    "name": "yc300_k403t",
+    "displayName": "R108",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16391,
+    "internalName": "yc300_k403t",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 557,
+    "name": "yc300_k402t",
+    "displayName": "R100",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16391,
+    "internalName": "yc300_k402t",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 575,
+    "name": "yc300_mg108_dm",
+    "displayName": "MG108",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_mg108_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 580,
+    "name": "yc300_kg033",
+    "displayName": "Neon75",
+    "company": "LTCFn",
+    "vendor": "LTCFn",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_kg033",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 591,
+    "name": "yc300_t98_dm",
+    "displayName": "T98",
+    "company": "首席玩家",
+    "vendor": "首席玩家",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_t98_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 594,
+    "name": "yc300_pc75_s_plus",
+    "displayName": "PC75B Plus+",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_pc75_s_plus",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 600,
+    "name": "yc300_r87",
+    "displayName": "ROYALAXE R87",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16391,
+    "internalName": "yc300_r87",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 606,
     "name": "akko_acr75_v2",
     "displayName": "ACR75 v2",
@@ -164,6 +552,174 @@
       "screen": false,
       "sideLight": true
     }
+  },
+  {
+    "id": 620,
+    "name": "yc300_5075s_s_dm",
+    "displayName": "5075S+",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_5075s_s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 631,
+    "name": "yc400_y87",
+    "displayName": "Y87",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16391,
+    "internalName": "yc400_y87",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 634,
+    "name": "yc400_y98",
+    "displayName": "Y98",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16391,
+    "internalName": "yc400_y98",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 635,
+    "name": "yc400_a84",
+    "displayName": "A84",
+    "company": "ATYT",
+    "vendor": "ATYT",
+    "vendorId": 12625,
+    "productId": 16391,
+    "internalName": "yc400_a84",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 652,
+    "name": "yc300_5108s_white_dm",
+    "displayName": "5108S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_5108s_white_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 655,
+    "name": "yc500_nj80",
+    "displayName": "NJ80 AP500",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_nj80",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 660,
@@ -194,6 +750,316 @@
     }
   },
   {
+    "id": 668,
+    "name": "yc300_pc75s_s_dm",
+    "displayName": "PC75S+",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_pc75s_s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 671,
+    "name": "yc500_rx980",
+    "displayName": "RX980",
+    "company": "RXSTORM",
+    "vendor": "RXSTORM",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_rx980",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 678,
+    "name": "yc300_5108_white",
+    "displayName": "5108B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_5108_white",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 679,
+    "name": "yc300_pc98bplus_s",
+    "displayName": "PC98B Plus+",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_pc98bplus_s",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 690,
+    "name": "yc500_ck75",
+    "displayName": "CK75 2.0",
+    "company": "叠韵创新",
+    "vendor": "叠韵创新",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_ck75",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 694,
+    "name": "yc500_mk859",
+    "displayName": "MAXFIT81",
+    "company": "Fantech",
+    "vendor": "Fantech",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_mk859",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 695,
+    "name": "yc300_pc75_s_white_plus",
+    "displayName": "PC75B Plus+",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_pc75_s_white_plus",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 698,
+    "name": "yc500_k980_oled",
+    "displayName": "K980",
+    "company": "XIBERIA",
+    "vendor": "XIBERIA",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_k980_oled",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 699,
+    "name": "yc500_nj80soc",
+    "displayName": "NJ80 AP600",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_nj80soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 732,
+    "name": "yc500_nj81",
+    "displayName": "NJ81",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_nj81",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 741,
+    "name": "yc500_th80_uk",
+    "displayName": "TH80",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_th80_uk",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 768,
     "name": "royalaxe_l98",
     "displayName": "L98",
@@ -217,6 +1083,88 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 784,
+    "name": "yc500_sg8897_soc",
+    "displayName": "G08",
+    "company": "bow",
+    "vendor": "bow",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_sg8897_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 785,
+    "name": "yc500_sg8897_soc_single",
+    "displayName": "G06",
+    "company": "bow",
+    "vendor": "bow",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_sg8897_soc_single",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 788,
+    "name": "yc500_ltou75v8",
+    "displayName": "Itou75V8",
+    "company": "ITOUCLUB",
+    "vendor": "ITOUCLUB",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_ltou75v8",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 790,
@@ -275,6 +1223,58 @@
     }
   },
   {
+    "id": 819,
+    "name": "yc500_nj81s",
+    "displayName": "NJ81S",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_nj81s",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 820,
+    "name": "yc500_l75_soc",
+    "displayName": "L75",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_l75_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 847,
     "name": "yc580_yi66",
     "displayName": "YZ166",
@@ -301,6 +1301,118 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 848,
+    "name": "yc300_spring75_dm_noled",
+    "displayName": "SPR75",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_spring75_dm_noled",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 849,
+    "name": "yc500_mk750_soc",
+    "displayName": "MK750",
+    "company": "腹灵",
+    "vendor": "腹灵",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_mk750_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 850,
+    "name": "yc500_y87_soc",
+    "displayName": "Y87",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_y87_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 852,
+    "name": "yc500_sk5",
+    "displayName": "SK5",
+    "company": "比乐",
+    "vendor": "比乐",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_sk5",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 853,
@@ -335,6 +1447,122 @@
     }
   },
   {
+    "id": 859,
+    "name": "yc300_m1_dm",
+    "displayName": "M1",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_m1_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 870,
+    "name": "yc500_m1_dm",
+    "displayName": "M1",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_m1_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 872,
+    "name": "yc500_b81_soc",
+    "displayName": "B81",
+    "company": "Firstblood",
+    "vendor": "Firstblood",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_b81_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 873,
+    "name": "yc500_nj81_ed",
+    "displayName": "NJ81-ED",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_nj81_ed",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 882,
     "name": "fb67_rgb_3m_v500",
     "displayName": "B67",
@@ -361,6 +1589,36 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 885,
+    "name": "yc500_5075s_abnt2_dm",
+    "displayName": "5075S-ABNT2",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_5075s_abnt2_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 888,
@@ -419,6 +1677,114 @@
     }
   },
   {
+    "id": 902,
+    "name": "yc500_kb752_soc",
+    "displayName": "XJ80",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_kb752_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 906,
+    "name": "yc500_ck98_soc",
+    "displayName": "CK98 2.0",
+    "company": "叠韵创新",
+    "vendor": "叠韵创新",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_ck98_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 907,
+    "name": "yc500_ck68_soc",
+    "displayName": "CK68",
+    "company": "叠韵创新",
+    "vendor": "叠韵创新",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_ck68_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 909,
+    "name": "yc500_y98_soc",
+    "displayName": "Y98",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_y98_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 913,
     "name": "yc500_cl87_soc",
     "displayName": "C87P",
@@ -445,6 +1811,148 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 918,
+    "name": "yc500_hh100_soc",
+    "displayName": "HH100",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_hh100_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 919,
+    "name": "yc500_k242_soc",
+    "displayName": "GP75",
+    "company": "腹灵",
+    "vendor": "腹灵",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_k242_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 928,
+    "name": "yc500_th80x_soc",
+    "displayName": "TH80X",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_th80x_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 932,
+    "name": "yc500_xl98_soc",
+    "displayName": "XL98",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_xl98_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 943,
+    "name": "yc500_sg8933_soc",
+    "displayName": "G21",
+    "company": "bow",
+    "vendor": "bow",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_sg8933_soc",
+    "keyLayout": "Common84_K811",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 946,
@@ -533,6 +2041,118 @@
     }
   },
   {
+    "id": 969,
+    "name": "yc500_mg108b_soc",
+    "displayName": "MG108B",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_mg108b_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 973,
+    "name": "yc500_ik87_soc",
+    "displayName": "BOYI IK87",
+    "company": "BOYI",
+    "vendor": "BOYI",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_ik87_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 983,
+    "name": "yc500_m1wnosled_soc",
+    "displayName": "M1W",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_m1wnosled_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 992,
+    "name": "yc500_ck75",
+    "displayName": "CK75 3.0",
+    "company": "叠韵创新",
+    "vendor": "叠韵创新",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_ck75",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 994,
     "name": "yc500_c84_soc",
     "displayName": "C84",
@@ -559,6 +2179,36 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1021,
+    "name": "yc500_nj98_soc",
+    "displayName": "NJ98",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_nj98_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1025,
@@ -612,6 +2262,66 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1042,
+    "name": "yc500_5075bplus_soc",
+    "displayName": "5075B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_5075bplus_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1086,
+    "name": "yc500_k247_soc",
+    "displayName": "CMK75",
+    "company": "腹灵",
+    "vendor": "腹灵",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_k247_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1104,
@@ -726,6 +2436,66 @@
     }
   },
   {
+    "id": 1133,
+    "name": "yc500_gamakaylk75_soc",
+    "displayName": "LK75",
+    "company": "gamakay2",
+    "vendor": "gamakay2",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_gamakaylk75_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1148,
+    "name": "yc300_5108_white",
+    "displayName": "5108B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_5108_white",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 1149,
     "name": "yc3121_k100max_soc",
     "displayName": "K100Max",
@@ -752,6 +2522,32 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1151,
+    "name": "yc3121_fk5253_soc",
+    "displayName": "NJ87",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_fk5253_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1154,
@@ -813,6 +2609,32 @@
       "screen": true,
       "sideLight": false
     }
+  },
+  {
+    "id": 1172,
+    "name": "yc500_ml_ep84plus_soc",
+    "displayName": "EP84 PLUS",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_ml_ep84plus_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1181,
@@ -1051,6 +2873,178 @@
     }
   },
   {
+    "id": 1264,
+    "name": "yc300_acr_pro75s_dm",
+    "displayName": "ACR Pro75",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_acr_pro75s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1275,
+    "name": "yc500_kf850_screen_soc",
+    "displayName": "DynaTab 75X",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_kf850_screen_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1281,
+    "name": "yc500_3098bplus_soc",
+    "displayName": "3098B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_3098bplus_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1304,
+    "name": "yc3121_mod007pc_cx_dm",
+    "displayName": "MOD007PC-CX ",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_mod007pc_cx_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1308,
+    "name": "yc3121_m5w_soc",
+    "displayName": "M5W",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_m5w_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1315,
+    "name": "yc3121_kiiboom980_soc",
+    "displayName": "KiiBoom980",
+    "company": "KiiBoom",
+    "vendor": "KiiBoom",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_kiiboom980_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 1318,
     "name": "yc500_yz1108",
     "displayName": "YZ1108",
@@ -1077,6 +3071,66 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1321,
+    "name": "yc500_nj80",
+    "displayName": "NJ80 AP500",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_nj80",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1325,
+    "name": "yc3121_m1hes_megnatism_dm",
+    "displayName": "M1 HES",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_m1hes_megnatism_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1326,
@@ -1109,6 +3163,32 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1330,
+    "name": "yc3121_5087gasket_soc",
+    "displayName": "5087B V2",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_5087gasket_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1343,
@@ -1172,6 +3252,36 @@
     }
   },
   {
+    "id": 1367,
+    "name": "yc3121_mod007bhe_soc",
+    "displayName": "MOD007B-HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_mod007bhe_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 1379,
     "name": "yc3121_cy_rt100_soc",
     "displayName": "RT100",
@@ -1209,6 +3319,148 @@
     }
   },
   {
+    "id": 1405,
+    "name": "yc3121_cr87k_dm",
+    "displayName": "PL87A",
+    "company": "SPMControls",
+    "vendor": "SPMControls",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc3121_cr87k_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1416,
+    "name": "yc3121_rt100_uk_soc",
+    "displayName": "RT100",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_rt100_uk_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1417,
+    "name": "yc3121_wm_keysme_lunar01_soc",
+    "displayName": "Lunar 01",
+    "company": "KeysMeConsole",
+    "vendor": "KeysMeConsole",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_wm_keysme_lunar01_soc",
+    "keyLayout": "Common87_MK25073",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1436,
+    "name": "yc300_5087s_dm",
+    "displayName": "5087S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_5087s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1452,
+    "name": "yc300_5075s_dm",
+    "displayName": "5075S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_5075s_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 1466,
     "name": "yc3121_sg8948_dm_hall",
     "displayName": "K85",
@@ -1237,6 +3489,204 @@
     }
   },
   {
+    "id": 1475,
+    "name": "yc500_nj81cp_hall",
+    "displayName": "NJ81-CP",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_nj81cp_hall",
+    "keyLayout": "Common81_NJ81CP~k1",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1478,
+    "name": "yc3121_vgna75_dm_hall",
+    "displayName": "A75",
+    "company": "VGN",
+    "vendor": "VGN",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_vgna75_dm_hall",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1483,
+    "name": "yc3121_gm560pro_hall_dm",
+    "displayName": "GM560Pro",
+    "company": "GM560Pro",
+    "vendor": "GM560Pro",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_gm560pro_hall_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1493,
+    "name": "yc500_nj81new",
+    "displayName": "NJ81",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc500_nj81new",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1494,
+    "name": "yc3121_wm_keysme_mars03_soc",
+    "displayName": "mars 03",
+    "company": "KeysMeConsole",
+    "vendor": "KeysMeConsole",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_wm_keysme_mars03_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1495,
+    "name": "yc3121_5087sv2_gasket_dm",
+    "displayName": "5087S V2",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc3121_5087sv2_gasket_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1513,
+    "name": "yc3121_crf81_oled_soc",
+    "displayName": "CR-F81",
+    "company": "ColorReco",
+    "vendor": "ColorReco",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_crf81_oled_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 1549,
     "name": "monka_a75",
     "displayName": "A75",
@@ -1260,6 +3710,148 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1550,
+    "name": "yc3121_x100_soc",
+    "displayName": "X100",
+    "company": "Bee",
+    "vendor": "Bee",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_x100_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1554,
+    "name": "yc500_nj80c_dm_hall",
+    "displayName": "NJ80-C",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_nj80c_dm_hall",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1563,
+    "name": "yc500_nj80c_hall",
+    "displayName": "NJ80-CP",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_nj80c_hall",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1567,
+    "name": "yc3121_swift82_dm_hall",
+    "displayName": "Swift 82",
+    "company": "vortexSeriesXmg",
+    "vendor": "vortexSeriesXmg",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_swift82_dm_hall",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1586,
+    "name": "yc3121_k258_87",
+    "displayName": "MK870 PRO",
+    "company": "腹灵",
+    "vendor": "腹灵",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_k258_87",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1591,
@@ -1292,6 +3884,126 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1594,
+    "name": "yc300_5075s_russia",
+    "displayName": "5075S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_5075s_russia",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1601,
+    "name": "yc3121_rt100_uk_soc_jp",
+    "displayName": "RT100",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_rt100_uk_soc_jp",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1610,
+    "name": "yc3121_k264_hall_soc_8k",
+    "displayName": "K264",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k264_hall_soc_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1611,
+    "name": "yc3121_k265_hall_soc_8k",
+    "displayName": "K265",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k265_hall_soc_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1618,
@@ -1338,6 +4050,392 @@
       "screen": true,
       "sideLight": false
     }
+  },
+  {
+    "id": 1631,
+    "name": "yc3121_k264_hall_dm_8k",
+    "displayName": "K264 Magneton",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k264_hall_dm_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1632,
+    "name": "yc3121_k265_hall_dm_8k",
+    "displayName": "K265 Magneton",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k265_hall_dm_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1638,
+    "name": "yc3121_r83_soc",
+    "displayName": "R83",
+    "company": "DARKALIEN",
+    "vendor": "DARKALIEN",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_r83_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1639,
+    "name": "yc3121_k262dittohe_hall_dm_8k",
+    "displayName": "K262 Ditto HE",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k262dittohe_hall_dm_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1640,
+    "name": "yc3121_k261dittohe_hall_dm_8k",
+    "displayName": "K261 Ditto HE",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k261dittohe_hall_dm_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1646,
+    "name": "yc3121_k264_uk_hall_soc_8k",
+    "displayName": "K264 UK",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k264_uk_hall_soc_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1647,
+    "name": "yc3121_k265_uk_hall_soc_8k",
+    "displayName": "K265 UK",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k265_uk_hall_soc_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1649,
+    "name": "yc3121_k264_uk_magneton_hall_dm_8k",
+    "displayName": "K264 UK Magneton",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k264_uk_magneton_hall_dm_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1650,
+    "name": "yc3121_k265_uk_magneton_hall_dm_8k",
+    "displayName": "K265 UK Magneton",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k265_uk_magneton_hall_dm_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1652,
+    "name": "yc3121_k261_uk_dittohe_hall_dm_8k",
+    "displayName": "K261 UK Ditto HE",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k261_uk_dittohe_hall_dm_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1653,
+    "name": "yc3121_k262_uk_dittohe_hall_dm_8k",
+    "displayName": "K262 UK Ditto HE",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_k262_uk_dittohe_hall_dm_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 12,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1668,
+    "name": "yc3121_x80_soc",
+    "displayName": "X80",
+    "company": "Bee",
+    "vendor": "Bee",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_x80_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1669,
+    "name": "yc500_y108_soc",
+    "displayName": "Y108",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_y108_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1679,
@@ -1391,6 +4489,32 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1698,
+    "name": "yc3121_kf830_soc",
+    "displayName": "RT80",
+    "company": "EPOMAKER",
+    "vendor": "EPOMAKER",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_kf830_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1721,
@@ -1625,6 +4749,36 @@
     }
   },
   {
+    "id": 1768,
+    "name": "yc3121_kiiboom81v3_soc",
+    "displayName": "KiiBoom81 V3",
+    "company": "KiiBoom",
+    "vendor": "KiiBoom",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_kiiboom81v3_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 1781,
     "name": "yc3121_nbd_mk905_soc",
     "displayName": "3MRGB-101",
@@ -1651,6 +4805,32 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1789,
+    "name": "yc3121_next75_soc_hall",
+    "displayName": "NEXT75",
+    "company": "叠韵创新",
+    "vendor": "叠韵创新",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_next75_soc_hall",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": true,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1812,
@@ -1777,6 +4957,62 @@
       "screen": true,
       "sideLight": false
     }
+  },
+  {
+    "id": 1863,
+    "name": "yc3121_nj98_1030_megnatism",
+    "displayName": "98CP（1030）",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_nj98_1030_megnatism",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
+    "id": 1874,
+    "name": "yc3121_tybu987x43_soc",
+    "displayName": "TYBU987X43",
+    "company": "TyphoonUltimateCBKB",
+    "vendor": "TyphoonUltimateCBKB",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_tybu987x43_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1876,
@@ -2028,6 +5264,36 @@
     }
   },
   {
+    "id": 1931,
+    "name": "yc3121_et8926t_soc",
+    "displayName": "PC423A",
+    "company": "PC423A",
+    "vendor": "PC423A",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_et8926t_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 1932,
     "name": "yc3121_cz75_soc_hall_8k",
     "displayName": "CZ75",
@@ -2114,6 +5380,36 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1954,
+    "name": "yc500_xl98l_soc",
+    "displayName": "XL98",
+    "company": "ROYALAXE",
+    "vendor": "ROYALAXE",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_xl98l_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1955,
@@ -2231,6 +5527,36 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 1991,
+    "name": "yc3121_mu02_soc",
+    "displayName": "MU02",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_mu02_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 1996,
@@ -2922,6 +6248,32 @@
     }
   },
   {
+    "id": 2276,
+    "name": "yc3121_k267_soc",
+    "displayName": "OG104",
+    "company": "腹灵",
+    "vendor": "腹灵",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_k267_soc",
+    "keyLayout": "Common104_MK826",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 2278,
     "name": "ry5088_xs_kf068_dm_8k",
     "displayName": "KF068",
@@ -3037,6 +6389,32 @@
       "screen": true,
       "sideLight": false
     }
+  },
+  {
+    "id": 2288,
+    "name": "ry5088_aj68cp_8k_dm",
+    "displayName": "AJ68-CP",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_aj68cp_8k_dm",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 2296,
@@ -4203,6 +7581,36 @@
     }
   },
   {
+    "id": 2400,
+    "name": "ry5088_nj80cp_soc_8k_002",
+    "displayName": "NJ80-CP V2",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "ry5088_nj80cp_soc_8k_002",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 8,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
+  },
+  {
     "id": 2406,
     "name": "yc3121_nbd_mk606_uk_dm_v300",
     "displayName": "NEXA HE60",
@@ -4627,7 +8035,7 @@
     "vendorId": 12625,
     "productId": 20528,
     "internalName": "ry5088_nj81cp_8k_8k",
-    "keyLayout": "Common81_NJ81CP",
+    "keyLayout": "Common81_NJ81CP~k2",
     "lightLayout": "S",
     "sideLightLayout": "",
     "profiles": 3,
@@ -7712,6 +11120,32 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 2714,
+    "name": "yc3121_k245c_soc",
+    "displayName": "NX87",
+    "company": "腹灵",
+    "vendor": "腹灵",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_k245c_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 2723,
@@ -12242,6 +15676,36 @@
       "screen": false,
       "sideLight": true
     }
+  },
+  {
+    "id": 2956,
+    "name": "yc3123_nj98_soc",
+    "displayName": "NJ98-V2",
+    "company": "Keydous",
+    "vendor": "Keydous",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_nj98_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    },
+    "screen": null
   },
   {
     "id": 2957,
