@@ -58,6 +58,11 @@ export interface BoardLayoutState {
   /** Match a pasted drawing against the board; returns the match rate and,
    *  when it clears the bar, makes it the pending picture. */
   tryCustom: (layout: BoardLayout) => Promise<number>;
+  /** Match a drawing without adopting it, for the editor's live feedback. */
+  previewCustom: (layout: BoardLayout) => Promise<Inference | null>;
+  /** The stored picture that came closest when none cleared the bar, as a
+   *  starting point for drawing the board. */
+  nearest: Inference | null;
 }
 
 const VENDOR = import.meta.glob("./layouts/vendor/*.json");
@@ -179,6 +184,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const [pending, setPending] = useState(false);
   const [inference, setInference] = useState<Inference | null>(null);
   const [remaining, setRemaining] = useState(0);
+  const [nearest, setNearest] = useState<Inference | null>(null);
   const [attempt, setAttempt] = useState(0);
   const matricesRef = useRef<number[][]>([]);
   const candidatesRef = useRef<Inference[]>([]);
@@ -206,6 +212,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     setPending(false);
     setInference(null);
     setRemaining(0);
+    setNearest(null);
     matricesRef.current = [];
     candidatesRef.current = [];
     indexRef.current = 0;
@@ -318,6 +325,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       // version of each candidate and let it compete on the same footing.
       const wantsIso = matrices.some(looksIso);
       const candidates: Inference[] = [];
+      let closest: Inference | null = null;
       for (const path of Object.keys(VENDOR)) {
         const stem = path.slice("./layouts/vendor/".length, -".json".length);
         if (stem === UNKNOWN_NAME) continue;
@@ -326,12 +334,17 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         if (!geometry) continue;
         const inf = bestMatch(geometry, stem, matrices);
         if (inf && inf.matchRate >= MATCH_BAR) candidates.push(inf);
+        if (inf && (!closest || inf.f1 > closest.f1)) closest = inf;
         if (!wantsIso) continue;
         const iso = isoVariant(geometry);
         if (!iso) continue;
         const isoInf = bestMatch(iso, isoName(stem), matrices);
         if (isoInf && isoInf.matchRate >= MATCH_BAR) candidates.push(isoInf);
       }
+      // A picture that explains half the board is worth editing rather
+      // than drawing from a blank preset; anything less is a different
+      // board.
+      if (closest && closest.f1 >= 0.5) setNearest(closest);
       const ranked = rankCandidates(candidates, name, MAX_CANDIDATES);
       if (!ranked.length) return;
       candidatesRef.current = ranked;
@@ -394,6 +407,15 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     setAttempt((n) => n + 1);
   }, [id]);
 
+  const previewCustom = useCallback(
+    async (geometry: BoardLayout) => {
+      const matrices = await readMatrices();
+      if (!matrices.length) return null;
+      return bestMatch(geometry, "kle", matrices);
+    },
+    [readMatrices],
+  );
+
   const tryCustom = useCallback(
     async (geometry: BoardLayout) => {
       const matrices = await readMatrices();
@@ -424,5 +446,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     reject,
     recheck,
     tryCustom,
+    previewCustom,
+    nearest,
   };
 }

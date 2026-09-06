@@ -19,10 +19,11 @@ import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
-import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
+import LayoutEditor from "@/components/LayoutEditor";
+import { useBoardLayout, type BoardLayout, type LayoutKey } from "@/lib/layout-loader";
 import { useBoardProfile } from "@/lib/use-profile";
 import { layoutBundle, type Inference } from "@/lib/layout-infer";
-import { kleToLayout } from "@/lib/kle";
+import type { Draft } from "@/lib/layout-draft";
 import {
   DISABLED_GLYPH,
   GROUPS,
@@ -65,13 +66,18 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     reject,
     recheck,
     tryCustom,
+    previewCustom,
+    nearest,
   } = useBoardLayout(device);
   const [verdict, setVerdict] = useState<"right" | "wrong" | null>(null);
   // Kept past rejection: the loader drops its inference then, and a "does
   // not match" report needs the picture that was turned down.
   const [reported, setReported] = useState<Inference | null>(null);
   const [copied, setCopied] = useState(false);
-  const [kleText, setKleText] = useState("");
+  const [drawing, setDrawing] = useState(false);
+  // Kept while the editor is closed, so a drawing turned down at the
+  // confirmation step can be picked up where it was left.
+  const [draft, setDraft] = useState<Draft | null>(null);
   const [layer, setLayer] = useState<"base" | "fn">("base");
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
   const [selected, setSelected] = useState<LayoutKey | null>(null);
@@ -199,24 +205,20 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     }
   };
 
-  const tryKle = async () => {
-    try {
-      const rate = await tryCustom(kleToLayout(kleText));
-      if (rate < 0.9) {
-        toast.error(
-          rate === 0
-            ? t("Could not read the board's keymap to match against.")
-            : t("Only {pct}% of the drawn keys match this board.", {
-                pct: Math.round(rate * 100),
-              }),
-        );
-      } else {
-        setVerdict(null);
-        setKleText("");
-      }
-    } catch (e) {
-      toast.error(`${e instanceof Error ? e.message : e}`);
+  const useDrawing = async (geometry: BoardLayout) => {
+    const rate = await tryCustom(geometry);
+    if (rate < 0.9) {
+      toast.error(
+        rate === 0
+          ? t("Could not read the board's keymap to match against.")
+          : t("Only {pct}% of the drawn keys match this board.", {
+              pct: Math.round(rate * 100),
+            }),
+      );
+      return;
     }
+    setVerdict(null);
+    setDrawing(false);
   };
 
   // A confirmed layout stays contributable in later sessions: inference
@@ -394,37 +396,34 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         </Card>
       )}
 
-      {connected && layout.grid && !pending && (
+      {connected && layout.grid && !pending && !drawing && (
         <Card>
           <CardHeader>
             <CardTitle className="text-base">{t("Draw your board")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p className="text-muted-foreground">
-              {t("No stored picture matches this keyboard. If you can draw it on")}{" "}
-              <button
-                className="underline"
-                onClick={() => openUrl("http://www.keyboard-layout-editor.com")}
-              >
-                keyboard-layout-editor.com
-              </button>
-              {t(", paste the raw data here and sharkfin will try to match it to your keys.")}
+              {t("No stored picture matches this keyboard. Draw it here, starting from a preset or the closest picture, and sharkfin matches it to your keys as you go.")}
             </p>
-            <textarea
-              value={kleText}
-              onChange={(e) => setKleText(e.target.value)}
-              spellCheck={false}
-              placeholder='["Esc","Q","W","E", …'
-              className="h-24 w-full rounded-md border bg-transparent p-2 font-mono text-xs"
-            />
-            <Button size="sm" disabled={!kleText.trim()} onClick={tryKle}>
-              {t("Try it")}
+            <Button size="sm" onClick={() => setDrawing(true)}>
+              {draft ? t("Continue drawing") : t("Draw it")}
             </Button>
           </CardContent>
         </Card>
       )}
 
-      {!entries || resolving ? (
+      {drawing && (
+        <LayoutEditor
+          draft={draft}
+          onChange={setDraft}
+          nearest={nearest}
+          preview={previewCustom}
+          onUse={useDrawing}
+          onClose={() => setDrawing(false)}
+        />
+      )}
+
+      {drawing ? null : !entries || resolving ? (
         <div className="flex h-64 items-center justify-center">
           <Waiting label={resolving ? t("Finding your keyboard…") : t("Reading keymap…")} />
         </div>

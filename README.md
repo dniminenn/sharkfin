@@ -61,9 +61,9 @@ set it speaks off the board's own answers, says so, and asks before it
 writes anything. Send a report from the Contribute tab and it gets a real
 entry.
 
-If your board shows the grid, or the picture is wrong, draw it on
-[keyboard-layout-editor.com](http://www.keyboard-layout-editor.com) and
-paste the drawing into the Keys page. Sending the result back gets the
+If your board shows the grid, or the picture is wrong, draw it on the
+Keys page: start from a preset or the closest stored picture, and each key
+shows whether the board has it as you go. Sending the result back gets the
 board drawn for everyone who owns one.
 
 ## Features

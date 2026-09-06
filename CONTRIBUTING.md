@@ -9,8 +9,8 @@ looks right? Answering it is a contribution too. Say yes and the Keys
 page and the Contribute tab both offer the picture's bundle; paste it
 into a board report and the picture ships built in, for you and everyone
 else with your board. Say no and the next closest picture is shown. If
-none of them fit, you can draw the board on keyboard-layout-editor.com,
-paste the drawing into the Keys page, and send that in the same way.
+none of them fit, the Keys page lets you draw the board, starting from a
+preset or the closest picture, and send that in the same way.
 
 ## Development
 
@@ -233,7 +233,8 @@ confirmed one is rebuilt from its name rather than loaded.
 
 For a board without a usable layout, the app searches every stored
 picture for the best match against the board's keymap and asks the owner
-to confirm one; owners can also paste a keyboard-layout-editor drawing.
+to confirm one; owners can also draw the board, or paste a
+keyboard-layout-editor drawing.
 The Keys page then produces a layout bundle carrying the confirmed
 geometry's name (`picture :`, or the drawing itself under
 `picture json:`) and the keymap it matched, which is the `defaultMatrix`
