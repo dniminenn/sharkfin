@@ -1,26 +1,21 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.7.0
+## What changed in 0.7.1
 
-**Magnetic switches.** Boards with hall-effect switches get a Switches
-page: actuation and release point, rapid trigger with its two
-sensitivities, and the bottom dead zone, for one key or the whole board.
-Written on the ry5088 lineage, 551 boards, whose own firmware was read for
-it; shown read-only on the other magnetic boards. Not yet: yc500 magnetic
-boards, and editing of dynamic keystroke, mod-tap, toggle and snap keys,
-which the page shows and leaves alone. No owner has tried a write yet.
-If yours misbehaves, a data bundle from the Contribute tab says why.
+**Magnetic switches on yc500 boards.** The Switches page now covers the
+yc3121 magnetic lineage: from firmware 2.00 the board's own per-key
+columns are read and written; older firmware takes one board-wide record
+and cannot report it back, and the page says so. Read out of the ER75 and
+K85 images. On every magnetic yc500 board, profiles are now addressed the
+way the firmware expects; 0.7.0 picked a keymap sub-layer instead.
 
-**122 boards the vendor dropped from its list** are back, named, with
-their factory keymaps read from firmware. Akko, Keydous, RoyalAxe,
-Epomaker, MonsGeek and others. Their entries do not say which command set
-they speak; the app asks the board at connect and writes once you allow
-it, as it does for a board with no entry at all.
+**Per-key kinds.** Dynamic keystroke, mod-tap, toggle and snap can be set
+per key on every board the page writes to, with the keys they act on.
+Read out of the X65HE image. No owner has tried a write yet on either
+family. If yours misbehaves, a data bundle from the Contribute tab says
+why.
 
-**Akko ACR75 v2 and Typhoon Ultimate TKL** are supported (device ids 606
-and 2045). The ACR75 v2's firmware reads the lighting's rainbow flag the
-other way round from every other board, so its rainbow switch now does
-what it says.
+**Typhoon Ultimate TKL** has its picture built in.
 
 The registry is 1153 boards, 4 of them confirmed on hardware.
 
@@ -28,7 +23,8 @@ You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
 Edge or another Chromium browser. Same app, same keyboard.
 
-Use a USB cable or the 2.4 GHz receiver. Bluetooth has no settings
+Use a USB cable. The 2.4 GHz receiver also works when it relays the
+settings channel; some receivers do not. Bluetooth has no settings
 channel.
 
 **Linux** needs a udev rule before either the app or the browser
