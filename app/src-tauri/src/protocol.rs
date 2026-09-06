@@ -503,10 +503,8 @@ pub mod hall {
 
     /// 128 little-endian u16 out of four raw pages.
     pub fn decode_wide(pages: &[u8]) -> Vec<u16> {
-        pages
-            .chunks_exact(2)
-            .take(SLOTS)
-            .map(|p| u16::from_le_bytes([p[0], p[1]]))
+        (0..(pages.len() / 2).min(SLOTS))
+            .map(|i| u16::from_le_bytes([pages[2 * i], pages[2 * i + 1]]))
             .collect()
     }
 
