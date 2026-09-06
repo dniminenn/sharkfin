@@ -1,21 +1,17 @@
 Alpha. Back up from the Device tab before you rely on it.
 
-## What changed in 0.7.1
+## What changed in 0.7.2
 
-**Magnetic switches on yc500 boards.** The Switches page now covers the
-yc3121 magnetic lineage: from firmware 2.00 the board's own per-key
-columns are read and written; older firmware takes one board-wide record
-and cannot report it back, and the page says so. Read out of the ER75 and
-K85 images. On every magnetic yc500 board, profiles are now addressed the
-way the firmware expects; 0.7.0 picked a keymap sub-layer instead.
+**Lighting per board.** The Lighting page now offers the effects your
+board's firmware has, from the vendor's own per-board table, instead of
+one list for everyone. 26 boards (Akko's V5 HE lineage and siblings) get
+Train and Endless and lose two wave directions they never had; the MK12
+and MK14 get brightness 0 to 7. Most boards keep their 18.
 
-**Per-key kinds.** Dynamic keystroke, mod-tap, toggle and snap can be set
-per key on every board the page writes to, with the keys they act on.
-Read out of the X65HE image. No owner has tried a write yet on either
-family. If yours misbehaves, a data bundle from the Contribute tab says
-why.
-
-**Typhoon Ultimate TKL** has its picture built in.
+**gen2 speed.** Boards on the gen2 command set ran every effect one step
+slower than the vendor app at the same slider position and could not reach
+their fastest. Read out of the X65HE image: the speed byte is a frame
+divider that starts at 0 there, at 1 on yc500.
 
 The registry is 1153 boards, 4 of them confirmed on hardware.
 
