@@ -185,6 +185,7 @@ pub fn derive_spec(
         },
         confirmed: None,
         unregistered: true,
+        light: None,
         led_flags_swapped: false,
     }
 }

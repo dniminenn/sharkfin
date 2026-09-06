@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import Waiting from "@/components/Waiting";
-import { BE_MODES } from "@/lib/lighting-modes";
+import { BE_MODES, MODE_LABELS, type LightMode } from "@/lib/lighting-modes";
 import {
   getLedParam,
   getSettings,
@@ -17,6 +17,7 @@ import {
   setOptions,
   setSideLight,
   type KbOptions,
+  type ConnectedDevice,
   type LedParam,
   type SledParam,
 } from "@/lib/backend";
@@ -64,7 +65,28 @@ const isNearBlack = (c: { r: number; g: number; b: number }) =>
 // let go.
 const WRITE_GAP = 300;
 
-export default function LightingPage({ connected }: { connected: boolean }) {
+/** The effects to offer: the board's own table when the registry has one,
+ *  else the common set. Speed is capped at the wire's 0..4 whatever the
+ *  vendor's slider claims. */
+function modesFor(device: ConnectedDevice | null): { modes: LightMode[]; brightnessMax: number } {
+  const table = device?.spec.light;
+  if (!table) return { modes: BE_MODES, brightnessMax: 4 };
+  const modes: LightMode[] = table.effects
+    .filter((e) => e.mode in MODE_LABELS)
+    .map((e) => ({
+      value: e.mode,
+      label: MODE_LABELS[e.mode],
+      options: e.options ?? undefined,
+      noColor: !e.rgb,
+      noSpeed: e.speedMax == null,
+      speedMax: Math.min(e.speedMax ?? 4, 4),
+    }));
+  return { modes, brightnessMax: Math.max(1, table.brightnessMax) };
+}
+
+export default function LightingPage({ device }: { device: ConnectedDevice | null }) {
+  const connected = !!device;
+  const { modes, brightnessMax } = modesFor(device);
   const [param, setParam] = useState<LedParam | null>(null);
   const [side, setSide] = useState<SledParam | null>(null);
   const [opts, setOpts] = useState<KbOptions | null>(null);
@@ -187,7 +209,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
     );
   }
 
-  const mode = BE_MODES.find((m) => m.value === param.mode);
+  const mode = modes.find((m) => m.value === param.mode);
   const hex = rgbToHex(param.r, param.g, param.b);
   const colorless = mode?.noColor ?? false;
 
@@ -206,7 +228,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
-            {BE_MODES.map((m) => (
+            {modes.map((m) => (
               <button
                 key={m.value}
                 onClick={() => commit({ mode: m.value, option: 0 })}
@@ -225,7 +247,7 @@ export default function LightingPage({ connected }: { connected: boolean }) {
             <div className="flex items-center gap-2">
               <Label className="text-sm text-muted-foreground">{t("Direction")}</Label>
               <div className="flex gap-1">
-                {mode.options.map((opt, i) => (
+                {mode.options.map((opt, i) => opt === null ? null : (
                   <button
                     key={opt}
                     onClick={() => commit({ option: i })}
@@ -389,11 +411,11 @@ export default function LightingPage({ connected }: { connected: boolean }) {
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <Label>{t("Brightness")}</Label>
-              <span className="text-muted-foreground">{param.brightness}/4</span>
+              <span className="text-muted-foreground">{param.brightness}/{brightnessMax}</span>
             </div>
             <Slider
               min={0}
-              max={4}
+              max={brightnessMax}
               step={1}
               value={[param.brightness]}
               onValueChange={([v]) => update({ brightness: v })}
@@ -405,11 +427,11 @@ export default function LightingPage({ connected }: { connected: boolean }) {
           >
             <div className="flex justify-between text-sm">
               <Label>{t("Speed")}</Label>
-              <span className="text-muted-foreground">{param.speed}/4</span>
+              <span className="text-muted-foreground">{param.speed}/{mode?.speedMax ?? 4}</span>
             </div>
             <Slider
               min={0}
-              max={4}
+              max={mode?.speedMax ?? 4}
               step={1}
               value={[param.speed]}
               onValueChange={([v]) => update({ speed: v })}

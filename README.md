@@ -71,8 +71,8 @@ board drawn for everyone who owns one.
 - **Keys.** Remap any key, on a picture of your board, per profile. Base
   and Fn layers, combos, and the knob (turn left, turn right, press). Writes
   go to the keyboard immediately.
-- **Lighting.** 18 effects with direction options, full RGB, brightness and
-  speed. Sliders preview as you drag and write when you let go, because the
+- **Lighting.** The board's own effects, 18 on most, with direction options,
+  full RGB, brightness and speed. Sliders preview as you drag and write when you let go, because the
   keyboard keeps its lighting in flash. Edge-light controls appear on boards
   that have edge LEDs.
 - **Paint.** Colour individual keys, then send. Sending is manual and

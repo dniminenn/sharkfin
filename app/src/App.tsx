@@ -246,7 +246,7 @@ export default function App() {
           )
         )}
         <div className="flex-1 overflow-auto">
-          {page === "lighting" && <LightingPage connected={!!device} />}
+          {page === "lighting" && <LightingPage device={device} />}
           {page === "paint" && <PaintPage device={device} />}
           {page === "keymap" && <KeymapPage device={device} />}
           {page === "switches" && <SwitchesPage device={device} />}

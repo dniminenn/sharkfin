@@ -72,6 +72,12 @@ pub struct DeviceSpec {
     /// app says so and asks the owner before the first write.
     #[serde(default)]
     pub unregistered: bool,
+    /// The backlight effects this board's firmware has, from the vendor's
+    /// per-board light table (`data/light-layouts.json`, keyed by
+    /// `light_layout`). Absent when the table has no entry; the app then
+    /// shows the common set.
+    #[serde(default, skip_deserializing)]
+    pub light: Option<LightLayoutSpec>,
     /// The firmware lineage that reads the LEDPARAM flags nibble the other
     /// way round: 8 is a fixed colour and 7 is the rainbow, and the seven
     /// preset colours differ. Read out of the Akko ACR75 v2's v3.03 image;
@@ -112,6 +118,32 @@ pub struct TravelRange {
     pub step: Option<f64>,
     #[serde(default)]
     pub default: Option<f64>,
+}
+
+/// One backlight effect as the vendor's table lists it for a light layout.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LightEffectSpec {
+    /// LEDPARAM mode byte.
+    pub mode: u8,
+    /// Highest speed the vendor offers; absent for effects with no motion.
+    #[serde(default)]
+    pub speed_max: Option<u8>,
+    /// Takes a colour; effects without this are always rainbow.
+    #[serde(default)]
+    pub rgb: bool,
+    /// Direction or variant names by option index; a null keeps the index
+    /// and marks a direction this board does not have.
+    #[serde(default)]
+    pub options: Option<Vec<Option<String>>>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LightLayoutSpec {
+    pub rgb: bool,
+    pub brightness_max: u8,
+    pub effects: Vec<LightEffectSpec>,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -277,6 +309,7 @@ pub fn build_id() -> String {
 
 static DEVICES_JSON: &str = include_str!("../data/devices.json");
 static CONFIRMED_JSON: &str = include_str!("../data/confirmed.json");
+static LIGHT_LAYOUTS_JSON: &str = include_str!("../data/light-layouts.json");
 
 /// A malformed registry must not take the app down; callers fall back to
 /// treating the board as unknown.
@@ -295,8 +328,17 @@ pub fn all() -> Vec<DeviceSpec> {
             Vec::new()
         }
     };
+    let lights: std::collections::HashMap<String, LightLayoutSpec> =
+        match serde_json::from_str(LIGHT_LAYOUTS_JSON) {
+            Ok(v) => v,
+            Err(e) => {
+                log::error!("data/light-layouts.json failed to parse: {e}");
+                Default::default()
+            }
+        };
     for d in &mut devices {
         d.confirmed = confirmed.iter().find(|c| c.id == d.id).cloned();
+        d.light = lights.get(&d.light_layout).cloned();
     }
     devices
 }
@@ -340,6 +382,34 @@ mod tests {
         );
         assert!(x86.writes_supported());
         assert_eq!(x86.label(), "AttackShark X86");
+    }
+
+    /// The vendor's light table names every layout the registry uses, bar
+    /// one board whose name the bundle no longer defines; a board with a
+    /// name and no table silently gets the common set.
+    #[test]
+    fn light_layouts_cover_the_registry() {
+        let x86 = by_id(1967).expect("X86 present");
+        let light = x86.light.expect("X86 has a light table");
+        assert_eq!(light.effects.len(), 18);
+        assert!(light
+            .effects
+            .iter()
+            .any(|e| e.mode == 4 && e.options.as_ref().is_some_and(|o| o.len() == 4)));
+        let m3 = by_id(2585).expect("M3 V5 present");
+        let light = m3.light.expect("M3 V5 has a light table");
+        assert!(light.effects.iter().any(|e| e.mode == 23));
+        assert!(light.effects.iter().any(|e| e.mode == 24));
+        let missing: Vec<u32> = all()
+            .iter()
+            .filter(|d| !d.light_layout.is_empty() && d.light.is_none())
+            .map(|d| d.id)
+            .collect();
+        assert_eq!(
+            missing,
+            vec![2872],
+            "boards named to a layout the table lacks"
+        );
     }
 
     /// Drawing is granted per lineage, never per family alone. yc3123 boards

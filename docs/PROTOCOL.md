@@ -236,10 +236,17 @@ Opcode shared. Packet **[HW]**.
 - RGB below `0x080808` renders as unlit **[HW]**. Backlight-off is an
   options bit, not a black write.
 
-Wire modes: 1 static, 2 breathing, 3 spectrum, 4 wave (4 dirs), 5 ripple,
-6 star dots, 7 flow (2), 8 key shadow, 9 layers, 10 sine, 11 spring (2),
-12 neon (2), 14 radiant, 15 loop (2), 16 colour grid, 17 snowfall,
-18 meteor, 19 silent snow. Modes 13, 21, 22, 23 need host-side data.
+Wire modes, the same numbers in both families' device classes: 1 static,
+2 breathing, 3 spectrum, 4 wave (4 dirs), 5 ripple, 6 star dots, 7 flow
+(2), 8 key shadow, 9 layers, 10 sine, 11 spring (2), 12 neon (2),
+14 radiant, 15 loop (2), 16 colour grid, 17 snowfall, 18 meteor,
+19 silent snow, 23 train, 24 endless (2). Modes 13, 20, 21, 22 and 25
+need host-side data. Which of these a board has, with its option list and
+speed and brightness ranges, is per board: the vendor's light table
+(`data/light-layouts.json`, keyed by the record's `lightLayout` name) lists
+them **[JS]**. Most boards have 1..19; the Akko V5 HE lineage and its
+siblings have 23 and 24 instead of the host-fed ones and only two wave
+directions; the MK12 and MK14 take speed and brightness 0..7.
 
 Caps LED Swap, key function `[0x0A, 17, 0, 0]`, lights that key white
 while caps lock is active. No command sets the colour. A per-key pattern

@@ -1607,7 +1607,8 @@ const FLAG_DAZZLE: u8 = 8;
 const MODE_USER_PICTURE: u8 = 13;
 const MODE_SCREEN_COLOR: u8 = 21;
 const MODE_MUSIC_2: u8 = 22;
-const MODE_MUSIC_3: u8 = 23;
+// 20 in both device classes' tables; 23 is Train, an ordinary effect.
+const MODE_MUSIC_3: u8 = 20;
 const MAX_SPEED: u8 = 5;
 
 const COMMON_COLORS: [(u8, u8, u8); 7] = [

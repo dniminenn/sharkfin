@@ -68,6 +68,27 @@ export interface DeviceSpec {
   /** Firmware lineage that reads the lighting flags nibble the other way
    * round; the backends encode and decode accordingly. */
   ledFlagsSwapped?: boolean;
+  /** The backlight effects this board's firmware has, from the vendor's
+   * per-board table. Absent when the table has no entry. */
+  light?: LightLayout | null;
+}
+
+export interface LightEffect {
+  /** LEDPARAM mode byte. */
+  mode: number;
+  /** Highest speed offered; absent for effects with no motion. */
+  speedMax?: number | null;
+  /** Takes a colour; otherwise always rainbow. */
+  rgb?: boolean;
+  /** Direction or variant names by option index; null marks an index this
+   * board does not have. */
+  options?: (string | null)[] | null;
+}
+
+export interface LightLayout {
+  rgb: boolean;
+  brightnessMax: number;
+  effects: LightEffect[];
 }
 
 export interface ConnectedDevice {
