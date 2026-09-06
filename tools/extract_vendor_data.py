@@ -691,6 +691,33 @@ def screen_spec(raw):
     }
 
 
+def travel_spec(other):
+    """The ranges the vendor's own UI offers for a magnetic board's travel
+    settings, in millimetres, or None when the record has none (most do
+    not, and the driver then falls back to defaults keyed on the firmware
+    revision). Each range is min, max, step and default; missing pieces
+    stay None so a consumer can tell "unknown" from a value.
+    """
+    if not isinstance(other, dict):
+        return None
+    raw = other.get("travelSetting")
+    if not isinstance(raw, dict):
+        return None
+    out = {}
+    for key in ("travel", "firePress", "fireLift", "deadzone"):
+        rng = raw.get(key)
+        if not isinstance(rng, dict):
+            continue
+        num = lambda v: v if isinstance(v, (int, float)) and not isinstance(v, bool) else None
+        out[key] = {
+            "min": num(rng.get("min")),
+            "max": num(rng.get("max")),
+            "step": num(rng.get("step")),
+            "default": num(rng.get("default")),
+        }
+    return out or None
+
+
 def load_extras(path):
     """Hand-maintained entries the bundle cannot supply.
 
@@ -790,6 +817,7 @@ def main():
         if isinstance(knob, list):
             knob = [k for k in knob if isinstance(k, str)]
         screen = screen_spec(other.get("screen"))
+        travel = travel_spec(other) if magnetic else None
         company = as_str(d.get("company"))
         devices.append(
             {
@@ -811,6 +839,8 @@ def main():
                 "magnetic": magnetic,
                 "family": family,
                 "screen": screen,
+                "travel": travel,
+                "switchReplaceable": bool(magnetic and other.get("isSwitchReplaceable")),
                 "features": {
                     "knob": knob if isinstance(knob, list) else [],
                     "debounce": "deBounce" in other,

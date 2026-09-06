@@ -53,6 +53,15 @@ pub struct DeviceSpec {
     /// ship, so nothing may assume a default.
     #[serde(default)]
     pub screen: Option<ScreenSpec>,
+    /// Ranges the vendor's UI offers for a magnetic board's travel
+    /// settings, in millimetres. Most magnetic records carry none; the
+    /// vendor's driver then falls back to defaults keyed on the firmware
+    /// revision, which the app reads at connect.
+    #[serde(default)]
+    pub travel: Option<TravelSpec>,
+    /// The vendor lets the owner declare a different switch model.
+    #[serde(default)]
+    pub switch_replaceable: bool,
     pub features: DeviceFeatures,
     /// Set when an owner's read sweep from this board is on file
     /// (`data/confirmed.json`). The vendor's data alone never sets it.
@@ -88,6 +97,38 @@ pub struct ScreenSpec {
     pub mode: String,
     #[serde(default)]
     pub layers: u8,
+}
+
+/// One slider's range as the vendor ships it, millimetres; a `None` is a
+/// piece the record left out, not a zero.
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TravelRange {
+    #[serde(default)]
+    pub min: Option<f64>,
+    #[serde(default)]
+    pub max: Option<f64>,
+    #[serde(default)]
+    pub step: Option<f64>,
+    #[serde(default)]
+    pub default: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TravelSpec {
+    /// Actuation and release point.
+    #[serde(default)]
+    pub travel: Option<TravelRange>,
+    /// Rapid trigger press sensitivity.
+    #[serde(default)]
+    pub fire_press: Option<TravelRange>,
+    /// Rapid trigger release sensitivity.
+    #[serde(default)]
+    pub fire_lift: Option<TravelRange>,
+    /// Bottom dead zone.
+    #[serde(default)]
+    pub deadzone: Option<TravelRange>,
 }
 
 fn family_unknown() -> String {

@@ -18,6 +18,13 @@ export interface DeviceFeatures {
   sideLight: boolean;
 }
 
+export interface TravelRange {
+  min?: number | null;
+  max?: number | null;
+  step?: number | null;
+  default?: number | null;
+}
+
 export interface ScreenSpec {
   w: number;
   h: number;
@@ -43,6 +50,16 @@ export interface DeviceSpec {
   /** The display, absent on a board without one. */
   screen?: ScreenSpec | null;
   features: DeviceFeatures;
+  /** Ranges the vendor's UI offers for a magnetic board's travel settings,
+   * in millimetres; absent on most records, and on every mechanical board. */
+  travel?: {
+    travel?: TravelRange;
+    firePress?: TravelRange;
+    fireLift?: TravelRange;
+    deadzone?: TravelRange;
+  } | null;
+  /** The vendor lets the owner declare a different switch model. */
+  switchReplaceable?: boolean;
   /** An owner's read sweep from this board is on file. */
   confirmed?: { issue: number; version: string } | null;
   /** Built from the board's own answers because the registry has no entry

@@ -156,6 +156,8 @@ pub fn derive_spec(
         magnetic: false,
         family: family.into(),
         screen: None,
+        travel: None,
+        switch_replaceable: false,
         features: DeviceFeatures {
             knob: knob(sweep.keymap),
             debounce: false,
