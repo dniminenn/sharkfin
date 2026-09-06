@@ -37342,5 +37342,34 @@
       "screen": true,
       "sideLight": false
     }
+  },
+  {
+    "id": 1087,
+    "name": "koodo_solar",
+    "displayName": "Solar",
+    "company": "KOODO",
+    "vendor": "KOODO",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "koodo_solar",
+    "keyLayout": "Local81_KOODO_Solar",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]
