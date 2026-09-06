@@ -392,6 +392,66 @@ struct Open {
     battery: Option<u8>,
     /// The settings collection's usage on the vendor page, for the bundle.
     usage: u16,
+    /// The `0x80` reply as a u16, read once at connect. Gates the yc500
+    /// switch columns, which arrived with firmware 2.00.
+    revision: Option<u16>,
+}
+
+/// What the Switches page may do with this board; mirrors commands.rs.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
+#[serde(rename_all = "lowercase")]
+enum SwitchAccess {
+    None,
+    Read,
+    Write,
+    Global,
+}
+
+fn switch_access(spec: &DeviceSpec, revision: Option<u16>, read_only: bool) -> SwitchAccess {
+    if spec.hall_reads(revision) {
+        if spec.hall_writes(revision) && !read_only {
+            SwitchAccess::Write
+        } else {
+            SwitchAccess::Read
+        }
+    } else if spec.hall_global(revision) && !read_only {
+        SwitchAccess::Global
+    } else {
+        SwitchAccess::None
+    }
+}
+
+/// `0x80` as a u16, `None` when the family is unknown or the board does not
+/// answer. Zero counts as no answer.
+async fn read_revision(t: &Transport, spec: &DeviceSpec) -> Option<u16> {
+    let op = family_cmds(&spec.family)?.get_revision?;
+    let rev = t.roundtrip(op, &[], Checksum::Bit7).await.ok()?;
+    let v = (u16::from(rev[2]) << 8) | u16::from(rev[1]);
+    (v != 0).then_some(v)
+}
+
+/// The open board's revision and switch access, with no board an error.
+fn open_switches() -> Result<(Option<u16>, SwitchAccess), String> {
+    STATE.with(|s| {
+        let s = s.borrow();
+        let open = s.open.as_ref().ok_or("no device connected")?;
+        let read_only =
+            !open.spec.writes_supported() || (open.spec.unregistered && !s.unregistered_ok);
+        Ok((
+            open.revision,
+            switch_access(&open.spec, open.revision, read_only),
+        ))
+    })
+}
+
+/// Whether the open board addresses profiles as `profile * 4 + sublayer`.
+fn scaled_profiles() -> bool {
+    STATE.with(|s| {
+        s.borrow()
+            .open
+            .as_ref()
+            .is_some_and(|o| o.spec.family == "yc500" && o.spec.magnetic)
+    })
 }
 
 /// The usage the device's vendor-page collection reports, 0 when none.
@@ -570,6 +630,8 @@ struct ConnectedInfo {
     device_id: u32,
     spec: DeviceSpec,
     read_only: bool,
+    switches: SwitchAccess,
+    revision: Option<u16>,
     /// Cable, or the 2.4 GHz receiver's relay. Factory reset needs the cable.
     link: Link,
     /// Percent, receiver link only.
@@ -655,10 +717,14 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
             } else {
                 None
             };
+            let revision = read_revision(&transport, &spec).await;
+            let read_only = !spec.writes_supported() || spec.unregistered;
             let info = ConnectedInfo {
                 path: "webhid".into(),
                 device_id: id,
-                read_only: !spec.writes_supported() || spec.unregistered,
+                read_only,
+                switches: switch_access(&spec, revision, read_only),
+                revision,
                 spec: spec.clone(),
                 link: transport.link(),
                 battery,
@@ -671,6 +737,7 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
                     spec,
                     battery,
                     usage,
+                    revision,
                 });
             });
             to_js(&info)
@@ -773,14 +840,19 @@ pub fn status() -> Result<JsValue, JsValue> {
     STATE.with(|s| {
         let s = s.borrow();
         to_js(&Status {
-            connected: s.open.as_ref().map(|o| ConnectedInfo {
-                path: "webhid".into(),
-                device_id: o.spec.id,
-                read_only: !o.spec.writes_supported()
-                    || (o.spec.unregistered && !s.unregistered_ok),
-                spec: o.spec.clone(),
-                link: o.transport.link(),
-                battery: o.battery,
+            connected: s.open.as_ref().map(|o| {
+                let read_only =
+                    !o.spec.writes_supported() || (o.spec.unregistered && !s.unregistered_ok);
+                ConnectedInfo {
+                    path: "webhid".into(),
+                    device_id: o.spec.id,
+                    read_only,
+                    switches: switch_access(&o.spec, o.revision, read_only),
+                    revision: o.revision,
+                    spec: o.spec.clone(),
+                    link: o.transport.link(),
+                    battery: o.battery,
+                }
             }),
             stalled: s.stalled,
         })
@@ -838,7 +910,10 @@ pub async fn get_profile() -> Result<u8, JsValue> {
         .roundtrip(fc.get_profile, &[], Checksum::Bit7)
         .await
         .map_err(fail)?;
-    Ok(reply[1])
+    Ok(protocol::yc500_profile_from_slot(
+        spec.family == "yc500" && spec.magnetic,
+        reply[1],
+    ))
 }
 
 /// The display's own firmware version, or `None` on a board without one.
@@ -866,6 +941,7 @@ pub async fn set_profile(profile: u8) -> Result<(), JsValue> {
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
+    let profile = protocol::yc500_profile_slot(spec.family == "yc500" && spec.magnetic, profile, 0);
     let pkt = protocol::packet(fc.set_profile, &[profile], Checksum::Bit7);
     t.send(&pkt).await.map_err(fail)?;
     // The switch lands in flash and gets no ack, and anything on the wire
@@ -889,11 +965,13 @@ pub async fn set_profile(profile: u8) -> Result<(), JsValue> {
 }
 
 /// 512-byte matrix: 128 slots × 4 bytes, read as 8 raw pages. Mirrors
-/// commands.rs::read_matrix, including the gen2 payload shapes.
+/// commands.rs::read_matrix, including the gen2 payload shapes; `profile`
+/// is the wire value, sub-layer already folded in on yc500.
 async fn read_matrix(
     t: &Transport,
     fc: &'static FamilyCmds,
     profile: u8,
+    sublayer: u8,
     fn_layer: bool,
 ) -> Result<Vec<u8>, HidErr> {
     let mut matrix = Vec::with_capacity(512);
@@ -901,7 +979,7 @@ async fn read_matrix(
         let (opcode, payload): (u8, Vec<u8>) = match (fc.name == "gen2", fn_layer) {
             (true, false) => (
                 fc.get_keymatrix,
-                protocol::gen2::keymatrix_read_payload(profile, page).to_vec(),
+                protocol::gen2::keymatrix_layer_read_payload(profile, page, sublayer).to_vec(),
             ),
             (true, true) => (
                 cmd::GET_FN,
@@ -919,6 +997,7 @@ async fn read_matrix(
 fn key_write_packet(
     fc: &'static FamilyCmds,
     profile: u8,
+    sublayer: u8,
     slot: u8,
     value: [u8; 4],
     fn_layer: bool,
@@ -927,7 +1006,7 @@ fn key_write_packet(
         return Ok(if fn_layer {
             protocol::gen2::set_fn_key_packet(profile, slot, value)
         } else {
-            protocol::gen2::set_key_packet(profile, slot, value)
+            protocol::gen2::set_layer_key_packet(profile, slot, sublayer, value)
         });
     }
     let opcode = if fn_layer {
@@ -943,11 +1022,22 @@ fn key_write_packet(
 
 #[wasm_bindgen]
 pub async fn read_keymap(profile: u8) -> Result<Vec<u8>, JsValue> {
+    read_keymap_layer(profile, 0).await
+}
+
+/// One of the four keymap sub-layers of a profile; mirrors commands.rs.
+#[wasm_bindgen]
+pub async fn read_keymap_layer(profile: u8, sublayer: u8) -> Result<Vec<u8>, JsValue> {
+    if sublayer > 3 {
+        return Err("sub-layer out of range (0..3)".into());
+    }
     let _busy = acquire().await;
     read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    read_matrix(&t, fc, profile, false)
+    let wire =
+        protocol::yc500_profile_slot(spec.family == "yc500" && spec.magnetic, profile, sublayer);
+    read_matrix(&t, fc, wire, sublayer, false)
         .await
         .map_err(fail)
         .map_err(JsValue::from)
@@ -959,7 +1049,7 @@ pub async fn read_fn_keymap(layer: u8) -> Result<Vec<u8>, JsValue> {
     read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    read_matrix(&t, fc, layer, true)
+    read_matrix(&t, fc, layer, 0, true)
         .await
         .map_err(fail)
         .map_err(JsValue::from)
@@ -967,15 +1057,43 @@ pub async fn read_fn_keymap(layer: u8) -> Result<Vec<u8>, JsValue> {
 
 #[wasm_bindgen]
 pub async fn set_key(profile: u8, slot: u8, value: Vec<u8>, fn_layer: bool) -> Result<(), JsValue> {
+    set_key_layer(profile, 0, slot, value, fn_layer).await
+}
+
+/// One slot in one keymap sub-layer; mirrors commands.rs.
+#[wasm_bindgen]
+pub async fn set_key_layer(
+    profile: u8,
+    sublayer: u8,
+    slot: u8,
+    value: Vec<u8>,
+    fn_layer: bool,
+) -> Result<(), JsValue> {
     let value: [u8; 4] = value
         .as_slice()
         .try_into()
         .map_err(|_| "key value must be 4 bytes")?;
+    if sublayer > 3 || (sublayer > 0 && fn_layer) {
+        return Err("sub-layer out of range".into());
+    }
+    if sublayer > 0
+        && !matches!(
+            open_switches()?.1,
+            SwitchAccess::Write | SwitchAccess::Global
+        )
+    {
+        return Err("this board has no keymap sub-layers sharkfin can write".into());
+    }
     gap(|s| &mut s.last_cmd, KEY_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    let pkt = key_write_packet(fc, profile, slot, value, fn_layer).map_err(fail)?;
+    let wire = if fn_layer {
+        profile
+    } else {
+        protocol::yc500_profile_slot(spec.family == "yc500" && spec.magnetic, profile, sublayer)
+    };
+    let pkt = key_write_packet(fc, wire, sublayer, slot, value, fn_layer).map_err(fail)?;
     t.send(&pkt).await.map_err(fail)?;
     Ok(())
 }
@@ -1351,42 +1469,62 @@ pub async fn write_macro(slot: u8, data_json: String) -> Result<(), JsValue> {
 // ---------------------------------------------------------------------------
 // Magnetic switches, mirroring commands.rs one for one.
 
+fn hall_format(spec: &DeviceSpec) -> Result<hall::Format, JsValue> {
+    hall::Format::for_family(&spec.family)
+        .ok_or_else(|| JsValue::from("no switch column format for this family"))
+}
+
 #[wasm_bindgen]
 pub async fn get_switches() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
     read_quiet().await;
     let (t, spec) = get_open(false)?;
-    if !spec.hall_reads() {
+    let (revision, _) = open_switches()?;
+    if !spec.hall_reads(revision) {
         return Err(JsValue::from(format!(
             "{} has no magnetic switches sharkfin can read",
             spec.label()
         )));
     }
-    async fn column(t: &Transport, subop: u8) -> Result<Vec<u8>, JsValue> {
+    let f = hall_format(&spec)?;
+    async fn column(t: &Transport, f: hall::Format, subop: u8) -> Result<Vec<u8>, JsValue> {
         let mut out = Vec::with_capacity(256);
-        for page in 0..hall::get_pages(subop) {
+        for page in 0..f.get_pages(subop) {
             out.extend_from_slice(
-                &t.read_raw_page(hall::GET, &hall::get_payload(subop, page), Checksum::Bit7)
+                &t.read_raw_page(hall::GET, &f.get_payload(subop, page), Checksum::Bit7)
                     .await
                     .map_err(fail)?,
             );
         }
         Ok(out)
     }
-    let mode = column(&t, hall::MODE).await?;
-    let travel = hall::decode_wide(&column(&t, hall::TRAVEL).await?);
-    let lift = hall::decode_wide(&column(&t, hall::LIFT).await?);
-    let rt_press = hall::decode_wide(&column(&t, hall::RT_PRESS).await?);
-    let rt_lift = hall::decode_wide(&column(&t, hall::RT_LIFT).await?);
-    let dead = hall::decode_wide(&column(&t, hall::DEAD_BOTTOM).await?);
-    to_js(&hall::assemble(
-        &mode, &travel, &lift, &rt_press, &rt_lift, &dead,
-    ))
+    let mut columns = Vec::new();
+    for &subop in hall::READ_COLUMNS.iter() {
+        columns.push((subop, f.decode(subop, &column(&t, f, subop).await?)));
+    }
+    let mut dks_all = Vec::with_capacity(4 * f.slots());
+    for block in 0..4u8 {
+        let mut raw = Vec::with_capacity(128);
+        for page in [2 * block, 2 * block + 1] {
+            raw.extend_from_slice(
+                &t.read_raw_page(
+                    hall::GET,
+                    &f.get_payload(hall::DKS_ACTIONS_ALL, page),
+                    Checksum::Bit7,
+                )
+                .await
+                .map_err(fail)?,
+            );
+        }
+        dks_all.extend_from_slice(&raw[..f.slots()]);
+    }
+    to_js(&hall::assemble(f, &columns, &dks_all))
 }
 
-fn require_hall_writes(spec: &DeviceSpec) -> Result<(), JsValue> {
-    if spec.hall_writes() {
-        Ok(())
+fn require_hall_writes(spec: &DeviceSpec) -> Result<hall::Format, JsValue> {
+    let (revision, _) = open_switches()?;
+    if spec.hall_writes(revision) {
+        hall_format(spec)
     } else {
         Err(JsValue::from(format!(
             "sharkfin has not read {}'s firmware for its switch settings, so it will not write them",
@@ -1397,36 +1535,130 @@ fn require_hall_writes(spec: &DeviceSpec) -> Result<(), JsValue> {
 
 #[wasm_bindgen]
 pub async fn set_switch_key(key_json: String) -> Result<(), JsValue> {
+    set_switch_keys(format!("[{key_json}]")).await
+}
+
+/// One or two keys in one visit, a flash settle between them.
+#[wasm_bindgen]
+pub async fn set_switch_keys(keys_json: String) -> Result<(), JsValue> {
+    let keys: Vec<hall::KeySwitch> = serde_json::from_str(&keys_json).map_err(|e| e.to_string())?;
+    if keys.is_empty() || keys.len() > 2 {
+        return Err("one or two keys at a time".into());
+    }
+    flash_cooldown().await;
+    let _busy = acquire().await;
+    let (t, spec) = get_open(true)?;
+    let f = require_hall_writes(&spec)?;
+    if keys
+        .iter()
+        .any(|k| k.kind == hall::KIND_SNAP && usize::from(k.snap_partner) >= f.slots())
+    {
+        return Err("snap partner out of range".into());
+    }
+    for key in &keys {
+        let cols = hall::columns_for(key.kind);
+        let n = cols.len();
+        for (i, &subop) in cols.iter().enumerate() {
+            let last = i + 1 == n;
+            let pkt = if subop == hall::DKS_ACTIONS {
+                f.set_dks_actions(key.slot, last, key.dks_actions)
+            } else {
+                f.set_one(subop, key.slot, last, key.wire(f, subop))
+            }
+            .ok_or("slot out of range")?;
+            t.send(&pkt).await.map_err(fail)?;
+        }
+        sleep_ms(FLASH_SETTLE_MS).await;
+    }
+    Ok(())
+}
+
+#[wasm_bindgen]
+pub async fn set_switches_all(key_json: String, modes: Vec<u8>) -> Result<(), JsValue> {
     let key: hall::KeySwitch = serde_json::from_str(&key_json).map_err(|e| e.to_string())?;
     flash_cooldown().await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
-    require_hall_writes(&spec)?;
+    let f = require_hall_writes(&spec)?;
     let n = hall::WRITE_COLUMNS.len();
     for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
-        let pkt = hall::set_one(subop, key.slot, i + 1 == n, key.wire(subop))
-            .ok_or("slot out of range")?;
-        t.send(&pkt).await.map_err(fail)?;
+        let values: Vec<u16> = (0..f.slots())
+            .map(|s| {
+                if subop == hall::MODE {
+                    let kind = modes.get(s).copied().unwrap_or(0) & 0x7F;
+                    let rt = if key.rapid_trigger {
+                        hall::MODE_RAPID_TRIGGER
+                    } else {
+                        0
+                    };
+                    u16::from(kind | rt)
+                } else {
+                    key.wire(f, subop)
+                }
+            })
+            .collect();
+        for pkt in f.set_all(subop, &values, i + 1 == n) {
+            t.send(&pkt).await.map_err(fail)?;
+            sleep_ms(FLASH_PAGE_GAP_MS).await;
+        }
     }
     sleep_ms(FLASH_SETTLE_MS).await;
     Ok(())
 }
 
 #[wasm_bindgen]
-pub async fn set_switches_all(key_json: String) -> Result<(), JsValue> {
+pub async fn get_switch_preset() -> Result<Option<u8>, JsValue> {
+    let _busy = acquire().await;
+    read_quiet().await;
+    let (t, spec) = get_open(false)?;
+    if spec.family != "yc500" || !spec.magnetic {
+        return Ok(None);
+    }
+    let reply = t
+        .roundtrip(hall::GET_PRESET, &[], Checksum::Bit7)
+        .await
+        .map_err(fail)?;
+    Ok((reply[1] <= hall::PRESET_CUSTOM).then_some(reply[1]))
+}
+
+#[wasm_bindgen]
+pub async fn set_switch_preset(preset: u8) -> Result<(), JsValue> {
+    let (_, access) = open_switches()?;
+    let (t, spec) = get_open(true)?;
+    if spec.family != "yc500" || !matches!(access, SwitchAccess::Write | SwitchAccess::Global) {
+        return Err(format!("{} has no switch presets", spec.label()).into());
+    }
+    if preset > hall::PRESET_CUSTOM {
+        return Err("preset out of range (0..3)".into());
+    }
+    gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
+    let _busy = acquire().await;
+    t.send(&protocol::packet(
+        hall::SET_PRESET,
+        &[preset],
+        Checksum::Bit7,
+    ))
+    .await
+    .map_err(fail)?;
+    Ok(())
+}
+
+#[wasm_bindgen]
+pub async fn set_switches_global(key_json: String, all: bool) -> Result<(), JsValue> {
     let key: hall::KeySwitch = serde_json::from_str(&key_json).map_err(|e| e.to_string())?;
+    let (_, access) = open_switches()?;
+    if access != SwitchAccess::Global {
+        return Err("this board takes its switch settings per key, not as one record".into());
+    }
+    if usize::from(key.slot) >= hall::Format::Yc500.slots() {
+        return Err("slot out of range".into());
+    }
     flash_cooldown().await;
     let _busy = acquire().await;
-    let (t, spec) = get_open(true)?;
-    require_hall_writes(&spec)?;
-    let n = hall::WRITE_COLUMNS.len();
-    for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
-        let values = [key.wire(subop); hall::SLOTS];
-        for pkt in hall::set_all(subop, &values, i + 1 == n) {
-            t.send(&pkt).await.map_err(fail)?;
-            sleep_ms(FLASH_PAGE_GAP_MS).await;
-        }
-    }
+    let (t, _) = get_open(true)?;
+    t.send(&hall::global_packet(&key, all))
+        .await
+        .map_err(fail)?;
     sleep_ms(FLASH_SETTLE_MS).await;
     Ok(())
 }
@@ -1463,9 +1695,11 @@ pub async fn export_config() -> Result<JsValue, JsValue> {
     let n = spec.profiles.clamp(1, 8);
     let mut profiles = Vec::new();
     let mut fn_layers = Vec::new();
+    let scaled = spec.family == "yc500" && spec.magnetic;
     for p in 0..n {
-        profiles.push(read_matrix(&t, fc, p, false).await.map_err(fail)?);
-        fn_layers.push(read_matrix(&t, fc, p, true).await.map_err(fail)?);
+        let wire = protocol::yc500_profile_slot(scaled, p, 0);
+        profiles.push(read_matrix(&t, fc, wire, 0, false).await.map_err(fail)?);
+        fn_layers.push(read_matrix(&t, fc, p, 0, true).await.map_err(fail)?);
     }
     let led = t
         .roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)
@@ -1542,12 +1776,17 @@ pub async fn import_config(raw: String) -> Result<JsValue, JsValue> {
                 )
                 .into());
             }
-            let current = read_matrix(&t, fc, p as u8, fn_layer).await.map_err(fail)?;
+            let wire = if fn_layer {
+                p as u8
+            } else {
+                protocol::yc500_profile_slot(spec.family == "yc500" && spec.magnetic, p as u8, 0)
+            };
+            let current = read_matrix(&t, fc, wire, 0, fn_layer).await.map_err(fail)?;
             for slot in 0..128usize {
                 let want: [u8; 4] = target[slot * 4..slot * 4 + 4].try_into().unwrap();
                 if current[slot * 4..slot * 4 + 4] != want {
                     let pkt =
-                        key_write_packet(fc, p as u8, slot as u8, want, fn_layer).map_err(fail)?;
+                        key_write_packet(fc, wire, 0, slot as u8, want, fn_layer).map_err(fail)?;
                     t.send(&pkt).await.map_err(fail)?;
                     keys_written += 1;
                     sleep_ms(KEY_GAP_MS).await;

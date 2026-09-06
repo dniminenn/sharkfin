@@ -75,6 +75,11 @@ export interface ConnectedDevice {
   deviceId: number;
   spec: DeviceSpec;
   readOnly: boolean;
+  /** What the Switches page may do: read the columns, write them, or write
+   * the one board-wide record of a yc500 board below firmware 2.00. */
+  switches: SwitchAccess;
+  /** Firmware revision from 0x80, e.g. 0x0200 for 2.00; null when unanswered. */
+  revision: number | null;
   /** Cable, or the 2.4 GHz receiver's relay. Factory reset and display pictures need the cable. */
   link: "usb" | "receiver";
   /** Percent, receiver link only. */
@@ -101,10 +106,13 @@ export interface ScanResult {
   keyboardOffline: boolean;
 }
 
+export type SwitchAccess = "none" | "read" | "write" | "global";
+
 /** One key's magnetic-switch settings, millimetres. */
 export interface KeySwitch {
   slot: number;
-  /** Bits 0..6 of the mode byte; 0 is a plain key. */
+  /** Bits 0..6 of the mode byte: 0 plain, 2 dynamic keystroke, 3 mod-tap,
+   * 4 toggle, 5 repeating toggle, 7 snap. */
   kind: number;
   rapidTrigger: boolean;
   travel: number;
@@ -112,9 +120,18 @@ export interface KeySwitch {
   rtPress: number;
   rtLift: number;
   deadBottom: number;
+  /** Dynamic keystroke: the first point; `travel` is the second. */
+  dksStart: number;
+  /** Dynamic keystroke: one byte per sub-layer, four 2-bit cells, one per travel event. */
+  dksActions: number[];
+  /** Mod-tap: milliseconds held before the hold action fires. */
+  mtTimeMs: number;
+  /** Snap: the partner's slot, 255 for none. */
+  snapPartner: number;
 }
 
 export interface SwitchSettings {
+  format: "gen2" | "yc500";
   unitMm: number;
   keys: KeySwitch[];
 }
@@ -299,8 +316,25 @@ export const getSwitches = (): Promise<SwitchSettings> =>
   withCore(async () => JSON.parse((await core.get_switches()) as string) as SwitchSettings);
 export const setSwitchKey = (key: KeySwitch): Promise<void> =>
   withCore(() => core.set_switch_key(JSON.stringify(key)));
-export const setSwitchesAll = (key: KeySwitch): Promise<void> =>
-  withCore(() => core.set_switches_all(JSON.stringify(key)));
+export const setSwitchKeys = (keys: KeySwitch[]): Promise<void> =>
+  withCore(() => core.set_switch_keys(JSON.stringify(keys)));
+export const setSwitchesAll = (key: KeySwitch, modes: number[]): Promise<void> =>
+  withCore(() => core.set_switches_all(JSON.stringify(key), new Uint8Array(modes)));
+export const getSwitchPreset = (): Promise<number | null> =>
+  withCore(async () => (await core.get_switch_preset()) ?? null);
+export const setSwitchPreset = (preset: number): Promise<void> =>
+  withCore(() => core.set_switch_preset(preset));
+export const setSwitchesGlobal = (key: KeySwitch, all: boolean): Promise<void> =>
+  withCore(() => core.set_switches_global(JSON.stringify(key), all));
+export const readKeymapLayer = (profile: number, sublayer: number): Promise<number[]> =>
+  withCore(async () => Array.from(await core.read_keymap_layer(profile, sublayer)));
+export const setKeyLayer = (
+  profile: number,
+  sublayer: number,
+  slot: number,
+  value: number[],
+): Promise<void> =>
+  withCore(() => core.set_key_layer(profile, sublayer, slot, new Uint8Array(value), false));
 export const getSettings = (): Promise<DeviceSettings> =>
   withCore(async () => JSON.parse((await core.get_settings()) as string));
 export const setDebounce = (value: number) => withCore(() => core.set_debounce(value));

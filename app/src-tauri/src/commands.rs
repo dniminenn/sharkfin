@@ -44,20 +44,68 @@ struct OpenDevice {
     battery: Option<u8>,
     /// The settings collection's usage on the vendor page, for the bundle.
     usage: u16,
+    /// The `0x80` reply as a u16, read once at connect. Gates the yc500
+    /// switch columns, which arrived with firmware 2.00.
+    revision: Option<u16>,
 }
 
 impl OpenDevice {
     fn connected(&self, unregistered_ok: bool) -> ConnectedDevice {
+        let read_only =
+            !self.spec.writes_supported() || (self.spec.unregistered && !unregistered_ok);
         ConnectedDevice {
             path: self.path.clone(),
             device_id: self.spec.id,
-            read_only: !self.spec.writes_supported()
-                || (self.spec.unregistered && !unregistered_ok),
+            read_only,
+            switches: switch_access(&self.spec, self.revision, read_only),
+            revision: self.revision,
             spec: self.spec.clone(),
             link: self.transport.link(),
             battery: self.battery,
         }
     }
+
+    /// Whether this board addresses profiles as `profile * 4 + sublayer`.
+    fn scaled_profiles(&self) -> bool {
+        self.spec.family == "yc500" && self.spec.magnetic
+    }
+}
+
+/// What the Switches page may do with this board. One source of truth for
+/// both frontends; the rules live on `DeviceSpec`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum SwitchAccess {
+    None,
+    /// Columns can be read, not written.
+    Read,
+    /// Columns can be read and written.
+    Write,
+    /// No columns: one board-wide record can be written, nothing read back.
+    Global,
+}
+
+pub fn switch_access(spec: &DeviceSpec, revision: Option<u16>, read_only: bool) -> SwitchAccess {
+    if spec.hall_reads(revision) {
+        if spec.hall_writes(revision) && !read_only {
+            SwitchAccess::Write
+        } else {
+            SwitchAccess::Read
+        }
+    } else if spec.hall_global(revision) && !read_only {
+        SwitchAccess::Global
+    } else {
+        SwitchAccess::None
+    }
+}
+
+/// `0x80` as a u16, `None` when the family is unknown or the board does not
+/// answer. Zero counts as no answer.
+fn read_revision(t: &Transport, spec: &DeviceSpec) -> Option<u16> {
+    let op = family_cmds(&spec.family)?.get_revision?;
+    let rev = t.roundtrip(op, &[], Checksum::Bit7).ok()?;
+    let v = (u16::from(rev[2]) << 8) | u16::from(rev[1]);
+    (v != 0).then_some(v)
 }
 
 /// How long a successful exchange vouches for the connection. Below this,
@@ -131,6 +179,9 @@ pub struct ConnectedDevice {
     pub spec: DeviceSpec,
     /// Families whose opcodes aren't established never accept writes.
     pub read_only: bool,
+    pub switches: SwitchAccess,
+    /// Firmware revision from `0x80`, e.g. 0x0200 for 2.00.
+    pub revision: Option<u16>,
     /// Cable, or the 2.4 GHz receiver's relay. Factory reset needs the cable.
     pub link: Link,
     /// Percent, receiver link only.
@@ -278,6 +329,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                     } else {
                         None
                     };
+                    let revision = read_revision(&transport, &spec);
                     let open = OpenDevice {
                         path: d.path,
                         transport,
@@ -285,6 +337,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                         last_ok: Instant::now(),
                         battery,
                         usage: d.usage,
+                        revision,
                     };
                     inner.unregistered_ok = false;
                     connected = Some(open.connected(false));
@@ -481,6 +534,13 @@ fn with_writable<T>(
     run(state, true, f)
 }
 
+/// Whether the open board addresses profiles as `profile * 4 + sublayer`
+/// (`protocol::yc500_profile_slot`). False with no board open.
+fn scaled_profiles(state: &tauri::State<AppState>) -> bool {
+    let inner = state.inner.lock();
+    inner.open.as_ref().is_some_and(|o| o.scaled_profiles())
+}
+
 /// Whether the open board's firmware reads the LEDPARAM flags nibble the
 /// swapped way (`DeviceSpec::led_flags_swapped`). False with no board open;
 /// the command then fails on the missing device anyway.
@@ -514,9 +574,10 @@ pub fn set_led_param(state: tauri::State<AppState>, param: LedParam) -> Result<(
 
 #[tauri::command(async)]
 pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
+    let scaled = scaled_profiles(&state);
     with_open(&state, |t, fc| {
         let reply = t.roundtrip(need(fc)?.get_profile, &[], Checksum::Bit7)?;
-        Ok(reply[1])
+        Ok(crate::protocol::yc500_profile_from_slot(scaled, reply[1]))
     })
 }
 
@@ -541,6 +602,7 @@ pub fn get_screen_version(state: tauri::State<AppState>) -> Result<Option<u16>, 
 #[tauri::command(async)]
 pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), String> {
     write_gap(&state, SETTING_GAP);
+    let profile = crate::protocol::yc500_profile_slot(scaled_profiles(&state), profile, 0);
     with_writable(&state, |t, fc| {
         let fc = need(fc)?;
         let pkt = crate::protocol::packet(fc.set_profile, &[profile], Checksum::Bit7);
@@ -563,11 +625,15 @@ pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), Str
 }
 
 /// 512-byte matrix: 128 slots × 4 bytes, read as 8 raw pages. gen2 payloads
-/// carry a 0xFF sentinel and put the page a byte later.
+/// carry a 0xFF sentinel and put the page a byte later. `profile` is the
+/// wire value: on yc500 magnetic boards the caller has already folded the
+/// sub-layer in (`protocol::yc500_profile_slot`); on gen2 it rides in the
+/// payload's fourth byte and the Fn layer has none.
 fn read_matrix(
     t: &Transport,
     fc: &'static FamilyCmds,
     profile: u8,
+    sublayer: u8,
     fn_layer: bool,
 ) -> Result<Vec<u8>, HidError> {
     let mut matrix = Vec::with_capacity(512);
@@ -575,7 +641,8 @@ fn read_matrix(
         let (opcode, payload): (u8, Vec<u8>) = match (fc.name == "gen2", fn_layer) {
             (true, false) => (
                 fc.get_keymatrix,
-                crate::protocol::gen2::keymatrix_read_payload(profile, page).to_vec(),
+                crate::protocol::gen2::keymatrix_layer_read_payload(profile, page, sublayer)
+                    .to_vec(),
             ),
             (true, true) => (
                 cmd::GET_FN,
@@ -593,6 +660,7 @@ fn read_matrix(
 fn key_write_packet(
     fc: &'static FamilyCmds,
     profile: u8,
+    sublayer: u8,
     slot: u8,
     value: [u8; 4],
     fn_layer: bool,
@@ -601,7 +669,7 @@ fn key_write_packet(
         return Ok(if fn_layer {
             crate::protocol::gen2::set_fn_key_packet(profile, slot, value)
         } else {
-            crate::protocol::gen2::set_key_packet(profile, slot, value)
+            crate::protocol::gen2::set_layer_key_packet(profile, slot, sublayer, value)
         });
     }
     let opcode = if fn_layer {
@@ -623,12 +691,32 @@ pub fn build_id() -> String {
 
 #[tauri::command(async)]
 pub fn read_keymap(state: tauri::State<AppState>, profile: u8) -> Result<Vec<u8>, String> {
-    with_open(&state, |t, fc| read_matrix(t, need(fc)?, profile, false))
+    let profile = crate::protocol::yc500_profile_slot(scaled_profiles(&state), profile, 0);
+    with_open(&state, |t, fc| read_matrix(t, need(fc)?, profile, 0, false))
+}
+
+/// One of the four keymap sub-layers of a profile. Sub-layer 0 is the
+/// keymap; 1..3 hold the actions of dynamic-keystroke, mod-tap and toggle
+/// keys on magnetic boards.
+#[tauri::command(async)]
+pub fn read_keymap_layer(
+    state: tauri::State<AppState>,
+    profile: u8,
+    sublayer: u8,
+) -> Result<Vec<u8>, String> {
+    if sublayer > 3 {
+        return Err("sub-layer out of range (0..3)".into());
+    }
+    let scaled = scaled_profiles(&state);
+    let profile = crate::protocol::yc500_profile_slot(scaled, profile, sublayer);
+    with_open(&state, |t, fc| {
+        read_matrix(t, need(fc)?, profile, sublayer, false)
+    })
 }
 
 #[tauri::command(async)]
 pub fn read_fn_keymap(state: tauri::State<AppState>, layer: u8) -> Result<Vec<u8>, String> {
-    with_open(&state, |t, fc| read_matrix(t, need(fc)?, layer, true))
+    with_open(&state, |t, fc| read_matrix(t, need(fc)?, layer, 0, true))
 }
 
 /// One slot: [op, profile, slot, 0.., ck7, value×4].
@@ -640,11 +728,47 @@ pub fn set_key(
     value: [u8; 4],
     fn_layer: bool,
 ) -> Result<(), String> {
+    set_key_layer(state, profile, 0, slot, value, fn_layer)
+}
+
+/// One slot in one keymap sub-layer. Sub-layers past 0 exist only on
+/// magnetic boards; the Fn layer has none.
+#[tauri::command(async)]
+pub fn set_key_layer(
+    state: tauri::State<AppState>,
+    profile: u8,
+    sublayer: u8,
+    slot: u8,
+    value: [u8; 4],
+    fn_layer: bool,
+) -> Result<(), String> {
+    if sublayer > 3 || (sublayer > 0 && fn_layer) {
+        return Err("sub-layer out of range".into());
+    }
+    if sublayer > 0 {
+        let inner = state.inner.lock();
+        let open = inner.open.as_ref().ok_or("no device connected")?;
+        if !matches!(
+            switch_access(&open.spec, open.revision, false),
+            SwitchAccess::Write | SwitchAccess::Global
+        ) {
+            return Err(format!(
+                "{} has no keymap sub-layers sharkfin can write",
+                open.spec.label()
+            ));
+        }
+    }
     key_gap(&state);
+    let wire_profile = if fn_layer {
+        profile
+    } else {
+        crate::protocol::yc500_profile_slot(scaled_profiles(&state), profile, sublayer)
+    };
     with_writable(&state, |t, fc| {
         t.send(&key_write_packet(
             need(fc)?,
-            profile,
+            wire_profile,
+            sublayer,
             slot,
             value,
             fn_layer,
@@ -1073,69 +1197,156 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
     out
 }
 
-/// Magnetic-switch settings for every slot: the mode column and the five
-/// travel columns, raw pages assembled into millimetres.
+/// What the open board's switch columns look like, and whether they may be
+/// read at all.
+fn hall_format(state: &tauri::State<AppState>) -> Result<hall::Format, String> {
+    let inner = state.inner.lock();
+    let open = inner.open.as_ref().ok_or("no device connected")?;
+    if !open.spec.hall_reads(open.revision) {
+        return Err(format!(
+            "{} has no magnetic switches sharkfin can read",
+            open.spec.label()
+        ));
+    }
+    hall::Format::for_family(&open.spec.family)
+        .ok_or_else(|| "no switch column format for this family".to_string())
+}
+
+/// Magnetic-switch settings for every slot: the mode column, the travel
+/// columns and the per-kind columns, raw pages assembled into millimetres.
 #[tauri::command(async)]
 pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSettings, String> {
-    {
-        let inner = state.inner.lock();
-        let spec = &inner.open.as_ref().ok_or("no device connected")?.spec;
-        if !spec.hall_reads() {
-            return Err(format!(
-                "{} has no magnetic switches sharkfin can read",
-                spec.label()
-            ));
-        }
-    }
+    let f = hall_format(&state)?;
     with_open(&state, |t, _| {
         let column = |subop: u8| -> Result<Vec<u8>, HidError> {
             let mut out = Vec::with_capacity(256);
-            for page in 0..hall::get_pages(subop) {
+            for page in 0..f.get_pages(subop) {
                 out.extend_from_slice(&t.read_raw_page(
                     hall::GET,
-                    &hall::get_payload(subop, page),
+                    &f.get_payload(subop, page),
                     Checksum::Bit7,
                 )?);
             }
             Ok(out)
         };
-        let mode = column(hall::MODE)?;
-        let travel = hall::decode_wide(&column(hall::TRAVEL)?);
-        let lift = hall::decode_wide(&column(hall::LIFT)?);
-        let rt_press = hall::decode_wide(&column(hall::RT_PRESS)?);
-        let rt_lift = hall::decode_wide(&column(hall::RT_LIFT)?);
-        let dead = hall::decode_wide(&column(hall::DEAD_BOTTOM)?);
-        Ok(hall::assemble(
-            &mode, &travel, &lift, &rt_press, &rt_lift, &dead,
-        ))
+        let mut columns = Vec::new();
+        for &subop in hall::READ_COLUMNS.iter() {
+            columns.push((subop, f.decode(subop, &column(subop)?)));
+        }
+        // Sub-op 10: four blocks of one byte a slot, two pages a block.
+        let mut dks_all = Vec::with_capacity(4 * f.slots());
+        for block in 0..4u8 {
+            let mut raw = Vec::with_capacity(128);
+            for page in [2 * block, 2 * block + 1] {
+                raw.extend_from_slice(&t.read_raw_page(
+                    hall::GET,
+                    &f.get_payload(hall::DKS_ACTIONS_ALL, page),
+                    Checksum::Bit7,
+                )?);
+            }
+            dks_all.extend_from_slice(&raw[..f.slots()]);
+        }
+        Ok(hall::assemble(f, &columns, &dks_all))
     })
 }
 
-fn require_hall_writes(state: &tauri::State<AppState>) -> Result<(), String> {
+fn require_hall_writes(state: &tauri::State<AppState>) -> Result<hall::Format, String> {
     let inner = state.inner.lock();
-    let spec = &inner.open.as_ref().ok_or("no device connected")?.spec;
-    if !spec.hall_writes() {
+    let open = inner.open.as_ref().ok_or("no device connected")?;
+    if !open.spec.hall_writes(open.revision) {
         return Err(format!(
             "sharkfin has not read {}'s firmware for its switch settings, so it will not write them",
-            spec.label()
+            open.spec.label()
         ));
     }
-    Ok(())
+    hall::Format::for_family(&open.spec.family)
+        .ok_or_else(|| "no switch column format for this family".to_string())
 }
 
-/// One key's switch settings. Six single-slot packets, the last one flagged
-/// so the firmware saves the block and applies it; that save is a flash
-/// erase and program, so it takes the flash cooldown.
+/// One key's switch settings: one packet a column, the last one flagged so
+/// the firmware saves the block and applies it; that save is a flash erase
+/// and program, so it takes the flash cooldown. A dynamic-keystroke,
+/// mod-tap or snap key gets its extra columns after the plain six. The
+/// sub-layer keymap entries those kinds act on are written separately
+/// (`set_key_layer`).
 #[tauri::command(async)]
 pub fn set_switch_key(state: tauri::State<AppState>, key: hall::KeySwitch) -> Result<(), String> {
-    require_hall_writes(&state)?;
+    set_switch_keys(state, vec![key])
+}
+
+/// Several keys in one visit, a flash settle between them: a snap pair
+/// needs both keys to carry each other's slot before either works.
+#[tauri::command(async)]
+pub fn set_switch_keys(
+    state: tauri::State<AppState>,
+    keys: Vec<hall::KeySwitch>,
+) -> Result<(), String> {
+    let f = require_hall_writes(&state)?;
+    if keys.is_empty() || keys.len() > 2 {
+        return Err("one or two keys at a time".into());
+    }
+    if keys
+        .iter()
+        .any(|k| k.kind == hall::KIND_SNAP && usize::from(k.snap_partner) >= f.slots())
+    {
+        return Err("snap partner out of range".into());
+    }
+    flash_cooldown(&state);
+    let out = with_writable(&state, |t, _| {
+        for key in &keys {
+            let cols = hall::columns_for(key.kind);
+            let n = cols.len();
+            for (i, &subop) in cols.iter().enumerate() {
+                let last = i + 1 == n;
+                let pkt = if subop == hall::DKS_ACTIONS {
+                    f.set_dks_actions(key.slot, last, key.dks_actions)
+                } else {
+                    f.set_one(subop, key.slot, last, key.wire(f, subop))
+                }
+                .ok_or_else(|| HidError::Protocol("slot out of range".into()))?;
+                t.send(&pkt)?;
+            }
+            std::thread::sleep(FLASH_SETTLE);
+        }
+        Ok(())
+    });
+    stamp_write(&state);
+    out
+}
+
+/// The same plain settings on every key. Six columns in bulk pages, the
+/// final page of the final column flagged. Keys carrying an advanced kind
+/// keep it: the mode column is written per slot from what was read.
+#[tauri::command(async)]
+pub fn set_switches_all(
+    state: tauri::State<AppState>,
+    key: hall::KeySwitch,
+    modes: Vec<u8>,
+) -> Result<(), String> {
+    let f = require_hall_writes(&state)?;
     flash_cooldown(&state);
     let out = with_writable(&state, |t, _| {
         let n = hall::WRITE_COLUMNS.len();
         for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
-            let pkt = hall::set_one(subop, key.slot, i + 1 == n, key.wire(subop))
-                .ok_or_else(|| HidError::Protocol("slot out of range".into()))?;
-            t.send(&pkt)?;
+            let values: Vec<u16> = (0..f.slots())
+                .map(|s| {
+                    if subop == hall::MODE {
+                        let kind = modes.get(s).copied().unwrap_or(0) & 0x7F;
+                        let rt = if key.rapid_trigger {
+                            hall::MODE_RAPID_TRIGGER
+                        } else {
+                            0
+                        };
+                        u16::from(kind | rt)
+                    } else {
+                        key.wire(f, subop)
+                    }
+                })
+                .collect();
+            for pkt in f.set_all(subop, &values, i + 1 == n) {
+                t.send(&pkt)?;
+                std::thread::sleep(FLASH_PAGE_GAP);
+            }
         }
         std::thread::sleep(FLASH_SETTLE);
         Ok(())
@@ -1144,21 +1355,77 @@ pub fn set_switch_key(state: tauri::State<AppState>, key: hall::KeySwitch) -> Re
     out
 }
 
-/// The same settings on every key. Six columns in bulk pages, the final
-/// page of the final column flagged.
+/// yc500 only: which evaluator table the board is on, 0..2 built in, 3 the
+/// columns. `None` on a board that does not answer `0x9D`.
 #[tauri::command(async)]
-pub fn set_switches_all(state: tauri::State<AppState>, key: hall::KeySwitch) -> Result<(), String> {
-    require_hall_writes(&state)?;
+pub fn get_switch_preset(state: tauri::State<AppState>) -> Result<Option<u8>, String> {
+    {
+        let inner = state.inner.lock();
+        let open = inner.open.as_ref().ok_or("no device connected")?;
+        if open.spec.family != "yc500" || !open.spec.magnetic {
+            return Ok(None);
+        }
+    }
+    with_open(&state, |t, _| {
+        let reply = t.roundtrip(hall::GET_PRESET, &[], Checksum::Bit7)?;
+        Ok((reply[1] <= hall::PRESET_CUSTOM).then_some(reply[1]))
+    })
+}
+
+/// yc500 only: `0x1D [preset]`. The handler stores the byte and re-runs
+/// the apply; nothing lands in flash, so no cooldown.
+#[tauri::command(async)]
+pub fn set_switch_preset(state: tauri::State<AppState>, preset: u8) -> Result<(), String> {
+    {
+        let inner = state.inner.lock();
+        let open = inner.open.as_ref().ok_or("no device connected")?;
+        let access = switch_access(&open.spec, open.revision, false);
+        if open.spec.family != "yc500"
+            || !matches!(access, SwitchAccess::Write | SwitchAccess::Global)
+        {
+            return Err(format!("{} has no switch presets", open.spec.label()));
+        }
+    }
+    if preset > hall::PRESET_CUSTOM {
+        return Err("preset out of range (0..3)".into());
+    }
+    write_gap(&state, SETTING_GAP);
+    with_writable(&state, |t, _| {
+        t.send(&crate::protocol::packet(
+            hall::SET_PRESET,
+            &[preset],
+            Checksum::Bit7,
+        ))?;
+        Ok(())
+    })
+}
+
+/// yc500 boards below firmware 2.00: the one record their firmware takes,
+/// for every key or one slot. The board saves it to flash and switches to
+/// the custom preset; it cannot report the result, so the page keeps its
+/// own copy.
+#[tauri::command(async)]
+pub fn set_switches_global(
+    state: tauri::State<AppState>,
+    key: hall::KeySwitch,
+    all: bool,
+) -> Result<(), String> {
+    {
+        let inner = state.inner.lock();
+        let open = inner.open.as_ref().ok_or("no device connected")?;
+        if switch_access(&open.spec, open.revision, false) != SwitchAccess::Global {
+            return Err(format!(
+                "{} takes its switch settings per key, not as one record",
+                open.spec.label()
+            ));
+        }
+    }
+    if usize::from(key.slot) >= hall::Format::Yc500.slots() {
+        return Err("slot out of range".into());
+    }
     flash_cooldown(&state);
     let out = with_writable(&state, |t, _| {
-        let n = hall::WRITE_COLUMNS.len();
-        for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
-            let values = [key.wire(subop); hall::SLOTS];
-            for pkt in hall::set_all(subop, &values, i + 1 == n) {
-                t.send(&pkt)?;
-                std::thread::sleep(FLASH_PAGE_GAP);
-            }
-        }
+        t.send(&hall::global_packet(&key, all))?;
         std::thread::sleep(FLASH_SETTLE);
         Ok(())
     });
@@ -1245,14 +1512,21 @@ pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             .map(|o| o.spec.clone())
             .ok_or("no device connected")?
     };
+    let scaled = spec.family == "yc500" && spec.magnetic;
     let cfg = with_open(&state, |t, fc| {
         let fc = need(fc)?;
         let n = spec.profiles.clamp(1, MAX_PROFILES);
         let mut profiles = Vec::new();
         let mut fn_layers = Vec::new();
         for p in 0..n {
-            profiles.push(read_matrix(t, fc, p, false)?);
-            fn_layers.push(read_matrix(t, fc, p, true)?);
+            profiles.push(read_matrix(
+                t,
+                fc,
+                crate::protocol::yc500_profile_slot(scaled, p, 0),
+                0,
+                false,
+            )?);
+            fn_layers.push(read_matrix(t, fc, p, 0, true)?);
         }
         let led = t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)?;
         let deb = t.roundtrip(fc.get_debounce, &[], Checksum::Bit7)?;
@@ -1316,6 +1590,7 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             spec.id
         ));
     }
+    let scaled = spec.family == "yc500" && spec.magnetic;
     let out = with_writable(&state, |t, fc| {
         let fc = need(fc)?;
         let mut keys_written = 0usize;
@@ -1327,11 +1602,16 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
                         target.len()
                     )));
                 }
-                let current = read_matrix(t, fc, p as u8, fn_layer)?;
+                let wire = if fn_layer {
+                    p as u8
+                } else {
+                    crate::protocol::yc500_profile_slot(scaled, p as u8, 0)
+                };
+                let current = read_matrix(t, fc, wire, 0, fn_layer)?;
                 for slot in 0..128usize {
                     let want: [u8; 4] = target[slot * 4..slot * 4 + 4].try_into().unwrap();
                     if current[slot * 4..slot * 4 + 4] != want {
-                        t.send(&key_write_packet(fc, p as u8, slot as u8, want, fn_layer)?)?;
+                        t.send(&key_write_packet(fc, wire, 0, slot as u8, want, fn_layer)?)?;
                         keys_written += 1;
                         std::thread::sleep(KEY_GAP);
                     }

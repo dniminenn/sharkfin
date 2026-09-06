@@ -389,65 +389,172 @@ above is.
 
 ## Magnetic switches [FW]
 
-gen2, ry5088 lineage. Read out of three images: 2268 X65HE `v309`
-(handlers `0xE5` at `0x08006414`, `0x65` at `0x08006770`, save path
-`0x0800d954`, apply `0x0800dc1c`), 2116 TITAN68HE `v304` and 3708 SK61HE
-`v507`, which match in shape. The vendor's driver builds the same packets.
+Two column formats share the opcodes and packet shapes. Which one a board
+has follows its family; whether it has columns at all follows its
+firmware.
 
-Settings are columns of 128 slots, one column per sub-op, indexed like the
-keymap. Values are hundredths of a millimetre: u16 little-endian for the
-travel columns, one byte for the rest.
+| | gen2 | yc500 |
+|---|---|---|
+| images read | 2268 X65HE `v309`, 2116 TITAN68HE `v304`, 3708 SK61HE `v507` | 1618 ER75 `v200`, 1466 K85 `v107` |
+| columns | from every image | from firmware 2.00 (`0x80` reply `02 00`); 1.07 has no `0x65` or `0xE5` |
+| slots a column | 128 | 126 (21 rows of 6) |
+| travel columns | u16 little-endian, hundredths of a millimetre | one byte, tenths, offset by one (below) |
+| write evidenced for | `ry5088_` lineage | `yc3121_` lineage |
+| profiles on the wire | as is | `profile * 4 + sublayer` (below) |
+
+Settings are columns, one per sub-op, indexed like the keymap.
 
 | | layout |
 |---|---|
-| read `0xE5` | `[subop, 1, page]`, Bit7; reply is the raw page, no echo. u16 columns 4 pages of 32 values, byte columns 2 pages |
+| read `0xE5` | `[subop, 1, page]`, Bit7; reply is the raw page, no echo. u16 columns 4 pages of 32 values, byte columns 2 pages of 64 |
 | write one `0x65` | `[subop, 0, slot, last]`, Bit7, value at 8 (lo) and 9 (hi) |
-| write all `0x65` | `[subop, 1, page, last]`, Bit7, 56 bytes at 8: 28 u16 a page over pages 0..4 (page 4 holds 16), or 56 bytes over pages 0..2 (page 2 holds 16) |
+| write all `0x65` | `[subop, 1, page, last]`, Bit7, 56 bytes at 8: 28 u16 a page over pages 0..4 (page 4 holds 16), or 56 bytes over pages 0..2 (page 2 holds 16 on gen2, 14 on yc500) |
 
-| sub-op | column | width |
-|---|---|---|
-| 0 | actuation travel | u16 |
-| 1 | release travel | u16 |
-| 2 | rapid trigger press step | u16 |
-| 3 | rapid trigger release step | u16 |
-| 4 | dynamic keystroke start | u16 |
-| 5 | mod-tap hold time, 10 ms units | u8 |
-| 6 | bottom dead zone | u16 |
-| 7 | key mode: bit 7 rapid trigger on; bits 0..6 = 0 normal, 2 dynamic keystroke, 3 mod-tap, 4 and 5 toggle, 7 snap | u8 |
-| 8 | dynamic keystroke actions, four bytes, write one slot only | 4 x u8 |
-| 9 | snap partner slot | u8 |
-| 10 | every key's dynamic keystroke actions, read only, 8 pages | 4 x 128 u8 |
-| 251 | top dead zone, 3708 only | u8 |
-| 252 | switch type, values 0..5, anything else stored as 0 | u8 |
-| 254 | live press travel, read only | u16 |
+| sub-op | column | gen2 | yc500 (1618 offset from `0x20c9c`) |
+|---|---|---|---|
+| 0 | actuation travel | u16 | `0x82d` |
+| 1 | release travel | u16 | `0x8ab` |
+| 2 | rapid trigger press step | u16 | `0x929` |
+| 3 | rapid trigger release step | u16 | `0x9a7` |
+| 4 | dynamic keystroke first point | u16 | `0xa25` |
+| 5 | mod-tap hold time, 10 ms units | u8 | `0xc9b` |
+| 6 | bottom dead zone | u16 | `0xd19` |
+| 7 | key mode: bit 7 rapid trigger; bits 0..6 the kind (below) | u8 | `0x7af` |
+| 8 | dynamic keystroke actions, four bytes, write one slot only | 4 x u8 | `0xaa3` + n*126 |
+| 9 | snap partner slot | u8 | `0xd97` |
+| 10 | every key's dynamic keystroke actions, read only, 8 pages | 4 x 128 u8 | 4 x 126 u8, two pages a block |
+| 251 | top dead zone, 3708 only | u8 | absent |
+| 252 | switch type, values 0..5, anything else stored as 0 | u8 | absent |
+| 254 | live press travel, read only | u16 | absent |
 
-The handler checks nothing else. A bulk page past the column or a slot past
-127 writes into the neighbouring column, so the bounds are the host's job.
-`last` set on a packet raises a flag; a deferred routine then erases the
-block at `0x08033800 + profile << 12` and the page after it, programs
-4096 bytes from the mode column through a `55 AA` marker, and re-runs the
-apply. Packets without `last` sit in RAM unapplied and unsaved. The apply
-clamps: travel below 10 becomes 15, a rapid-trigger step of 0 becomes 1,
-a bottom dead zone above 340 becomes 30. Defaults are 200 travel, 280
-release, 50 for both steps, 30 dead zone.
+| kind | meaning |
+|---|---|
+| 0 | plain |
+| 2 | dynamic keystroke |
+| 3 | mod-tap: sub-layer 0 held, sub-layer 1 tapped |
+| 4 | toggle |
+| 5 | toggle, repeating |
+| 7 | snap |
+
+Neither handler checks anything else. A bulk page past the column or a
+slot past the end writes into the neighbouring column, so the bounds are
+the host's job. `last` set on a packet raises a flag; a deferred routine
+saves the block to flash and re-runs the apply. Packets without `last`
+sit in RAM unapplied and unsaved.
+
+### gen2
+
+2268 handlers: `0xE5` at `0x08006414`, `0x65` at `0x08006770`, save
+`0x0800d954`, apply `0x0800dc1c`. 2116 and 3708 match in shape. The save
+erases `0x08033800 + profile << 12` and the page after it, programs 4096
+bytes from the mode column through a `55 AA` marker, and re-applies. The
+apply clamps: travel below 10 becomes 15, a rapid-trigger step of 0
+becomes 1, a bottom dead zone above 340 becomes 30. Defaults are 200
+travel, 280 release, 50 for both steps and the first point, 30 dead zone,
+0 mod-tap time, 255 snap partner.
 
 `0xE6` (the vendor's precision read) is not handled by any of the three
 images; the reply is the echoed request. The vendor's driver falls back to
 0.01 mm for such boards, which is what the firmware uses.
+
+#### Keymap sub-layers
+
+Each profile holds four 512-byte keymaps. Sub-layer 0 is the keymap; the
+kinds above act on 1..3. The RAM copy is `base + sublayer * 512 + slot *
+4` (keycode emit `0x0800f9d0`); flash is `0x08028800 + profile * 2048 +
+sublayer * 512`.
+
+| | layout |
+|---|---|
+| write one `0x0A` | `[profile, slot, 0, 0, last, sublayer]`, Bit7, entry at 8..11. Handler `0x08006f10`: byte 6 shifted by 9 picks the block, byte 5 sets the commit flag |
+| write all `0x0A` | `[profile, 0xFF, page, len, last, sublayer]` + 56 bytes |
+| read `0x8A` | `[profile, 0xFF, page, sublayer]`; handler `0x08010d08` reads `profile << 11 | sublayer << 9` out of flash |
+
+#### Dynamic keystroke (2268 engine `0x0800c8a4..0x0800cccc`)
+
+Two points: the first is sub-op 4, the second sub-op 0. A live travel of
+320 counts as the second point when the column says more. Four events, in
+order: A press past the first point, B press past the second, C release
+past the second, D release past the first. Each of the four action bytes
+belongs to a sub-layer and holds one 2-bit cell per event, cell 0 for A.
+At an event the engine reads that event's cell and the one before it:
+
+| cell value | at its own event | at the next event |
+|---|---|---|
+| 0 | nothing | |
+| 1 | press, then release after 1..10 ticks (a tap) | |
+| 2 | press | release |
+| 3 | press | stays down if this cell is 3 too, else released |
+
+D clears every hold. A hold from A to C is therefore `3, 2, 0, 0`; a tap
+at B is `0, 1, 0, 0`. The key pressed is the sub-layer's entry for the
+slot.
+
+#### Mod-tap (2268 `0x0800d190`, tick `0x0800ee82`)
+
+Sub-layer 0 is the hold, sub-layer 1 the tap. The tick counts while the
+key is down and compares against the mod-tap byte doubled
+(`0x0800eeaa`), so the byte is 10 ms at the 5 ms tick; released before
+that, the tap key is pressed and released. Movement under 0.30 mm is
+ignored.
+
+#### Toggle (2268 `0x0800e934`, `0x0800ea70`, tick `0x0800f4fe`)
+
+A press latches sub-layer 0's key down, the next press releases it. Held
+past 60 ticks the key acts as plain and releases with the finger. Kind 5
+adds a repeat: the latched key is pressed and released every 8..17 ticks
+(`0x0800f664`).
+
+#### Snap (2268 `0x0800e228`)
+
+The partner slot is stored as row and column (`slot / 6`, `slot % 6`, apply
+`0x0800dd7a`). Pressing a snap key releases its partner if the partner is
+down; releasing it presses the partner again if the partner is still held.
+Both keys carry kind 7 and each other's slot.
 
 Never sent: `0x1C` and `0x1E` are sensor calibration. On, they zero the
 stored travel tables in RAM; off, they save them to flash, so on-then-off
 without pressing every key commits zeroed tables. `0x7F 55 AA 55 AA` erases
 the keymap block and the switch-settings block and enters the bootloader.
 
-yc500 magnetic boards are not covered. Two of their images differ from each
-other: the K85 (1466 `v107`) has no per-key opcodes at all, only a global
-configuration on `0x1A`/`0x1F` and presets on `0x1D`/`0x9D`; the ER75
-(1618 `v200`) has `0x65`/`0xE5` with byte columns of 126 and no bounds
-checks, and `0xAC` there sets a pending-flash bit whose consumer was not
-located. The vendor's driver sends yc500 travel as tenths of a millimetre
-with fixed offsets that the handlers do not show, so the arithmetic sits in
-its apply routine and is unverified.
+### yc500
+
+1618 handlers: `0x65` at `0x01017de6`, `0xE5` at `0x01018152`, save
+`0x01014984`, apply `0x010144bc`, evaluator `0x01014e9c`. Columns are
+bytes at the offsets in the table above, 126 slots each. `0xE5` copies
+64 bytes from `column + page * 64`, so the second page carries two bytes
+of the next column. `last` programs 2048 bytes from the mode column into
+`0x01080000 + (profile >> 2) * 0x5000`, re-runs the apply and forces
+preset 3.
+
+The apply copies bytes unchanged. The evaluator compares them with live
+travel in tenths of a millimetre from the top:
+
+| column | fires when | vendor shows |
+|---|---|---|
+| actuation, first point, rapid trigger steps | live travel exceeds the byte (`0x01015244`, `0x10152ee`) | `(b + 1) / 10` mm; first point `(b + 2) / 10` |
+| release | live travel at or below the byte (`0x1015374`) | `(b + 1) / 10` |
+| bottom dead zone | live travel exceeds the byte counts as bottomed out (`0x10152b0`) | `(40 - (b + 1)) / 10` mm from the bottom; the 40 is the vendor's, not the firmware's |
+
+Defaults with no saved block (`0x010144fe`): 18 travel, 28 release, 2
+for both steps and the first point, 33 dead zone, 30 mod-tap, 255 snap
+partner. Rapid-trigger steps below 2 are read as 2 (`0x01014f80`).
+
+| opcode | |
+|---|---|
+| `0x1D [preset]` | 0 comfort (18/28), 1 sensitive (3/18), 2 gaming (3, rapid trigger 3/3), 3 the columns. Tables at `0x01014ee4..0x01014f00`. Stored and re-applied, not saved |
+| `0x9D` | reply `[9D, preset, 0 x6]` |
+| `0x1A` | one record for every key (byte 5 set) or one slot (byte 6). Handler `0x01017d76`, apply `0x010146f2`: 3 mode, 4 travel, 8 release, 9 and 10 steps, 11 first point, 12..15 actions, 16 mod-tap, 25 dead zone. Bytes 1 and 2 are stored and never read. For every key, the mode replaces plain keys and sets only the rapid-trigger bit on dynamic ones. Saves and forces preset 3 |
+| `0x9F` | reply of the eight bytes `0x1F` set; unrelated to travel |
+
+1466 (K85 `v107`) has `0x1A`, `0x1D`, `0x9D` and the same apply shape
+(`0x01010ad4`) with no `0x65` or `0xE5`, so its settings can be written
+and not read. Unknown opcodes are dropped.
+
+Profiles: `0x05`, `0x09`, `0x13` and `0x89` take `profile * 4 + sublayer`
+on every magnetic yc500 board (`0x89` reads `base + byte1 * 512`, the
+switch block is `slot >> 2`), and `0x85` answers the same number. The Fn
+layer opcodes take the profile as is.
 
 ## Destructive opcodes
 

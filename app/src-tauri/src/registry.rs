@@ -165,17 +165,42 @@ impl DeviceSpec {
         KNOWN_FAMILIES.contains(&self.family.as_str())
     }
 
+    /// The first yc500 firmware with per-key switch columns. The vendor's
+    /// driver gates on the same number; the K85 at 1.07 has no `0x65` at
+    /// all, the ER75 at 2.00 has the columns.
+    pub const YC500_HALL_REVISION: u16 = 0x0200;
+
     /// Whether the magnetic-switch settings can be read: a magnetic gen2
-    /// board. The read is a raw page copy with no side effects.
-    pub fn hall_reads(&self) -> bool {
-        self.magnetic && self.family == "gen2"
+    /// board, or a magnetic yc500 board whose firmware is 2.00 or later.
+    /// The read is a raw page copy with no side effects. `revision` is the
+    /// `0x80` reply as a u16, None when the board did not answer.
+    pub fn hall_reads(&self, revision: Option<u16>) -> bool {
+        self.magnetic
+            && match self.family.as_str() {
+                "gen2" => true,
+                "yc500" => revision.is_some_and(|r| r >= Self::YC500_HALL_REVISION),
+                _ => false,
+            }
     }
 
-    /// Whether they can be written: only the ry5088 lineage, whose handler
-    /// and save path were read out of three of its images. The other gen2
+    /// Whether they can be written: the lineages whose handler and save
+    /// path were read out of their own images (ry5088 on gen2, three
+    /// images; yc3121 on yc500, the ER75's 2.00 image). The other gen2
     /// lineages share the family, not the evidence.
-    pub fn hall_writes(&self) -> bool {
-        self.hall_reads() && self.internal_name.starts_with("ry5088_")
+    pub fn hall_writes(&self, revision: Option<u16>) -> bool {
+        self.hall_reads(revision)
+            && (self.internal_name.starts_with("ry5088_")
+                || self.internal_name.starts_with("yc3121_"))
+    }
+
+    /// A yc500 magnetic board below 2.00 keeps one board-wide record
+    /// (`0x1A`) instead of columns. Read out of the K85's 1.07 image; the
+    /// ER75's 2.00 image has the same handler beside its columns.
+    pub fn hall_global(&self, revision: Option<u16>) -> bool {
+        self.magnetic
+            && self.family == "yc500"
+            && self.internal_name.starts_with("yc3121_")
+            && revision.is_some_and(|r| r < Self::YC500_HALL_REVISION)
     }
 
     /// What drawing is allowed on this board's display, or `None` when the

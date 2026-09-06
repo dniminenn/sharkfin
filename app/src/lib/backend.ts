@@ -70,6 +70,11 @@ export interface ConnectedDevice {
   deviceId: number;
   spec: DeviceSpec;
   readOnly: boolean;
+  /** What the Switches page may do: read the columns, write them, or write
+   * the one board-wide record of a yc500 board below firmware 2.00. */
+  switches: SwitchAccess;
+  /** Firmware revision from 0x80, e.g. 0x0200 for 2.00; null when unanswered. */
+  revision: number | null;
   /** Cable, or the 2.4 GHz receiver's relay. Factory reset and display pictures need the cable. */
   link: "usb" | "receiver";
   /** Percent, receiver link only. */
@@ -96,10 +101,13 @@ export interface ScanResult {
   keyboardOffline: boolean;
 }
 
+export type SwitchAccess = "none" | "read" | "write" | "global";
+
 /** One key's magnetic-switch settings, millimetres. */
 export interface KeySwitch {
   slot: number;
-  /** Bits 0..6 of the mode byte; 0 is a plain key. */
+  /** Bits 0..6 of the mode byte: 0 plain, 2 dynamic keystroke, 3 mod-tap,
+   * 4 toggle, 5 repeating toggle, 7 snap. */
   kind: number;
   rapidTrigger: boolean;
   travel: number;
@@ -107,9 +115,18 @@ export interface KeySwitch {
   rtPress: number;
   rtLift: number;
   deadBottom: number;
+  /** Dynamic keystroke: the first point; `travel` is the second. */
+  dksStart: number;
+  /** Dynamic keystroke: one byte per sub-layer, four 2-bit cells, one per travel event. */
+  dksActions: number[];
+  /** Mod-tap: milliseconds held before the hold action fires. */
+  mtTimeMs: number;
+  /** Snap: the partner's slot, 255 for none. */
+  snapPartner: number;
 }
 
 export interface SwitchSettings {
+  format: "gen2" | "yc500";
   unitMm: number;
   keys: KeySwitch[];
 }
@@ -166,7 +183,22 @@ export const scan = () => invoke<ScanResult>("scan");
 export const allowUnregistered = () => invoke<void>("allow_unregistered");
 export const getSwitches = () => invoke<SwitchSettings>("get_switches");
 export const setSwitchKey = (key: KeySwitch) => invoke<void>("set_switch_key", { key });
-export const setSwitchesAll = (key: KeySwitch) => invoke<void>("set_switches_all", { key });
+/** One or two keys in one visit; a snap pair goes through here. */
+export const setSwitchKeys = (keys: KeySwitch[]) => invoke<void>("set_switch_keys", { keys });
+/** The plain settings on every key; `modes` keeps each key's kind as read. */
+export const setSwitchesAll = (key: KeySwitch, modes: number[]) =>
+  invoke<void>("set_switches_all", { key, modes });
+/** yc500 only: 0 comfort, 1 sensitive, 2 gaming, 3 custom; null elsewhere. */
+export const getSwitchPreset = () => invoke<number | null>("get_switch_preset");
+export const setSwitchPreset = (preset: number) => invoke<void>("set_switch_preset", { preset });
+/** yc500 below 2.00: the one record, for every key or the record's slot. */
+export const setSwitchesGlobal = (key: KeySwitch, all: boolean) =>
+  invoke<void>("set_switches_global", { key, all });
+/** One of the four keymap sub-layers of a profile, 512 bytes. */
+export const readKeymapLayer = (profile: number, sublayer: number) =>
+  invoke<number[]>("read_keymap_layer", { profile, sublayer });
+export const setKeyLayer = (profile: number, sublayer: number, slot: number, value: number[]) =>
+  invoke<void>("set_key_layer", { profile, sublayer, slot, value, fnLayer: false });
 /** Version and commit of this build. */
 export const buildId = () => invoke<string>("build_id");
 export const getSettings = () => invoke<DeviceSettings>("get_settings");
