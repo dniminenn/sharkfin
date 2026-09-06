@@ -1,5 +1,10 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.4
+
+**KOODO Solar** is supported (device id 1087), with its picture built in
+from the owner's keymap. Reported in issue #42.
+
 ## What changed in 0.7.3
 
 **Switch writes closed on 23 gen2 boards.** 0.7.1 let boards whose internal
@@ -22,7 +27,7 @@ slower than the vendor app at the same slider position and could not reach
 their fastest. Read out of the X65HE image: the speed byte is a frame
 divider that starts at 0 there, at 1 on yc500.
 
-The registry is 1153 boards, 4 of them confirmed on hardware.
+The registry is 1154 boards, 4 of them confirmed on hardware.
 
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
