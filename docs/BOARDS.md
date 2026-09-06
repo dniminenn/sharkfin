@@ -16,7 +16,7 @@ the board itself; blank means the entry rests on the vendor's data.
 |---|---:|
 | total | 1153 |
 | writable | 1027 |
-| drawn | 317 |
+| drawn | 318 |
 | drawn after confirmation | 686 |
 | confirmed on hardware | 4 |
 
@@ -905,7 +905,7 @@ the board itself; blank means the entry rests on the vendor's data.
 | TITANHUB TITAN60 | 2220 | 3151:5029 | gen2 | yes |  |  |
 | TITANHUB TITAN68HE | 2116 | 3151:5029 | gen2 | yes |  |  |
 | TNT TX108 | 3671 | 38a9:0017 | gen2 | yes | auto |  |
-| Typhoon Ultimate TKL | 2045 | 3151:4015 | yc500 | yes |  |  |
+| Typhoon Ultimate TKL | 2045 | 3151:4015 | yc500 | yes | yes |  |
 | TyphoonUltimateCBKB TYBU987X43 | 1874 | 3151:4015 | unknown |  |  |  |
 | URX(R) Core68HE | 3513 | 3151:5029 | gen2 | yes | auto |  |
 | Veekos Shine60 | 2832 | 3151:5030 | gen2 | yes | auto |  |
