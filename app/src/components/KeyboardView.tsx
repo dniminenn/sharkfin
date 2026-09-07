@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { PopoverAnchor } from "@/components/ui/popover";
 import type { BoardLayout, LayoutKey } from "@/lib/layout-loader";
 import { DISABLED_GLYPH, PASSTHRU_GLYPH } from "@/lib/hid-usages";
 import { t } from "@/lib/i18n";
@@ -40,6 +41,11 @@ interface Props {
   selected: number | null;
   entries: Map<number, number[]>;
   modified: Set<number>;
+  /** A slot that was just written; its cap flashes once. */
+  flash?: number | null;
+  /** Place a popover anchor over the selected key, for a picker that
+   *  opens on the key itself. The Popover root is the caller's. */
+  anchor?: boolean;
   labelFor: (k: LayoutKey, entry: number[] | undefined) => string;
   onSelect: (k: LayoutKey) => void;
 }
@@ -127,6 +133,8 @@ export default function KeyboardView({
   selected,
   entries,
   modified,
+  flash = null,
+  anchor = false,
   labelFor,
   onSelect,
 }: Props) {
@@ -136,6 +144,23 @@ export default function KeyboardView({
     () => layout.keys.filter((k) => k.type !== "knob"),
     [layout],
   );
+  // The anchor sits over the selected key, or over the knob as a whole
+  // when one of its zones is selected.
+  const anchorBox = useMemo(() => {
+    if (!anchor || selected === null) return null;
+    const k = layout.keys.find((k) => k.matrixIndex === selected);
+    if (!k) return null;
+    if (k.type !== "knob") return { x: k.x, y: k.y, w: k.w, h: k.h };
+    const knob = layout.keys.filter((k) => k.type === "knob");
+    const x = Math.min(...knob.map((k) => k.x));
+    const y = Math.min(...knob.map((k) => k.y));
+    return {
+      x,
+      y,
+      w: Math.max(...knob.map((k) => k.x + k.w)) - x,
+      h: Math.max(...knob.map((k) => k.y + k.h)) - y,
+    };
+  }, [anchor, selected, layout]);
   return (
     <div className="w-full" style={{ containerType: "inline-size" }}>
       <div className="keycap-plate mx-auto max-w-[920px] rounded-2xl p-[1.6%]">
@@ -158,6 +183,7 @@ export default function KeyboardView({
                     : `${k.text ?? k.code}: ${describe(labelFor(k, entry))}`
                 }
                 data-selected={!dead && selected === k.matrixIndex}
+                data-flash={!dead && flash === k.matrixIndex}
                 className={`keycap absolute flex items-center justify-center overflow-hidden rounded-[8%] text-[1.15cqw] font-medium leading-none tracking-tight${dead ? " opacity-40" : ""}`}
                 style={{
                   ...ROLE_VARS[role(k)],
@@ -175,6 +201,19 @@ export default function KeyboardView({
             );
           })}
           <Knob layout={layout} selected={selected} onSelect={onSelect} />
+          {anchorBox && (
+            <PopoverAnchor asChild>
+              <div
+                className="pointer-events-none absolute"
+                style={{
+                  left: pct(anchorBox.x, layout.canvas.width),
+                  top: pct(anchorBox.y, layout.canvas.height),
+                  width: pct(anchorBox.w, layout.canvas.width),
+                  height: pct(anchorBox.h, layout.canvas.height),
+                }}
+              />
+            </PopoverAnchor>
+          )}
         </div>
       </div>
     </div>

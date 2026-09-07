@@ -343,6 +343,18 @@
         outline: 2px solid var(--ring);
         outline-offset: 1px;
     }
+    /* A write landed: the cap lights once, then settles. */
+    @keyframes key-flash {
+        0% { filter: brightness(1.9); box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 70%, transparent), 0 2px 3px oklch(0 0 0 / 0.35); }
+        100% { filter: brightness(1); }
+    }
+    .keycap[data-flash="true"] {
+        animation: key-flash 650ms ease-out;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .keycap[data-flash="true"] { animation: none; }
+        .keycap, .knob-ring { transition: none; }
+    }
     .keycap-plate {
         background: linear-gradient(
             180deg,

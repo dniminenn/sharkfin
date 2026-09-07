@@ -1,19 +1,21 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-import { useCallback, useEffect, useMemo, useState } from "react";
+// The plate is the page. One line above it, one line below it; the picker
+// opens on the key you click. Anything about the picture itself lives in
+// the Picture menu.
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { Pencil, RefreshCw } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ChevronDown, Pencil, RefreshCw, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -25,28 +27,15 @@ import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
+import KeyPicker, { rememberRecent } from "@/components/KeyPicker";
 import LayoutEditor from "@/components/LayoutEditor";
 import { useBoardLayout, type BoardLayout, type LayoutKey } from "@/lib/layout-loader";
 import { useBoardProfile } from "@/lib/use-profile";
 import { layoutBundle, type Inference } from "@/lib/layout-infer";
 import { fromLayout, type Draft } from "@/lib/layout-draft";
-import {
-  DISABLED_GLYPH,
-  GROUPS,
-  PASSTHRU_GLYPH,
-  entryLabel,
-  usageLabel,
-  type Assignable,
-} from "@/lib/hid-usages";
+import { DISABLED_GLYPH, PASSTHRU_GLYPH, entryLabel, type Assignable } from "@/lib/hid-usages";
 import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
 import Waiting from "@/components/Waiting";
-
-// Every plain-key usage, for the combo pickers.
-const COMBO_KEYS: { label: string; usage: number }[] = GROUPS.flatMap((g) =>
-  g.items
-    .filter((i) => i.entry[0] === 0 && i.entry[2] !== 0)
-    .map((i) => ({ label: i.label, usage: i.entry[2] })),
-);
 
 const REPO = "https://github.com/dniminenn/sharkfin";
 
@@ -56,6 +45,32 @@ function sliceEntries(matrix: number[]): Map<number, number[]> {
     m.set(slot, matrix.slice(slot * 4, slot * 4 + 4));
   }
   return m;
+}
+
+/** Two choices, one control. */
+function Segmented<T extends string>({
+  value,
+  options,
+  onChange,
+}: {
+  value: T;
+  options: [T, string][];
+  onChange: (v: T) => void;
+}) {
+  return (
+    <div className="flex rounded-lg bg-muted p-[3px] text-sm">
+      {options.map(([v, label]) => (
+        <button
+          key={v}
+          onClick={() => onChange(v)}
+          data-on={value === v}
+          className="rounded-md px-3 py-1 text-muted-foreground transition-colors data-[on=true]:bg-background data-[on=true]:text-foreground data-[on=true]:shadow-sm"
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 export default function KeymapPage({ device }: { device: ConnectedDevice | null }) {
@@ -87,11 +102,8 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
   const [selected, setSelected] = useState<LayoutKey | null>(null);
   const [busy, setBusy] = useState(false);
-  const [combo, setCombo] = useState<{ main: number; extraA: number; extraB: number }>({
-    main: 0,
-    extraA: 0,
-    extraB: 0,
-  });
+  const [flash, setFlash] = useState<number | null>(null);
+  const flashTimer = useRef<number | null>(null);
 
   // Some vendor layouts simply leave keys out: Common68_ZAP68, shared by 33
   // boards, has no Right Ctrl. Those keys exist on the board and answer in
@@ -124,7 +136,6 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   // A selection belongs to the picture it was made on. When the picture
   // changes underneath it, its slot means a different physical key, so
   // writing it would remap something the user never clicked.
-
   useEffect(() => {
     setSelected(null);
   }, [layout]);
@@ -176,22 +187,17 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         next.set(slot, [...a.entry]);
         return next;
       });
-      toast.success(`${selected.text ?? selected.code} → ${a.label}`);
+      rememberRecent(a);
+      // The cap itself says the write landed; the picker closes on it.
+      setSelected(null);
+      setFlash(slot);
+      if (flashTimer.current) window.clearTimeout(flashTimer.current);
+      flashTimer.current = window.setTimeout(() => setFlash(null), 700);
     } catch (e) {
       toast.error(t("Write failed: {e}", { e: String(e) }));
     } finally {
       setBusy(false);
     }
-  };
-
-  const assignCombo = () => {
-    if (!combo.main) return;
-    const entry: Assignable["entry"] = [0, combo.extraA, combo.main, combo.extraB];
-    const label = [combo.extraA, combo.main, combo.extraB]
-      .filter(Boolean)
-      .map(usageLabel)
-      .join("+");
-    return assign({ label, entry });
   };
 
   const answer = (v: "right" | "wrong") => {
@@ -234,6 +240,11 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     setDrawing(false);
   };
 
+  const editPicture = () => {
+    setDraft(fromLayout(layout));
+    setDrawing(true);
+  };
+
   // A confirmed layout stays contributable in later sessions: inference
   // reruns on every connect until the layout ships with slot data, and a
   // shown, unrejected layout means the stored answer was "looks right".
@@ -268,154 +279,167 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   }
 
   const selectedEntry = selected ? entries?.get(selected.matrixIndex!) : undefined;
+  const offSelected = selected && !layout.keys.some((k) => k.matrixIndex === selected.matrixIndex);
 
-  const comboSelect = (
-    field: "main" | "extraA" | "extraB",
-    placeholder: string,
-    optional: boolean,
-  ) => (
-    <Select
-      value={combo[field] ? String(combo[field]) : ""}
-      onValueChange={(v) => setCombo((c) => ({ ...c, [field]: Number(v) }))}
-    >
-      <SelectTrigger className="w-32">
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {optional && <SelectItem value="0">{t("none")}</SelectItem>}
-        {COMBO_KEYS.map((k) => (
-          <SelectItem key={`${field}-${k.usage}`} value={String(k.usage)}>
-            {k.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+  const pictureNote = layout.grid
+    ? t("No picture yet, so every key is a numbered slot.")
+    : inference?.layoutName === "kle"
+      ? t("Your drawing.")
+      : inference
+        ? t("Picture matched against this board.")
+        : t("Built-in picture.");
+
+  const picker = selected && (
+    <PopoverContent align="center" side="bottom" sideOffset={10} className="w-auto p-3">
+      <KeyPicker
+        name={selected.text ?? selected.code}
+        current={selectedEntry}
+        fnLayer={layer === "fn"}
+        canReset={defaults.has(selected.matrixIndex!)}
+        disabled={busy || pending || switching}
+        onAssign={assign}
+        onReset={resetKey}
+      />
+    </PopoverContent>
   );
 
   return (
-    <div className="mx-auto max-w-5xl space-y-4 p-6">
-      <div className="flex items-center justify-between">
+    <div className="mx-auto max-w-5xl space-y-5 p-6">
+      <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">{t("Keys")}</h1>
           {!drawing && (
             <p className="text-sm text-muted-foreground">
-              {t("Click a key, then pick its new function. Writes are instant.")}
+              {pending
+                ? t("Confirm the picture below before remapping.")
+                : t("Click a key to change what it does. Writes are instant.")}
             </p>
           )}
         </div>
         {!drawing && (
-        <div className="flex items-center gap-2">
-          <div className="flex rounded-md border p-0.5">
-            {(["base", "fn"] as const).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLayer(l)}
-                className={cn(
-                  "rounded px-3 py-1 text-sm transition-colors",
-                  layer === l ? "bg-primary/10 font-medium" : "text-muted-foreground",
-                )}
-              >
-                {l === "base" ? t("Base") : t("Fn layer")}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-2">
+            <Segmented
+              value={layer}
+              options={[
+                ["base", t("Base")],
+                ["fn", t("Fn layer")],
+              ]}
+              onChange={setLayer}
+            />
+            {profileCount > 1 && (
+              <Select value={String(profile)} onValueChange={(v) => selectProfile(Number(v))}>
+                <SelectTrigger size="sm" className="w-28">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: profileCount }, (_, i) => i).map((p) => (
+                    <SelectItem key={p} value={String(p)}>
+                      {t("Profile {n}", { n: p + 1 })}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            {!pending && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="ghost">
+                    {t("Picture")} <ChevronDown className="ml-1 h-3.5 w-3.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-64">
+                  <div className="px-2 py-1.5 text-xs text-muted-foreground">{pictureNote}</div>
+                  <DropdownMenuSeparator />
+                  {!layout.grid && (
+                    <DropdownMenuItem onClick={editPicture}>
+                      <Pencil /> {t("Edit the picture")}
+                    </DropdownMenuItem>
+                  )}
+                  {layout.grid && (
+                    <DropdownMenuItem onClick={() => setDrawing(true)}>
+                      <Pencil /> {draft ? t("Continue drawing") : t("Draw the board")}
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem onClick={sweep}>
+                    <RefreshCw /> {t("Try another picture")}
+                  </DropdownMenuItem>
+                  {device && bundleFor && effectiveVerdict && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => sendIn(bundleFor, effectiveVerdict)}>
+                        <Send />{" "}
+                        {effectiveVerdict === "right"
+                          ? t("Send this picture in")
+                          : t("Send what the board reports")}
+                      </DropdownMenuItem>
+                      <div className="px-2 pb-1.5 text-xs text-muted-foreground">
+                        {t("sharkfin has no telemetry, so it only learns about boards from what owners send in.")}
+                      </div>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
-          <span className="text-sm text-muted-foreground">{t("Profile")}</span>
-          <Select
-            value={String(profile)}
-            onValueChange={(v) => selectProfile(Number(v))}
-          >
-            <SelectTrigger className="w-24">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Array.from({ length: profileCount }, (_, i) => i).map((p) => (
-                <SelectItem key={p} value={String(p)}>
-                  {p + 1}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
         )}
       </div>
 
       {pending && !drawing && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("Does this match your keyboard?")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <p>
-              {inference?.layoutName === "kle"
-                ? t("This is the picture you drew, matched against your board's current keymap. Compare it with the physical keys. Keys stay read-only until you answer.")
-                : t("This picture was matched against your board's current keymap. Compare it with the physical keys: same shape, same legends in the same places. Keys stay read-only until you answer.")}
-            </p>
-            {inference && inference.ambiguous.length > 0 && (
-              <p className="text-muted-foreground">
-                {t("{n} keys share a factory function with another key, so each pair may be swapped. Check those first.", { n: inference.ambiguous.length })}
-              </p>
-            )}
-            <div className="flex items-center gap-2">
-              <Button size="sm" onClick={() => answer("right")}>
-                {t("Looks right")}
-              </Button>
-              <Button size="sm" variant="outline" onClick={() => answer("wrong")}>
-                {t("Something is wrong")}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  setDraft(fromLayout(layout));
-                  setDrawing(true);
-                }}
-              >
-                <Pencil className="mr-1 h-3.5 w-3.5" /> {t("Almost, let me fix it")}
-              </Button>
-              {remaining > 0 && (
-                <span className="text-xs text-muted-foreground">
-                  {t("no shows the next closest picture, {remaining} left", { remaining })}
-                </span>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="rounded-xl bg-primary/10 px-4 py-3 text-sm motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1">
+          <p className="font-medium">{t("Does this match your keyboard?")}</p>
+          <p className="mt-0.5 text-muted-foreground">
+            {inference?.layoutName === "kle"
+              ? t("Your drawing, matched against the board's keymap. Compare it with the physical keys.")
+              : t("Matched against the board's keymap. Same shape, same legends in the same places?")}
+            {inference && inference.ambiguous.length > 0 &&
+              " " + t("{n} keys share a factory function with another key, so each pair may be swapped. Check those first.", { n: inference.ambiguous.length })}
+          </p>
+          <div className="mt-2.5 flex flex-wrap items-center gap-2">
+            <Button size="sm" onClick={() => answer("right")}>
+              {t("Looks right")}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={editPicture}>
+              <Pencil className="mr-1 h-3.5 w-3.5" /> {t("Almost, let me fix it")}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => answer("wrong")}>
+              {remaining > 0
+                ? t("Wrong, show the next one ({n} left)", { n: remaining })
+                : t("Wrong, give up on stored pictures")}
+            </Button>
+          </div>
+        </div>
       )}
 
-      {connected && layout.grid && !pending && !drawing && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("No picture of this keyboard yet")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <p className="text-muted-foreground">
-              {t("Below is every key the board reports, as a numbered slot. Everything still works; the picture is what is missing. Draw it here, starting from a preset or the closest stored picture, and sharkfin checks each key against your board as you go.")}
-            </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button size="sm" onClick={() => setDrawing(true)}>
-                <Pencil className="mr-1 h-3.5 w-3.5" />
-                {draft ? t("Continue drawing") : t("Draw it")}
-              </Button>
-              {device && bundleFor && (
-                <span className="text-xs text-muted-foreground">
-                  {t("or")}{" "}
-                  <button
-                    className="text-primary underline underline-offset-2"
-                    onClick={() => sendIn(bundleFor, effectiveVerdict ?? "wrong")}
-                  >
-                    {t("send what the board reports")}
-                  </button>{" "}
-                  {t("and it gets drawn for you.")}
-                </span>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+      {layout.grid && !pending && !drawing && (
+        <div className="rounded-xl bg-primary/10 px-4 py-3 text-sm motion-safe:animate-in motion-safe:fade-in">
+          <p className="font-medium">{t("No picture of this keyboard yet")}</p>
+          <p className="mt-0.5 text-muted-foreground">
+            {t("Every key the board reports is below as a numbered slot, and remapping works as usual. Draw the board to get a real picture: start from a preset or the closest stored one, and each key is checked against your board as you go.")}
+          </p>
+          <div className="mt-2.5 flex flex-wrap items-center gap-3">
+            <Button size="sm" onClick={() => setDrawing(true)}>
+              <Pencil className="mr-1 h-3.5 w-3.5" />
+              {draft ? t("Continue drawing") : t("Draw the board")}
+            </Button>
+            {device && bundleFor && (
+              <span className="text-xs text-muted-foreground">
+                {t("or")}{" "}
+                <button
+                  className="text-primary underline underline-offset-2"
+                  onClick={() => sendIn(bundleFor, effectiveVerdict ?? "wrong")}
+                >
+                  {t("send what the board reports")}
+                </button>{" "}
+                {t("and it gets drawn for you.")}
+              </span>
+            )}
+          </div>
+        </div>
       )}
 
       {drawing && (
         <LayoutEditor
-          title={layout.grid ? t("Draw your board") : t("Edit the picture")}
+          title={layout.grid ? t("Draw the board") : t("Edit the picture")}
           draft={draft}
           onChange={setDraft}
           nearest={nearest}
@@ -430,12 +454,14 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
           <Waiting label={resolving ? t("Finding your keyboard…") : t("Reading keymap…")} />
         </div>
       ) : (
-        <>
+        <Popover open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
           <KeyboardView
             layout={layout}
             selected={selected?.matrixIndex ?? null}
             entries={entries}
             modified={modified}
+            flash={flash}
+            anchor={!offSelected}
             labelFor={(k, entry) =>
               entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
             }
@@ -446,171 +472,46 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
             {defaults.size > 0 && (
               <>
                 <span className="mr-1 inline-block h-[0.5em] w-[0.5em] rounded-full bg-(--ring) align-middle" />
-                {t("marks a key that differs from this board's factory default.")}{" "}
+                {t("changed from factory.")}{" "}
               </>
             )}
             {layer === "fn"
-              ? t("{glyph} means the key falls through to the base layer.", { glyph: PASSTHRU_GLYPH })
-              : t("{glyph} means the key does nothing.", { glyph: DISABLED_GLYPH })}
+              ? t("{glyph} falls through to the base layer.", { glyph: PASSTHRU_GLYPH })
+              : t("{glyph} does nothing.", { glyph: DISABLED_GLYPH })}
           </p>
 
-          {!pending && (
-            <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-              <span>
-                {layout.grid
-                  ? t("Slots are labelled with what the board reports.")
-                  : inference?.layoutName === "kle"
-                    ? t("This is your drawing.")
-                    : inference
-                      ? t("This picture was matched against your board.")
-                      : t("Built-in picture for this board.")}
-              </span>
-              {!layout.grid && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    setDraft(fromLayout(layout));
-                    setDrawing(true);
-                  }}
-                >
-                  <Pencil className="mr-1 h-3.5 w-3.5" /> {t("Edit the picture")}
-                </Button>
-              )}
-              <Button size="sm" variant="outline" onClick={sweep}>
-                <RefreshCw className="mr-1 h-3.5 w-3.5" /> {t("Try another picture")}
-              </Button>
+          {offPicture.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-1.5 text-xs text-muted-foreground">
+              <span className="mr-1">{t("Also on this board, not in the picture:")}</span>
+              {offPicture.map((k) => {
+                const on = selected?.matrixIndex === k.matrixIndex;
+                const chip = (
+                  <button
+                    key={k.matrixIndex}
+                    onClick={() => setSelected(k)}
+                    data-on={on}
+                    className={cn(
+                      "keycap rounded-md px-2 py-1 font-mono text-xs",
+                      on && "outline-2 outline-(--ring)",
+                    )}
+                    style={{ "--key": "var(--key-base)", "--key-fg": "var(--key-legend)" } as React.CSSProperties}
+                  >
+                    {k.text}
+                  </button>
+                );
+                return on ? (
+                  <PopoverAnchor key={k.matrixIndex} asChild>
+                    {chip}
+                  </PopoverAnchor>
+                ) : (
+                  chip
+                );
+              })}
             </div>
           )}
 
-          {offPicture.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">
-                  {t("Keys this picture leaves out")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-sm">
-                <p className="text-muted-foreground">
-                  {t("Your board answers for these, but the picture does not draw them. Pick one to remap it. Sending a board report from the Contribute tab is what gets them drawn.")}
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  {offPicture.map((k) => (
-                    <button
-                      key={k.matrixIndex}
-                      onClick={() => setSelected(k)}
-                      data-selected={selected?.matrixIndex === k.matrixIndex}
-                      className={cn(
-                        "rounded-md border px-2 py-1 text-xs transition-colors hover:bg-accent",
-                        selected?.matrixIndex === k.matrixIndex && "border-(--ring)",
-                      )}
-                    >
-                      {k.text}
-                      <span className="ml-1 text-muted-foreground">
-                        {t("slot {n}", { n: k.matrixIndex! })}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <Card className={cn(!selected && "opacity-60")}>
-            <CardHeader className="flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-base">
-                {selected
-                  ? layer === "fn"
-                    ? t("Assign: {key} (Fn layer)", { key: selected.text ?? selected.code })
-                    : t("Assign: {key}", { key: selected.text ?? selected.code })
-                  : t("Select a key above")}
-                {selected && selectedEntry && (
-                  <Badge variant="outline" className="ml-2">
-                    {t("now: {label}", { label: entryLabel(selectedEntry, layer === "fn") })}
-                  </Badge>
-                )}
-              </CardTitle>
-              {selected && defaults.has(selected.matrixIndex!) && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={resetKey}
-                  disabled={busy || pending || switching}
-                >
-                  {t("Reset to default")}
-                </Button>
-              )}
-            </CardHeader>
-            {selected && (
-              <CardContent>
-                <ScrollArea className="h-56">
-                  <div className="space-y-3 pr-3">
-                    {GROUPS.map((g) => (
-                      <div key={g.name}>
-                        <div className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                          {g.name}
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {g.items.map((item) => (
-                            <button
-                              key={g.name + item.label}
-                              disabled={busy || pending || switching}
-                              onClick={() => assign(item)}
-                              className="rounded-md border px-2 py-1 text-xs transition-colors hover:bg-accent disabled:opacity-50"
-                            >
-                              {item.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    <div>
-                      <div className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        {t("Combo: up to three keys on one press")}
-                      </div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        {comboSelect("main", t("key"), false)}
-                        <span className="text-xs text-muted-foreground">+</span>
-                        {comboSelect("extraA", t("second"), true)}
-                        <span className="text-xs text-muted-foreground">+</span>
-                        {comboSelect("extraB", t("third"), true)}
-                        <Button
-                          size="sm"
-                          disabled={busy || pending || switching || !combo.main}
-                          onClick={assignCombo}
-                        >
-                          {t("Apply combo")}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            )}
-          </Card>
-
-          {device && bundleFor && effectiveVerdict && !layout.grid && !pending && (
-            <p className="text-center text-xs text-muted-foreground">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      className="underline underline-offset-2"
-                      onClick={() => sendIn(bundleFor, effectiveVerdict)}
-                    >
-                      {effectiveVerdict === "right"
-                        ? t("Send this picture in")
-                        : t("Help fix this picture")}
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs text-center">
-                    {t("sharkfin has no telemetry, so it learns about boards only from what their owners send in. This opens a board report with the bundle already copied.")}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </p>
-          )}
-        </>
+          {picker}
+        </Popover>
       )}
     </div>
   );

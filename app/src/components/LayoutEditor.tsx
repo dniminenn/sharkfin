@@ -9,8 +9,8 @@ import { toast } from "sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { Minus, Plus, Trash2, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import type { BoardLayout } from "@/lib/layout-loader";
@@ -89,6 +89,37 @@ function describe(layout: BoardLayout): string {
 
 const fmt = (u: number) => `${u}u`;
 
+/** A preset at a glance: its caps as a small drawing on plate colours. */
+function Silhouette({ draft }: { draft: Draft }) {
+  const e = extent(draft);
+  const gap = 0.12;
+  return (
+    <svg viewBox={`0 0 ${e.width} ${e.height}`} className="h-auto w-full text-(--key-base)" aria-hidden>
+      {draft.keys.map((k) => (
+        <rect
+          key={k.id}
+          x={k.x + gap / 2}
+          y={k.y + gap / 2}
+          width={k.w - gap}
+          height={k.h - gap}
+          rx={0.12}
+          fill={k.usage === null ? "var(--key-plate)" : "currentColor"}
+          stroke={k.usage === null ? "var(--key-mod)" : "none"}
+          strokeWidth={0.04}
+        />
+      ))}
+      {draft.knob && (
+        <circle
+          cx={draft.knob.x + KNOB_SIZE / 2}
+          cy={draft.knob.y + KNOB_SIZE / 2}
+          r={(KNOB_SIZE - gap) / 2}
+          fill="var(--key-accent)"
+        />
+      )}
+    </svg>
+  );
+}
+
 export default function LayoutEditor({
   title,
   draft,
@@ -99,6 +130,8 @@ export default function LayoutEditor({
   onClose,
 }: Props) {
   const [selected, setSelected] = useState<Selection>(null);
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const [history, setHistory] = useState<Draft[]>([]);
   const [inference, setInference] = useState<Inference | null>(null);
   const [checked, setChecked] = useState(false);
@@ -392,6 +425,10 @@ export default function LayoutEditor({
     const d = dragRef.current;
     dragRef.current = null;
     if (d?.moved) setHistory((h) => [...h.slice(-99), d.before]);
+    else if (d) {
+      setQuery("");
+      setOpen(true);
+    }
   };
 
   const use = async () => {
@@ -404,148 +441,155 @@ export default function LayoutEditor({
     }
   };
 
+  const q = query.trim().toLowerCase();
+  const pickable = useMemo(() => {
+    if (!q) return DRAWABLE;
+    return DRAWABLE.map((g) => ({
+      ...g,
+      items: g.items.filter(
+        (i) => i.label.toLowerCase().includes(q) || g.name.toLowerCase().includes(q),
+      ),
+    })).filter((g) => g.items.length);
+  }, [q]);
+
   const labelled = draft?.keys.filter((k) => k.usage !== null).length ?? 0;
   const unlabelled = (draft?.keys.length ?? 0) - labelled;
   const wrong = labelled - matched.size;
   const rate = inference?.matchRate ?? 0;
 
+  const anchorBox = (() => {
+    if (!draft || !selected) return null;
+    if (selected.kind === "knob")
+      return draft.knob ? { x: draft.knob.x, y: draft.knob.y, w: KNOB_SIZE, h: KNOB_SIZE } : null;
+    return selectedKey ? { x: selectedKey.x, y: selectedKey.y, w: selectedKey.w, h: selectedKey.h } : null;
+  })();
+
   if (!draft) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{title}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4 text-sm">
-          <p className="text-muted-foreground">
-            {t("No stored picture matches this keyboard. Pick the closest start below. Each key then shows whether your board has it, and anything the board has that is not drawn is listed to add.")}
+      <div className="space-y-5 motion-safe:animate-in motion-safe:fade-in">
+        <div>
+          <h2 className="text-base font-semibold">{title}</h2>
+          <p className="max-w-2xl text-sm text-muted-foreground">
+            {t("Pick a starting point. Each key then shows whether your board has it, and anything the board has that is not drawn is listed to add.")}
           </p>
-          {history.length > 0 && (
-            <Button size="sm" onClick={undo}>
-              <Undo2 className="mr-1 h-3.5 w-3.5" /> {t("Back to the drawing")}
-            </Button>
-          )}
-          <div className="flex flex-wrap gap-4">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" checked={iso} onChange={(e) => setIso(e.target.checked)} />
-              {t("ISO layout")}
-            </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" checked={knob} onChange={(e) => setKnob(e.target.checked)} />
-              {t("Has a knob")}
-            </label>
-          </div>
+        </div>
+        {history.length > 0 && (
+          <Button size="sm" onClick={undo}>
+            <Undo2 className="mr-1 h-3.5 w-3.5" /> {t("Back to the drawing")}
+          </Button>
+        )}
+        <div className="flex flex-wrap gap-5 text-sm">
+          <label className="flex items-center gap-2">
+            <input type="checkbox" className="accent-(--primary)" checked={iso} onChange={(e) => setIso(e.target.checked)} />
+            {t("ISO layout")}
+          </label>
+          <label className="flex items-center gap-2">
+            <input type="checkbox" className="accent-(--primary)" checked={knob} onChange={(e) => setKnob(e.target.checked)} />
+            {t("Has a knob")}
+          </label>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {nearest && (
-            <div className="space-y-1">
-              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                {t("Closest stored picture")}
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <Button size="sm" variant="outline" onClick={() => start(fromLayout(nearest.layout))}>
-                  {t("Start from it")}
-                </Button>
-                <span className="text-muted-foreground">
-                  {t("{what}, {matched} of {total} keys match your board. Fix what differs.", {
-                    what: describe(nearest.layout),
-                    matched: nearest.matched,
-                    total: nearest.total,
-                  })}
+            <button
+              type="button"
+              onClick={() => start(fromLayout(nearest.layout))}
+              className="keycap-plate group flex flex-col items-start gap-2 rounded-xl p-3 text-left transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-(--ring)"
+            >
+              <Silhouette draft={fromLayout(nearest.layout)} />
+              <span className="text-sm font-medium text-(--key-legend)">{t("Closest stored picture")}</span>
+              <span className="text-xs text-(--key-mod-legend)">
+                {t("{what}, {matched} of {total} match", {
+                  what: describe(nearest.layout),
+                  matched: nearest.matched,
+                  total: nearest.total,
+                })}
+              </span>
+            </button>
+          )}
+          {PRESETS.map((p) => {
+            const s = scores[p.size];
+            const best = bestPreset === p.size;
+            const d = preset(p.size, { iso, knob });
+            return (
+              <button
+                key={p.size}
+                type="button"
+                onClick={() => start(d)}
+                className={cn(
+                  "keycap-plate group flex flex-col items-start gap-2 rounded-xl p-3 text-left transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-(--ring)",
+                  best && "outline-2 outline-(--ring)",
+                )}
+              >
+                <Silhouette draft={d} />
+                <span className="text-sm font-medium text-(--key-legend)">
+                  {p.label}
+                  {best && <span className="ml-2 text-xs font-normal text-(--key-accent)">{t("best fit")}</span>}
                 </span>
-              </div>
+                <span className="text-xs text-(--key-mod-legend)">
+                  {s
+                    ? t("{matched} of {total} match", { matched: s.matched, total: s.total })
+                    : t("{n} keys", { n: d.keys.length })}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="space-y-2 text-sm">
+          <button className="text-xs text-muted-foreground underline underline-offset-2" onClick={() => setPasting((v) => !v)}>
+            {t("Paste a keyboard-layout-editor.com drawing instead")}
+          </button>
+          {pasting && (
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground">
+                {t("Copy the raw data from")}{" "}
+                <button
+                  className="underline"
+                  onClick={() => openUrl("http://www.keyboard-layout-editor.com")}
+                >
+                  keyboard-layout-editor.com
+                </button>
+                {t(" and paste it here. The drawing opens in the editor.")}
+              </p>
+              <textarea
+                value={kleText}
+                onChange={(e) => setKleText(e.target.value)}
+                spellCheck={false}
+                placeholder='["Esc","Q","W","E", …'
+                className="h-24 w-full rounded-md border bg-transparent p-2 font-mono text-xs"
+              />
+              <Button size="sm" disabled={!kleText.trim()} onClick={loadKle}>
+                {t("Open in the editor")}
+              </Button>
             </div>
           )}
-          <div className="space-y-1">
-            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              {t("Blank preset")}
-            </div>
-            <div className="flex flex-wrap items-stretch gap-2">
-              {PRESETS.map((p) => {
-                const s = scores[p.size];
-                const best = bestPreset === p.size;
-                return (
-                  <button
-                    key={p.size}
-                    type="button"
-                    onClick={() => start(preset(p.size, { iso, knob }))}
-                    className={cn(
-                      "flex min-w-20 flex-col items-center rounded-md border px-3 py-1.5 transition-colors hover:bg-accent",
-                      best && "border-(--ring) bg-primary/10",
-                    )}
-                  >
-                    <span className="font-medium">{p.label}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {s
-                        ? t("{matched} of {total} match", { matched: s.matched, total: s.total })
-                        : t("{n} keys", { n: preset(p.size, { iso, knob }).keys.length })}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-            {bestPreset && (
-              <p className="text-xs text-muted-foreground">
-                {t("The highlighted one fits your board best.")}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <button className="text-xs text-muted-foreground underline" onClick={() => setPasting((v) => !v)}>
-              {t("Paste a keyboard-layout-editor.com drawing instead")}
-            </button>
-            {pasting && (
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">
-                  {t("Copy the raw data from")}{" "}
-                  <button
-                    className="underline"
-                    onClick={() => openUrl("http://www.keyboard-layout-editor.com")}
-                  >
-                    keyboard-layout-editor.com
-                  </button>
-                  {t(" and paste it here. The drawing opens in the editor.")}
-                </p>
-                <textarea
-                  value={kleText}
-                  onChange={(e) => setKleText(e.target.value)}
-                  spellCheck={false}
-                  placeholder='["Esc","Q","W","E", …'
-                  className="h-24 w-full rounded-md border bg-transparent p-2 font-mono text-xs"
-                />
-                <Button size="sm" disabled={!kleText.trim()} onClick={loadKle}>
-                  {t("Open in the editor")}
-                </Button>
-              </div>
-            )}
-          </div>
-          <div>
-            <Button size="sm" variant="ghost" onClick={onClose}>
-              {t("Close")}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+        <Button size="sm" variant="ghost" onClick={onClose}>
+          {t("Close")}
+        </Button>
+      </div>
     );
   }
 
   const cq = (u: number) => `${(u / size.width) * 100}cqw`;
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="space-y-4 motion-safe:animate-in motion-safe:fade-in">
+      <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <h2 className="text-base font-semibold">{title}</h2>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {t("Click a key to label or resize it, drag to move. Arrow keys nudge, Delete removes.")}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button size="sm" variant="outline" onClick={undo} disabled={!history.length}>
+          <Button size="sm" variant="ghost" onClick={undo} disabled={!history.length}>
             <Undo2 className="mr-1 h-3.5 w-3.5" /> {t("Undo")}
           </Button>
-          <Button size="sm" variant="outline" onClick={addKey}>
+          <Button size="sm" variant="ghost" onClick={addKey}>
             <Plus className="mr-1 h-3.5 w-3.5" /> {t("Add key")}
           </Button>
           {!draft.knob && (
-            <Button size="sm" variant="outline" onClick={() => addKnob()}>
+            <Button size="sm" variant="ghost" onClick={() => addKnob()}>
               <Plus className="mr-1 h-3.5 w-3.5" /> {t("Add knob")}
             </Button>
           )}
@@ -555,6 +599,13 @@ export default function LayoutEditor({
         </div>
       </div>
 
+      <Popover
+        open={open && !!anchorBox}
+        onOpenChange={(o) => {
+          setOpen(o);
+          if (!o) plateRef.current?.focus();
+        }}
+      >
       <div className="w-full">
         <div className="keycap-plate mx-auto max-w-[920px] rounded-2xl p-[1.6%]">
           <div
@@ -562,7 +613,10 @@ export default function LayoutEditor({
             tabIndex={0}
             onKeyDown={onKeyDown}
             onPointerDown={(e) => {
-              if (e.target === e.currentTarget) setSelected(null);
+              if (e.target === e.currentTarget) {
+                setSelected(null);
+                setOpen(false);
+              }
             }}
             className="relative outline-none"
             style={{
@@ -636,9 +690,148 @@ export default function LayoutEditor({
                 <span className="knob-cap absolute inset-[24%]" />
               </button>
             )}
+            {anchorBox && (
+              <PopoverAnchor asChild>
+                <div
+                  className="pointer-events-none absolute"
+                  style={{
+                    left: cq(anchorBox.x),
+                    top: cq(anchorBox.y),
+                    width: cq(anchorBox.w - CAP_GAP),
+                    height: cq(anchorBox.h - CAP_GAP),
+                  }}
+                />
+              </PopoverAnchor>
+            )}
           </div>
         </div>
       </div>
+
+      {selected?.kind === "knob" && draft.knob && (
+        <PopoverContent side="bottom" sideOffset={10} className="w-64 space-y-3 p-3">
+          <div className="flex items-baseline justify-between">
+            <span className="text-sm font-semibold">{t("Knob")}</span>
+            <Button size="xs" variant="ghost" onClick={remove}>
+              <Trash2 /> {t("Remove")}
+            </Button>
+          </div>
+          <div className="text-xs text-muted-foreground">{t("Press")}</div>
+          <div className="flex flex-wrap gap-1">
+            {KNOB_PRESSES.map((p) => (
+              <button
+                key={p.label}
+                onClick={() => apply({ ...draft, knob: { ...draft.knob!, press: p.entry } })}
+                data-on={draft.knob!.press[2] === p.entry[2]}
+                className="rounded-md px-2 py-1 text-xs transition-colors hover:bg-accent data-[on=true]:bg-primary data-[on=true]:text-primary-foreground"
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </PopoverContent>
+      )}
+      {selectedKey && (
+        <PopoverContent side="bottom" sideOffset={10} className="w-80 space-y-3 p-3">
+          <div className="flex items-baseline justify-between gap-2">
+            <div className="min-w-0">
+              <div className="truncate font-mono text-sm font-semibold">
+                {selectedKey.usage === null
+                  ? (selectedKey.note ?? t("No label"))
+                  : legend(selectedKey.usage)}
+              </div>
+              {selectedKey.usage === null && (
+                <div className="text-xs text-muted-foreground">
+                  {selectedKey.note ? t("Printed on the stored picture, not a key sharkfin knows.") : t("Pick what is printed on it.")}
+                </div>
+              )}
+            </div>
+            <Button size="xs" variant="ghost" onClick={remove}>
+              <Trash2 /> {t("Remove")}
+            </Button>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <span>{t("Width")}</span>
+            <Button
+              size="icon-xs"
+              variant="ghost"
+              disabled={selectedKey.w <= STEP * 2}
+              onClick={() => updateKey(selectedKey.id, { w: selectedKey.w - STEP })}
+            >
+              <Minus />
+            </Button>
+            <span className="w-10 text-center font-mono text-foreground">{fmt(selectedKey.w)}</span>
+            <Button
+              size="icon-xs"
+              variant="ghost"
+              onClick={() => updateKey(selectedKey.id, { w: selectedKey.w + STEP })}
+            >
+              <Plus />
+            </Button>
+            <span className="ml-2">{t("Height")}</span>
+            <div className="flex rounded-md bg-muted p-[2px]">
+              {[1, 2].map((h) => (
+                <button
+                  key={h}
+                  onClick={() => updateKey(selectedKey.id, { h })}
+                  data-on={selectedKey.h === h}
+                  className="rounded px-2 py-0.5 transition-colors data-[on=true]:bg-background data-[on=true]:text-foreground"
+                >
+                  {fmt(h)}
+                </button>
+              ))}
+            </div>
+            <Button size="xs" variant="ghost" onClick={addKey}>
+              <Plus /> {t("Add one to the right")}
+            </Button>
+          </div>
+          <Input
+            autoFocus
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("Type the legend, like PgUp or F13")}
+            className="h-8"
+          />
+          <div className="max-h-56 space-y-3 overflow-y-auto pr-1">
+            {!q && (
+              <button
+                onClick={() => label(null)}
+                className="rounded-md border border-dashed px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent"
+              >
+                {t("No label")}
+              </button>
+            )}
+            {pickable.map((g) => (
+              <div key={g.name}>
+                <div className="mb-1 px-1 text-xs text-muted-foreground">{t(g.name)}</div>
+                <div className="flex flex-wrap gap-1">
+                  {g.items.map((item) => {
+                    const holder = used.get(item.usage);
+                    const here = holder === selectedKey.id;
+                    return (
+                      <button
+                        key={`${g.name}-${item.usage}`}
+                        onClick={() => label(item.usage)}
+                        title={holder !== undefined && !here ? t("Already on another key") : undefined}
+                        data-on={here}
+                        className={cn(
+                          "rounded-md px-2 py-1 text-xs transition-colors hover:bg-accent data-[on=true]:bg-primary data-[on=true]:text-primary-foreground",
+                          holder !== undefined && !here && "text-muted-foreground",
+                        )}
+                      >
+                        {item.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+            {q && !pickable.length && (
+              <p className="px-1 py-2 text-xs text-muted-foreground">{t("No key called that.")}</p>
+            )}
+          </div>
+        </PopoverContent>
+      )}
+      </Popover>
 
       <div className="space-y-2 text-center text-xs text-muted-foreground">
         {!checked ? (
@@ -661,161 +854,33 @@ export default function LayoutEditor({
       </div>
 
       {missing.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("Your board also has")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <p className="text-xs text-muted-foreground">
-              {selectedKey
-                ? t("Pick one to put it on the selected key.")
-                : wrong > 0
-                  ? t("Click a dimmed key first, then pick its real label here. With nothing selected, picking one adds a new key. Knob functions add the knob. Greyed ones cannot be drawn.")
-                  : t("Pick one to add it as a new key. Knob functions add the knob. Greyed ones cannot be drawn.")}
-            </p>
-            <div className="flex flex-wrap gap-1">
-              {missing.map((m) => (
-                <button
-                  key={m.label}
-                  disabled={m.usage === null && m.knob === null}
-                  onClick={() =>
-                    m.knob === null
-                      ? label(m.usage)
-                      : addKnob(m.knob === "turn" ? undefined : m.knob)
-                  }
-                  className="rounded-md border px-2 py-1 text-xs transition-colors hover:bg-accent disabled:opacity-40"
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="space-y-1.5 text-center text-xs text-muted-foreground">
+          <p>
+            {selectedKey
+              ? t("Your board also has these. Pick one to put it on the selected key.")
+              : wrong > 0
+                ? t("Your board also has these. Click a dimmed key first to relabel it, or pick one to add a key. Greyed ones cannot be drawn.")
+                : t("Your board also has these. Pick one to add it as a key. Greyed ones cannot be drawn.")}
+          </p>
+          <div className="flex flex-wrap justify-center gap-1">
+            {missing.map((m) => (
+              <button
+                key={m.label}
+                disabled={m.usage === null && m.knob === null}
+                onClick={() =>
+                  m.knob === null
+                    ? label(m.usage)
+                    : addKnob(m.knob === "turn" ? undefined : m.knob)
+                }
+                className="keycap rounded-md px-2 py-1 font-mono text-xs disabled:opacity-40"
+                style={{ "--key": "var(--key-base)", "--key-fg": "var(--key-legend)" } as React.CSSProperties}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
-
-      <Card className={cn(!selected && "opacity-60")}>
-        <CardHeader className="flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-base">
-            {selected?.kind === "knob"
-              ? t("Knob")
-              : selectedKey
-                ? selectedKey.usage === null
-                  ? selectedKey.note
-                    ? t("Unlabelled key, printed {note}", { note: selectedKey.note })
-                    : t("Unlabelled key")
-                  : t("Key: {label}", { label: legend(selectedKey.usage) })
-                : t("Select a key above")}
-          </CardTitle>
-          {selected && (
-            <Button size="sm" variant="outline" onClick={remove}>
-              <Trash2 className="mr-1 h-3.5 w-3.5" /> {t("Remove")}
-            </Button>
-          )}
-        </CardHeader>
-        {selected?.kind === "knob" && draft.knob && (
-          <CardContent className="space-y-2 text-sm">
-            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              {t("Press")}
-            </div>
-            <div className="flex flex-wrap gap-1">
-              {KNOB_PRESSES.map((p) => (
-                <button
-                  key={p.label}
-                  onClick={() => apply({ ...draft, knob: { ...draft.knob!, press: p.entry } })}
-                  data-on={draft.knob!.press[2] === p.entry[2]}
-                  className="rounded-md border px-2 py-1 text-xs transition-colors hover:bg-accent data-[on=true]:border-(--ring) data-[on=true]:bg-primary/10"
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        )}
-        {selectedKey && (
-          <CardContent className="space-y-3 text-sm">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="text-xs text-muted-foreground">{t("Width")}</span>
-              <div className="flex items-center gap-1">
-                <Button
-                  size="icon-sm"
-                  variant="outline"
-                  disabled={selectedKey.w <= STEP * 2}
-                  onClick={() => updateKey(selectedKey.id, { w: selectedKey.w - STEP })}
-                >
-                  <Minus />
-                </Button>
-                <span className="w-12 text-center font-mono text-xs">{fmt(selectedKey.w)}</span>
-                <Button
-                  size="icon-sm"
-                  variant="outline"
-                  onClick={() => updateKey(selectedKey.id, { w: selectedKey.w + STEP })}
-                >
-                  <Plus />
-                </Button>
-              </div>
-              <span className="text-xs text-muted-foreground">{t("Height")}</span>
-              <div className="flex rounded-md border p-0.5">
-                {[1, 2].map((h) => (
-                  <button
-                    key={h}
-                    onClick={() => updateKey(selectedKey.id, { h })}
-                    className={cn(
-                      "rounded px-2 py-0.5 text-xs transition-colors",
-                      selectedKey.h === h ? "bg-primary/10 font-medium" : "text-muted-foreground",
-                    )}
-                  >
-                    {fmt(h)}
-                  </button>
-                ))}
-              </div>
-              <Button size="sm" variant="outline" onClick={addKey}>
-                <Plus className="mr-1 h-3.5 w-3.5" /> {t("Add key to the right")}
-              </Button>
-            </div>
-            <ScrollArea className="h-56">
-              <div className="space-y-3 pr-3">
-                <button
-                  onClick={() => label(null)}
-                  className="rounded-md border border-dashed px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent"
-                >
-                  {t("No label")}
-                </button>
-                {DRAWABLE.map((g) => (
-                  <div key={g.name}>
-                    <div className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      {t(g.name)}
-                    </div>
-                    <div className="flex flex-wrap gap-1">
-                      {g.items.map((item) => {
-                        const holder = used.get(item.usage);
-                        const here = holder === selectedKey.id;
-                        return (
-                          <button
-                            key={`${g.name}-${item.usage}`}
-                            onClick={() => label(item.usage)}
-                            title={
-                              holder !== undefined && !here
-                                ? t("Already on another key")
-                                : undefined
-                            }
-                            className={cn(
-                              "rounded-md border px-2 py-1 text-xs transition-colors hover:bg-accent",
-                              here && "border-(--ring) bg-primary/10",
-                              holder !== undefined && !here && "text-muted-foreground",
-                            )}
-                          >
-                            {item.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        )}
-      </Card>
 
       <div className="flex flex-wrap items-center gap-2">
         <Button size="sm" onClick={use} disabled={busy || !inference || rate < BAR}>
