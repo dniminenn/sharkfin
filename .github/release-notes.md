@@ -1,5 +1,17 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.5
+
+**Draw your board.** When no stored picture matches your keyboard, the
+Keys page lets you draw it instead of sending you to
+keyboard-layout-editor.com. Start from a preset (60% to full size, ISO,
+knob) or from the closest stored picture; each preset shows how many of
+its keys your board has. As you draw, a key your board does not have dims,
+and the keys it has that are not drawn yet are listed to add with one
+click. The drawing goes through the same confirmation as any other
+picture, and its bundle bakes it in for everyone with the board. Pasting a
+keyboard-layout-editor drawing still works and opens in the editor.
+
 ## What changed in 0.7.4
 
 **KOODO Solar** is supported (device id 1087), with its picture built in
