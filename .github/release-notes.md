@@ -1,5 +1,14 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.8
+
+**The Lighting page shows the effect.** An animation of the board's LEDs
+runs above the effect chips and follows every chip, colour and slider.
+It is timed from the keyboard's own firmware, mode by mode, so Flow, Layers,
+Sine wave and the rest run at the board's pace. Layers and Sine wave play
+the firmware's own scripts. The shapes of the other effects are drawn to
+match by eye.
+
 ## What changed in 0.7.7
 
 **VGN Neon75 Extreme** under its second device id (3391) is supported,
