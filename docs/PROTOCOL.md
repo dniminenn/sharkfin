@@ -285,18 +285,31 @@ gen2 speed, wire `w` 0..4, in frames:
 | 8 | event every `500 + 250w` |
 | 12, 16 | counter seeded with `200w`, `150w` |
 
-yc500 speed, wire `w`: apply (`0x0101c8de`) scales each channel to
-`colour << 8 × pct / 100` with pct from `[0, 25, 50, 75, 100]`
-(`0x10362bd`) by brightness, divides by `ramp[w]` from `0x10362c4` to
-get the per-step increment, and holds 20 steps at each end.
+yc500 speed: each mode's apply routine reads its own six-word table by
+wire `w` (0..5), all consecutive from `0x10362c4`. Breathing scales each
+channel to `colour << 8 × pct / 100` with pct from `[0, 25, 50, 75, 100]`
+(`0x10362bd`) by brightness, divides by the ramp to get the per-step
+increment, and holds 20 steps at each end. Wire 6 and up read into the
+next table, which is the out-of-range speed the X86 renders faster.
 
-| wire | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
-|---|---|---|---|---|---|---|---|---|
-| ramp, frames | 10 | 40 | 60 | 80 | 100 | 200 | 5 | 4 |
+| mode | table | w = 0..5 | meaning |
+|---|---|---|---|
+| 2 breathing | `0x10362c4` | 10 40 60 80 100 200 | frames per ramp |
+| 3 spectrum | `0x10362dc` | 5 4 3 2 1 0 | hue step every 2 frames; 0 stands still |
+| 4 wave, 11, 12, 15 | `0x10362f4` … | 5 4 3 2 1 0 | hue step + 1 per frame, per column |
+| 5 ripple, 14 radiant | `0x103630c` | 5 7 9 11 13 12 | frames per step |
+| 6 star dots, 7 flow | `0x103634c` | 5 10 15 20 25 12 | frames per step |
+| 9 layers | `0x1036394` | 2 3 5 7 9 11 | frames per script step |
+| 10 sine | `0x10363b4` | 5 7 10 14 17 20 | frames per step |
+| 16, 18 | `0x103641c` | 2 2 2 2 2 2 | frames per step |
 
-Wire 6 and up read past the table, which is the out-of-range speed the
-X86 renders faster. Modes 11, 12 and 15 step every 8 frames, 7 every 6,
-1 every 5.
+The hue walker (`0x0102075c`) ramps one channel by the step to 255 then
+the next, six ramps per turn. Layers (mode 9, stepper `0x0101e56c`) plays
+a script: a count table at `0x1035dac` (per step, 255 = pause five steps
+and change colour, 0 = rest 25 steps and restart) and a row-column list at
+`0x1035c64` on a 6 × 18 grid. Sine (mode 10, `0x0101e47e`) births one
+dot per step on a row from a 30-entry table and runs it out both ways one
+column per step.
 
 ### Edge light
 

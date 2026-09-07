@@ -9,6 +9,9 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import Waiting from "@/components/Waiting";
+import EffectPreview from "@/components/EffectPreview";
+import { useBoardLayout } from "@/lib/layout-loader";
+import type { Family } from "@/lib/effects";
 import { BE_MODES, MODE_LABELS, type LightMode } from "@/lib/lighting-modes";
 import {
   getLedParam,
@@ -87,6 +90,7 @@ function modesFor(device: ConnectedDevice | null): { modes: LightMode[]; brightn
 export default function LightingPage({ device }: { device: ConnectedDevice | null }) {
   const connected = !!device;
   const { modes, brightnessMax } = modesFor(device);
+  const { layout, resolving } = useBoardLayout(device);
   const [param, setParam] = useState<LedParam | null>(null);
   const [side, setSide] = useState<SledParam | null>(null);
   const [opts, setOpts] = useState<KbOptions | null>(null);
@@ -212,6 +216,9 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
   const mode = modes.find((m) => m.value === param.mode);
   const hex = rgbToHex(param.r, param.g, param.b);
   const colorless = mode?.noColor ?? false;
+  // The preview is timed from the firmware of the two families; a board
+  // whose family is still unknown is drawn on the gen2 clock.
+  const family: Family = device.spec.family === "yc500" ? "yc500" : "gen2";
 
   const slider = (
     label: string,
@@ -245,6 +252,24 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
         title={t("Lighting")}
         hint={t("Backlight effect, color and motion. Changes apply live.")}
       />
+
+      {!resolving && !opts?.ledOff && (
+        <EffectPreview
+            layout={layout}
+            family={family}
+            param={{
+              mode: param.mode,
+              speed: param.speed,
+              brightness: param.brightness,
+              brightnessMax,
+              option: param.option,
+              rainbow: colorless || param.dazzle,
+              r: param.r,
+              g: param.g,
+              b: param.b,
+            }}
+          />
+      )}
 
       <Section title={t("Effect")}>
         <div className="flex flex-wrap gap-1">
