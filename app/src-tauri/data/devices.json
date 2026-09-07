@@ -21357,7 +21357,7 @@
     "vendorId": 12625,
     "productId": 20564,
     "internalName": "vgn_neon75_extreme",
-    "keyLayout": "Common82_GK8640GW",
+    "keyLayout": "Local82_VGN_Neon75_Extreme",
     "lightLayout": "S",
     "sideLightLayout": "Yt",
     "profiles": 4,
@@ -37370,6 +37370,35 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": false
+    }
+  },
+  {
+    "id": 3391,
+    "name": "vgn_neon75_extreme_v2",
+    "displayName": "Neon75 Extreme",
+    "company": "VGN",
+    "vendor": "VGN",
+    "vendorId": 12625,
+    "productId": 20564,
+    "internalName": "vgn_neon75_extreme_v2",
+    "keyLayout": "Local82_VGN_Neon75_Extreme",
+    "lightLayout": "S",
+    "sideLightLayout": "Yt",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
     }
   }
 ]

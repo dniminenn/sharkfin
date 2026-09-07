@@ -437,7 +437,7 @@
   {
     "_why": "Reported in issue #38. A new revision of the VGN Neon75: the vendor tables carry five Neon75 ids (2781, 2859, 2904, 2905, 3237) and the GK8640GW PRO, Air and Turbo, but not 3288, so an extraction alone will not add it. The board's product string is 'VGN Neon75 Extreme Tri-mode Keyboard'; the owner names it the Neon Super Competitive Edition with Tianba magnetic switches. The vendor OTA API has no record for 3288 or for any Neon75 id. Fields other than the layout copy 3237, which shares 3151:5054.",
     "_evidence": "Read sweep from the owner's board (0.5.1 web build, e453665). identify 0x8F returns 0x0cd8 = 3288 in the gen2 shape. GET_KEYMATRIX 0x8A returns a gen2 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the yc500 reads 0x89 and 0x92 answer only the opcode; the gen2 sleep read 0x91 answers four u16 (180, 180, 1620, 1620) at bytes 8..15 and 0x84 answers profile 2. That fixes the family as gen2. The keymap fills 84 slots: 80 keys, Fn at 71, and a knob as consumer Vol- , Vol+ and Mute at 90, 91 and 92. Common82_GK8640GW explains all 84 by entry; the siblings' Common82_GK8640 explains 81 and leaves the knob undrawn, so the Air and Turbo picture is the suggestion here. Neither file has slot data, so the Keys page asks the owner to confirm the picture, and the bundle it produces is what bakes the slots.",
-    "_unknown": "Slot order was not observable from a read sweep, so the picture is offered, not drawn, until the owner confirms it. Debounce 0x86 answers 0 at byte 1 and the siblings say no debounce, so debounce is off. Edge light 0x88 answers a plausible state and the siblings declare side LEDs, so sideLight stays on as the vendor has it. 0xAD answers version 0 and the siblings have no screen. Profiles are pinned to 4 with the siblings; the board was on profile 2 when read.",
+    "_unknown": "Local82_VGN_Neon75_Extreme is the Common82_GK8640GW geometry baked against the owner's keymap from the issue #38 data bundle, 84 of 84 matched by entry with no ambiguous pairs; the board reported in issue #44 (3391) sent the same keymap byte for byte. Debounce 0x86 answers 0 at byte 1 and the siblings say no debounce, so debounce is off. Edge light 0x88 answers a plausible state and the siblings declare side LEDs, so sideLight stays on as the vendor has it. 0xAD answers version 0 and the siblings have no screen. Profiles are pinned to 4 with the siblings; the board was on profile 2 when read.",
     "id": 3288,
     "name": "vgn_neon75_extreme",
     "displayName": "Neon75 Extreme",
@@ -446,7 +446,7 @@
     "vendorId": 12625,
     "productId": 20564,
     "internalName": "vgn_neon75_extreme",
-    "keyLayout": "Common82_GK8640GW",
+    "keyLayout": "Local82_VGN_Neon75_Extreme",
     "lightLayout": "S",
     "sideLightLayout": "Yt",
     "profiles": 4,
@@ -553,6 +553,38 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": false
+    }
+  },
+  {
+    "_why": "Reported in issue #44. A second revision of the VGN Neon75 Extreme: 3288 (issue #38) shares the product string 'VGN Neon75 Extreme Tri-mode Keyboard' and 3151:5054, and the vendor tables carry neither id, so an extraction alone will not add it. The vendor OTA API has no record for 3391, 3288 or 3237. Fields copy 3288.",
+    "_evidence": "Read sweep from the owner's board (0.7.6 web build, 3595fdd). identify 0x8F returns 0x0d3f = 3391 in the gen2 shape. GET_KEYMATRIX 0x8A returns a gen2 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the yc500 reads 0x89 and 0x92 answer only the opcode; the gen2 sleep read 0x91 answers four u16 (180, 180, 1620, 1620) at bytes 8..15 and 0x84 answers profile 2. That fixes the family as gen2, which the app also detected from the sweep. The keymap is byte for byte the one 3288 sent in issue #38: 84 slots, 80 keys, Fn at 71, and a knob as consumer Vol-, Vol+ and Mute at 90, 91 and 92. Common82_GK8640GW explains all 84 by entry. The owner allowed changes on the unregistered notice and reports everything tried worked, edge lighting included.",
+    "_unknown": "Local82_VGN_Neon75_Extreme is the Common82_GK8640GW geometry baked against this keymap, 84 of 84 matched by entry with no ambiguous pairs, and the owner's photo shows the same 75% with a knob; 3288 sent the identical keymap in issue #38. Debounce 0x86 answers 1 at byte 1 where 3288 answered 0; the siblings declare no debounce and nobody has written it, so debounce stays off. Report rate 0x83 answers 3 at byte 2 where 3288 answered 0. Identify bytes 7..8 read 03 05 here and 04 05 on 3288, meaning unestablished. 0x88 answers a plausible edge light state, so sideLight stays on. 0xAD answers version 0, no screen. Profiles are pinned to 4 with the siblings.",
+    "id": 3391,
+    "name": "vgn_neon75_extreme_v2",
+    "displayName": "Neon75 Extreme",
+    "company": "VGN",
+    "vendor": "VGN",
+    "vendorId": 12625,
+    "productId": 20564,
+    "internalName": "vgn_neon75_extreme_v2",
+    "keyLayout": "Local82_VGN_Neon75_Extreme",
+    "lightLayout": "S",
+    "sideLightLayout": "Yt",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
     }
   }
 ]

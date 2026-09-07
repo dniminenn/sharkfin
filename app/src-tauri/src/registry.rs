@@ -589,6 +589,10 @@ mod tests {
                 "Local81_KOODO_Solar",
                 include_str!("../../src/lib/layouts/vendor/Local81_KOODO_Solar.json"),
             ),
+            (
+                "Local82_VGN_Neon75_Extreme",
+                include_str!("../../src/lib/layouts/vendor/Local82_VGN_Neon75_Extreme.json"),
+            ),
         ];
         for (name, text) in LOCAL {
             let v: serde_json::Value = serde_json::from_str(text).expect("parses");
