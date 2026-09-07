@@ -1,5 +1,17 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.7
+
+**VGN Neon75 Extreme** under its second device id (3391) is supported,
+with the picture built in from the owner's keymap; the earlier revision
+(3288) gets the same picture. Reported in issue #44.
+
+**One bundle.** The Contribute tab's bundle now carries the keyboard
+picture and your answer about it, so a board report is a single paste.
+The Keys page's "send it in" opens the Contribute tab instead of copying a
+second bundle. A board drawn from its built-in picture is no longer asked
+for a report.
+
 ## What changed in 0.7.6
 
 **The Keys page is the picture.** Click a key and the cap itself takes
