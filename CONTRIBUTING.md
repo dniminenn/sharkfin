@@ -5,12 +5,12 @@ Reporting a bug or a board? You don't need any of this. Open the app's
 [issue](https://github.com/dniminenn/sharkfin/issues/new/choose).
 
 Did the Keys page show a picture of your keyboard and ask whether it
-looks right? Answering it is a contribution too. Say yes and the Keys
-page and the Contribute tab both offer the picture's bundle; paste it
-into a board report and the picture ships built in, for you and everyone
-else with your board. Say no and the next closest picture is shown. If
-none of them fit, the Keys page lets you draw the board, starting from a
-preset or the closest picture, and send that in the same way.
+looks right? Answering it is a contribution too. Say yes, and the bundle
+from the Contribute tab carries the picture; paste it into a board report
+and the picture ships built in, for you and everyone else with your
+board. Say no and the next closest picture is shown. If none of them fit,
+the Keys page lets you draw the board, starting from a preset or the
+closest picture, and the bundle carries the drawing the same way.
 
 ## Development
 
@@ -229,10 +229,10 @@ For a board without a usable layout, the app searches every stored
 picture for the best match against the board's keymap and asks the owner
 to confirm one; owners can also draw the board, or paste a
 keyboard-layout-editor drawing.
-The Keys page then produces a layout bundle carrying the confirmed
-geometry's name (`picture :`, or the drawing itself under
-`picture json:`) and the keymap it matched, which is the `defaultMatrix`
-the vendor build was missing. To bake it in:
+The data bundle from the Contribute tab then carries a picture section:
+the confirmed geometry's name (`picture :`, or the drawing itself under
+`picture json:`), the owner's verdict, and the keymap it matched, which
+is the `defaultMatrix` the vendor build was missing. To bake it in:
 
 ```sh
 python3 tools/bake_layout.py bundle.txt

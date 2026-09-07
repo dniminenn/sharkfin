@@ -44,21 +44,15 @@ export default function ContributePage({
   const [bundle, setBundle] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
-  const { pending, inference } = useBoardLayout(device);
-  const [layoutCopied, setLayoutCopied] = useState(false);
+  const { pending, inference, rejected } = useBoardLayout(device);
   // Answered neither as a keyboard nor as a receiver; nothing to report from it.
   const silent = !device && !!unknown && unknown.deviceId === null;
   // A registered board drawn from its built-in picture has nothing left
   // to report. An inference means the picture was matched at connect or
-  // the owner replaced the built-in one, and that is what a report carries.
-  const wanted = !device || device.spec.unregistered || device.readOnly || !!inference;
-
-  const copyLayout = async () => {
-    if (!device || !inference) return;
-    await navigator.clipboard.writeText(layoutBundle(device, inference, "right"));
-    setLayoutCopied(true);
-    toast.success(t("Copied. Paste it into a board report."));
-  };
+  // the owner replaced the built-in one; a rejection means none fit.
+  // Either is what a report carries.
+  const wanted =
+    !device || device.spec.unregistered || device.readOnly || !!inference || !!rejected;
 
   useEffect(() => {
     buildId()
@@ -69,7 +63,19 @@ export default function ContributePage({
   const collect = async () => {
     setBusy(true);
     try {
-      setBundle(await contributionBundle(device ? undefined : unknown?.path));
+      let text = await contributionBundle(device ? undefined : unknown?.path);
+      // One paste carries everything: the picture the match found and the
+      // owner's answer ride inside the same fence as the sweep.
+      const picture =
+        device && inference
+          ? layoutBundle(device, inference, pending ? null : "right")
+          : device && rejected
+            ? layoutBundle(device, rejected, "wrong")
+            : null;
+      if (picture) {
+        text = text.replace(/```\s*$/, "") + "\n" + picture.replace(/^```\n/, "");
+      }
+      setBundle(text);
       setCopied(false);
     } catch (e) {
       toast.error(t("Bundle failed: {error}", { error: String(e) }));
@@ -194,46 +200,6 @@ export default function ContributePage({
           </ol>
         )}
       </Section>
-
-      {device && inference && (
-        <Section
-          title={t("Keyboard picture")}
-          actions={
-            <span className="text-sm text-muted-foreground">
-              {pending ? t("unconfirmed") : t("confirmed")}
-            </span>
-          }
-        >
-          {pending ? (
-            <p className="text-sm text-muted-foreground">
-              {t("The Keys page is asking whether the keyboard picture matches your board. Answer there first; the picture then has its own bundle you can send from here.")}
-            </p>
-          ) : (
-            <>
-              <p className="text-sm text-muted-foreground">
-                {t("You confirmed the keyboard picture for this board. Send it in and it ships built in for everyone with this board: copy, open a board report, paste.")}
-              </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <Button size="sm" variant="ghost" onClick={copyLayout}>
-                  {layoutCopied ? (
-                    <Check className="mr-1 h-3.5 w-3.5" />
-                  ) : (
-                    <Copy className="mr-1 h-3.5 w-3.5" />
-                  )}
-                  {layoutCopied ? t("Copied") : t("Copy picture bundle")}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
-                >
-                  <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
-                </Button>
-              </div>
-            </>
-          )}
-        </Section>
-      )}
 
       {bundle && (
         <Section title={t("Data bundle")}>

@@ -246,7 +246,9 @@ export default function App() {
         <div className="flex-1 overflow-auto">
           {page === "lighting" && <LightingPage device={device} />}
           {page === "paint" && <PaintPage device={device} />}
-          {page === "keymap" && <KeymapPage device={device} />}
+          {page === "keymap" && (
+            <KeymapPage device={device} onContribute={() => setPage("contribute")} />
+          )}
           {page === "switches" && <SwitchesPage device={device} />}
           {page === "macros" && <MacrosPage device={device} />}
           {page === "settings" && <DevicePage device={device} />}

@@ -5,7 +5,6 @@
 // the Picture menu.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { openUrl } from "@tauri-apps/plugin-opener";
 import { ChevronDown, Pencil, RefreshCw, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
@@ -25,20 +24,17 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
-import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
 import KeyPicker, { directUsage, rememberRecent, searchAssignables } from "@/components/KeyPicker";
 import LayoutEditor from "@/components/LayoutEditor";
 import { useBoardLayout, type BoardLayout, type LayoutKey } from "@/lib/layout-loader";
 import { useBoardProfile } from "@/lib/use-profile";
-import { layoutBundle, type Inference } from "@/lib/layout-infer";
+import { type Inference } from "@/lib/layout-infer";
 import { fromLayout, type Draft } from "@/lib/layout-draft";
 import { DISABLED_GLYPH, PASSTHRU_GLYPH, entryLabel, usageLabel, type Assignable } from "@/lib/hid-usages";
 import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
 import Waiting from "@/components/Waiting";
 import { Banner, PageHeader, Segmented } from "@/components/Page";
-
-const REPO = "https://github.com/dniminenn/sharkfin";
 
 function sliceEntries(matrix: number[]): Map<number, number[]> {
   const m = new Map<number, number[]>();
@@ -48,7 +44,13 @@ function sliceEntries(matrix: number[]): Map<number, number[]> {
   return m;
 }
 
-export default function KeymapPage({ device }: { device: ConnectedDevice | null }) {
+export default function KeymapPage({
+  device,
+  onContribute,
+}: {
+  device: ConnectedDevice | null;
+  onContribute: () => void;
+}) {
   const connected = !!device;
   const { profile, count: profileCount, select: selectProfile, switching } =
     useBoardProfile(device);
@@ -193,7 +195,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         toast(t("Picture confirmed."), {
           description: t("sharkfin has no telemetry, so it only learns about boards from what owners send in. Send this one in and it ships built in for everyone with this board."),
           duration: 15000,
-          action: { label: t("Send it in"), onClick: () => sendIn(inf, "right") },
+          action: { label: t("Send it in"), onClick: onContribute },
         });
     } else {
       if (remaining === 0) {
@@ -230,19 +232,6 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   // shown, unrejected layout means the stored answer was "looks right".
   const effectiveVerdict = verdict ?? (inference && !pending ? "right" : null);
   const bundleFor = inference ?? reported;
-
-  // The report opens first: in a browser the click is what lets a window
-  // open, and an await in between would spend it.
-  const sendIn = async (inf: Inference, v: "right" | "wrong") => {
-    if (!device) return;
-    openUrl(
-      `${REPO}/issues/new?template=board-report.yml&title=${encodeURIComponent(
-        `[layout] ${deviceLabel(device.spec)}`,
-      )}`,
-    );
-    await navigator.clipboard.writeText(layoutBundle(device, inf, v));
-    toast.success(t("Bundle copied. Paste it into the report."));
-  };
 
   // On the cap: Enter takes the first match, Escape lets go, and a key that
   // is not a character (F13, PgUp, Delete) assigns itself.
@@ -373,7 +362,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                   {device && bundleFor && effectiveVerdict && (
                     <>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => sendIn(bundleFor, effectiveVerdict)}>
+                      <DropdownMenuItem onClick={onContribute}>
                         <Send />{" "}
                         {effectiveVerdict === "right"
                           ? t("Send this picture in")
@@ -433,7 +422,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                 {t("or")}{" "}
                 <button
                   className="text-primary underline underline-offset-2"
-                  onClick={() => sendIn(bundleFor, effectiveVerdict ?? "wrong")}
+                  onClick={onContribute}
                 >
                   {t("send what the board reports")}
                 </button>{" "}

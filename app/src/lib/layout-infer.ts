@@ -38,7 +38,7 @@ export interface Inference {
 export function layoutBundle(
   device: ConnectedDevice,
   inf: Inference,
-  verdict: "right" | "wrong",
+  verdict: "right" | "wrong" | null,
 ): string {
   const hex: string[] = [];
   for (let i = 0; i < inf.matrix.length; i += 16) {
@@ -60,7 +60,7 @@ export function layoutBundle(
   lines.push(
     `matched : ${inf.matched}/${inf.total} keys` +
       (inf.ambiguous.length ? `, ${inf.ambiguous.length} ambiguous` : ""),
-    `verdict : ${verdict === "right" ? "looks right" : "does not match"}`,
+    `verdict : ${verdict === null ? "not answered" : verdict === "right" ? "looks right" : "does not match"}`,
     `keymap, profile ${inf.profile + 1}, base layer:`,
     ...hex,
   );

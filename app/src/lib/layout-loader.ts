@@ -47,6 +47,10 @@ export interface BoardLayoutState {
   /** Inferred and not yet confirmed by the user; keymap writes stay gated. */
   pending: boolean;
   inference: Inference | null;
+  /** What a report carries once the owner has said no to every stored
+   *  picture: the last one refused, or the closest on a later connect.
+   *  Null while a picture is in play or the board was never rejected. */
+  rejected: Inference | null;
   /** Candidate pictures left to try after the current one. */
   remaining: number;
   confirm: () => void;
@@ -184,6 +188,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const [resolving, setResolving] = useState(true);
   const [pending, setPending] = useState(false);
   const [inference, setInference] = useState<Inference | null>(null);
+  const [rejected, setRejected] = useState<Inference | null>(null);
   const [remaining, setRemaining] = useState(0);
   const [nearest, setNearest] = useState<Inference | null>(null);
   const [attempt, setAttempt] = useState(0);
@@ -214,6 +219,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     setResolving(true);
     setPending(false);
     setInference(null);
+    setRejected(null);
     setRemaining(0);
     setNearest(null);
     matricesRef.current = [];
@@ -323,7 +329,8 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       // remapped profile misses the bar, so every profile gets a try.
       setLayout(fallbackRef.current ?? gridLayout());
       setResolving(false);
-      if (id === undefined || readStore(rejectedKey(id))) return;
+      if (id === undefined) return;
+      const refused = !!readStore(rejectedKey(id));
       const matrices = await readMatrices();
       if (!live || !matrices.length) return;
 
@@ -376,6 +383,12 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       // than drawing from a blank preset; anything less is a different
       // board.
       if (closest && closest.f1 >= 0.5) setNearest(closest);
+      // The owner already said no to everything: offer nothing, but keep
+      // what the board reports so the bundle can still carry it.
+      if (refused) {
+        setRejected(closest ?? inferSlots(gridLayout(), matrices[0]));
+        return;
+      }
       const ranked = rankCandidates(candidates, name, MAX_CANDIDATES);
       if (!ranked.length) return;
       candidatesRef.current = ranked;
@@ -419,6 +432,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       return;
     }
     if (id !== undefined) writeStore(rejectedKey(id), "1");
+    setRejected(candidatesRef.current[indexRef.current] ?? null);
     setPending(false);
     setRemaining(0);
     setInference(null);
@@ -458,6 +472,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         candidatesRef.current = [inf];
         indexRef.current = 0;
         setInference(inf);
+        setRejected(null);
         setLayout(inf.layout);
         setRemaining(0);
         setPending(true);
@@ -473,6 +488,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     resolving,
     pending,
     inference,
+    rejected,
     remaining,
     confirm,
     reject,
