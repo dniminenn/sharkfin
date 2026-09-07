@@ -51,10 +51,11 @@ export interface BoardLayoutState {
   remaining: number;
   confirm: () => void;
   reject: () => void;
-  /** Forget the stored answer and work the picture out again. A confirmed
-   *  picture is otherwise final, and a key missing from it is only noticed
-   *  after confirming. */
-  recheck: () => void;
+  /** Forget the stored answer and offer every stored picture that fits
+   *  this board, the registry's own suggestion first. This is the way out
+   *  for a board whose built-in picture is wrong, and for one that never
+   *  had a picture. */
+  sweep: () => void;
   /** Match a pasted drawing against the board; returns the match rate and,
    *  when it clears the bar, makes it the pending picture. */
   tryCustom: (layout: BoardLayout) => Promise<number>;
@@ -191,6 +192,8 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const indexRef = useRef(0);
   /** The shipped picture, when there is one to go back to. */
   const fallbackRef = useRef<BoardLayout | null>(null);
+  /** Set by sweep(): skip the shipped picture and offer the collection. */
+  const forcedRef = useRef(false);
 
   const readMatrices = useCallback(async () => {
     if (matricesRef.current.length) return matricesRef.current;
@@ -222,11 +225,38 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       setResolving(false);
       return;
     }
+    const forced = forcedRef.current;
+    forcedRef.current = false;
     (async () => {
       const named = name === UNKNOWN_NAME ? null : await loadVendor(name);
       if (!live) return;
-      if (named && usable(named)) {
+      if (named && usable(named)) fallbackRef.current = named;
+      if (named && usable(named) && !forced) {
         setLayout(named);
+        // An answer the owner already gave outranks the shipped file: a
+        // picture they drew, or one they picked from the collection. It is
+        // matched against the live keymap again rather than trusted, so a
+        // board whose keymap changed underneath falls back to the file.
+        const stored = id === undefined ? null : readStore(confirmedKey(id));
+        if (stored && stored !== "1" && stored !== name) {
+          const matrices = await readMatrices();
+          if (!live) return;
+          let geometry: BoardLayout | null = null;
+          if (stored === "kle") {
+            const raw = readStore(customKey(id!));
+            if (raw) geometry = JSON.parse(raw) as BoardLayout;
+          } else {
+            geometry = await resolvePicture(stored, loadVendor);
+          }
+          if (!live) return;
+          const inf = geometry && matrices.length ? bestMatch(geometry, stored, matrices) : null;
+          if (inf && inf.matchRate >= MATCH_BAR) {
+            setInference(inf);
+            setLayout(inf.layout);
+            setResolving(false);
+            return;
+          }
+        }
         // Layout files are shared between boards, and boards sharing one
         // do not always ship the same factory keymap, so the slots can be
         // right for a sibling and wrong here. Keep them only while the
@@ -286,11 +316,12 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         setResolving(false);
         return;
       }
-      // No slot data anywhere for this board. The board's own keymap is
-      // the only remaining source; trust nothing short of a near-total
-      // match, and a user who already said no keeps the grid. A remapped
-      // profile misses the bar, so every profile gets a try.
-      setLayout(gridLayout());
+      // No slot data anywhere for this board, or the owner asked for the
+      // collection instead of the shipped picture. The board's own keymap
+      // is the only remaining source; trust nothing short of a near-total
+      // match, and a user who already said no keeps what they had. A
+      // remapped profile misses the bar, so every profile gets a try.
+      setLayout(fallbackRef.current ?? gridLayout());
       setResolving(false);
       if (id === undefined || readStore(rejectedKey(id))) return;
       const matrices = await readMatrices();
@@ -397,13 +428,14 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     setLayout(fallbackRef.current ?? gridLayout());
   }, [id]);
 
-  const recheck = useCallback(() => {
+  const sweep = useCallback(() => {
     if (id !== undefined) {
       clearStore(confirmedKey(id));
       clearStore(rejectedKey(id));
       clearStore(customKey(id));
     }
     matricesRef.current = [];
+    forcedRef.current = true;
     setAttempt((n) => n + 1);
   }, [id]);
 
@@ -444,7 +476,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     remaining,
     confirm,
     reject,
-    recheck,
+    sweep,
     tryCustom,
     previewCustom,
     nearest,

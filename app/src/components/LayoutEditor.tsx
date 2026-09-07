@@ -39,6 +39,9 @@ import {
 } from "@/lib/layout-draft";
 
 interface Props {
+  /** What the header calls the job: drawing a board that has no picture,
+   *  or editing one it has. */
+  title: string;
   draft: Draft | null;
   onChange: (draft: Draft | null) => void;
   nearest: Inference | null;
@@ -87,6 +90,7 @@ function describe(layout: BoardLayout): string {
 const fmt = (u: number) => `${u}u`;
 
 export default function LayoutEditor({
+  title,
   draft,
   onChange,
   nearest,
@@ -409,7 +413,7 @@ export default function LayoutEditor({
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("Draw your board")}</CardTitle>
+          <CardTitle className="text-base">{title}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 text-sm">
           <p className="text-muted-foreground">
@@ -528,7 +532,7 @@ export default function LayoutEditor({
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 className="text-base font-semibold">{t("Draw your board")}</h2>
+          <h2 className="text-base font-semibold">{title}</h2>
           <p className="text-xs text-muted-foreground">
             {t("Click a key to label or resize it, drag to move. Arrow keys nudge, Delete removes.")}
           </p>
@@ -815,7 +819,7 @@ export default function LayoutEditor({
 
       <div className="flex flex-wrap items-center gap-2">
         <Button size="sm" onClick={use} disabled={busy || !inference || rate < BAR}>
-          {t("Use this drawing")}
+          {t("Use this picture")}
         </Button>
         <Button size="sm" variant="ghost" onClick={onClose}>
           {t("Close")}

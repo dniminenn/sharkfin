@@ -3,11 +3,17 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { Check, Copy, Keyboard } from "lucide-react";
+import { Pencil, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   Select,
   SelectContent,
@@ -23,7 +29,7 @@ import LayoutEditor from "@/components/LayoutEditor";
 import { useBoardLayout, type BoardLayout, type LayoutKey } from "@/lib/layout-loader";
 import { useBoardProfile } from "@/lib/use-profile";
 import { layoutBundle, type Inference } from "@/lib/layout-infer";
-import type { Draft } from "@/lib/layout-draft";
+import { fromLayout, type Draft } from "@/lib/layout-draft";
 import {
   DISABLED_GLYPH,
   GROUPS,
@@ -64,7 +70,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     remaining,
     confirm,
     reject,
-    recheck,
+    sweep,
     tryCustom,
     previewCustom,
     nearest,
@@ -73,7 +79,6 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   // Kept past rejection: the loader drops its inference then, and a "does
   // not match" report needs the picture that was turned down.
   const [reported, setReported] = useState<Inference | null>(null);
-  const [copied, setCopied] = useState(false);
   const [drawing, setDrawing] = useState(false);
   // Kept while the editor is closed, so a drawing turned down at the
   // confirmation step can be picked up where it was left.
@@ -192,10 +197,18 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   const answer = (v: "right" | "wrong") => {
     // "Wrong" pages to the next candidate picture; the verdict only lands
     // once there is nothing left to try.
-    setCopied(false);
     if (v === "right") {
       setVerdict("right");
       confirm();
+      // The one moment to ask. A picture confirmed here is the only way
+      // the collection grows, and the page itself stays quiet about it.
+      const inf = inference;
+      if (inf)
+        toast(t("Picture confirmed."), {
+          description: t("sharkfin has no telemetry, so it only learns about boards from what owners send in. Send this one in and it ships built in for everyone with this board."),
+          duration: 15000,
+          action: { label: t("Send it in"), onClick: () => sendIn(inf, "right") },
+        });
     } else {
       if (remaining === 0) {
         setVerdict("wrong");
@@ -227,13 +240,17 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   const effectiveVerdict = verdict ?? (inference && !pending ? "right" : null);
   const bundleFor = inference ?? reported;
 
-  const copyBundle = async () => {
-    if (!device || !bundleFor || !effectiveVerdict) return;
-    await navigator.clipboard.writeText(
-      layoutBundle(device, bundleFor, effectiveVerdict),
+  // The report opens first: in a browser the click is what lets a window
+  // open, and an await in between would spend it.
+  const sendIn = async (inf: Inference, v: "right" | "wrong") => {
+    if (!device) return;
+    openUrl(
+      `${REPO}/issues/new?template=board-report.yml&title=${encodeURIComponent(
+        `[layout] ${deviceLabel(device.spec)}`,
+      )}`,
     );
-    setCopied(true);
-    toast.success(t("Copied. Paste it into the report."));
+    await navigator.clipboard.writeText(layoutBundle(device, inf, v));
+    toast.success(t("Bundle copied. Paste it into the report."));
   };
 
   const resetKey = async () => {
@@ -280,10 +297,13 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">{t("Keys")}</h1>
-          <p className="text-sm text-muted-foreground">
-            {t("Click a key, then pick its new function. Writes are instant.")}
-          </p>
+          {!drawing && (
+            <p className="text-sm text-muted-foreground">
+              {t("Click a key, then pick its new function. Writes are instant.")}
+            </p>
+          )}
         </div>
+        {!drawing && (
         <div className="flex items-center gap-2">
           <div className="flex rounded-md border p-0.5">
             {(["base", "fn"] as const).map((l) => (
@@ -316,22 +336,19 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
             </SelectContent>
           </Select>
         </div>
+        )}
       </div>
 
-      {layout.grid && (
-        <p className="text-xs text-muted-foreground">
-          {t("No layout data for this board yet, so here are its 128 matrix slots as a grid. Everything is still editable; labels come from what the board reports.")}
-        </p>
-      )}
-
-      {pending && (
+      {pending && !drawing && (
         <Card>
           <CardHeader>
             <CardTitle className="text-base">{t("Does this match your keyboard?")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p>
-              {t("This picture was matched against your board's current keymap. Compare it with the physical keys: same shape, same legends in the same places. Keys stay read-only until you answer.")}
+              {inference?.layoutName === "kle"
+                ? t("This is the picture you drew, matched against your board's current keymap. Compare it with the physical keys. Keys stay read-only until you answer.")
+                : t("This picture was matched against your board's current keymap. Compare it with the physical keys: same shape, same legends in the same places. Keys stay read-only until you answer.")}
             </p>
             {inference && inference.ambiguous.length > 0 && (
               <p className="text-muted-foreground">
@@ -345,6 +362,16 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
               <Button size="sm" variant="outline" onClick={() => answer("wrong")}>
                 {t("Something is wrong")}
               </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setDraft(fromLayout(layout));
+                  setDrawing(true);
+                }}
+              >
+                <Pencil className="mr-1 h-3.5 w-3.5" /> {t("Almost, let me fix it")}
+              </Button>
               {remaining > 0 && (
                 <span className="text-xs text-muted-foreground">
                   {t("no shows the next closest picture, {remaining} left", { remaining })}
@@ -355,65 +382,40 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         </Card>
       )}
 
-      {device && bundleFor && (verdict !== null || !pending) && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              {effectiveVerdict === "right" ? t("Make it built-in") : t("Help fix it")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <p>
-              {effectiveVerdict === "right"
-                ? t("This layout is matched on your board every time it connects. Paste this bundle into a board report and it ships built in for everyone with this board.")
-                : t("You get the slot grid instead. Paste this bundle into a board report so the layout can be fixed for everyone with this board.")}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <Button size="sm" variant="outline" onClick={copyBundle}>
-                {copied ? (
-                  <Check className="mr-1 h-3.5 w-3.5" />
-                ) : (
-                  <Copy className="mr-1 h-3.5 w-3.5" />
-                )}
-                {copied ? t("Copied") : t("Copy bundle")}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() =>
-                  openUrl(
-                    `${REPO}/issues/new?template=board-report.yml&title=${encodeURIComponent(
-                      `[layout] ${deviceLabel(device.spec)}`,
-                    )}`,
-                  )
-                }
-              >
-                <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Open a board report")}
-              </Button>
-              <span className="text-muted-foreground">{t("then paste")}</span>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
       {connected && layout.grid && !pending && !drawing && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("Draw your board")}</CardTitle>
+            <CardTitle className="text-base">{t("No picture of this keyboard yet")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p className="text-muted-foreground">
-              {t("No stored picture matches this keyboard. Draw it here, starting from a preset or the closest picture, and sharkfin matches it to your keys as you go.")}
+              {t("Below is every key the board reports, as a numbered slot. Everything still works; the picture is what is missing. Draw it here, starting from a preset or the closest stored picture, and sharkfin checks each key against your board as you go.")}
             </p>
-            <Button size="sm" onClick={() => setDrawing(true)}>
-              {draft ? t("Continue drawing") : t("Draw it")}
-            </Button>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button size="sm" onClick={() => setDrawing(true)}>
+                <Pencil className="mr-1 h-3.5 w-3.5" />
+                {draft ? t("Continue drawing") : t("Draw it")}
+              </Button>
+              {device && bundleFor && (
+                <span className="text-xs text-muted-foreground">
+                  {t("or")}{" "}
+                  <button
+                    className="text-primary underline underline-offset-2"
+                    onClick={() => sendIn(bundleFor, effectiveVerdict ?? "wrong")}
+                  >
+                    {t("send what the board reports")}
+                  </button>{" "}
+                  {t("and it gets drawn for you.")}
+                </span>
+              )}
+            </div>
           </CardContent>
         </Card>
       )}
 
       {drawing && (
         <LayoutEditor
+          title={layout.grid ? t("Draw your board") : t("Edit the picture")}
           draft={draft}
           onChange={setDraft}
           nearest={nearest}
@@ -453,12 +455,32 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
           </p>
 
           {!pending && (
-            <p className="text-center text-xs text-muted-foreground">
-              {t("Not your keyboard, or a key missing?")}{" "}
-              <button className="underline" onClick={recheck}>
-                {t("Check the picture again")}
-              </button>
-            </p>
+            <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+              <span>
+                {layout.grid
+                  ? t("Slots are labelled with what the board reports.")
+                  : inference?.layoutName === "kle"
+                    ? t("This is your drawing.")
+                    : inference
+                      ? t("This picture was matched against your board.")
+                      : t("Built-in picture for this board.")}
+              </span>
+              {!layout.grid && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setDraft(fromLayout(layout));
+                    setDrawing(true);
+                  }}
+                >
+                  <Pencil className="mr-1 h-3.5 w-3.5" /> {t("Edit the picture")}
+                </Button>
+              )}
+              <Button size="sm" variant="outline" onClick={sweep}>
+                <RefreshCw className="mr-1 h-3.5 w-3.5" /> {t("Try another picture")}
+              </Button>
+            </div>
           )}
 
           {offPicture.length > 0 && (
@@ -566,6 +588,28 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
               </CardContent>
             )}
           </Card>
+
+          {device && bundleFor && effectiveVerdict && !layout.grid && !pending && (
+            <p className="text-center text-xs text-muted-foreground">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="underline underline-offset-2"
+                      onClick={() => sendIn(bundleFor, effectiveVerdict)}
+                    >
+                      {effectiveVerdict === "right"
+                        ? t("Send this picture in")
+                        : t("Help fix this picture")}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs text-center">
+                    {t("sharkfin has no telemetry, so it learns about boards only from what their owners send in. This opens a board report with the bundle already copied.")}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </p>
+          )}
         </>
       )}
     </div>
