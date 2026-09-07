@@ -183,7 +183,6 @@ pub fn derive_spec(
             screen,
             side_light: false,
         },
-        confirmed: None,
         unregistered: true,
         light: None,
         led_flags_swapped: false,

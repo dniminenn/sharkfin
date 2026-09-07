@@ -128,12 +128,6 @@ The script:
   still publish firmware: identity and USB ids from the table, the picture
   from the firmware keymap when exactly one shipped picture matches it,
   family `unknown` so the app settles it from the board at connect.
-- `app/src-tauri/data/confirmed.json` is separate and untouched by
-  regeneration: one line per board whose owner sent a read sweep in an
-  issue, with the issue number and app version. It marks the board
-  **confirmed** in `docs/BOARDS.md` and the Contribute page stops asking
-  for a board report on it. Add a line when a clean bundle for a
-  registered board comes in.
 - Keeps any layout file marked `"local": true`. Those are hand-made from
   hardware evidence for boards no vendor layout fits, and regeneration
   neither deletes nor overwrites them. The name must not match a vendor

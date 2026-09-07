@@ -63,10 +63,6 @@ pub struct DeviceSpec {
     #[serde(default)]
     pub switch_replaceable: bool,
     pub features: DeviceFeatures,
-    /// Set when an owner's read sweep from this board is on file
-    /// (`data/confirmed.json`). The vendor's data alone never sets it.
-    #[serde(default)]
-    pub confirmed: Option<Confirmation>,
     /// Built from the board's own answers because the registry has no
     /// entry for its id (`derive.rs`). Never true for a shipped entry. The
     /// app says so and asks the owner before the first write.
@@ -84,14 +80,6 @@ pub struct DeviceSpec {
     /// the X86 lineage keeps 7 fixed, 8 rainbow (docs/PROTOCOL.md).
     #[serde(default)]
     pub led_flags_swapped: bool,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Confirmation {
-    pub id: u32,
-    pub issue: u32,
-    pub version: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -326,7 +314,6 @@ pub fn build_id() -> String {
 }
 
 static DEVICES_JSON: &str = include_str!("../data/devices.json");
-static CONFIRMED_JSON: &str = include_str!("../data/confirmed.json");
 static LIGHT_LAYOUTS_JSON: &str = include_str!("../data/light-layouts.json");
 
 /// A malformed registry must not take the app down; callers fall back to
@@ -339,13 +326,6 @@ pub fn all() -> Vec<DeviceSpec> {
             return Vec::new();
         }
     };
-    let confirmed: Vec<Confirmation> = match serde_json::from_str(CONFIRMED_JSON) {
-        Ok(v) => v,
-        Err(e) => {
-            log::error!("data/confirmed.json failed to parse: {e}");
-            Vec::new()
-        }
-    };
     let lights: std::collections::HashMap<String, LightLayoutSpec> =
         match serde_json::from_str(LIGHT_LAYOUTS_JSON) {
             Ok(v) => v,
@@ -355,7 +335,6 @@ pub fn all() -> Vec<DeviceSpec> {
             }
         };
     for d in &mut devices {
-        d.confirmed = confirmed.iter().find(|c| c.id == d.id).cloned();
         d.light = lights.get(&d.light_layout).cloned();
     }
     devices
@@ -524,24 +503,6 @@ mod tests {
             assert!(!d.family.is_empty(), "device {} has no family", d.id);
             let known = matches!(d.family.as_str(), "yc500" | "gen2");
             assert_eq!(d.writes_supported(), known, "device {}", d.id);
-        }
-    }
-
-    #[test]
-    fn confirmations_name_registered_boards() {
-        let entries: Vec<Confirmation> =
-            serde_json::from_str(CONFIRMED_JSON).expect("confirmed.json parses");
-        for c in entries {
-            assert!(
-                by_id(c.id).is_some(),
-                "confirmed.json id {} is not in the registry",
-                c.id
-            );
-            assert!(
-                c.issue > 0 && !c.version.is_empty(),
-                "confirmed.json id {}",
-                c.id
-            );
         }
     }
 

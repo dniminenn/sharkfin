@@ -56,7 +56,6 @@ export interface DeviceSpec {
   /** The vendor lets the owner declare a different switch model. */
   switchReplaceable?: boolean;
   /** An owner's read sweep from this board is on file. */
-  confirmed?: { issue: number; version: string } | null;
   /** Built from the board's own answers because the registry has no entry
    * for its id. The app says so and asks before the first write. */
   unregistered?: boolean;

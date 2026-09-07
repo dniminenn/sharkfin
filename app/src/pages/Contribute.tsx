@@ -48,8 +48,10 @@ export default function ContributePage({
   const [layoutCopied, setLayoutCopied] = useState(false);
   // Answered neither as a keyboard nor as a receiver; nothing to report from it.
   const silent = !device && !!unknown && unknown.deviceId === null;
-  // A board with an owner's sweep on file has nothing left to report.
-  const confirmed = device && !device.readOnly ? device.spec.confirmed : null;
+  // A registered board drawn from its built-in picture has nothing left
+  // to report. An inference means the picture was matched at connect or
+  // the owner replaced the built-in one, and that is what a report carries.
+  const wanted = !device || device.spec.unregistered || device.readOnly || !!inference;
 
   const copyLayout = async () => {
     if (!device || !inference) return;
@@ -135,11 +137,6 @@ export default function ContributePage({
             </p>
           )
         )}
-        {confirmed && (
-          <p className="text-sm text-muted-foreground">
-            {t("This board is confirmed on hardware (issue #{issue}, sharkfin {version}). There is nothing to send unless something is wrong; a bug report still wants a bundle.", { issue: confirmed.issue, version: confirmed.version })}
-          </p>
-        )}
         {!device && unknown && unknown.deviceId !== null && (
           <p className="text-sm text-muted-foreground">
             {t("sharkfin does not know this board yet. A bundle is the first step to adding it.")}
@@ -176,7 +173,7 @@ export default function ContributePage({
             </li>
             <li className="flex flex-wrap items-center gap-3">
               {step(3)}
-              {!confirmed && (
+              {wanted && (
                 <Button
                   size="sm"
                   variant="ghost"
