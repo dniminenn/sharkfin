@@ -34,7 +34,7 @@ export default function ConnectGate() {
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
-      <div className="pointer-events-auto flex items-center gap-3 rounded-xl border bg-card px-4 py-3 shadow-lg">
+      <div className="pointer-events-auto flex items-center gap-3 rounded-xl bg-card px-4 py-3 shadow-lg ring-1 ring-foreground/10">
         <span className="text-sm text-muted-foreground">
           Plug in the keyboard or its receiver, then
         </span>

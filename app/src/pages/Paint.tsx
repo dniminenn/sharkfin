@@ -13,9 +13,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
+import { PageHeader, Strip } from "@/components/Page";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
 import { writePerKey, type ConnectedDevice } from "@/lib/backend";
 
@@ -273,17 +273,12 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
 
   return (
     <div className="mx-auto max-w-4xl space-y-5 p-6">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">{t("Paint")}</h1>
-          <p className="text-sm text-muted-foreground">
-            {t("Click or drag to colour keys, right-click to pick a colour up, then send it. Sending writes the keyboard's flash and takes a few seconds.")}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title={t("Paint")}
+        hint={t("Click or drag to colour keys, right-click to pick a colour up, then send it. Sending writes the keyboard's flash and takes a few seconds.")}
+      />
 
-      <Card>
-        <CardContent className="flex flex-wrap items-center gap-3">
+      <Strip className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1">
             <Button
               variant={tool === "brush" ? "secondary" : "ghost"}
@@ -372,11 +367,11 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
           </div>
 
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => fillAll(brush)}>
+            <Button variant="ghost" size="sm" onClick={() => fillAll(brush)}>
               <PaintBucket className="mr-1 h-4 w-4" />
               {t("Fill")}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => fillAll("#000000")}>
+            <Button variant="ghost" size="sm" onClick={() => fillAll("#000000")}>
               <Eraser className="mr-1 h-4 w-4" />
               {t("Clear")}
             </Button>
@@ -386,7 +381,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
             </Button>
           </div>
 
-          <div className="flex w-full flex-wrap items-center gap-2 border-t pt-3">
+          <div className="flex w-full flex-wrap items-center gap-2 pt-1">
             <span className="text-xs text-muted-foreground">{t("Patterns")}</span>
             {saved.map((slot, i) => (
               <button
@@ -398,7 +393,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
                 }}
                 aria-label={t("Saved pattern {n}", { n: i + 1 })}
                 title={t("Load this pattern. Right-click to remove.")}
-                className="keycap-plate relative h-8 w-14 overflow-hidden rounded-md border transition-transform hover:scale-110"
+                className="keycap-plate relative h-8 w-14 overflow-hidden rounded-md transition-transform hover:scale-110"
               >
                 {paintKeys.map((k) => (
                   <span
@@ -427,8 +422,7 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
               </Button>
             )}
           </div>
-        </CardContent>
-      </Card>
+      </Strip>
 
       <div className="w-full" style={{ containerType: "inline-size" }}>
         <div className="keycap-plate mx-auto max-w-[920px] rounded-2xl p-[1.6%]">

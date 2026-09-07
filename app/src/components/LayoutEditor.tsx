@@ -9,13 +9,13 @@ import { toast } from "sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { Minus, Plus, Trash2, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import type { BoardLayout } from "@/lib/layout-loader";
 import type { Inference } from "@/lib/layout-infer";
-import { entryLabel } from "@/lib/hid-usages";
+import { CODE_TO_USAGE, entryLabel } from "@/lib/hid-usages";
+import { directUsage, matchRank } from "@/components/KeyPicker";
 import { FN_ENTRY, kleToLayout } from "@/lib/kle";
 import {
   DRAWABLE,
@@ -88,6 +88,10 @@ function describe(layout: BoardLayout): string {
 }
 
 const fmt = (u: number) => `${u}u`;
+
+const CODE_OF: Record<number, string> = Object.fromEntries(
+  Object.entries(CODE_TO_USAGE).map(([c, u]) => [u, c.toLowerCase()]),
+);
 
 /** A preset at a glance: its caps as a small drawing on plate colours. */
 function Silhouette({ draft }: { draft: Draft }) {
@@ -343,6 +347,7 @@ export default function LayoutEditor({
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
+    if ((e.target as HTMLElement).tagName === "INPUT") return;
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
       e.preventDefault();
       undo();
@@ -442,15 +447,68 @@ export default function LayoutEditor({
   };
 
   const q = query.trim().toLowerCase();
+  const rankOf = (g: (typeof DRAWABLE)[number], i: (typeof DRAWABLE)[number]["items"][number]) =>
+    matchRank(q, i.label, typeof i.usage === "number" ? CODE_OF[i.usage] : undefined, g.name);
   const pickable = useMemo(() => {
     if (!q) return DRAWABLE;
     return DRAWABLE.map((g) => ({
       ...g,
-      items: g.items.filter(
-        (i) => i.label.toLowerCase().includes(q) || g.name.toLowerCase().includes(q),
-      ),
+      items: g.items.filter((i) => rankOf(g, i) >= 0),
     })).filter((g) => g.items.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q]);
+  // The best match across every group, not the first group's first item.
+  const firstPick = useMemo(() => {
+    if (!q) return undefined;
+    let best: { rank: number; item: (typeof DRAWABLE)[number]["items"][number] } | undefined;
+    for (const g of pickable)
+      for (const i of g.items) {
+        const rank = rankOf(g, i);
+        if (!best || rank < best.rank) best = { rank, item: i };
+      }
+    return best?.item;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, pickable]);
+
+  // On the cap: Enter takes the first match, Escape lets go, arrows nudge,
+  // Delete on an empty field removes the key, and a key that is not a
+  // character labels the cap with itself.
+  const onCapKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      setOpen(false);
+      setSelected(null);
+      plateRef.current?.focus();
+      return;
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (q && firstPick) label(firstPick.usage);
+      return;
+    }
+    if (e.key.startsWith("Arrow")) {
+      e.preventDefault();
+      const step = e.shiftKey ? 1 : STEP;
+      const d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+      if (d) nudge(d[0], d[1]);
+      return;
+    }
+    if ((e.key === "Delete" || e.key === "Backspace") && !query) {
+      e.preventDefault();
+      remove();
+      return;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !query) {
+      e.preventDefault();
+      undo();
+      return;
+    }
+    const usage = directUsage(e);
+    if (usage !== undefined && DRAWABLE.some((g) => g.items.some((i) => i.usage === usage))) {
+      e.preventDefault();
+      label(usage);
+    }
+  };
 
   const labelled = draft?.keys.filter((k) => k.usage !== null).length ?? 0;
   const unlabelled = (draft?.keys.length ?? 0) - labelled;
@@ -693,14 +751,36 @@ export default function LayoutEditor({
             {anchorBox && (
               <PopoverAnchor asChild>
                 <div
-                  className="pointer-events-none absolute"
+                  className={open && selectedKey ? "absolute" : "pointer-events-none absolute"}
                   style={{
                     left: cq(anchorBox.x),
                     top: cq(anchorBox.y),
                     width: cq(anchorBox.w - CAP_GAP),
                     height: cq(anchorBox.h - CAP_GAP),
                   }}
-                />
+                >
+                  {open && selectedKey && (
+                    <input
+                      autoFocus
+                      value={query}
+                      placeholder={selectedKey.usage === null ? "?" : capLegend(selectedKey.usage)}
+                      onChange={(e) => setQuery(e.target.value)}
+                      onKeyDown={onCapKey}
+                      spellCheck={false}
+                      autoComplete="off"
+                      aria-label={t("Type the legend, like PgUp or F13")}
+                      className="keycap absolute inset-0 z-20 w-full rounded-[8%] text-center font-medium leading-none tracking-tight outline-none placeholder:opacity-50"
+                      style={
+                        {
+                          "--key": "var(--key-accent)",
+                          "--key-fg": "var(--key-accent-legend)",
+                          color: "var(--key-fg)",
+                          fontSize: cq(0.28),
+                        } as React.CSSProperties
+                      }
+                    />
+                  )}
+                </div>
               </PopoverAnchor>
             )}
           </div>
@@ -708,7 +788,7 @@ export default function LayoutEditor({
       </div>
 
       {selected?.kind === "knob" && draft.knob && (
-        <PopoverContent side="bottom" sideOffset={10} className="w-64 space-y-3 p-3">
+        <PopoverContent side="bottom" sideOffset={10} className="w-64 space-y-3 p-3" onOpenAutoFocus={(e) => e.preventDefault()}>
           <div className="flex items-baseline justify-between">
             <span className="text-sm font-semibold">{t("Knob")}</span>
             <Button size="xs" variant="ghost" onClick={remove}>
@@ -731,7 +811,7 @@ export default function LayoutEditor({
         </PopoverContent>
       )}
       {selectedKey && (
-        <PopoverContent side="bottom" sideOffset={10} className="w-80 space-y-3 p-3">
+        <PopoverContent side="bottom" sideOffset={10} className="w-80 space-y-3 p-3" onOpenAutoFocus={(e) => e.preventDefault()}>
           <div className="flex items-baseline justify-between gap-2">
             <div className="min-w-0">
               <div className="truncate font-mono text-sm font-semibold">
@@ -784,13 +864,11 @@ export default function LayoutEditor({
               <Plus /> {t("Add one to the right")}
             </Button>
           </div>
-          <Input
-            autoFocus
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("Type the legend, like PgUp or F13")}
-            className="h-8"
-          />
+          <p className="text-xs text-muted-foreground">
+            {q
+              ? t("Enter takes the outlined match.")
+              : t("Type the legend on the key, like PgUp or F13, or press that key on another keyboard.")}
+          </p>
           <div className="max-h-56 space-y-3 overflow-y-auto pr-1">
             {!q && (
               <button
@@ -813,8 +891,9 @@ export default function LayoutEditor({
                         onClick={() => label(item.usage)}
                         title={holder !== undefined && !here ? t("Already on another key") : undefined}
                         data-on={here}
+                        data-first={!!q && item === firstPick}
                         className={cn(
-                          "rounded-md px-2 py-1 text-xs transition-colors hover:bg-accent data-[on=true]:bg-primary data-[on=true]:text-primary-foreground",
+                          "rounded-md px-2 py-1 text-xs transition-colors hover:bg-accent data-[first=true]:ring-1 data-[first=true]:ring-(--ring) data-[on=true]:bg-primary data-[on=true]:text-primary-foreground",
                           holder !== undefined && !here && "text-muted-foreground",
                         )}
                       >

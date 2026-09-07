@@ -46,6 +46,14 @@ interface Props {
   /** Place a popover anchor over the selected key, for a picker that
    *  opens on the key itself. The Popover root is the caller's. */
   anchor?: boolean;
+  /** Turn the selected cap into a text field: what is typed is the legend
+   *  being looked for. Rendered over the cap, in the cap's own style. */
+  editor?: {
+    value: string;
+    placeholder: string;
+    onChange: (v: string) => void;
+    onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  };
   labelFor: (k: LayoutKey, entry: number[] | undefined) => string;
   onSelect: (k: LayoutKey) => void;
 }
@@ -135,6 +143,7 @@ export default function KeyboardView({
   modified,
   flash = null,
   anchor = false,
+  editor,
   labelFor,
   onSelect,
 }: Props) {
@@ -204,14 +213,35 @@ export default function KeyboardView({
           {anchorBox && (
             <PopoverAnchor asChild>
               <div
-                className="pointer-events-none absolute"
+                className={editor ? "absolute" : "pointer-events-none absolute"}
                 style={{
                   left: pct(anchorBox.x, layout.canvas.width),
                   top: pct(anchorBox.y, layout.canvas.height),
                   width: pct(anchorBox.w, layout.canvas.width),
                   height: pct(anchorBox.h, layout.canvas.height),
                 }}
-              />
+              >
+                {editor && (
+                  <input
+                    autoFocus
+                    value={editor.value}
+                    placeholder={editor.placeholder}
+                    onChange={(e) => editor.onChange(e.target.value)}
+                    onKeyDown={editor.onKeyDown}
+                    spellCheck={false}
+                    autoComplete="off"
+                    aria-label={editor.placeholder}
+                    className="keycap absolute inset-0 z-20 w-full rounded-[8%] text-center text-[1.15cqw] font-medium leading-none tracking-tight outline-none placeholder:opacity-60"
+                    style={
+                      {
+                        "--key": "var(--key-accent)",
+                        "--key-fg": "var(--key-accent-legend)",
+                        color: "var(--key-fg)",
+                      } as React.CSSProperties
+                    }
+                  />
+                )}
+              </div>
             </PopoverAnchor>
           )}
         </div>

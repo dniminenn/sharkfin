@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Banner, Chip, PageHeader, Section } from "@/components/Page";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
@@ -213,99 +213,93 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
   const hex = rgbToHex(param.r, param.g, param.b);
   const colorless = mode?.noColor ?? false;
 
-  return (
-    <div className="mx-auto max-w-3xl space-y-6 p-8">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight">{t("Lighting")}</h1>
-        <p className="text-sm text-muted-foreground">
-          {t("Backlight effect, color and motion. Changes apply live.")}
-        </p>
+  const slider = (
+    label: string,
+    value: number,
+    max: number,
+    onChange: (v: number) => void,
+    onCommit: (v: number) => void,
+    muted = false,
+  ) => (
+    <div className={cn("space-y-2", muted && "pointer-events-none opacity-50")}>
+      <div className="flex justify-between text-sm">
+        <Label>{label}</Label>
+        <span className="text-muted-foreground">
+          {value}/{max}
+        </span>
       </div>
+      <Slider
+        min={0}
+        max={max}
+        step={1}
+        value={[value]}
+        onValueChange={([v]) => onChange(v)}
+        onValueCommit={([v]) => onCommit(v)}
+      />
+    </div>
+  );
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("Effect")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
-            {modes.map((m) => (
-              <button
-                key={m.value}
-                onClick={() => commit({ mode: m.value, option: 0 })}
-                className={cn(
-                  "rounded-md border px-2 py-2 text-xs transition-colors sm:text-sm",
-                  param.mode === m.value
-                    ? "border-primary bg-primary/10 font-medium"
-                    : "hover:bg-accent",
-                )}
-              >
-                {t(m.label)}
-              </button>
-            ))}
+  return (
+    <div className="mx-auto max-w-3xl space-y-8 p-6">
+      <PageHeader
+        title={t("Lighting")}
+        hint={t("Backlight effect, color and motion. Changes apply live.")}
+      />
+
+      <Section title={t("Effect")}>
+        <div className="flex flex-wrap gap-1">
+          {modes.map((m) => (
+            <Chip key={m.value} on={param.mode === m.value} onClick={() => commit({ mode: m.value, option: 0 })}>
+              {t(m.label)}
+            </Chip>
+          ))}
+        </div>
+        {mode?.options && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm text-muted-foreground">{t("Direction")}</span>
+            {mode.options.map((opt, i) =>
+              opt === null ? null : (
+                <Chip key={opt} on={param.option === i} onClick={() => commit({ option: i })} className="text-xs">
+                  {t(opt)}
+                </Chip>
+              ),
+            )}
           </div>
-          {mode?.options && (
-            <div className="flex items-center gap-2">
-              <Label className="text-sm text-muted-foreground">{t("Direction")}</Label>
-              <div className="flex gap-1">
-                {mode.options.map((opt, i) => opt === null ? null : (
-                  <button
-                    key={opt}
-                    onClick={() => commit({ option: i })}
-                    className={cn(
-                      "rounded-md border px-3 py-1 text-xs transition-colors",
-                      param.option === i
-                        ? "border-primary bg-primary/10 font-medium"
-                        : "hover:bg-accent",
-                    )}
-                  >
-                    {t(opt)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        )}
+      </Section>
 
-      <Card className={cn(colorless && "opacity-50")}>
-        <CardHeader>
-          <CardTitle className="text-base">{t("Color")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {opts?.ledOff && (
-            <div className="rounded-md border border-(--ring) bg-accent/40 px-3 py-2 text-sm">
-              {t("The backlight is off. Pick a colour or rainbow to light it back up.")}
-            </div>
-          )}
-          <div className="flex items-center gap-3">
-            {SWATCHES.map((c) => (
-              <button
-                key={c}
-                disabled={colorless}
-                onClick={() => pickColor(hexToRgb(c))}
-                className={cn(
-                  "h-8 w-8 rounded-full border-2 transition-transform enabled:hover:scale-110",
-                  !param.dazzle && hex === c
-                    ? "border-foreground"
-                    : "border-transparent",
-                )}
-                style={{ backgroundColor: c }}
-                aria-label={c}
-              />
-            ))}
-            <input
-              type="color"
-              value={hex}
+      <Section
+        title={t("Color")}
+        hint={colorless ? t("This effect brings its own colours.") : undefined}
+        className={cn(colorless && "opacity-50")}
+      >
+        {opts?.ledOff && (
+          <Banner>{t("The backlight is off. Pick a colour or rainbow to light it back up.")}</Banner>
+        )}
+        <div className="flex flex-wrap items-center gap-3">
+          {SWATCHES.map((c) => (
+            <button
+              key={c}
               disabled={colorless}
-              onChange={(e) => commitIdle({ ...hexToRgb(e.target.value), dazzle: false })}
-              className="h-8 w-8 cursor-pointer rounded-full border bg-transparent"
-              aria-label={t("Custom color")}
+              onClick={() => pickColor(hexToRgb(c))}
+              className={cn(
+                "h-8 w-8 rounded-full transition-transform enabled:hover:scale-110",
+                !param.dazzle && hex === c && "ring-2 ring-foreground ring-offset-2 ring-offset-background",
+              )}
+              style={{ backgroundColor: c }}
+              aria-label={c}
             />
-          </div>
-          <div className="flex items-center justify-between">
-            <Label htmlFor="dazzle" className="text-sm">
-              {t("Rainbow cycle")}
-            </Label>
+          ))}
+          <input
+            type="color"
+            value={hex}
+            disabled={colorless}
+            onChange={(e) => commitIdle({ ...hexToRgb(e.target.value), dazzle: false })}
+            className="h-8 w-8 cursor-pointer rounded-full bg-transparent"
+            aria-label={t("Custom color")}
+          />
+          <label htmlFor="dazzle" className="ml-auto flex items-center gap-2 text-sm">
+            {t("Rainbow cycle")}
             <Switch
               id="dazzle"
               disabled={colorless}
@@ -315,131 +309,54 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
                 commit({ dazzle: v });
               }}
             />
-          </div>
-        </CardContent>
-      </Card>
+          </label>
+        </div>
+      </Section>
+
+      <Section title={t("Motion")}>
+        <div className="grid gap-6 sm:grid-cols-2">
+          {slider(t("Brightness"), param.brightness, brightnessMax, (v) => update({ brightness: v }), (v) => commit({ brightness: v }))}
+          {slider(t("Speed"), param.speed, mode?.speedMax ?? 4, (v) => update({ speed: v }), (v) => commit({ speed: v }), !!mode?.noSpeed)}
+        </div>
+      </Section>
 
       {side && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("Edge light")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-              {SIDE_MODES.map((m) => (
-                <button
-                  key={m.value}
-                  onClick={() => commitSide({ mode: m.value })}
-                  className={cn(
-                    "rounded-md border px-2 py-2 text-xs transition-colors sm:text-sm",
-                    side.mode === m.value
-                      ? "border-primary bg-primary/10 font-medium"
-                      : "hover:bg-accent",
-                  )}
-                >
-                  {t(m.label)}
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-3">
-              {SWATCHES.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => commitSide({ ...hexToRgb(c), dazzle: false })}
-                  className={cn(
-                    "h-7 w-7 rounded-full border-2 transition-transform hover:scale-110",
-                    !side.dazzle && rgbToHex(side.r, side.g, side.b) === c
-                      ? "border-foreground"
-                      : "border-transparent",
-                  )}
-                  style={{ backgroundColor: c }}
-                  aria-label={c}
-                />
-              ))}
-              <div className="ml-auto flex items-center gap-2">
-                <Label htmlFor="side-dazzle" className="text-xs">
-                  {t("Rainbow")}
-                </Label>
-                <Switch
-                  id="side-dazzle"
-                  checked={side.dazzle}
-                  onCheckedChange={(v) => commitSide({ dazzle: v })}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <Label>{t("Brightness")}</Label>
-                  <span className="text-muted-foreground">
-                    {side.brightness}/4
-                  </span>
-                </div>
-                <Slider
-                  min={0}
-                  max={4}
-                  step={1}
-                  value={[side.brightness]}
-                  onValueChange={([v]) => updateSide({ brightness: v })}
-                  onValueCommit={([v]) => commitSide({ brightness: v })}
-                />
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <Label>{t("Speed")}</Label>
-                  <span className="text-muted-foreground">{side.speed}/4</span>
-                </div>
-                <Slider
-                  min={0}
-                  max={4}
-                  step={1}
-                  value={[side.speed]}
-                  onValueChange={([v]) => updateSide({ speed: v })}
-                  onValueCommit={([v]) => commitSide({ speed: v })}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <Section title={t("Edge light")}>
+          <div className="flex flex-wrap gap-1">
+            {SIDE_MODES.map((m) => (
+              <Chip key={m.value} on={side.mode === m.value} onClick={() => commitSide({ mode: m.value })}>
+                {t(m.label)}
+              </Chip>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            {SWATCHES.map((c) => (
+              <button
+                key={c}
+                onClick={() => commitSide({ ...hexToRgb(c), dazzle: false })}
+                className={cn(
+                  "h-7 w-7 rounded-full transition-transform hover:scale-110",
+                  !side.dazzle && rgbToHex(side.r, side.g, side.b) === c && "ring-2 ring-foreground ring-offset-2 ring-offset-background",
+                )}
+                style={{ backgroundColor: c }}
+                aria-label={c}
+              />
+            ))}
+            <label htmlFor="side-dazzle" className="ml-auto flex items-center gap-2 text-sm">
+              {t("Rainbow")}
+              <Switch
+                id="side-dazzle"
+                checked={side.dazzle}
+                onCheckedChange={(v) => commitSide({ dazzle: v })}
+              />
+            </label>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2">
+            {slider(t("Brightness"), side.brightness, 4, (v) => updateSide({ brightness: v }), (v) => commitSide({ brightness: v }))}
+            {slider(t("Speed"), side.speed, 4, (v) => updateSide({ speed: v }), (v) => commitSide({ speed: v }))}
+          </div>
+        </Section>
       )}
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("Motion")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <Label>{t("Brightness")}</Label>
-              <span className="text-muted-foreground">{param.brightness}/{brightnessMax}</span>
-            </div>
-            <Slider
-              min={0}
-              max={brightnessMax}
-              step={1}
-              value={[param.brightness]}
-              onValueChange={([v]) => update({ brightness: v })}
-              onValueCommit={([v]) => commit({ brightness: v })}
-            />
-          </div>
-          <div
-            className={cn("space-y-2", mode?.noSpeed && "pointer-events-none opacity-50")}
-          >
-            <div className="flex justify-between text-sm">
-              <Label>{t("Speed")}</Label>
-              <span className="text-muted-foreground">{param.speed}/{mode?.speedMax ?? 4}</span>
-            </div>
-            <Slider
-              min={0}
-              max={mode?.speedMax ?? 4}
-              step={1}
-              value={[param.speed]}
-              onValueChange={([v]) => update({ speed: v })}
-              onValueCommit={([v]) => commit({ speed: v })}
-            />
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

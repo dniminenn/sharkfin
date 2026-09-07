@@ -11,7 +11,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageHeader, Section } from "@/components/Page";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -582,14 +582,14 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
   };
 
   return (
-    <div className="space-y-6 p-8">
+    <div className="mx-auto max-w-5xl space-y-6 p-6">
       <div>
-        <h1 className="text-xl font-semibold tracking-tight">{t("Switches")}</h1>
-        <p className="text-sm text-muted-foreground">
-          {t(
+        <PageHeader
+          title={t("Switches")}
+          hint={t(
             "How far each key travels before it fires, and whether it re-arms on the way up. Values are millimetres, as the board stores them.",
           )}
-        </p>
+        />
         {!writable && (
           <p className="mt-1 text-sm text-muted-foreground">
             {t(
@@ -654,27 +654,18 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
 
       <div className="grid gap-6 lg:grid-cols-2">
         {draftAll && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">{t("All keys")}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-xs text-muted-foreground">
-                {t("Written to every key at once. Keys with a kind keep it.")}
-              </p>
+          <Section title={t("All keys")} hint={t("Written to every key at once. Keys with a kind keep it.")}>
+            <div className="space-y-4">
               <PlainRows value={draftAll} ranges={ranges} unit={unit} onChange={setDraftAll} />
               <Button size="sm" onClick={applyAll} disabled={!writable || busy}>
                 {busy ? t("Writing. Leave the keyboard plugged in.") : t("Apply to all keys")}
               </Button>
-            </CardContent>
-          </Card>
+            </div>
+          </Section>
         )}
         {draftKey && selected && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">{selected.text ?? selected.code}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <Section title={<span className="font-mono">{selected.text ?? selected.code}</span>}>
+            <div className="space-y-4">
               <div className="flex items-center justify-between text-sm">
                 <Label>{t("Kind")}</Label>
                 <Select
@@ -774,8 +765,8 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
               <Button size="sm" onClick={applyKey} disabled={!writable || busy}>
                 {busy ? t("Writing. Leave the keyboard plugged in.") : t("Apply to this key")}
               </Button>
-            </CardContent>
-          </Card>
+            </div>
+          </Section>
         )}
       </div>
     </div>

@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { Bug, Check, Copy, FileDown, Keyboard } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { PageHeader, Section } from "@/components/Page";
 import { t } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
 import { useBoardLayout } from "@/lib/layout-loader";
@@ -85,179 +84,166 @@ export default function ContributePage({
   };
 
 
+  const status = device
+    ? device.spec.unregistered
+      ? t("not in the registry")
+      : device.readOnly
+        ? t("read-only")
+        : t("id {id}", { id: device.deviceId })
+    : unknown
+      ? silent
+        ? t("no answer")
+        : t("not in the registry")
+      : null;
+
+  const step = (n: number) => (
+    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted font-mono text-xs">
+      {n}
+    </span>
+  );
+
   return (
-    <div className="mx-auto max-w-3xl space-y-6 p-8">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight">{t("Contribute")}</h1>
-        <p className="text-sm text-muted-foreground">
-          {t("Reporting a bug, or telling us how your board behaves? Both work the same way: collect a bundle, copy it, paste it into an issue. The bundle is read-only and never writes to the keyboard.")}
-        </p>
-        {version && (
-          <p className="mt-1 font-mono text-xs text-muted-foreground">
-            sharkfin {version}
+    <div className="mx-auto max-w-3xl space-y-8 p-6">
+      <PageHeader
+        title={t("Contribute")}
+        hint={
+          <>
+            {t("Reporting a bug, or telling us how your board behaves? Both work the same way: collect a bundle, copy it, paste it into an issue. The bundle is read-only and never writes to the keyboard.")}
+            {version && <span className="ml-2 font-mono text-xs">sharkfin {version}</span>}
+          </>
+        }
+      />
+
+      <Section
+        title={
+          device
+            ? deviceLabel(device.spec)
+            : unknown
+              ? unknown.product || t("Unrecognized keyboard")
+              : t("No keyboard connected")
+        }
+        actions={status && <span className="text-sm text-muted-foreground">{status}</span>}
+      >
+        {device?.spec.unregistered ? (
+          <p className="text-sm text-muted-foreground">
+            {t("sharkfin does not know this board yet. It answers like a {family} board, so it can be used. A bundle adds it to the list.", { family: device.spec.family ?? "" })}
+          </p>
+        ) : (
+          device?.readOnly && (
+            <p className="text-sm text-muted-foreground">
+              {t("This board stays read-only until its command set is known. A bundle is the first step.")}
+            </p>
+          )
+        )}
+        {confirmed && (
+          <p className="text-sm text-muted-foreground">
+            {t("This board is confirmed on hardware (issue #{issue}, sharkfin {version}). There is nothing to send unless something is wrong; a bug report still wants a bundle.", { issue: confirmed.issue, version: confirmed.version })}
           </p>
         )}
-      </div>
+        {!device && unknown && unknown.deviceId !== null && (
+          <p className="text-sm text-muted-foreground">
+            {t("sharkfin does not know this board yet. A bundle is the first step to adding it.")}
+          </p>
+        )}
+        {silent && (
+          <p className="text-sm text-muted-foreground">
+            {t("This device did not answer as a keyboard or as a receiver. Connect the keyboard by cable and it will appear here.")}
+          </p>
+        )}
 
-      <Card>
-        <CardHeader className="flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-base">
-            {device
-              ? deviceLabel(device.spec)
-              : unknown
-                ? unknown.product || t("Unrecognized keyboard")
-                : t("No keyboard connected")}
-          </CardTitle>
-          {device ? (
-            <Badge variant="outline">
-              {device.spec.unregistered
-                ? t("not in the registry")
-                : device.readOnly
-                  ? t("read-only")
-                  : t("id {id}", { id: device.deviceId })}
-            </Badge>
-          ) : (
-            unknown && (
-              <Badge variant="outline">
-                {silent ? t("no answer") : t("not in the registry")}
-              </Badge>
-            )
-          )}
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {device?.spec.unregistered ? (
-            <p className="text-sm text-muted-foreground">
-              {t("sharkfin does not know this board yet. It answers like a {family} board, so it can be used. A bundle adds it to the list.", { family: device.spec.family ?? "" })}
-            </p>
-          ) : (
-            device?.readOnly && (
-              <p className="text-sm text-muted-foreground">
-                {t("This board stays read-only until its command set is known. A bundle is the first step.")}
-              </p>
-            )
-          )}
-          {confirmed && (
-            <p className="text-sm text-muted-foreground">
-              {t("This board is confirmed on hardware (issue #{issue}, sharkfin {version}). There is nothing to send unless something is wrong; a bug report still wants a bundle.", { issue: confirmed.issue, version: confirmed.version })}
-            </p>
-          )}
-          {!device && unknown && unknown.deviceId !== null && (
-            <p className="text-sm text-muted-foreground">
-              {t("sharkfin does not know this board yet. A bundle is the first step to adding it.")}
-            </p>
-          )}
-          {silent && (
-            <p className="text-sm text-muted-foreground">
-              {t("This device did not answer as a keyboard or as a receiver. Connect the keyboard by cable and it will appear here.")}
-            </p>
-          )}
-
-          {!silent && (
-            <ol className="space-y-3 text-sm">
-              <li className="flex items-center gap-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
-                  1
-                </span>
-                <Button size="sm" onClick={collect} disabled={busy || (!device && !unknown)}>
-                  <FileDown className="mr-1 h-3.5 w-3.5" />
-                  {busy ? t("Reading board…") : t("Collect data bundle")}
-                </Button>
-                {!device && !unknown && (
-                  <span className="text-muted-foreground">
-                    {t("connect a keyboard")}
-                  </span>
+        {!silent && (
+          <ol className="space-y-3 text-sm">
+            <li className="flex items-center gap-3">
+              {step(1)}
+              <Button size="sm" onClick={collect} disabled={busy || (!device && !unknown)}>
+                <FileDown className="mr-1 h-3.5 w-3.5" />
+                {busy ? t("Reading board…") : t("Collect data bundle")}
+              </Button>
+              {!device && !unknown && (
+                <span className="text-muted-foreground">{t("connect a keyboard")}</span>
+              )}
+            </li>
+            <li className="flex items-center gap-3">
+              {step(2)}
+              <Button size="sm" variant="ghost" onClick={copy} disabled={!bundle}>
+                {copied ? (
+                  <Check className="mr-1 h-3.5 w-3.5" />
+                ) : (
+                  <Copy className="mr-1 h-3.5 w-3.5" />
                 )}
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
-                  2
-                </span>
-                <Button size="sm" variant="outline" onClick={copy} disabled={!bundle}>
-                  {copied ? (
+                {copied ? t("Copied") : t("Copy")}
+              </Button>
+            </li>
+            <li className="flex flex-wrap items-center gap-3">
+              {step(3)}
+              {!confirmed && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
+                >
+                  <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
+                </Button>
+              )}
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => openUrl(issueUrl(device, unknown, "bug"))}
+              >
+                <Bug className="mr-1 h-3.5 w-3.5" /> {t("Report a bug")}
+              </Button>
+              <span className="text-muted-foreground">{t("then paste")}</span>
+            </li>
+          </ol>
+        )}
+      </Section>
+
+      {device && inference && (
+        <Section
+          title={t("Keyboard picture")}
+          actions={
+            <span className="text-sm text-muted-foreground">
+              {pending ? t("unconfirmed") : t("confirmed")}
+            </span>
+          }
+        >
+          {pending ? (
+            <p className="text-sm text-muted-foreground">
+              {t("The Keys page is asking whether the keyboard picture matches your board. Answer there first; the picture then has its own bundle you can send from here.")}
+            </p>
+          ) : (
+            <>
+              <p className="text-sm text-muted-foreground">
+                {t("You confirmed the keyboard picture for this board. Send it in and it ships built in for everyone with this board: copy, open a board report, paste.")}
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button size="sm" variant="ghost" onClick={copyLayout}>
+                  {layoutCopied ? (
                     <Check className="mr-1 h-3.5 w-3.5" />
                   ) : (
                     <Copy className="mr-1 h-3.5 w-3.5" />
                   )}
-                  {copied ? t("Copied") : t("Copy")}
+                  {layoutCopied ? t("Copied") : t("Copy picture bundle")}
                 </Button>
-              </li>
-              <li className="flex flex-wrap items-center gap-3">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs">
-                  3
-                </span>
-                {!confirmed && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
-                  >
-                    <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
-                  </Button>
-                )}
                 <Button
                   size="sm"
-                  variant="outline"
-                  onClick={() => openUrl(issueUrl(device, unknown, "bug"))}
+                  variant="ghost"
+                  onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
                 >
-                  <Bug className="mr-1 h-3.5 w-3.5" /> {t("Report a bug")}
+                  <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
                 </Button>
-                <span className="text-muted-foreground">{t("then paste")}</span>
-              </li>
-            </ol>
+              </div>
+            </>
           )}
-        </CardContent>
-      </Card>
-
-      {device && inference && (
-        <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-base">{t("Keyboard picture")}</CardTitle>
-            <Badge variant="outline">{pending ? t("unconfirmed") : t("confirmed")}</Badge>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            {pending ? (
-              <p className="text-muted-foreground">
-                {t("The Keys page is asking whether the keyboard picture matches your board. Answer there first; the picture then has its own bundle you can send from here.")}
-              </p>
-            ) : (
-              <>
-                <p className="text-muted-foreground">
-                  {t("You confirmed the keyboard picture for this board. Send it in and it ships built in for everyone with this board: copy, open a board report, paste.")}
-                </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  <Button size="sm" variant="outline" onClick={copyLayout}>
-                    {layoutCopied ? (
-                      <Check className="mr-1 h-3.5 w-3.5" />
-                    ) : (
-                      <Copy className="mr-1 h-3.5 w-3.5" />
-                    )}
-                    {layoutCopied ? t("Copied") : t("Copy picture bundle")}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => openUrl(issueUrl(device, unknown, "board-report"))}
-                  >
-                    <Keyboard className="mr-1 h-3.5 w-3.5" /> {t("Report this board")}
-                  </Button>
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
+        </Section>
       )}
 
       {bundle && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("Data bundle")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-64 rounded-md border bg-muted/30">
-              <pre className="p-3 font-mono text-xs leading-relaxed">{bundle}</pre>
-            </ScrollArea>
-          </CardContent>
-        </Card>
+        <Section title={t("Data bundle")}>
+          <ScrollArea className="h-64 rounded-xl bg-muted/40">
+            <pre className="p-3 font-mono text-xs leading-relaxed">{bundle}</pre>
+          </ScrollArea>
+        </Section>
       )}
     </div>
   );

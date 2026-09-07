@@ -12,7 +12,6 @@ import {
   Usb,
   Magnet,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -118,7 +117,7 @@ export default function App() {
 
   return (
     <div className="flex h-screen bg-background text-foreground">
-      <aside className="flex w-56 shrink-0 flex-col border-r bg-sidebar">
+      <aside className="flex w-56 shrink-0 flex-col bg-sidebar">
         <div className="flex items-center gap-2 px-4 py-4">
           <span className="text-primary">
             <SharkfinLogo size={26} />
@@ -148,7 +147,7 @@ export default function App() {
           )}
         </nav>
         <div className="mt-auto space-y-2 p-3">
-          <div className="rounded-lg border bg-card p-3">
+          <div className="rounded-xl bg-sidebar-accent/60 p-3">
             <div className="flex items-center gap-2">
               {device?.link === "receiver" ? (
                 <Radio className="h-4 w-4 text-(--key-accent)" />
@@ -176,10 +175,9 @@ export default function App() {
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {device ? (
-                    <Badge
-                      variant="outline"
+                    <span
                       className={cn(
-                        "mt-1",
+                        "mt-1 block truncate",
                         !readOnly(device) && "text-(--key-accent)",
                       )}
                     >
@@ -195,17 +193,17 @@ export default function App() {
                                 ? ""
                                 : ` · ${device.battery}%`)
                             : t("USB · id {id}", { id: device.deviceId })}
-                    </Badge>
+                    </span>
                   ) : stalled ? (
                     t("Unplug, wait 10s, plug back in")
                   ) : asleep ? (
                     t("Press a key, or connect by cable")
                   ) : unknown ? (
-                    <Badge variant="outline" className="mt-1">
+                    <span className="mt-1 block">
                       {unknown.deviceId === null
                         ? t("no answer")
                         : t("not in the registry")}
-                    </Badge>
+                    </span>
                   ) : (
                     t("Connect by cable")
                   )}

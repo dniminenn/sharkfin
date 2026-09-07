@@ -3,10 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Circle, MousePointer2, Send, Square, Trash2, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Chip, PageHeader, Section, Segmented, Strip } from "@/components/Page";
 import {
   Select,
   SelectContent,
@@ -225,52 +224,44 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-4 p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">{t("Macros")}</h1>
-          <p className="text-sm text-muted-foreground">
-            {t("Record a sequence, send it to one of the 50 onboard slots, then bind it to a key. Slots load straight from the keyboard.")}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">{t("Slot")}</span>
-          <Select value={String(slot)} onValueChange={(v) => setSlot(Number(v))}>
-            <SelectTrigger className="w-24">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {SLOTS.map((s) => (
-                <SelectItem key={s} value={String(s)}>
-                  {s + 1}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+    <div className="mx-auto max-w-5xl space-y-8 p-6">
+      <PageHeader
+        title={t("Macros")}
+        hint={t("Record a sequence, send it to one of the 50 onboard slots, then bind it to a key. Slots load straight from the keyboard.")}
+      >
+        <Select value={String(slot)} onValueChange={(v) => setSlot(Number(v))}>
+          <SelectTrigger size="sm" className="w-28">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {SLOTS.map((s) => (
+              <SelectItem key={s} value={String(s)}>
+                {t("Slot {n}", { n: s + 1 })}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </PageHeader>
 
-      <Card>
-        <CardHeader className="flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-base">
-            {t("Sequence")}
-            <Badge variant="outline" className="ml-2">
-              {t(events.length === 1 ? "1 event" : "{n} events", { n: events.length })}
-            </Badge>
-          </CardTitle>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">{t("Repeat")}</span>
-            <Input
-              type="number"
-              min={1}
-              max={65535}
-              value={repeat}
-              onChange={(e) => setRepeat(Math.min(65535, Math.max(1, Number(e.target.value) || 1)))}
-              className="w-20"
-            />
+      <Section
+        title={t("Sequence")}
+        hint={t(events.length === 1 ? "1 event" : "{n} events", { n: events.length })}
+        actions={
+          <>
+            <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              {t("Repeat")}
+              <Input
+                type="number"
+                min={1}
+                max={65535}
+                value={repeat}
+                onChange={(e) => setRepeat(Math.min(65535, Math.max(1, Number(e.target.value) || 1)))}
+                className="h-8 w-20"
+              />
+            </label>
             <Button
               size="sm"
-              variant="outline"
+              variant="ghost"
               disabled={events.length === 0 || recording}
               onClick={() => setEvents([])}
             >
@@ -281,137 +272,126 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                 <Square className="mr-1 h-3.5 w-3.5" /> {t("Stop")}
               </Button>
             ) : (
-              <Button size="sm" variant="outline" onClick={startRecording}>
-                <Circle className="mr-1 h-3.5 w-3.5 text-red-500" /> {t("Record")}
+              <Button size="sm" variant="ghost" onClick={startRecording}>
+                <Circle className="mr-1 h-3.5 w-3.5 fill-red-500 text-red-500" /> {t("Record")}
               </Button>
             )}
             <Button size="sm" disabled={busy || recording || events.length === 0} onClick={send}>
               <Send className="mr-1 h-3.5 w-3.5" /> {t("Send to keyboard")}
             </Button>
+          </>
+        }
+      >
+        {recording && (
+          <div
+            ref={surface}
+            tabIndex={0}
+            onKeyDown={(e) => onKey(e, true)}
+            onKeyUp={(e) => onKey(e, false)}
+            onMouseDown={(e) => onMouse(e, true)}
+            onMouseUp={(e) => onMouse(e, false)}
+            onContextMenu={(e) => e.preventDefault()}
+            className="flex h-24 items-center justify-center rounded-xl bg-primary/10 text-sm outline-none ring-2 ring-(--ring) motion-safe:animate-in motion-safe:fade-in"
+          >
+            {t("Type or click here. Every press and release is captured.")}
           </div>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {recording && (
-            <div
-              ref={surface}
-              tabIndex={0}
-              onKeyDown={(e) => onKey(e, true)}
-              onKeyUp={(e) => onKey(e, false)}
-              onMouseDown={(e) => onMouse(e, true)}
-              onMouseUp={(e) => onMouse(e, false)}
-              onContextMenu={(e) => e.preventDefault()}
-              className="flex h-24 items-center justify-center rounded-lg border-2 border-dashed border-(--ring) text-sm text-muted-foreground outline-none"
-            >
-              {t("Type or click here. Every press and release is captured.")}
-            </div>
-          )}
-          <div className="flex flex-wrap items-center gap-2 rounded-md border p-2 text-sm">
-            <span className="shrink-0 text-muted-foreground">{t("Mouse key")}</span>
-            {DIRECTIONS.map(([label]) => (
-              <Button
-                key={label}
-                size="sm"
-                variant={dir === label ? "default" : "outline"}
-                disabled={recording}
-                onClick={() => setDir(label)}
-              >
-                <MousePointer2 className="mr-1 h-3.5 w-3.5" />
-                {label}
-              </Button>
-            ))}
-            <Select value={String(speed)} onValueChange={(v) => setSpeed(Number(v))}>
-              <SelectTrigger className="w-28">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {SPEEDS.map((sp) => (
-                  <SelectItem key={sp.step} value={String(sp.step)}>
-                    {sp.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button size="sm" disabled={busy || recording} onClick={makeMouseKey}>
-              {t("Build and send")}
-            </Button>
-            <span className="w-full text-xs text-muted-foreground">
-              {t("Builds a macro that nudges the cursor, sends it to slot {slot}, and sets the binding to While held so it repeats. Then click a key below.", { slot: slot + 1 })}
-            </span>
+        )}
+
+        {reading && !recording ? (
+          <div className="py-6">
+            <Waiting label={t("Reading macro…")} />
           </div>
-
-          {reading && !recording ? (
-            <div className="py-6">
-              <Waiting label={t("Reading macro…")} />
-            </div>
-          ) : events.length === 0 && !recording ? (
-            <div className="py-6 text-center text-sm text-muted-foreground">
-              {t("Empty. Hit Record to capture a sequence.")}
-            </div>
-          ) : (
-            <ScrollArea className={cn(events.length > 8 && "h-64")}>
-              <div className="space-y-1 pr-3">
-                {events.map((e, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 rounded-md border px-3 py-1.5 text-sm"
-                  >
-                    <span className="w-6 text-right font-mono text-xs text-muted-foreground">
-                      {i + 1}
-                    </span>
-                    <span className="flex-1 font-medium">{eventLabel(e)}</span>
-                    <label className="flex items-center gap-1 text-xs text-muted-foreground">
-                      {t("delay")}
-                      <Input
-                        type="number"
-                        min={0}
-                        max={e.kind === "mouseMove" ? 255 : 65535}
-                        value={e.delayMs}
-                        onChange={(ev) =>
-                          setDelay(i, Math.max(0, Number(ev.target.value) || 0))
-                        }
-                        className="h-7 w-20"
-                      />
-                      {t("ms")}
-                    </label>
-                    <button
-                      onClick={() => setEvents((prev) => prev.filter((_, j) => j !== i))}
-                      className="text-muted-foreground transition-colors hover:text-destructive"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-base">
-            {layer === "fn"
-              ? t("Bind macro {slot} to a Fn layer key", { slot: slot + 1 })
-              : t("Bind macro {slot} to a key", { slot: slot + 1 })}
-          </CardTitle>
-          <div className="flex items-center gap-2">
-            <div className="flex rounded-md border p-0.5">
-              {(["base", "fn"] as const).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLayer(l)}
-                  className={cn(
-                    "rounded px-3 py-1 text-sm transition-colors",
-                    layer === l ? "bg-primary/10 font-medium" : "text-muted-foreground",
-                  )}
+        ) : events.length === 0 && !recording ? (
+          <p className="py-4 text-sm text-muted-foreground">
+            {t("Empty. Hit Record to capture a sequence, or build a mouse key below.")}
+          </p>
+        ) : (
+          <ScrollArea className={cn(events.length > 8 && "h-64")}>
+            <div className="space-y-1 pr-3">
+              {events.map((e, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 rounded-md bg-muted/40 px-3 py-1.5 text-sm"
                 >
-                  {l === "base" ? t("Base") : t("Fn layer")}
-                </button>
+                  <span className="w-6 text-right font-mono text-xs text-muted-foreground">
+                    {i + 1}
+                  </span>
+                  <span className="flex-1 font-mono">{eventLabel(e)}</span>
+                  <label className="flex items-center gap-1 text-xs text-muted-foreground">
+                    {t("delay")}
+                    <Input
+                      type="number"
+                      min={0}
+                      max={e.kind === "mouseMove" ? 255 : 65535}
+                      value={e.delayMs}
+                      onChange={(ev) =>
+                        setDelay(i, Math.max(0, Number(ev.target.value) || 0))
+                      }
+                      className="h-7 w-20"
+                    />
+                    {t("ms")}
+                  </label>
+                  <button
+                    onClick={() => setEvents((prev) => prev.filter((_, j) => j !== i))}
+                    className="text-muted-foreground transition-colors hover:text-destructive"
+                    aria-label={t("Remove")}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               ))}
             </div>
-            <span className="text-sm text-muted-foreground">{t("Mode")}</span>
+          </ScrollArea>
+        )}
+
+        <Strip className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-muted-foreground">{t("Mouse key")}</span>
+          {DIRECTIONS.map(([label]) => (
+            <Chip key={label} on={dir === label} disabled={recording} onClick={() => setDir(label)} className="text-xs">
+              <MousePointer2 className="mr-1 inline h-3 w-3" />
+              {t(label)}
+            </Chip>
+          ))}
+          <Select value={String(speed)} onValueChange={(v) => setSpeed(Number(v))}>
+            <SelectTrigger size="sm" className="w-28">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SPEEDS.map((sp) => (
+                <SelectItem key={sp.step} value={String(sp.step)}>
+                  {sp.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button size="sm" variant="ghost" disabled={busy || recording} onClick={makeMouseKey}>
+            {t("Build and send")}
+          </Button>
+          <span className="w-full text-xs text-muted-foreground">
+            {t("Builds a macro that nudges the cursor, sends it to slot {slot}, and sets the binding to While held so it repeats. Then click a key below.", { slot: slot + 1 })}
+          </span>
+        </Strip>
+      </Section>
+
+      <Section
+        title={t("Bind macro {slot} to a key", { slot: slot + 1 })}
+        hint={
+          pending
+            ? t("This keyboard picture is not confirmed yet. Confirm it on the Keys page before binding macros.")
+            : t("Click a key to bind it. Keys already running this macro are dotted; unbind from the Keys page.")
+        }
+        actions={
+          <>
+            <Segmented
+              value={layer}
+              options={[
+                ["base", t("Base")],
+                ["fn", t("Fn layer")],
+              ]}
+              onChange={setLayer}
+            />
             <Select value={String(mode)} onValueChange={(v) => setMode(Number(v))}>
-              <SelectTrigger className="w-36">
+              <SelectTrigger size="sm" className="w-36">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -422,47 +402,40 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
                 ))}
               </SelectContent>
             </Select>
-            <span className="text-sm text-muted-foreground">{t("Profile")}</span>
-            <Select value={String(profile)} onValueChange={(v) => selectProfile(Number(v))}>
-              <SelectTrigger className="w-20">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Array.from({ length: profileCount }, (_, i) => i).map((p) => (
-                  <SelectItem key={p} value={String(p)}>
-                    {p + 1}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {profileCount > 1 && (
+              <Select value={String(profile)} onValueChange={(v) => selectProfile(Number(v))}>
+                <SelectTrigger size="sm" className="w-28">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: profileCount }, (_, i) => i).map((p) => (
+                    <SelectItem key={p} value={String(p)}>
+                      {t("Profile {n}", { n: p + 1 })}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </>
+        }
+      >
+        {!entries || resolving ? (
+          <div className="py-6">
+            <Waiting label={resolving ? t("Finding your keyboard…") : t("Reading keymap…")} />
           </div>
-        </CardHeader>
-        <CardContent>
-          {!entries || resolving ? (
-            <div className="py-6">
-              <Waiting label={resolving ? t("Finding your keyboard…") : t("Reading keymap…")} />
-            </div>
-          ) : (
-            <>
-              <p className="mb-3 text-sm text-muted-foreground">
-                {pending
-                  ? t("This keyboard picture is not confirmed yet. Confirm it on the Keys page before binding macros.")
-                  : t("Click a key to bind it. Keys already running this macro are dotted; unbind from the Keys page.")}
-              </p>
-              <KeyboardView
-                layout={layout}
-                selected={null}
-                entries={entries}
-                modified={bound}
-                labelFor={(k, entry) =>
-                  entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
-                }
-                onSelect={(k) => !busy && !pending && !switching && bind(k.matrixIndex!, k.text ?? k.code)}
-              />
-            </>
-          )}
-        </CardContent>
-      </Card>
+        ) : (
+          <KeyboardView
+            layout={layout}
+            selected={null}
+            entries={entries}
+            modified={bound}
+            labelFor={(k, entry) =>
+              entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
+            }
+            onSelect={(k) => !busy && !pending && !switching && bind(k.matrixIndex!, k.text ?? k.code)}
+          />
+        )}
+      </Section>
     </div>
   );
 }

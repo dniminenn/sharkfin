@@ -34,7 +34,7 @@ export default function UnregisteredNotice({
     }
   };
   return (
-    <div className="flex items-center gap-3 border-b bg-accent/40 px-4 py-2 text-sm">
+    <div className="flex items-center gap-3 bg-primary/10 px-4 py-2 text-sm">
       {device.readOnly ? (
         <ShieldAlert className="h-4 w-4 shrink-0 text-muted-foreground" />
       ) : (
@@ -55,7 +55,7 @@ export default function UnregisteredNotice({
           {t("Allow changes")}
         </Button>
       )}
-      <Button size="sm" variant="outline" onClick={onContribute}>
+      <Button size="sm" variant="ghost" onClick={onContribute}>
         {t("Send a report")}
       </Button>
     </div>

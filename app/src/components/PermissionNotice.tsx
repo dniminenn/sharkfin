@@ -40,7 +40,7 @@ export default function PermissionNotice() {
   };
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
-      <div className="pointer-events-auto rounded-xl border bg-card px-4 py-3 shadow-lg">
+      <div className="pointer-events-auto rounded-xl bg-card px-4 py-3 shadow-lg ring-1 ring-foreground/10">
         <div className="max-w-xl space-y-2 text-sm">
           <p className="font-medium">{t("The keyboard is there, but sharkfin can't open it.")}</p>
           {isLinux() ? (
@@ -48,11 +48,11 @@ export default function PermissionNotice() {
               <p className="text-muted-foreground">
                 {t("On Linux the keyboard's device node belongs to root until a udev rule hands it to you. Paste this into a terminal, then unplug the keyboard and plug it back in:")}
               </p>
-              <pre className="whitespace-pre-wrap break-all rounded-md border bg-muted/50 p-2 text-[11px] leading-relaxed">
+              <pre className="whitespace-pre-wrap break-all rounded-md bg-muted/50 p-2 text-[11px] leading-relaxed">
                 {UDEV_ONELINER}
               </pre>
               <div className="flex items-center gap-3">
-                <Button size="sm" variant="outline" onClick={copy}>
+                <Button size="sm" variant="ghost" onClick={copy}>
                   {copied ? (
                     <>
                       <Check className="mr-1 h-3.5 w-3.5" /> {t("Copied")}

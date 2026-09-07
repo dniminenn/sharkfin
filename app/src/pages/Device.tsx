@@ -2,9 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { PageHeader, Section } from "@/components/Page";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
@@ -94,7 +93,7 @@ function Row({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-1">
+    <div className="flex items-center justify-between gap-4">
       <div>
         <Label className="text-sm">{label}</Label>
         {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
@@ -283,24 +282,18 @@ export default function DevicePage({
   const wireless = device.spec.features.sleep24 || device.spec.features.sleepBT;
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6 p-8">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight">{t("Device")}</h1>
-        <p className="text-sm text-muted-foreground">
-          {t("{label} · firmware {revision} · device ID {deviceId} · {profiles} profiles", {
-            label: deviceLabel(device.spec),
-            revision: s.revision,
-            deviceId: device.deviceId,
-            profiles: device.spec.profiles,
-          })}
-        </p>
-      </div>
+    <div className="mx-auto max-w-3xl space-y-8 p-6">
+      <PageHeader
+        title={t("Device")}
+        hint={t("{label} · firmware {revision} · device ID {deviceId} · {profiles} profiles", {
+          label: deviceLabel(device.spec),
+          revision: s.revision,
+          deviceId: device.deviceId,
+          profiles: device.spec.profiles,
+        })}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("Switches")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <Section title={t("Switches")}>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <Label>{t("Debounce")}</Label>
@@ -318,15 +311,11 @@ export default function DevicePage({
               {t("Lower reacts faster; raise it if a switch starts chattering.")}
             </p>
           </div>
-        </CardContent>
-      </Card>
+      </Section>
 
       {(device.spec.screen || screenVersion !== null) && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("Display")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
+        <Section title={t("Display")}>
+          <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <Label>{t("Size")}</Label>
               <span className="text-muted-foreground">
@@ -391,15 +380,12 @@ export default function DevicePage({
                 {t("sharkfin reads this display but cannot draw on it. The picture goes through a separate chip on this board.")}
               </p>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </Section>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("Behaviour")}</CardTitle>
-        </CardHeader>
-        <CardContent className="divide-y">
+      <Section title={t("Behaviour")}>
+        <div className="space-y-3">
           {s.options ? (
             <>
               <Row
@@ -440,38 +426,32 @@ export default function DevicePage({
           </Row>
           {s.options && (
             <Row label={t("Layout mode")} hint={t("Switched on the keyboard itself")}>
-              <Badge variant="outline">
+              <span className="text-sm text-muted-foreground">
                 {s.options.macMode ? "macOS" : "Windows"}
-              </Badge>
+              </span>
             </Row>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </Section>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t("Backup")}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex items-center justify-between gap-4">
+      <Section title={t("Backup")}>
+        <div className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             {t("Keymaps for every profile and layer, lighting and settings, as one file. Per-key paint patterns live in the Paint tab, because the firmware can't report those back.")}
           </p>
           <div className="flex shrink-0 gap-2">
-            <Button size="sm" variant="outline" disabled={transferring} onClick={doExport}>
+            <Button size="sm" variant="ghost" disabled={transferring} onClick={doExport}>
               {t("Export")}
             </Button>
-            <Button size="sm" variant="outline" disabled={transferring} onClick={doImport}>
+            <Button size="sm" variant="ghost" disabled={transferring} onClick={doImport}>
               {transferring ? t("Working…") : t("Import")}
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </Section>
 
-      <Card className="border-destructive/40">
-        <CardHeader>
-          <CardTitle className="text-base">{t("Factory reset")}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex items-center justify-between gap-4">
+      <Section title={t("Factory reset")}>
+        <div className="flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
             {device?.link === "receiver"
               ? t("Connect the keyboard by cable to reset it.")
@@ -497,15 +477,12 @@ export default function DevicePage({
               </DialogFooter>
             </DialogContent>
           </Dialog>
-        </CardContent>
-      </Card>
+        </div>
+      </Section>
 
       {wireless && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">{t("Wireless sleep")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
+        <Section title={t("Wireless sleep")}>
+          <div className="grid gap-6 sm:grid-cols-2">
             {(
               [
                 ["sleep24", t("Sleep · 2.4 GHz"), "sleep24" as const, SLEEP_MIN],
@@ -533,8 +510,8 @@ export default function DevicePage({
                 </div>
               ) : null,
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </Section>
       )}
     </div>
   );

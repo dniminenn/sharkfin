@@ -27,15 +27,16 @@ import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
 import KeyboardView from "@/components/KeyboardView";
-import KeyPicker, { rememberRecent } from "@/components/KeyPicker";
+import KeyPicker, { directUsage, rememberRecent, searchAssignables } from "@/components/KeyPicker";
 import LayoutEditor from "@/components/LayoutEditor";
 import { useBoardLayout, type BoardLayout, type LayoutKey } from "@/lib/layout-loader";
 import { useBoardProfile } from "@/lib/use-profile";
 import { layoutBundle, type Inference } from "@/lib/layout-infer";
 import { fromLayout, type Draft } from "@/lib/layout-draft";
-import { DISABLED_GLYPH, PASSTHRU_GLYPH, entryLabel, type Assignable } from "@/lib/hid-usages";
+import { DISABLED_GLYPH, PASSTHRU_GLYPH, entryLabel, usageLabel, type Assignable } from "@/lib/hid-usages";
 import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
 import Waiting from "@/components/Waiting";
+import { Banner, PageHeader, Segmented } from "@/components/Page";
 
 const REPO = "https://github.com/dniminenn/sharkfin";
 
@@ -45,32 +46,6 @@ function sliceEntries(matrix: number[]): Map<number, number[]> {
     m.set(slot, matrix.slice(slot * 4, slot * 4 + 4));
   }
   return m;
-}
-
-/** Two choices, one control. */
-function Segmented<T extends string>({
-  value,
-  options,
-  onChange,
-}: {
-  value: T;
-  options: [T, string][];
-  onChange: (v: T) => void;
-}) {
-  return (
-    <div className="flex rounded-lg bg-muted p-[3px] text-sm">
-      {options.map(([v, label]) => (
-        <button
-          key={v}
-          onClick={() => onChange(v)}
-          data-on={value === v}
-          className="rounded-md px-3 py-1 text-muted-foreground transition-colors data-[on=true]:bg-background data-[on=true]:text-foreground data-[on=true]:shadow-sm"
-        >
-          {label}
-        </button>
-      ))}
-    </div>
-  );
 }
 
 export default function KeymapPage({ device }: { device: ConnectedDevice | null }) {
@@ -101,6 +76,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   const [layer, setLayer] = useState<"base" | "fn">("base");
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
   const [selected, setSelected] = useState<LayoutKey | null>(null);
+  const [query, setQuery] = useState("");
   const [busy, setBusy] = useState(false);
   const [flash, setFlash] = useState<number | null>(null);
   const flashTimer = useRef<number | null>(null);
@@ -139,6 +115,10 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
   useEffect(() => {
     setSelected(null);
   }, [layout]);
+
+  useEffect(() => {
+    setQuery("");
+  }, [selected]);
 
   // Defaults come from the layout; a synthesized grid has none, and the Fn
   // layer's factory state isn't in the layout files either.
@@ -264,6 +244,27 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
     toast.success(t("Bundle copied. Paste it into the report."));
   };
 
+  // On the cap: Enter takes the first match, Escape lets go, and a key that
+  // is not a character (F13, PgUp, Delete) assigns itself.
+  const onCapKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      setSelected(null);
+      return;
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const first = searchAssignables(query)[0];
+      if (first) assign(first);
+      return;
+    }
+    const usage = directUsage(e);
+    if (usage !== undefined) {
+      e.preventDefault();
+      assign({ label: usageLabel(usage), entry: [0, 0, usage, 0] });
+    }
+  };
+
   const resetKey = async () => {
     if (!selected) return;
     const def = defaults.get(selected.matrixIndex!);
@@ -290,9 +291,16 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
         : t("Built-in picture.");
 
   const picker = selected && (
-    <PopoverContent align="center" side="bottom" sideOffset={10} className="w-auto p-3">
+    <PopoverContent
+      align="center"
+      side="bottom"
+      sideOffset={10}
+      className="w-auto p-3"
+      onOpenAutoFocus={(e) => e.preventDefault()}
+    >
       <KeyPicker
         name={selected.text ?? selected.code}
+        query={query}
         current={selectedEntry}
         fnLayer={layer === "fn"}
         canReset={defaults.has(selected.matrixIndex!)}
@@ -305,19 +313,18 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
 
   return (
     <div className="mx-auto max-w-5xl space-y-5 p-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">{t("Keys")}</h1>
-          {!drawing && (
-            <p className="text-sm text-muted-foreground">
-              {pending
-                ? t("Confirm the picture below before remapping.")
-                : t("Click a key to change what it does. Writes are instant.")}
-            </p>
-          )}
-        </div>
+      <PageHeader
+        title={t("Keys")}
+        hint={
+          drawing
+            ? undefined
+            : pending
+              ? t("Confirm the picture below before remapping.")
+              : t("Click a key to change what it does. Writes are instant.")
+        }
+      >
         {!drawing && (
-          <div className="flex flex-wrap items-center gap-2">
+          <>
             <Segmented
               value={layer}
               options={[
@@ -380,12 +387,12 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
-          </div>
+          </>
         )}
-      </div>
+      </PageHeader>
 
       {pending && !drawing && (
-        <div className="rounded-xl bg-primary/10 px-4 py-3 text-sm motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1">
+        <Banner className="motion-safe:slide-in-from-top-1">
           <p className="font-medium">{t("Does this match your keyboard?")}</p>
           <p className="mt-0.5 text-muted-foreground">
             {inference?.layoutName === "kle"
@@ -407,11 +414,11 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
                 : t("Wrong, give up on stored pictures")}
             </Button>
           </div>
-        </div>
+        </Banner>
       )}
 
       {layout.grid && !pending && !drawing && (
-        <div className="rounded-xl bg-primary/10 px-4 py-3 text-sm motion-safe:animate-in motion-safe:fade-in">
+        <Banner>
           <p className="font-medium">{t("No picture of this keyboard yet")}</p>
           <p className="mt-0.5 text-muted-foreground">
             {t("Every key the board reports is below as a numbered slot, and remapping works as usual. Draw the board to get a real picture: start from a preset or the closest stored one, and each key is checked against your board as you go.")}
@@ -434,7 +441,7 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
               </span>
             )}
           </div>
-        </div>
+        </Banner>
       )}
 
       {drawing && (
@@ -462,6 +469,16 @@ export default function KeymapPage({ device }: { device: ConnectedDevice | null 
             modified={modified}
             flash={flash}
             anchor={!offSelected}
+            editor={
+              selected && !offSelected && !pending
+                ? {
+                    value: query,
+                    placeholder: entryLabel(selectedEntry ?? [0, 0, 0, 0], layer === "fn"),
+                    onChange: setQuery,
+                    onKeyDown: onCapKey,
+                  }
+                : undefined
+            }
             labelFor={(k, entry) =>
               entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
             }
