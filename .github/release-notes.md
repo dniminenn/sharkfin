@@ -1,5 +1,23 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.6
+
+**The Keys page is the picture.** Click a key and the cap itself takes
+your typing: type a name and Enter picks the match, or press the key you
+want on another keyboard and it is assigned on the spot. The picker opens
+on the key with search, recents and every group. The cap flashes when the
+write lands.
+
+**Pictures have controls.** A Picture menu on the Keys page edits the
+current picture, tries another from the collection, or sends yours in. A
+picture offered for confirmation can be fixed in the editor instead of
+rejected. Drawings and picked pictures are remembered on boards that have a
+built-in one too.
+
+**One look across the app.** Sections replace cards on every page,
+choices are chips, the one primary action on a screen is filled. The
+editor's presets are drawn as small keyboards with their match counts.
+
 ## What changed in 0.7.5
 
 **Draw your board.** When no stored picture matches your keyboard, the
