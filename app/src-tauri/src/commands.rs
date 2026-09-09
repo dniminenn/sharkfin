@@ -31,6 +31,11 @@ struct Inner {
     /// The owner of a board the registry does not know has confirmed the
     /// detected family and allowed writes. Cleared with the handle.
     unregistered_ok: bool,
+    /// The owner's own answer to which way round this board reads the
+    /// LEDPARAM flags nibble, when they have given one. Kept here rather
+    /// than on the spec so the spec keeps describing the board as shipped.
+    /// Cleared with the handle.
+    led_swap: Option<bool>,
 }
 
 struct OpenDevice {
@@ -166,6 +171,7 @@ impl Default for AppState {
                 last_write: None,
                 stalled: false,
                 unregistered_ok: false,
+                led_swap: None,
             }),
         }
     }
@@ -340,6 +346,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                         revision,
                     };
                     inner.unregistered_ok = false;
+                    inner.led_swap = None;
                     connected = Some(open.connected(false));
                     inner.open = Some(open);
                     break;
@@ -546,11 +553,15 @@ fn scaled_profiles(state: &tauri::State<AppState>) -> bool {
 /// missing device anyway.
 fn led_wire(state: &tauri::State<AppState>) -> crate::protocol::LedWire {
     let inner = state.inner.lock();
-    inner
+    let mut wire = inner
         .open
         .as_ref()
         .map(|o| o.spec.led_wire())
-        .unwrap_or(crate::protocol::LedWire::YC500)
+        .unwrap_or(crate::protocol::LedWire::YC500);
+    if let Some(swapped) = inner.led_swap {
+        wire.swapped = swapped;
+    }
+    wire
 }
 
 #[tauri::command(async)]
@@ -571,6 +582,22 @@ pub fn set_led_param(state: tauri::State<AppState>, param: LedParam) -> Result<(
         t.send(&param.to_packet_for(wire))?;
         Ok(())
     })
+}
+
+/// Which way round this board reads the LEDPARAM flags nibble, from the
+/// owner rather than the registry. The two lineages disagree about it
+/// (`docs/PROTOCOL.md`), so a board whose entry has it the wrong way round
+/// shows a solid colour where the owner asked for the rainbow. This changes
+/// how the next packet is encoded and how a reply is read; it sends nothing,
+/// and it lasts as long as the handle.
+#[tauri::command(async)]
+pub fn set_led_flags_swapped(state: tauri::State<AppState>, swapped: bool) -> Result<(), String> {
+    let mut inner = state.inner.lock();
+    if inner.open.is_none() {
+        return Err("no device connected".into());
+    }
+    inner.led_swap = Some(swapped);
+    Ok(())
 }
 
 #[tauri::command(async)]

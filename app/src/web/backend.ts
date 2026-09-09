@@ -373,6 +373,11 @@ export const getLedParam = (): Promise<LedParam> =>
   withCore(async () => JSON.parse((await core.get_led_param()) as string));
 export const setLedParam = (param: LedParam) =>
   withCore(() => core.set_led_param(JSON.stringify(param)));
+/** Which way round this board reads the rainbow flag, from the owner. */
+export const setLedFlagsSwapped = (swapped: boolean): Promise<void> =>
+  withCore(async () => {
+    core.set_led_flags_swapped(swapped);
+  });
 export const getProfile = (): Promise<number> => withCore(() => core.get_profile());
 /** The display's firmware version, or null on a board without one. */
 export const getScreenVersion = (): Promise<number | null> =>

@@ -46,6 +46,7 @@ pub fn run() {
             commands::build_id,
             commands::get_led_param,
             commands::set_led_param,
+            commands::set_led_flags_swapped,
             commands::get_profile,
             commands::get_screen_version,
             commands::set_profile,

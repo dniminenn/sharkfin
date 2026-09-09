@@ -16,6 +16,7 @@ import { BE_MODES, MODE_LABELS, type LightMode } from "@/lib/lighting-modes";
 import {
   getLedParam,
   getSettings,
+  setLedFlagsSwapped,
   setLedParam,
   setOptions,
   setSideLight,
@@ -60,6 +61,41 @@ function rgbToHex(r: number, g: number, b: number) {
 const isNearBlack = (c: { r: number; g: number; b: number }) =>
   Math.max(c.r, c.g, c.b) < 8;
 
+// Two firmware lineages read the rainbow flag the other way round, so a
+// board can show a solid colour where the owner asked for the rainbow. The
+// registry says which way round a board is where that is known; this is the
+// owner's answer for their own board, kept by device id. `dflt` records what
+// the registry said when they answered: if it has changed since, the board
+// has been evidenced and the registry wins.
+const FLAGS_STORE = "sharkfin.ledflags";
+
+interface FlagChoice {
+  swapped: boolean;
+  dflt: boolean;
+}
+
+function readChoice(id: number): FlagChoice | null {
+  try {
+    const raw = localStorage.getItem(`${FLAGS_STORE}.${id}`);
+    if (raw) {
+      const c = JSON.parse(raw);
+      if (typeof c?.swapped === "boolean" && typeof c?.dflt === "boolean") return c;
+    }
+  } catch {
+    // Storage can be blocked; there is then no choice on file.
+  }
+  return null;
+}
+
+function writeChoice(id: number, choice: FlagChoice | null) {
+  try {
+    if (choice) localStorage.setItem(`${FLAGS_STORE}.${id}`, JSON.stringify(choice));
+    else localStorage.removeItem(`${FLAGS_STORE}.${id}`);
+  } catch {
+    // Nothing to do: the choice simply is not remembered next time.
+  }
+}
+
 // Lighting is onboard state: every write lands in flash, the same as a key
 // or a macro. Measured on an X86, 39 of them a second apart wedged the
 // firmware even though nothing exceeded its rate limit, because the limit
@@ -94,6 +130,11 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
   const [param, setParam] = useState<LedParam | null>(null);
   const [side, setSide] = useState<SledParam | null>(null);
   const [opts, setOpts] = useState<KbOptions | null>(null);
+  /** Which way round this board reads the rainbow flag, and whether that is
+   *  the owner's answer rather than the registry's. */
+  const [swapped, setSwapped] = useState(false);
+  const [owned, setOwned] = useState(false);
+  const defaultSwap = useRef(false);
   const paramRef = useRef<LedParam | null>(null);
   const sideRef = useRef<SledParam | null>(null);
   const pushTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -103,11 +144,22 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
   const lastSideSent = useRef(0);
 
   useEffect(() => {
-    if (!connected) {
+    if (!device) {
       setParam(null);
       return;
     }
-    getLedParam()
+    // The flag decides how a reply is read as well as how a packet is
+    // written, so the owner's answer goes in before the first read.
+    const id = device.spec.id;
+    const dflt = device.spec.ledFlagsSwapped ?? false;
+    const stale = readChoice(id);
+    const choice = stale && stale.dflt === dflt ? stale : null;
+    if (stale && !choice) writeChoice(id, null);
+    defaultSwap.current = dflt;
+    setSwapped(choice ? choice.swapped : dflt);
+    setOwned(!!choice);
+    (choice ? setLedFlagsSwapped(choice.swapped) : Promise.resolve())
+      .then(getLedParam)
       .then((p) => {
         paramRef.current = p;
         setParam(p);
@@ -123,7 +175,8 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
         setSide(null);
         setOpts(null);
       });
-  }, [connected]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connected, device?.spec.id]);
 
   const setLedOff = (ledOff: boolean) => {
     if (!opts || opts.ledOff === ledOff) return;
@@ -196,6 +249,19 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
     }
     setLedOff(false);
     commit({ ...rgb, dazzle: false });
+  };
+
+  // The board keeps the flag it was sent, so the same settings go back out
+  // under the other reading and the keyboard follows at once.
+  const applySwap = (next: boolean) => {
+    if (!device) return;
+    const own = next !== defaultSwap.current;
+    setSwapped(next);
+    setOwned(own);
+    writeChoice(device.spec.id, own ? { swapped: next, dflt: defaultSwap.current } : null);
+    setLedFlagsSwapped(next)
+      .then(() => commit())
+      .catch((e) => toast.error(t("Write failed: {e}", { e })));
   };
 
   if (!connected) {
@@ -324,7 +390,7 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
             aria-label={t("Custom color")}
           />
           <label htmlFor="dazzle" className="ml-auto flex items-center gap-2 text-sm">
-            {t("Rainbow cycle")}
+            {t("Rainbow")}
             <Switch
               id="dazzle"
               disabled={colorless}
@@ -336,6 +402,31 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
             />
           </label>
         </div>
+        {!colorless && (owned || param.dazzle) && (
+          <p className="text-xs text-muted-foreground">
+            {owned ? (
+              <>
+                {t("Swapped for this board.")}{" "}
+                <button
+                  className="text-primary underline underline-offset-2"
+                  onClick={() => applySwap(defaultSwap.current)}
+                >
+                  {t("Undo")}
+                </button>
+              </>
+            ) : (
+              <>
+                {t("Seeing one solid colour instead of a rainbow?")}{" "}
+                <button
+                  className="text-primary underline underline-offset-2"
+                  onClick={() => applySwap(!swapped)}
+                >
+                  {t("Swap them")}
+                </button>
+              </>
+            )}
+          </p>
+        )}
       </Section>
 
       <Section title={t("Motion")}>

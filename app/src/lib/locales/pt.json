@@ -124,7 +124,6 @@
  "Profile": "Perfil",
  "Radiant": "Radiante",
  "Rainbow": "Arco-íris",
- "Rainbow cycle": "Ciclo arco-íris",
  "Read-only: sharkfin doesn't know this board's command set yet.": "Somente leitura: o sharkfin ainda não conhece o conjunto de comandos deste teclado.",
  "Reading board…": "Lendo o teclado…",
  "Reading current lighting…": "Lendo a iluminação atual…",
@@ -357,5 +356,8 @@
  "Slot {n}": "Slot {n}",
  "This effect brings its own colours.": "Este efeito traz as próprias cores.",
  "Type on the key, or press the key you want on another keyboard.": "Digite na tecla, ou pressione a tecla que você quer em outro teclado.",
- "Type the legend on the key, like PgUp or F13, or press that key on another keyboard.": "Digite a legenda na tecla, como PgUp ou F13, ou pressione essa tecla em outro teclado."
+ "Type the legend on the key, like PgUp or F13, or press that key on another keyboard.": "Digite a legenda na tecla, como PgUp ou F13, ou pressione essa tecla em outro teclado.",
+ "Seeing one solid colour instead of a rainbow?": "Está vendo uma cor sólida em vez do arco-íris?",
+ "Swap them": "Trocar os dois",
+ "Swapped for this board.": "Trocado para este teclado."
 }

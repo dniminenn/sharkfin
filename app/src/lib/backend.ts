@@ -238,6 +238,9 @@ export const writePerKey = (colors: number[], activate: boolean) =>
 export const getLedParam = () => invoke<LedParam>("get_led_param");
 export const setLedParam = (param: LedParam) =>
   invoke<void>("set_led_param", { param });
+/** Which way round this board reads the rainbow flag, from the owner. */
+export const setLedFlagsSwapped = (swapped: boolean) =>
+  invoke<void>("set_led_flags_swapped", { swapped });
 export const getProfile = () => invoke<number>("get_profile");
 /** The display's firmware version, or null on a board without one. */
 export const getScreenVersion = () => invoke<number | null>("get_screen_version");

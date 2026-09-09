@@ -479,6 +479,10 @@ struct AppState {
     /// The owner of a board the registry does not know has confirmed the
     /// detected family and allowed writes. Cleared with the session.
     unregistered_ok: bool,
+    /// The owner's own answer to which way round this board reads the
+    /// LEDPARAM flags nibble, when they have given one. Kept here rather
+    /// than on the spec so the spec keeps describing the board as shipped.
+    led_swap: Option<bool>,
     last_flash: Option<(f64, f64)>,
     /// One clock for every command write: when the last one was claimed,
     /// and the floor its class asked for. Both halves matter, since the
@@ -732,6 +736,7 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
             STATE.with(|s| {
                 let mut s = s.borrow_mut();
                 s.unregistered_ok = false;
+                s.led_swap = None;
                 s.open = Some(Open {
                     transport: Rc::new(transport),
                     spec,
@@ -884,7 +889,7 @@ pub async fn get_led_param() -> Result<JsValue, JsValue> {
         .roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)
         .await
         .map_err(fail)?;
-    let p = LedParam::from_reply_for(&reply, spec.led_wire()).ok_or("bad LEDPARAM reply")?;
+    let p = LedParam::from_reply_for(&reply, led_wire(&spec)).ok_or("bad LEDPARAM reply")?;
     to_js(&p)
 }
 
@@ -894,10 +899,32 @@ pub async fn set_led_param(param_json: String) -> Result<(), JsValue> {
     gap(|s| &mut s.last_cmd, LIGHT_GAP_MS).await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
-    t.send(&param.to_packet_for(spec.led_wire()))
+    t.send(&param.to_packet_for(led_wire(&spec)))
         .await
         .map_err(fail)?;
     Ok(())
+}
+
+#[wasm_bindgen]
+pub fn set_led_flags_swapped(swapped: bool) -> Result<(), JsValue> {
+    STATE.with(|s| {
+        let mut s = s.borrow_mut();
+        if s.open.is_none() {
+            return Err(JsValue::from("no device connected"));
+        }
+        s.led_swap = Some(swapped);
+        Ok(())
+    })
+}
+
+/// How the open board reads a LEDPARAM packet: what its firmware was read to
+/// do, or what its owner says instead. Mirrors `led_wire` in commands.rs.
+fn led_wire(spec: &DeviceSpec) -> protocol::LedWire {
+    let mut wire = spec.led_wire();
+    if let Some(swapped) = STATE.with(|s| s.borrow().led_swap) {
+        wire.swapped = swapped;
+    }
+    wire
 }
 
 #[wasm_bindgen]
@@ -1375,7 +1402,7 @@ pub async fn write_per_key(colors: Vec<u8>, activate: bool) -> Result<(), JsValu
     // means talking to a board that is still writing flash.
     let needs_mode = activate
         && match t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7).await {
-            Ok(r) => LedParam::from_reply_for(&r, spec.led_wire())
+            Ok(r) => LedParam::from_reply_for(&r, led_wire(&spec))
                 .map(|p| p.mode != PER_KEY_MODE)
                 .unwrap_or(true),
             Err(_) => true,
@@ -1732,7 +1759,7 @@ pub async fn export_config() -> Result<JsValue, JsValue> {
         board: spec.label(),
         profiles,
         fn_layers,
-        led: LedParam::from_reply_for(&led, spec.led_wire()).ok_or("bad LEDPARAM reply")?,
+        led: LedParam::from_reply_for(&led, led_wire(&spec)).ok_or("bad LEDPARAM reply")?,
         side_light: sled,
         debounce: deb[fc.debounce_at],
         sleep: SleepTimes::from_reply_expecting(&slp, fc.get_sleeptime, fc.sleep_reply_at)
@@ -1819,7 +1846,7 @@ pub async fn import_config(raw: String) -> Result<JsValue, JsValue> {
     if let (Some(sled), true, Some(_)) = (cfg.side_light, spec.features.side_light, fc.sled) {
         t.send(&sled.to_packet()).await.map_err(fail)?;
     }
-    t.send(&cfg.led.to_packet_for(spec.led_wire()))
+    t.send(&cfg.led.to_packet_for(led_wire(&spec)))
         .await
         .map_err(fail)?;
     Ok(format!(

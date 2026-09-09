@@ -230,9 +230,8 @@ Opcode shared. Packet **[HW]**.
   `0x101F4E4` / `0x101F16A`), all by exact compare. Its preset table is
   red, green, blue, orange, magenta, amber, warm white, and its SET handler
   (`0x1019604`) has no RGB clamp and no mode range guard, so it must never
-  be sent a mode above 31. The registry marks such boards
-  `ledFlagsSwapped`. **[FW]** Mode 13 puts a pattern slot in the option
-  nibble and forces RGB `(0,200,200)`. That slot is the gen2 USERPIC
+  be sent a mode above 31. **[FW]** Mode 13 puts a pattern slot in the
+  option nibble and forces RGB `(0,200,200)`. That slot is the gen2 USERPIC
   slot; yc500 USERPIC has no slot byte. Mode 21 zeroes the flags byte.
 - White `0xFFFFFF` transmits as `0xFAFAFA`.
 - On GET, a flags nibble of 0..6 is a preset-colour index overriding RGB:

@@ -124,7 +124,6 @@
  "Profile": "Profil",
  "Radiant": "Radiant",
  "Rainbow": "Pelangi",
- "Rainbow cycle": "Siklus pelangi",
  "Read-only: sharkfin doesn't know this board's command set yet.": "Hanya baca: sharkfin belum tahu set perintah board ini.",
  "Reading board…": "Membaca board…",
  "Reading current lighting…": "Membaca pencahayaan saat ini…",
@@ -357,5 +356,8 @@
  "Slot {n}": "Slot {n}",
  "This effect brings its own colours.": "Efek ini membawa warnanya sendiri.",
  "Type on the key, or press the key you want on another keyboard.": "Ketik di tombolnya, atau tekan tombol yang Anda mau di keyboard lain.",
- "Type the legend on the key, like PgUp or F13, or press that key on another keyboard.": "Ketik legendanya di tombol, seperti PgUp atau F13, atau tekan tombol itu di keyboard lain."
+ "Type the legend on the key, like PgUp or F13, or press that key on another keyboard.": "Ketik legendanya di tombol, seperti PgUp atau F13, atau tekan tombol itu di keyboard lain.",
+ "Seeing one solid colour instead of a rainbow?": "Melihat satu warna solid, bukan pelangi?",
+ "Swap them": "Tukar keduanya",
+ "Swapped for this board.": "Ditukar untuk keyboard ini."
 }
