@@ -1,5 +1,18 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.9
+
+**The rainbow toggle was backward on some boards.** Turning it on gave one
+solid colour and turning it off gave the rainbow. Which way round a board
+reads it now comes from the board's own firmware, which settles 33 of them,
+mostly Akko and MonsGeek, plus the AttackShark X65HE and the Keydous
+AJ68-CP. On any other board the Lighting page offers to swap the two and
+remembers the answer for that board. The edge light follows it.
+
+**The window no longer dies on Wayland with an Nvidia card.** It opened
+blank and the app was gone in under a second. The drawing path behind that
+is switched off on those two together, and left alone everywhere else.
+
 ## What changed in 0.7.8
 
 **The Lighting page shows the effect.** An animation of the board's LEDs
