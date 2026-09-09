@@ -830,6 +830,7 @@ pub fn get_settings(state: tauri::State<AppState>) -> Result<DeviceSettings, Str
             .map(|o| o.spec.features.side_light)
             .unwrap_or(false)
     };
+    let swapped = led_wire(&state).swapped;
     with_open(&state, |t, fc| {
         let fc = need(fc)?;
         let deb = t.roundtrip(fc.get_debounce, &[], Checksum::Bit7)?;
@@ -853,7 +854,7 @@ pub fn get_settings(state: tauri::State<AppState>) -> Result<DeviceSettings, Str
             (true, Some((_, get))) => t
                 .roundtrip(get, &[], Checksum::Bit7)
                 .ok()
-                .and_then(|r| SledParam::from_reply(&r)),
+                .and_then(|r| SledParam::from_reply_on(&r, swapped)),
             _ => None,
         };
         Ok(DeviceSettings {
@@ -930,11 +931,12 @@ pub fn set_side_light(state: tauri::State<AppState>, param: SledParam) -> Result
             return Err(format!("{} has no edge light", spec.label()));
         }
     }
+    let swapped = led_wire(&state).swapped;
     with_writable(&state, |t, fc| {
         need(fc)?.sled.ok_or_else(|| {
             HidError::Protocol("edge light opcodes unknown for this family".into())
         })?;
-        t.send(&param.to_packet())
+        t.send(&param.to_packet_on(swapped))
     })
 }
 
@@ -1541,6 +1543,7 @@ pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             .ok_or("no device connected")?
     };
     let scaled = spec.family == "yc500" && spec.magnetic;
+    let wire = led_wire(&state);
     let cfg = with_open(&state, |t, fc| {
         let fc = need(fc)?;
         let n = spec.profiles.clamp(1, MAX_PROFILES);
@@ -1567,7 +1570,7 @@ pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             (true, Some((_, get))) => t
                 .roundtrip(get, &[], Checksum::Bit7)
                 .ok()
-                .and_then(|r| SledParam::from_reply(&r)),
+                .and_then(|r| SledParam::from_reply_on(&r, wire.swapped)),
             _ => None,
         };
         Ok(SavedConfig {
@@ -1577,7 +1580,7 @@ pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             board: spec.label(),
             profiles,
             fn_layers,
-            led: LedParam::from_reply_for(&led, spec.led_wire())
+            led: LedParam::from_reply_for(&led, wire)
                 .ok_or_else(|| HidError::Protocol("bad LEDPARAM reply".into()))?,
             side_light: sled,
             debounce: deb[fc.debounce_at],
@@ -1609,6 +1612,7 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             .map(|o| o.spec.clone())
             .ok_or("no device connected")?
     };
+    let wire = led_wire(&state);
     if cfg.device_id != spec.id {
         return Err(format!(
             "this config was exported from {} (device id {}), but {} (id {}) is connected",
@@ -1669,10 +1673,10 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
         t.send(&cfg.sleep.to_packet_as(fc.set_sleeptime))?;
         std::thread::sleep(KEY_GAP);
         if let (Some(sled), true, Some(_)) = (cfg.side_light, spec.features.side_light, fc.sled) {
-            t.send(&sled.to_packet())?;
+            t.send(&sled.to_packet_on(wire.swapped))?;
             std::thread::sleep(KEY_GAP);
         }
-        t.send(&cfg.led.to_packet_for(spec.led_wire()))?;
+        t.send(&cfg.led.to_packet_for(wire))?;
         Ok(format!(
             "restored {keys_written} keys, settings and lighting from {}",
             cfg.board

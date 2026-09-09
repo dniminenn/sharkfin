@@ -203,6 +203,20 @@ runtime instead of drawn from a sibling's.
 `tools/coverage.py` reports how many boards have a rendered layout and
 which layouts the writable boards still need.
 
+`tools/led_flags.py` reads the same packages for a different fact: which
+LEDPARAM flags value a board paints as the rainbow. It is `8` on most
+boards and `7` on 33 of the 133 whose firmware could be read, and a board
+with it wrong shows one solid colour where its owner asked for the
+rainbow. The verdicts go in `app/src-tauri/data/led-flags.json`, which is
+committed and read at load. It needs `arm-none-eabi-objdump` on PATH.
+
+```sh
+python3 tools/led_flags.py
+```
+
+Boards it cannot read keep `8`, and their owners can say otherwise from
+the Lighting page, which settles it for that board without a release.
+
 ### ISO boards
 
 Almost every layout the vendor ships is ANSI, and ISO boards keep turning

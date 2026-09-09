@@ -222,17 +222,36 @@ Opcode shared. Packet **[HW]**.
   the byte before it advances, so 0 advances every frame and is the
   fastest; the vendor's gen2 class never sends 5 **[FW]**. Brightness
   direct, 0..4 on most boards; the light table says where it is wider.
-- Flags nibble: `7` fixed colour, `8` rainbow. Modes 22/23 invert it
-  (`0` rainbow, `4` fixed). One lineage swaps the two: the Akko ACR75 v2
-  (device 606, firmware 3.03) has `7` rainbow and `8` fixed in every
-  renderer (init `0x1014688` tests 7 for the hue walker where the RT100
-  `0x101C9C0` and X85PRO `0x101C770` test 8; render `0x1015F90` against
-  `0x101F4E4` / `0x101F16A`), all by exact compare. Its preset table is
-  red, green, blue, orange, magenta, amber, warm white, and its SET handler
-  (`0x1019604`) has no RGB clamp and no mode range guard, so it must never
-  be sent a mode above 31. **[FW]** Mode 13 puts a pattern slot in the
-  option nibble and forces RGB `(0,200,200)`. That slot is the gen2 USERPIC
-  slot; yc500 USERPIC has no slot byte. Mode 21 zeroes the flags byte.
+- Flags nibble: `7` fixed colour, `8` rainbow on most boards. Modes 22/23
+  invert it (`0` rainbow, `4` fixed). Some boards read the two the other way
+  round, and it splits inside both families, so it is per board and not per
+  family. Every renderer dispatches the nibble the same way, a `cmp #6` for
+  the preset indices and then the two values by exact compare, one branch
+  painting the colour the packet carried and the other walking its own, so
+  which is which can be read off any image. 33 of the 133 boards whose
+  published firmware could be read have `7` rainbow, `8` fixed, mostly Akko
+  and MonsGeek but also the AttackShark X65HE and the Keydous AJ68-CP; they
+  are listed in `data/led-flags.json`. **[FW]**
+- Two images read end to end for that. Akko ACR75 v2 (606, firmware 3.03,
+  yc500): `0x10145E2` tests 7 into the hue reseed at `0x10145EC` and 8 into
+  the packet's RGB at `0x1014602`, where the RT100 (946, v507) has
+  `0x10148A2` testing 8 into the reseed at `0x10148AC` and 7 into the RGB at
+  `0x10148C2`. Its preset table is red, green, blue, orange, magenta, amber,
+  warm white, and its SET handler (`0x1019604`) has no RGB clamp and no mode
+  range guard, so it must never be sent a mode above 31. AttackShark X65HE
+  (2268, v309, gen2): the SET handler at `0x8010BAE` stores the packet's RGB
+  per mode at settings `+130`, the settings copy at `0x800FD9A` masks that
+  mode's flags byte (settings `+98`) into the light state at `+30` with the
+  frame counter beside it at `+31`, and the renderer at `0x8008446` tests 7
+  into the counter walk at `0x8008452` and 8 into the stored RGB at
+  `0x80084AE`. Its cycle table holds eight colours: red, green, blue,
+  yellow, magenta, cyan, white, orange. **[FW]**
+- The edge light reads the nibble the way the same board's backlight does:
+  606's side renderer (`0x1016D2E`) tests the same two values the same way
+  round as its backlight renderer. **[FW]**
+- Mode 13 puts a pattern slot in the option nibble and forces RGB
+  `(0,200,200)`. That slot is the gen2 USERPIC slot; yc500 USERPIC has no
+  slot byte. Mode 21 zeroes the flags byte.
 - White `0xFFFFFF` transmits as `0xFAFAFA`.
 - On GET, a flags nibble of 0..6 is a preset-colour index overriding RGB:
   red, orange, yellow, green, cyan, blue, magenta.

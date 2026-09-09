@@ -74,11 +74,15 @@ pub struct DeviceSpec {
     /// shows the common set.
     #[serde(default, skip_deserializing)]
     pub light: Option<LightLayoutSpec>,
-    /// The firmware lineage that reads the LEDPARAM flags nibble the other
-    /// way round: 8 is a fixed colour and 7 is the rainbow, and the seven
-    /// preset colours differ. Read out of the Akko ACR75 v2's v3.03 image;
-    /// the X86 lineage keeps 7 fixed, 8 rainbow (docs/PROTOCOL.md).
-    #[serde(default)]
+    /// This board reads the LEDPARAM flags nibble the other way round: 8 is
+    /// a fixed colour and 7 is the rainbow, and the seven preset colours
+    /// differ. Not a field of the record: read out of each board's own
+    /// firmware into `data/led-flags.json` by `tools/led_flags.py`, and
+    /// attached here at load. The owner of a board the scan could not read
+    /// can say so from the Lighting page, which overrides this for the open
+    /// board (`set_led_flags_swapped`). Most boards keep 7 fixed, 8 rainbow
+    /// (docs/PROTOCOL.md).
+    #[serde(default, skip_deserializing)]
     pub led_flags_swapped: bool,
 }
 
@@ -315,6 +319,15 @@ pub fn build_id() -> String {
 
 static DEVICES_JSON: &str = include_str!("../data/devices.json");
 static LIGHT_LAYOUTS_JSON: &str = include_str!("../data/light-layouts.json");
+static LED_FLAGS_JSON: &str = include_str!("../data/led-flags.json");
+
+/// One board's LEDPARAM flags reading, out of its own firmware
+/// (`tools/led_flags.py`). `rainbow` is the nibble value that paints the
+/// rainbow: `8` on most boards, `7` on the rest.
+#[derive(Deserialize)]
+struct LedFlagRecord {
+    rainbow: u8,
+}
 
 /// A malformed registry must not take the app down; callers fall back to
 /// treating the board as unknown.
@@ -334,11 +347,26 @@ pub fn all() -> Vec<DeviceSpec> {
                 Default::default()
             }
         };
+    let flags: std::collections::HashMap<String, LedFlagRecord> =
+        match serde_json::from_str(LED_FLAGS_JSON) {
+            Ok(v) => v,
+            Err(e) => {
+                log::error!("data/led-flags.json failed to parse: {e}");
+                Default::default()
+            }
+        };
     for d in &mut devices {
         d.light = lights.get(&d.light_layout).cloned();
+        d.led_flags_swapped = flags
+            .get(&d.id.to_string())
+            .is_some_and(|r| r.rainbow == FLAGS_SWAPPED_RAINBOW);
     }
     devices
 }
+
+/// The flags nibble that paints the rainbow on the boards that read it the
+/// other way round.
+const FLAGS_SWAPPED_RAINBOW: u8 = 7;
 
 pub fn by_id(id: u32) -> Option<DeviceSpec> {
     all().into_iter().find(|d| d.id == id)
@@ -428,6 +456,27 @@ mod tests {
             vec![2872],
             "boards named to a layout the table lacks"
         );
+    }
+
+    /// The flags nibble comes from each board's own firmware, not from the
+    /// record. Both boards whose owners reported an inverted rainbow toggle
+    /// are in the file; the X86, whose lineage reads 8 as the rainbow, is
+    /// not.
+    #[test]
+    fn led_flags_come_from_the_firmware_scan() {
+        for id in [606, 1308, 2268] {
+            let d = by_id(id).unwrap_or_else(|| panic!("device {id} present"));
+            assert!(d.led_flags_swapped, "device {id} reads 7 as the rainbow");
+            assert!(d.led_wire().swapped);
+        }
+        let x86 = by_id(1967).expect("X86 present");
+        assert!(
+            !x86.led_flags_swapped,
+            "the X86 lineage reads 8 as the rainbow"
+        );
+        assert!(!x86.led_wire().swapped);
+        let swapped = all().iter().filter(|d| d.led_flags_swapped).count();
+        assert_eq!(swapped, 33, "boards the scan read as 7 = rainbow");
     }
 
     /// Drawing is granted per lineage, never per family alone. yc3123 boards

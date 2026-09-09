@@ -1140,6 +1140,7 @@ async fn read_settings(
     t: &Transport,
     fc: &'static FamilyCmds,
     has_side_light: bool,
+    swapped: bool,
 ) -> Result<DeviceSettings, HidErr> {
     let deb = t.roundtrip(fc.get_debounce, &[], Checksum::Bit7).await?;
     let slp = t.roundtrip(fc.get_sleeptime, &[], Checksum::Bit7).await?;
@@ -1163,7 +1164,7 @@ async fn read_settings(
             .roundtrip(get, &[], Checksum::Bit7)
             .await
             .ok()
-            .and_then(|r| SledParam::from_reply(&r)),
+            .and_then(|r| SledParam::from_reply_on(&r, swapped)),
         _ => None,
     };
     Ok(DeviceSettings {
@@ -1189,7 +1190,7 @@ pub async fn get_settings() -> Result<JsValue, JsValue> {
     read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    let s = read_settings(&t, fc, spec.features.side_light)
+    let s = read_settings(&t, fc, spec.features.side_light, led_wire(&spec).swapped)
         .await
         .map_err(fail)?;
     to_js(&s)
@@ -1258,7 +1259,9 @@ pub async fn set_side_light(param_json: String) -> Result<(), JsValue> {
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
     fc.sled
         .ok_or("edge light opcodes unknown for this family")?;
-    t.send(&param.to_packet()).await.map_err(fail)?;
+    t.send(&param.to_packet_on(led_wire(&spec).swapped))
+        .await
+        .map_err(fail)?;
     Ok(())
 }
 
@@ -1749,7 +1752,7 @@ pub async fn export_config() -> Result<JsValue, JsValue> {
             .roundtrip(get, &[], Checksum::Bit7)
             .await
             .ok()
-            .and_then(|r| SledParam::from_reply(&r)),
+            .and_then(|r| SledParam::from_reply_on(&r, led_wire(&spec).swapped)),
         _ => None,
     };
     let cfg = SavedConfig {
@@ -1844,7 +1847,9 @@ pub async fn import_config(raw: String) -> Result<JsValue, JsValue> {
         .await
         .map_err(fail)?;
     if let (Some(sled), true, Some(_)) = (cfg.side_light, spec.features.side_light, fc.sled) {
-        t.send(&sled.to_packet()).await.map_err(fail)?;
+        t.send(&sled.to_packet_on(led_wire(&spec).swapped))
+            .await
+            .map_err(fail)?;
     }
     t.send(&cfg.led.to_packet_for(led_wire(&spec)))
         .await

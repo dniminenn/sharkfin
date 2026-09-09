@@ -1,0 +1,933 @@
+{
+ "413": {
+  "board": "PC75B Plus",
+  "firmware": "v309",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "425": {
+  "board": "T98",
+  "firmware": "v304",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "455": {
+  "board": "5108S",
+  "firmware": "v302",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "457": {
+  "board": "3084S",
+  "firmware": "v302",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "458": {
+  "board": "5087S",
+  "firmware": "v303",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "459": {
+  "board": "5075S",
+  "firmware": "v307",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "494": {
+  "board": "KC108",
+  "firmware": "v304",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "554": {
+  "board": "R108",
+  "firmware": "v406",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "557": {
+  "board": "R100",
+  "firmware": "v405",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "575": {
+  "board": "MG108",
+  "firmware": "v302",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "580": {
+  "board": "Neon75",
+  "firmware": "v308",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "591": {
+  "board": "T98",
+  "firmware": "v301",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "594": {
+  "board": "PC75B Plus+",
+  "firmware": "v310",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "600": {
+  "board": "ROYALAXE R87",
+  "firmware": "v407",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "606": {
+  "board": "ACR75 v2",
+  "firmware": "v303",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "620": {
+  "board": "5075S+",
+  "firmware": "v304",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "631": {
+  "board": "Y87",
+  "firmware": "v406",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "634": {
+  "board": "Y98",
+  "firmware": "v410",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "635": {
+  "board": "A84",
+  "firmware": "v419_oledv113",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "652": {
+  "board": "5108S",
+  "firmware": "v305",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "655": {
+  "board": "NJ80 AP500",
+  "firmware": "v515",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 4
+ },
+ "668": {
+  "board": "PC75S+",
+  "firmware": "v305",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "671": {
+  "board": "RX980",
+  "firmware": "v505",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "678": {
+  "board": "5108B Plus",
+  "firmware": "v304",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "679": {
+  "board": "PC98B Plus+",
+  "firmware": "v304",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "690": {
+  "board": "CK75 2.0",
+  "firmware": "v507",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "694": {
+  "board": "MAXFIT81",
+  "firmware": "v508",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "695": {
+  "board": "PC75B Plus+",
+  "firmware": "v308",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "698": {
+  "board": "K980",
+  "firmware": "v507",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "699": {
+  "board": "NJ80 AP600",
+  "firmware": "v111",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "732": {
+  "board": "NJ81",
+  "firmware": "v514",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "741": {
+  "board": "TH80",
+  "firmware": "v503",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "788": {
+  "board": "Itou75V8",
+  "firmware": "v504_oledv504",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "819": {
+  "board": "NJ81S",
+  "firmware": "v507",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "848": {
+  "board": "SPR75",
+  "firmware": "v304",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "852": {
+  "board": "SK5",
+  "firmware": "v505",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "859": {
+  "board": "M1",
+  "firmware": "v302",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "870": {
+  "board": "M1",
+  "firmware": "v502",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "873": {
+  "board": "NJ81-ED",
+  "firmware": "v504_oledv504",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "882": {
+  "board": "B67",
+  "firmware": "v505",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "885": {
+  "board": "5075S-ABNT2",
+  "firmware": "v506",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "932": {
+  "board": "XL98",
+  "firmware": "v113_oledv107",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "946": {
+  "board": "RT100 Wired",
+  "firmware": "v507_oledv506",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "992": {
+  "board": "CK75 3.0",
+  "firmware": "v504",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1148": {
+  "board": "5108B Plus",
+  "firmware": "v300",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1154": {
+  "board": "YZ-21",
+  "firmware": "v501",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1264": {
+  "board": "ACR Pro75",
+  "firmware": "v300",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1308": {
+  "board": "M5W",
+  "firmware": "v103",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1321": {
+  "board": "NJ80 AP500",
+  "firmware": "v506",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 4
+ },
+ "1405": {
+  "board": "PL87A",
+  "firmware": "v505",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1436": {
+  "board": "5087S",
+  "firmware": "v300",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1452": {
+  "board": "5075S",
+  "firmware": "v301",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1493": {
+  "board": "NJ81",
+  "firmware": "v504",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1495": {
+  "board": "5087S V2",
+  "firmware": "v502",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1549": {
+  "board": "A75",
+  "firmware": "v105",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1550": {
+  "board": "X100",
+  "firmware": "v108",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1586": {
+  "board": "MK870 PRO",
+  "firmware": "v110",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1594": {
+  "board": "5075S",
+  "firmware": "v301",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1638": {
+  "board": "R83",
+  "firmware": "v101",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1668": {
+  "board": "X80",
+  "firmware": "v105",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1812": {
+  "board": "3MRGB-207",
+  "firmware": "v108",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1954": {
+  "board": "XL98",
+  "firmware": "v110_oledv106",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "1991": {
+  "board": "MU02",
+  "firmware": "v103",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "2116": {
+  "board": "TITAN68HE",
+  "firmware": "v304",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2220": {
+  "board": "TITAN60",
+  "firmware": "v303",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2227": {
+  "board": "VK MAG75 Pro",
+  "firmware": "v303",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2234": {
+  "board": "VK MAG75 Lite",
+  "firmware": "v304",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2246": {
+  "board": "VK MAG 75",
+  "firmware": "v303",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2268": {
+  "board": "X65HE",
+  "firmware": "v309",
+  "rainbow": 7,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2276": {
+  "board": "OG104",
+  "firmware": "v112",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "2281": {
+  "board": "AGK75 U2",
+  "firmware": "v310",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2288": {
+  "board": "AJ68-CP",
+  "firmware": "v402",
+  "rainbow": 7,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2367": {
+  "board": "PL108W",
+  "firmware": "v126",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 1
+ },
+ "2398": {
+  "board": "MAG75 Max",
+  "firmware": "v306",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2400": {
+  "board": "NJ80-CP V2",
+  "firmware": "v410",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2425": {
+  "board": "AGK75 PRO",
+  "firmware": "v305",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2446": {
+  "board": "Chronos 68",
+  "firmware": "v410",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2450": {
+  "board": "GK75",
+  "firmware": "v307",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2454": {
+  "board": "NJ81-CP",
+  "firmware": "v413_oledv111",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2485": {
+  "board": "X68",
+  "firmware": "v409",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2494": {
+  "board": "MX8.2",
+  "firmware": "v320",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2576": {
+  "board": "NJ98-CP",
+  "firmware": "v421_oledv106",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2626": {
+  "board": "K5",
+  "firmware": "v317",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2651": {
+  "board": "AGK75 PRO",
+  "firmware": "v302",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2656": {
+  "board": "AO98",
+  "firmware": "v104",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "2704": {
+  "board": "MOD007S V3-HE UK",
+  "firmware": "v509",
+  "rainbow": 7,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2714": {
+  "board": "NX87",
+  "firmware": "v102",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "2727": {
+  "board": "GV10M-8K",
+  "firmware": "v120",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2730": {
+  "board": "K86",
+  "firmware": "v115_oledv108_flashv101",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "2739": {
+  "board": "MG108B",
+  "firmware": "v116",
+  "rainbow": 7,
+  "shape": "thumb1",
+  "sites": 3
+ },
+ "2752": {
+  "board": "Nyf HE 82K",
+  "firmware": "v409_oledv104_flashv100",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2755": {
+  "board": "X68MAX",
+  "firmware": "v504",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2759": {
+  "board": "HTK3180UA",
+  "firmware": "v113",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "2762": {
+  "board": "HE68 Llte",
+  "firmware": "v502",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2774": {
+  "board": "HTK1180UA",
+  "firmware": "v112",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "2782": {
+  "board": "TAC75 HE",
+  "firmware": "v502",
+  "rainbow": 7,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2800": {
+  "board": "HTK3880UA",
+  "firmware": "v518_oledv106",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2801": {
+  "board": "GV8M-8K",
+  "firmware": "v120",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2816": {
+  "board": "Storm68",
+  "firmware": "v508",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2817": {
+  "board": "PLUX CST KB",
+  "firmware": "v116_oledv109_flashv102",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 3
+ },
+ "2831": {
+  "board": "VK99 Gaming",
+  "firmware": "v515_oledv113_flashv101",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2853": {
+  "board": "HTK1880UA",
+  "firmware": "v513",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2856": {
+  "board": "HTK1880",
+  "firmware": "v508",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2857": {
+  "board": "HTK3880",
+  "firmware": "v510_oledv106",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2858": {
+  "board": "HTK3880EU",
+  "firmware": "v511_oledv106",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2861": {
+  "board": "HTK4180UA",
+  "firmware": "v124_oledv102",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "2862": {
+  "board": "HTK4180EU",
+  "firmware": "v114_oledv102",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "2874": {
+  "board": "M3 V5 HE",
+  "firmware": "v510",
+  "rainbow": 7,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2876": {
+  "board": "HTK3860UA",
+  "firmware": "v516_oledv105",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2912": {
+  "board": "GMK82",
+  "firmware": "v505",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2917": {
+  "board": "HTK1860UA",
+  "firmware": "v511",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2918": {
+  "board": "HTK1860",
+  "firmware": "v511",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2919": {
+  "board": "HTK3860",
+  "firmware": "v512_oledv105",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2920": {
+  "board": "HTK3860EU",
+  "firmware": "v515_oledv105",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 2
+ },
+ "2936": {
+  "board": "HTK4100UA",
+  "firmware": "v113_oledv106_flashv100",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "2949": {
+  "board": "M1 V5 TMR",
+  "firmware": "v410",
+  "rainbow": 7,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "2956": {
+  "board": "NJ98-V2",
+  "firmware": "v118_oledv104",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 3
+ },
+ "3045": {
+  "board": "HTK3180",
+  "firmware": "v109",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "3046": {
+  "board": "HTK4180",
+  "firmware": "v112_oledv102",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "3144": {
+  "board": "75% HE Pro",
+  "firmware": "v414",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "3175": {
+  "board": "HTK1180UA",
+  "firmware": "v106",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "3205": {
+  "board": "HTK4100UA",
+  "firmware": "v106_oledv106_flashv100",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "3217": {
+  "board": "HTK4160EU",
+  "firmware": "v105_oledv102",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "3320": {
+  "board": "HTK4100",
+  "firmware": "v105_oledv106_flashv100",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 2
+ },
+ "3335": {
+  "board": "X80HE",
+  "firmware": "v505",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "3336": {
+  "board": "NX108HE",
+  "firmware": "v504",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "3431": {
+  "board": "Mi60",
+  "firmware": "v508",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "3450": {
+  "board": "VG-209-BK",
+  "firmware": "v103",
+  "rainbow": 8,
+  "shape": "thumb1",
+  "sites": 5
+ },
+ "3468": {
+  "board": "H60-Pro",
+  "firmware": "v503",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "3474": {
+  "board": "75% HE Pro",
+  "firmware": "v406",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "3513": {
+  "board": "Core68HE",
+  "firmware": "v504",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "3701": {
+  "board": "MATATAKI (JIS coalowl)",
+  "firmware": "v401",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ },
+ "3708": {
+  "board": "SK61HE",
+  "firmware": "v507",
+  "rainbow": 8,
+  "shape": "thumb2",
+  "sites": 1
+ }
+}

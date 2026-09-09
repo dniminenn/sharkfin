@@ -429,6 +429,17 @@ pub struct SledParam {
 
 const MODE_NEON: u8 = 3;
 
+/// `(fixed colour, rainbow)` flags-nibble values for a board. Most boards
+/// read `7` as the colour the packet carried and `8` as the rainbow; the
+/// boards `data/led-flags.json` records read them the other way round.
+fn flags_pair(swapped: bool) -> (u8, u8) {
+    if swapped {
+        (FLAG_DAZZLE, FLAG_FIXED)
+    } else {
+        (FLAG_FIXED, FLAG_DAZZLE)
+    }
+}
+
 /// Near-black stores fine but renders as "all LEDs off" (verified on an X86),
 /// which reads as a dead board. Backlight-off is KBOPTION's job; a colour
 /// write is floored to stay visible.
@@ -444,14 +455,26 @@ fn floor_black(r: u8, g: u8, b: u8) -> (u8, u8, u8) {
 
 impl SledParam {
     pub fn to_packet(self) -> [u8; REPORT_LEN] {
+        self.to_packet_on(false)
+    }
+
+    pub fn from_reply(reply: &[u8]) -> Option<Self> {
+        Self::from_reply_on(reply, false)
+    }
+
+    /// The edge light reads the flags nibble the way the same board's
+    /// backlight does: in the 606 image both renderers test the same values
+    /// by exact compare (`docs/PROTOCOL.md`).
+    pub fn to_packet_on(self, swapped: bool) -> [u8; REPORT_LEN] {
+        let (fixed, dazzle) = flags_pair(swapped);
         let (mut r, mut g, mut b) = floor_black(self.r, self.g, self.b);
         if (r, g, b) == (0xFF, 0xFF, 0xFF) {
             (r, g, b) = (0xFA, 0xFA, 0xFA);
         }
         let flags4 = if self.mode == MODE_NEON {
-            FLAG_DAZZLE
+            dazzle
         } else {
-            (self.option << 4) | if self.dazzle { FLAG_DAZZLE } else { FLAG_FIXED }
+            (self.option << 4) | if self.dazzle { dazzle } else { fixed }
         };
         packet(
             cmd::SET_SLEDPARAM,
@@ -460,19 +483,25 @@ impl SledParam {
         )
     }
 
-    pub fn from_reply(reply: &[u8]) -> Option<Self> {
+    pub fn from_reply_on(reply: &[u8], swapped: bool) -> Option<Self> {
         if reply.len() < 8 || reply[0] != cmd::GET_SLEDPARAM {
             return None;
         }
+        let (fixed, dazzle_flag) = flags_pair(swapped);
+        let presets: &[(u8, u8, u8)] = if swapped {
+            &COMMON_COLORS_SWAPPED
+        } else {
+            &COMMON_COLORS
+        };
         let flags = reply[4];
         let nibble = flags & 0x0F;
         let (mut r, mut g, mut b) = (reply[5], reply[6], reply[7]);
         if (r, g, b) == (0xFA, 0xFA, 0xFA) {
             (r, g, b) = (0xFF, 0xFF, 0xFF);
         }
-        let dazzle = nibble == FLAG_DAZZLE;
-        if !dazzle && nibble != FLAG_FIXED {
-            if let Some(&(pr, pg, pb)) = COMMON_COLORS.get(nibble as usize) {
+        let dazzle = nibble == dazzle_flag;
+        if !dazzle && nibble != fixed {
+            if let Some(&(pr, pg, pb)) = presets.get(nibble as usize) {
                 (r, g, b) = (pr, pg, pb);
             }
         }
@@ -1680,11 +1709,7 @@ impl LedParam {
     /// nibble by exact value, so the two constants simply trade places;
     /// nothing else in the packet moves.
     pub fn to_packet_for(self, wire: LedWire) -> [u8; REPORT_LEN] {
-        let (fixed, dazzle) = if wire.swapped {
-            (FLAG_DAZZLE, FLAG_FIXED)
-        } else {
-            (FLAG_FIXED, FLAG_DAZZLE)
-        };
+        let (fixed, dazzle) = flags_pair(wire.swapped);
         let (mut r, mut g, mut b) = floor_black(self.r, self.g, self.b);
         if (r, g, b) == (0xFF, 0xFF, 0xFF) {
             (r, g, b) = (0xFA, 0xFA, 0xFA);
@@ -1732,10 +1757,11 @@ impl LedParam {
         if reply.len() < 8 || reply[0] != cmd::GET_LEDPARAM {
             return None;
         }
-        let (fixed, dazzle_flag, presets) = if wire.swapped {
-            (FLAG_DAZZLE, FLAG_FIXED, &COMMON_COLORS_SWAPPED)
+        let (fixed, dazzle_flag) = flags_pair(wire.swapped);
+        let presets = if wire.swapped {
+            &COMMON_COLORS_SWAPPED
         } else {
-            (FLAG_FIXED, FLAG_DAZZLE, &COMMON_COLORS)
+            &COMMON_COLORS
         };
         let mode = reply[1];
         let flags = reply[4];
@@ -1848,6 +1874,46 @@ mod tests {
             0x80,
             "and orange on the X86"
         );
+    }
+
+    /// The edge light follows the same board's backlight: in the 606 image
+    /// both renderers test the two values by exact compare, the same way
+    /// round.
+    #[test]
+    fn the_edge_light_follows_the_same_lineage() {
+        use super::*;
+        let rainbow = SledParam {
+            mode: 1,
+            speed: 2,
+            brightness: 4,
+            option: 0,
+            dazzle: true,
+            r: 0xFF,
+            g: 0x00,
+            b: 0x00,
+        };
+        assert_eq!(rainbow.to_packet()[4] & 0x0F, 8);
+        assert_eq!(rainbow.to_packet_on(true)[4] & 0x0F, 7);
+        let fixed = SledParam {
+            dazzle: false,
+            ..rainbow
+        };
+        assert_eq!(fixed.to_packet()[4] & 0x0F, 7);
+        assert_eq!(fixed.to_packet_on(true)[4] & 0x0F, 8);
+        // Neon brings its own colours whichever way round the board is.
+        let neon = SledParam {
+            mode: MODE_NEON,
+            dazzle: false,
+            ..rainbow
+        };
+        assert_eq!(neon.to_packet()[4] & 0x0F, 8);
+        assert_eq!(neon.to_packet_on(true)[4] & 0x0F, 7);
+        let reply = [0x88, 1, 2, 4, 0x08, 0x90, 0x13, 0xFE];
+        assert!(SledParam::from_reply(&reply).unwrap().dazzle);
+        assert!(!SledParam::from_reply_on(&reply, true).unwrap().dazzle);
+        let preset = [0x88, 1, 2, 4, 0x01, 0, 0, 0];
+        assert_eq!(SledParam::from_reply_on(&preset, true).unwrap().g, 0xFF);
+        assert_eq!(SledParam::from_reply(&preset).unwrap().g, 0x80);
     }
 
     use super::*;
