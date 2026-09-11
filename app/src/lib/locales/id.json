@@ -214,6 +214,7 @@
  "sharkfin does not know this board yet. A bundle is the first step to adding it.": "sharkfin belum mengenal board ini. Bundel adalah langkah pertama untuk menambahkannya.",
  "sharkfin reads this display but cannot draw on it yet.": "sharkfin membaca layar ini tapi belum bisa menggambar di atasnya.",
  "sharkfin reads this display but cannot draw on it. The picture goes through a separate chip on this board.": "sharkfin membaca layar ini tapi tidak bisa menggambar di atasnya. Gambar lewat chip terpisah di board ini.",
+  "sharkfin reads this display but cannot draw on it: its size is not recorded.": "sharkfin membaca layar ini tapi tidak bisa menggambar di atasnya: ukurannya belum direkam.",
  "slot {n}": "slot {n}",
  "slow": "lambat",
  "third": "ketiga",

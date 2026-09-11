@@ -214,6 +214,7 @@
  "sharkfin does not know this board yet. A bundle is the first step to adding it.": "o sharkfin ainda não conhece este teclado. Um pacote é o primeiro passo para adicioná-lo.",
  "sharkfin reads this display but cannot draw on it yet.": "o sharkfin lê este display, mas ainda não consegue desenhar nele.",
  "sharkfin reads this display but cannot draw on it. The picture goes through a separate chip on this board.": "o sharkfin lê este display, mas não consegue desenhar nele. A imagem passa por um chip separado neste teclado.",
+  "sharkfin reads this display but cannot draw on it: its size is not recorded.": "o sharkfin lê este display, mas não consegue desenhar nele: o tamanho não foi gravado.",
  "slot {n}": "slot {n}",
  "slow": "lento",
  "third": "terceiro",

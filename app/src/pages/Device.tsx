@@ -380,6 +380,11 @@ export default function DevicePage({
                 {t("sharkfin reads this display but cannot draw on it. The picture goes through a separate chip on this board.")}
               </p>
             )}
+            {!device.spec.screen && (
+              <p className="text-xs text-muted-foreground">
+                {t("sharkfin reads this display but cannot draw on it: its size is not recorded.")}
+              </p>
+            )}
           </div>
         </Section>
       )}
