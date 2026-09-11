@@ -9,11 +9,11 @@ import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { t } from "@/lib/i18n";
 
-// Most of these boards are ROYUAN's 3151, but 189 of the 1184 in the registry
+// Most of these boards are ROYUAN's 3151, but 237 of the 1317 in the registry
 // ship under a different vendor ID, so matching 3151 alone locks their owners
 // out. Keep in step with `packaging/70-sharkfin.rules`.
 const UDEV_RULE =
-  'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|0db0|145f|14a5|2ea8|3121|3299|331a|374a|379a|38a9|391d|3984|39a8|39ab|54ab", MODE="0660", TAG+="uaccess"';
+  'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|0db0|145f|14a5|2ea8|3121|3299|331a|374a|379a|38a9|38ee|391d|3984|39a8|39ab|54ab", MODE="0660", TAG+="uaccess"';
 
 // One paste: write the rule, reload, apply. `tee` because the redirect would
 // run as the user, not as root. Deliberately not a script to download and

@@ -38627,7 +38627,7 @@
     "company": "akko"
   },
   "1374": {
-    "board": "(not in the registry)",
+    "board": "PC75B Plus",
     "firmware": "v301",
     "image": "raw",
     "offset": 129400,
@@ -39026,8 +39026,7 @@
       2,
       2,
       0
-    ],
-    "company": "akko"
+    ]
   },
   "1379": {
     "board": "RT100",
@@ -75932,7 +75931,7 @@
     ]
   },
   "2839": {
-    "board": "(not in the registry)",
+    "board": "MOD007 V5 HE",
     "firmware": "v515_oledv108_flashv102",
     "image": "firmwareFile.bin",
     "offset": 149344,
@@ -76335,8 +76334,7 @@
       3,
       3,
       0
-    ],
-    "company": "akko"
+    ]
   },
   "2853": {
     "board": "HTK1880UA",
@@ -83236,7 +83234,7 @@
     "company": "Keydous"
   },
   "3013": {
-    "board": "(not in the registry)",
+    "board": "Air01",
     "firmware": "v110",
     "image": "raw",
     "offset": 154112,
@@ -83603,8 +83601,7 @@
       0,
       79,
       0
-    ],
-    "company": "akko"
+    ]
   },
   "3045": {
     "board": "HTK3180",
@@ -84886,7 +84883,7 @@
     "company": "cherry"
   },
   "3113": {
-    "board": "(not in the registry)",
+    "board": "MOD007 V5 HE",
     "firmware": "v510_oledv107_flashv102",
     "image": "firmwareFile.bin",
     "offset": 136488,
@@ -85289,8 +85286,7 @@
       3,
       3,
       0
-    ],
-    "company": "akko"
+    ]
   },
   "3144": {
     "board": "75% HE Pro",

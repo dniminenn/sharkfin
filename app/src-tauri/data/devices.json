@@ -56,6 +56,38 @@
     }
   },
   {
+    "id": 338,
+    "name": "yc200_mk11",
+    "displayName": "5075B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc200_mk11",
+    "keyLayout": "Common82_PC75S",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "Volume_Brightness1",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 413,
     "name": "yc200_pc75b",
     "displayName": "PC75B Plus",
@@ -1076,6 +1108,34 @@
     "features": {
       "knob": [],
       "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 771,
+    "name": "yc300_3084bp_iso_uk",
+    "displayName": "3084BP-ISO-UK",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_3084bp_iso_uk",
+    "keyLayout": "Common85_3084BP",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
       "sleep24": true,
       "sleepBT": true,
       "magneticSwitches": false,
@@ -2210,6 +2270,34 @@
     "screen": null
   },
   {
+    "id": 1023,
+    "name": "yc500_5108bplus_uk_soc",
+    "displayName": "5108B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_5108bplus_uk_soc",
+    "keyLayout": "Common108_MG108B",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1025,
     "name": "attackshark_x65he",
     "displayName": "X65HE",
@@ -2321,6 +2409,35 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 1087,
+    "name": "koodo_solar",
+    "displayName": "Solar",
+    "company": "KOODO",
+    "vendor": "KOODO",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "koodo_solar",
+    "keyLayout": "Local81_KOODO_Solar",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   },
   {
     "id": 1104,
@@ -2717,6 +2834,66 @@
     }
   },
   {
+    "id": 1200,
+    "name": "yc3121_m3w_soc",
+    "displayName": "M3W",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_m3w_soc",
+    "keyLayout": "Common87_MonsGeek_M3V5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 1215,
+    "name": "yc500_m7wnosled_soc",
+    "displayName": "M7W",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_m7wnosled_soc",
+    "keyLayout": "Common68_MK902_2",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1220,
     "name": "yc500_c98pro_soc",
     "displayName": "C98 Pro",
@@ -2926,6 +3103,34 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 1280,
+    "name": "yc300_3098bplus",
+    "displayName": "3098B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_3098bplus",
+    "keyLayout": "Common98_xl98",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   },
   {
     "id": 1281,
@@ -3318,6 +3523,38 @@
     }
   },
   {
+    "id": 1395,
+    "name": "yc500_mod007bpc_soc",
+    "displayName": "MOD007B PC",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_mod007bpc_soc",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1405,
     "name": "yc3121_cr87k_dm",
     "displayName": "PL87A",
@@ -3402,6 +3639,38 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 1419,
+    "name": "yc500_ice75_soc",
+    "displayName": "ICE75",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc500_ice75_soc",
+    "keyLayout": "Common82_SG9000_v3",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   },
   {
     "id": 1436,
@@ -3686,6 +3955,38 @@
     "screen": null
   },
   {
+    "id": 1528,
+    "name": "yc300_5075b_plus_s",
+    "displayName": "5075B Plus-S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc300_5075b_plus_s",
+    "keyLayout": "Common82_MOD007BHE",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "Volume_Brightness",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 1549,
     "name": "monka_a75",
     "displayName": "A75",
@@ -3853,6 +4154,34 @@
     "screen": null
   },
   {
+    "id": 1588,
+    "name": "yc3121_mu01_soc",
+    "displayName": "MU01",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_mu01_soc",
+    "keyLayout": "Common68_kc68rt",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1591,
     "name": "yc3121_yz19_soc",
     "displayName": "YZ19",
@@ -3943,6 +4272,34 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 1604,
+    "name": "yc3121_m1whes_hall_8k",
+    "displayName": "M1W HE",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_m1whes_hall_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 5,
+    "magnetic": true,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
   },
   {
     "id": 1610,
@@ -4109,6 +4466,38 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 1637,
+    "name": "yc3121_mod007bv3he_soc_8k",
+    "displayName": "MOD007B HE PC",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_mod007bv3he_soc_8k",
+    "keyLayout": "Common82_MOD007BHE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 5,
+    "magnetic": true,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "Volume_Brightness",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
   },
   {
     "id": 1638,
@@ -4437,6 +4826,34 @@
     "screen": null
   },
   {
+    "id": 1674,
+    "name": "yc3121_mg75s_hes_dm_hall_8k",
+    "displayName": "MG75S HE",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_mg75s_hes_dm_hall_8k",
+    "keyLayout": "Common83_MG75S",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1679,
     "name": "yc3121_k75rgb_dm",
     "displayName": "K75RGB",
@@ -4514,6 +4931,34 @@
       "sideLight": false
     },
     "screen": null
+  },
+  {
+    "id": 1714,
+    "name": "yc3121_top75b_soc",
+    "displayName": "TOP75B",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc3121_top75b_soc",
+    "keyLayout": "Common81_beat75",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
   },
   {
     "id": 1721,
@@ -4988,6 +5433,34 @@
     "screen": null
   },
   {
+    "id": 1868,
+    "name": "yc300_5108bp_iso_ne",
+    "displayName": "5108BP-ISO-UK",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1121,
+    "productId": 16387,
+    "internalName": "yc300_5108bp_iso_ne",
+    "keyLayout": "Common108_5108V5UK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 1874,
     "name": "yc3121_tybu987x43_soc",
     "displayName": "TYBU987X43",
@@ -5263,6 +5736,43 @@
     }
   },
   {
+    "id": 1923,
+    "name": "yc3121_kf102_soc",
+    "displayName": "5098B",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_kf102_soc",
+    "keyLayout": "Common97_5098B",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": {
+      "w": 172,
+      "h": 320,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "MediaPlayPause",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
     "id": 1931,
     "name": "yc3121_et8926t_soc",
     "displayName": "PC423A",
@@ -5325,6 +5835,38 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 1933,
+    "name": "yc3121_m1w_v5_soc",
+    "displayName": "M1 V5",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_m1w_v5_soc",
+    "keyLayout": "Common82_SG9000_v3",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -6135,6 +6677,38 @@
     }
   },
   {
+    "id": 2247,
+    "name": "ry5088_m1w_v5_soc_8k",
+    "displayName": "M1 V5 TMR",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_m1w_v5_soc_8k",
+    "keyLayout": "Common82_M1_V5_TMR",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "VolumeBrightnessToggle3",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2248,
     "name": "yc3121_mk921_soc",
     "displayName": "3MRGB-210",
@@ -6477,6 +7051,34 @@
     }
   },
   {
+    "id": 2299,
+    "name": "ry5088_fun60_nolight_1k_005",
+    "displayName": "FUN60",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20526,
+    "internalName": "ry5088_fun60_nolight_1k_005",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2300,
     "name": "yc3121_mk902v2_dm_hall",
     "displayName": "RT68",
@@ -6527,6 +7129,118 @@
       "debounce": false,
       "sleep24": false,
       "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 2304,
+    "name": "ry5088_akko_fun60pro_1m_8k",
+    "displayName": "FUN60 PRO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20525,
+    "internalName": "ry5088_akko_fun60pro_1m_8k",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 2305,
+    "name": "ry5088_fun60pro_8k_002",
+    "displayName": "FUN60 PRO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "ry5088_fun60pro_8k_002",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 2306,
+    "name": "ry5088_fun60max_8k",
+    "displayName": "FUN60 MAX",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_fun60max_8k",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 2307,
+    "name": "ry5088_fun60max2_8k",
+    "displayName": "FUN60 Ultra",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_fun60max2_8k",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
       "magneticSwitches": true,
       "screen": false,
       "sideLight": false
@@ -7103,6 +7817,34 @@
     }
   },
   {
+    "id": 2352,
+    "name": "ry5088_fun60ultra_8k_dm_dfn4",
+    "displayName": "FUN60 Ultra",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_fun60ultra_8k_dm_dfn4",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2356,
     "name": "ry5088_sg_sg9015_3m_8k",
     "displayName": "X82PRO HE",
@@ -7342,6 +8084,34 @@
     }
   },
   {
+    "id": 2381,
+    "name": "ry5088_fun60ultra_8k_dm",
+    "displayName": "FUN60 Ultra",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20525,
+    "internalName": "ry5088_fun60ultra_8k_dm",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2382,
     "name": "pan1086_k19_soc",
     "displayName": "K19",
@@ -7459,6 +8229,34 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 2387,
+    "name": "ry5088_fun60ultra_8k_2049e",
+    "displayName": "FUN60 Ultra",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_fun60ultra_8k_2049e",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -8059,6 +8857,34 @@
     }
   },
   {
+    "id": 2464,
+    "name": "ry5088_fun60pro_8k_dm",
+    "displayName": "FUN60 PRO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20525,
+    "internalName": "ry5088_fun60pro_8k_dm",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2465,
     "name": "ry5088_x82he68_dm_8k",
     "displayName": "HE68 Mag",
@@ -8648,6 +9474,38 @@
     }
   },
   {
+    "id": 2536,
+    "name": "ry5088_akko_m1_v5_uk_3m_pan1080_8k",
+    "displayName": "M1 V5 TMR",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_m1_v5_uk_3m_pan1080_8k",
+    "keyLayout": "Common82_M1_V5_UK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "VolumeBrightnessToggle3",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2546,
     "name": "ry5088_k80a_dm_8k_002",
     "displayName": "K-68M",
@@ -8852,6 +9710,38 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": false
+    }
+  },
+  {
+    "id": 2567,
+    "name": "yc3121_5075bplus_s_mac_soc",
+    "displayName": "5075B Plus-S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_5075bplus_s_mac_soc",
+    "keyLayout": "Common82_5075B",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "Volume_Brightness",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
     }
   },
   {
@@ -10322,6 +11212,34 @@
     }
   },
   {
+    "id": 2655,
+    "name": "pan1086_alice_soc",
+    "displayName": "Armor Alice",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20517,
+    "internalName": "pan1086_alice_soc",
+    "keyLayout": "Common68_Alice",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 2656,
     "name": "yc3121_k2406b_soc",
     "displayName": "AO98",
@@ -10636,6 +11554,38 @@
     "switchReplaceable": true,
     "features": {
       "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 2679,
+    "name": "ry5088_m1v5heb_soc_8k_dfn4",
+    "displayName": "M1 V5 TMR",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_m1v5heb_soc_8k_dfn4",
+    "keyLayout": "Common82_M1_V5_TMR",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "VolumeBrightnessToggle3",
+        "AudioVolumeUp"
+      ],
       "debounce": false,
       "sleep24": true,
       "sleepBT": true,
@@ -11147,6 +12097,34 @@
     "screen": null
   },
   {
+    "id": 2721,
+    "name": "ry5088_veekosk0038_8k_8k",
+    "displayName": "Verve68",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_veekosk0038_8k_8k",
+    "keyLayout": "Common68_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 2723,
     "name": "ry5088_mopao_k67_1m_8k",
     "displayName": "K67",
@@ -11328,6 +12306,34 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": false
+    }
+  },
+  {
+    "id": 2735,
+    "name": "yc3121_akko_k0039_1m",
+    "displayName": "TAC87",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc3121_akko_k0039_1m",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
     }
   },
   {
@@ -11569,6 +12575,38 @@
       "magneticSwitches": true,
       "screen": true,
       "sideLight": false
+    }
+  },
+  {
+    "id": 2753,
+    "name": "yc3123_akko_5075bplus_3m_1k",
+    "displayName": "5075 V3",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_5075bplus_3m_1k",
+    "keyLayout": "Common82_SG9000_v2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
     }
   },
   {
@@ -12763,6 +13801,38 @@
     }
   },
   {
+    "id": 2807,
+    "name": "ry5088_akko5075b_3m_8k_1k_1049es",
+    "displayName": "5075 V3 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "ry5088_akko5075b_3m_8k_1k_1049es",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 2808,
     "name": "ry5088_hf_kf810_ry1049es_8k_1k",
     "displayName": "NS75",
@@ -13105,6 +14175,34 @@
     }
   },
   {
+    "id": 2829,
+    "name": "ry5088_akko_5087b_3m_8k_1k",
+    "displayName": "5087 V3 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "ry5088_akko_5087b_3m_8k_1k",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 2831,
     "name": "ry5088_fq_vk99_8k_8k",
     "displayName": "VK99 Gaming",
@@ -13279,6 +14377,43 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 2839,
+    "name": "ry5088_akko_mod007_v5_3m_8k_8k",
+    "displayName": "MOD007 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "ry5088_akko_mod007_v5_3m_8k_8k",
+    "keyLayout": "Common82_MOD007V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "MediaPlayPause",
+        "AudioVolumeDown"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
     }
   },
   {
@@ -15584,6 +16719,34 @@
     }
   },
   {
+    "id": 2950,
+    "name": "yc3121_3084bp_iso_3m",
+    "displayName": "3084BP-ISO-DE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16387,
+    "internalName": "yc3121_3084bp_iso_3m",
+    "keyLayout": "Common85_3084BP",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2952,
     "name": "yc3123_sg8995_3m_1k_soc",
     "displayName": "X85PRO",
@@ -16687,6 +17850,43 @@
     }
   },
   {
+    "id": 3008,
+    "name": "yc3123_akko_kf106_3m_1k",
+    "displayName": "KF106",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_kf106_3m_1k",
+    "keyLayout": "Common87_KF106",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "MediaPlayPause",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3011,
     "name": "ry5088_zdm_zap87_3m_8k_1k",
     "displayName": "ZAP87",
@@ -16738,6 +17938,34 @@
       "sleep24": true,
       "sleepBT": true,
       "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3013,
+    "name": "yc3123_akko_air01_3m_1k",
+    "displayName": "Air01",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_air01_3m_1k",
+    "keyLayout": "Common84_Air01",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
       "screen": false,
       "sideLight": true
     }
@@ -16910,6 +18138,43 @@
     }
   },
   {
+    "id": 3031,
+    "name": "yc3123_akko_kf105_3m_1k",
+    "displayName": "KF105",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_kf105_3m_1k",
+    "keyLayout": "Common67_KF105",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "MediaPlayPause",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3032,
     "name": "ry5088_dyh_1m_8k_ry1049e",
     "displayName": "H60",
@@ -16962,6 +18227,43 @@
       "sleepBT": false,
       "magneticSwitches": true,
       "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3034,
+    "name": "yc3123_akko_mod007v5_3m_1k",
+    "displayName": "MOD07 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_mod007v5_3m_1k",
+    "keyLayout": "Common82_MOD007V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "MediaPlayPause",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
       "sideLight": false
     }
   },
@@ -17123,6 +18425,34 @@
       "sleep24": false,
       "sleepBT": false,
       "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3039,
+    "name": "yc3121_akko_3108_v3_single_1m",
+    "displayName": "3108 V3",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc3121_akko_3108_v3_single_1m",
+    "keyLayout": "Common108_MG108B",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
       "screen": false,
       "sideLight": false
     }
@@ -17467,6 +18797,34 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3052,
+    "name": "ry5088_akko_fun60_prob_jp_8k",
+    "displayName": "FUN60 KizunaAI SE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_fun60_prob_jp_8k",
+    "keyLayout": "Common61_FUN60B",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -18310,6 +19668,62 @@
     }
   },
   {
+    "id": 3091,
+    "name": "ry5088_akko_fun68_8k_1m",
+    "displayName": "FUN68",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_fun68_8k_1m",
+    "keyLayout": "Common68_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3095,
+    "name": "yc3123_akko_5087v2_3m_1k",
+    "displayName": "5087 V3",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_5087v2_3m_1k",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3096,
     "name": "ry5088_zdm_b87_1m_8k",
     "displayName": "B87",
@@ -18371,6 +19785,34 @@
       "sleepBT": true,
       "magneticSwitches": false,
       "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3099,
+    "name": "ry5088_akko_k0038_1m_8k_3099",
+    "displayName": "Verve68",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_k0038_1m_8k_3099",
+    "keyLayout": "Common68_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
       "sideLight": true
     }
   },
@@ -18486,6 +19928,34 @@
       "sleep24": true,
       "sleepBT": true,
       "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3105,
+    "name": "ry5088_alice_soc_8k",
+    "displayName": "Armor Alice",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_alice_soc_8k",
+    "keyLayout": "Common68_AliceH",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
       "screen": false,
       "sideLight": true
     }
@@ -18617,6 +20087,43 @@
       "magneticSwitches": true,
       "screen": true,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3113,
+    "name": "ry5088_akko_mod007_v5_he_1m_8k",
+    "displayName": "MOD007 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_mod007_v5_he_1m_8k",
+    "keyLayout": "Common82_MOD007V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "MediaPlayPause",
+        "AudioVolumeDown"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
     }
   },
   {
@@ -18954,6 +20461,122 @@
     }
   },
   {
+    "id": 3127,
+    "name": "yc3123_akko_5075s_1m_1k",
+    "displayName": "5075 V3",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_5075s_1m_1k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3129,
+    "name": "ry5088_akko_5075bv2he_1m",
+    "displayName": "5075 VЗ HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20525,
+    "internalName": "ry5088_akko_5075bv2he_1m",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3130,
+    "name": "yc3123_akko_5087v2_1m_1k",
+    "displayName": "5087 V3",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_5087v2_1m_1k",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3131,
+    "name": "ry5088_akko_5087bv2he_1m_8k",
+    "displayName": "5087 V3 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_5087bv2he_1m_8k",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3135,
     "name": "pan1086_yc_x500pro_3m",
     "displayName": "X500PRO",
@@ -19215,6 +20838,34 @@
     }
   },
   {
+    "id": 3147,
+    "name": "yc3123_akko_3068b_3m_1k_soc",
+    "displayName": "FUN68",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_3068b_3m_1k_soc",
+    "keyLayout": "Common68_FUN68",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3148,
     "name": "yc3123_ak65b_soc",
     "displayName": "Kreo Swarm 65",
@@ -19473,6 +21124,126 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3160,
+    "name": "yc3121_mod0078_he_b_3m",
+    "displayName": "MOD007B HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_mod0078_he_b_3m",
+    "keyLayout": "Common82_MOD007BHE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "Volume_Brightness",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3161,
+    "name": "yc3121_mod0078_he_c_3m",
+    "displayName": "MOD007B HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16437,
+    "internalName": "yc3121_mod0078_he_c_3m",
+    "keyLayout": "Common82_SG9000_v2",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3162,
+    "name": "ry5088_akko_mod68_8k_8k_3m",
+    "displayName": "MOD68",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_mod68_8k_8k_3m",
+    "keyLayout": "Common68_ROYALAXE_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3163,
+    "name": "ry5088_akko_mod68_8k_1m",
+    "displayName": "MOD68",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_mod68_8k_1m",
+    "keyLayout": "Common68_ROYALAXE_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -19787,6 +21558,38 @@
     }
   },
   {
+    "id": 3183,
+    "name": "yc3123_fl_k2505mmxf_3m_1k",
+    "displayName": "HTK590UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2505mmxf_3m_1k",
+    "keyLayout": "Common104_K2513",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "Null",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3186,
     "name": "yc3123_nbdglolal_mk921_3m_1k",
     "displayName": "GKG108-MK921",
@@ -19812,6 +21615,41 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3187,
+    "name": "ry5088_akko_5087hejp_1m_8k",
+    "displayName": "FUN87 KizunaAI PE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_5087hejp_1m_8k",
+    "keyLayout": "Common92_5087HEJP",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -20040,6 +21878,66 @@
       "sleep24": true,
       "sleepBT": true,
       "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3199,
+    "name": "yc3123_fl_k2514_3m_1k",
+    "displayName": "HTK580UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2514_3m_1k",
+    "keyLayout": "Common87_K2514",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "Null",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3200,
+    "name": "ry5088_akko_tac87_1m_8k",
+    "displayName": "TAC87",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_tac87_1m_8k",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
       "screen": false,
       "sideLight": true
     }
@@ -20866,6 +22764,34 @@
     }
   },
   {
+    "id": 3245,
+    "name": "yc3123_akko_mg108b_3m_1k",
+    "displayName": "MG108B",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_mg108b_3m_1k",
+    "keyLayout": "Common108_MG108B",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3246,
     "name": "ry5088_kk_yumi68_1m_8k",
     "displayName": "yumi68",
@@ -20982,6 +22908,66 @@
     }
   },
   {
+    "id": 3251,
+    "name": "yc3123_fl_k2513h_c_uk_3m_1k",
+    "displayName": "HTK590EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2513h_c_uk_3m_1k",
+    "keyLayout": "Common104_K2513UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "Null",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3256,
+    "name": "yc3123_fl_k2405_3m_1k_rgb_kb_soc_v100",
+    "displayName": "K2405",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2405_3m_1k_rgb_kb_soc_v100",
+    "keyLayout": "Common82_K2405",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3257,
     "name": "ry5088_qch_x147b_8k_soc",
     "displayName": "QY98 Ultra",
@@ -21014,6 +23000,90 @@
     }
   },
   {
+    "id": 3259,
+    "name": "yc3123_fl_k258_21_3m_1k",
+    "displayName": "k258-21",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k258_21_3m_1k",
+    "keyLayout": "Common21_K258",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3260,
+    "name": "yc3123_fl_k258_87_3m_1k",
+    "displayName": "k258-87",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k258_87_3m_1k",
+    "keyLayout": "Common87_K258",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3263,
+    "name": "ry6609_5075v3_8k_8k_3m",
+    "displayName": "5075 V3",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20556,
+    "internalName": "ry6609_5075v3_8k_8k_3m",
+    "keyLayout": "Common82_5075B",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3264,
     "name": "ry5088_dyh_yk84cz_1m_8k",
     "displayName": "C84",
@@ -21039,6 +23109,66 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": false
+    }
+  },
+  {
+    "id": 3265,
+    "name": "ry6609_5087v3_8k_8k_3m",
+    "displayName": "5087 V3",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20556,
+    "internalName": "ry6609_5087v3_8k_8k_3m",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3266,
+    "name": "yc3123_fl_k2514c_uk_3m_1k",
+    "displayName": "HTK580EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2514c_uk_3m_1k",
+    "keyLayout": "Common87_K2514UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "Null",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
     }
   },
   {
@@ -21106,6 +23236,66 @@
     }
   },
   {
+    "id": 3269,
+    "name": "ry5088_akko_veekosshine68_3m_8k",
+    "displayName": "Shine68",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_veekosshine68_3m_8k",
+    "keyLayout": "Common68_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3270,
+    "name": "ry5088_akko_veekosshine68_1m_8k",
+    "displayName": "Shine68",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 9,
+    "internalName": "ry5088_akko_veekosshine68_1m_8k",
+    "keyLayout": "Common68_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3271,
     "name": "ry5088_lxl_mk9010_1m_8k",
     "displayName": "MK9010",
@@ -21132,6 +23322,62 @@
       "debounce": false,
       "sleep24": false,
       "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3273,
+    "name": "ry5088_gem02_8k_8k",
+    "displayName": "Gem 02",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_gem02_8k_8k",
+    "keyLayout": "Common102",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3275,
+    "name": "ry5088_gem01_8k_8k",
+    "displayName": "Gem 01",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_gem01_8k_8k",
+    "keyLayout": "Common83_mineral01",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
       "magneticSwitches": true,
       "screen": false,
       "sideLight": false
@@ -21230,6 +23476,34 @@
     }
   },
   {
+    "id": 3279,
+    "name": "yc3123_fl_k258_87uk_3m_1k",
+    "displayName": "k258-87 UK",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k258_87uk_3m_1k",
+    "keyLayout": "Common87_K2514H_CUK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3280,
     "name": "ry6609_zmd_x87_8k_8k_3m",
     "displayName": "X87S",
@@ -21255,6 +23529,38 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3281,
+    "name": "yc3123_k2506mxa_ua_dm",
+    "displayName": "HTK1160UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2506mxa_ua_dm",
+    "keyLayout": "Common67_K2506MA",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -21345,6 +23651,34 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3285,
+    "name": "yc3123_5108v5_soc",
+    "displayName": "5108 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_5108v5_soc",
+    "keyLayout": "Common108_MG108B",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -21603,6 +23937,34 @@
     }
   },
   {
+    "id": 3296,
+    "name": "yc3121_akko_3087s_us_single_1m",
+    "displayName": "3087S US",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc3121_akko_3087s_us_single_1m",
+    "keyLayout": "Common87_MonsGeek_M3V5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3298,
     "name": "yc3123_yx_k77b_soc",
     "displayName": "PanteonT27",
@@ -21636,6 +23998,91 @@
       "sleepBT": true,
       "magneticSwitches": false,
       "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3299,
+    "name": "ry5088_akko_fun60max_3m_8k",
+    "displayName": "FUN60 MAX",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_fun60max_3m_8k",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.4,
+        "step": 0.01,
+        "default": 2.5
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2.5,
+        "step": 0.01,
+        "default": 1.5
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2.5,
+        "step": 0.01,
+        "default": 1.5
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3300,
+    "name": "ry5088_m1v5he_3m_8k_8k",
+    "displayName": "M1 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_m1v5he_3m_8k_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
       "sideLight": false
     }
   },
@@ -21883,6 +24330,70 @@
       "magneticSwitches": false,
       "screen": true,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3321,
+    "name": "ry5088_akko_mod007sv3he_us_b_1m_8k",
+    "displayName": "MOD007S V3-HE US",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_mod007sv3he_us_b_1m_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3322,
+    "name": "ry5088_akko_mod007sv3he_uk_b_1m_8k",
+    "displayName": "MOD007S V3-HE UK",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_mod007sv3he_uk_b_1m_8k",
+    "keyLayout": "Common83_mod007sv3he_uk",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -22195,6 +24706,34 @@
     }
   },
   {
+    "id": 3341,
+    "name": "ry5088_akko_mod68_uk_8k_8k_3m",
+    "displayName": "MOD68 ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_mod68_uk_8k_8k_3m",
+    "keyLayout": "Common69_MOD68UK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3342,
     "name": "ry5088_yh_h60_b_1m_8k_ry1049es",
     "displayName": "H60",
@@ -22497,6 +25036,38 @@
     }
   },
   {
+    "id": 3357,
+    "name": "ry5088_akko_5075_v3_he_3m_8k_8k",
+    "displayName": "5075 V3 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_5075_v3_he_3m_8k_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3358,
     "name": "yc3123_nbd_mk25083_3m_1k_v100",
     "displayName": "Fierce-GK7",
@@ -22526,6 +25097,34 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": false
+    }
+  },
+  {
+    "id": 3359,
+    "name": "ry5088_akko_5087_v3_he_3m_8k_8k",
+    "displayName": "5087 V3 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_5087_v3_he_3m_8k_8k",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
     }
   },
   {
@@ -22767,6 +25366,70 @@
     }
   },
   {
+    "id": 3368,
+    "name": "yc3121_akko_5075a_1m_1k_rgb_v500",
+    "displayName": "5075S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 10,
+    "internalName": "yc3121_akko_5075a_1m_1k_rgb_v500",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3369,
+    "name": "yc3121_akko_5075b_1m_1k_rgb_v500",
+    "displayName": "5075S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 10,
+    "internalName": "yc3121_akko_5075b_1m_1k_rgb_v500",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3371,
     "name": "ry5088_jc_gk8640gw1_3m_8k_8k",
     "displayName": "GK8640GW PRO",
@@ -22792,6 +25455,90 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3373,
+    "name": "yc3121_fl_k258_87_us_soc",
+    "displayName": "K258-87",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 13862,
+    "internalName": "yc3121_fl_k258_87_us_soc",
+    "keyLayout": "Common87_K258",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3374,
+    "name": "yc3121_fl_k258_87_uk_soc",
+    "displayName": "K258-87 UK",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 13862,
+    "internalName": "yc3121_fl_k258_87_uk_soc",
+    "keyLayout": "Common87_K258_UK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3375,
+    "name": "yc3121_fl_k258_21_soc",
+    "displayName": "K258-21",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 13862,
+    "internalName": "yc3121_fl_k258_21_soc",
+    "keyLayout": "Common21_K258",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -22824,6 +25571,34 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3378,
+    "name": "ry5088_akko_mod68_uk_8k_1m_v500",
+    "displayName": "MOD68 ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 9,
+    "internalName": "ry5088_akko_mod68_uk_8k_1m_v500",
+    "keyLayout": "Common69_MOD68UK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -23071,6 +25846,137 @@
     }
   },
   {
+    "id": 3391,
+    "name": "vgn_neon75_extreme_v2",
+    "displayName": "Neon75 Extreme",
+    "company": "VGN",
+    "vendor": "VGN",
+    "vendorId": 12625,
+    "productId": 20564,
+    "internalName": "vgn_neon75_extreme_v2",
+    "keyLayout": "Local82_VGN_Neon75_Extreme",
+    "lightLayout": "S",
+    "sideLightLayout": "Yt",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3397,
+    "name": "ry5088_akko_mod68_3m_8k_8k_v400",
+    "displayName": "MOD68",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_mod68_3m_8k_8k_v400",
+    "keyLayout": "Common68_ROYALAXE_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3401,
+    "name": "ry5088_akko_mod007_v5_he_b_3m_8k_8k_v500",
+    "displayName": "MOD007 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_mod007_v5_he_b_3m_8k_8k_v500",
+    "keyLayout": "Common82_MOD007V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "MediaPlayPause",
+        "AudioVolumeDown"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3402,
+    "name": "ry5088_akko_mod007_v5_he_b_1m_8k_8k_v500",
+    "displayName": "MOD007 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_mod007_v5_he_b_1m_8k_8k_v500",
+    "keyLayout": "Common82_MOD007V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "MediaPlayPause",
+        "AudioVolumeDown"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3403,
     "name": "ry5088_zdm_howl75_8k_dm",
     "displayName": "HOWL 75",
@@ -23126,6 +26032,34 @@
       "sleep24": true,
       "sleepBT": true,
       "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3405,
+    "name": "ry6609_akko_5108s_v5_3m_8k_8k",
+    "displayName": "5108 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20556,
+    "internalName": "ry6609_akko_5108s_v5_3m_8k_8k",
+    "keyLayout": "Common108_5108V5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
       "screen": false,
       "sideLight": false
     }
@@ -23478,6 +26412,34 @@
     }
   },
   {
+    "id": 3424,
+    "name": "ry5088_akko_5087_v3_he_3m_8k_8k_v400",
+    "displayName": "5087V3 HE TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5087_v3_he_3m_8k_8k_v400",
+    "keyLayout": "Common88_5087V5",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3425,
     "name": "ry5088_nbd_gzanhm_mk25082_1m_8k",
     "displayName": "PSY P1",
@@ -23532,6 +26494,34 @@
       "debounce": false,
       "sleep24": true,
       "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3429,
+    "name": "ry5088_fun68_uk_dm_8k",
+    "displayName": "FUN68 ISO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 9,
+    "internalName": "ry5088_fun68_uk_dm_8k",
+    "keyLayout": "Common68_fun68_uk",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
       "magneticSwitches": true,
       "screen": false,
       "sideLight": false
@@ -23741,6 +26731,34 @@
     }
   },
   {
+    "id": 3444,
+    "name": "ry6609_akko_5087_v5_3m_8k_8k",
+    "displayName": "5087 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 3,
+    "internalName": "ry6609_akko_5087_v5_3m_8k_8k",
+    "keyLayout": "Common88_5087V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3445,
     "name": "ry6609_zmd_x98v3_meta98_8k_8k_3m",
     "displayName": "S98",
@@ -23783,6 +26801,38 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3448,
+    "name": "ry6609_akko_5075_v5_3m_8k_8k",
+    "displayName": "5075 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 3,
+    "internalName": "ry6609_akko_5075_v5_3m_8k_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
     "screen": null,
     "travel": null,
     "switchReplaceable": false,
@@ -23902,6 +26952,34 @@
     }
   },
   {
+    "id": 3452,
+    "name": "yc3123_akko_air01uk_3m_1k",
+    "displayName": "Air01 UK",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_air01uk_3m_1k",
+    "keyLayout": "Common84_Air01UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3455,
     "name": "yc3121_woao_kiiboom_phantom81_v4_3m",
     "displayName": "Kiiboom phantom81 V4",
@@ -23995,6 +27073,34 @@
     }
   },
   {
+    "id": 3460,
+    "name": "ry5088_akko_k0038b_3m_8k_8k",
+    "displayName": "Verve68T",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_k0038b_3m_8k_8k",
+    "keyLayout": "Common68_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3461,
     "name": "yc3123_sg_sg9045_b_3m_1k_rgb_kb",
     "displayName": "X820UItra",
@@ -24028,6 +27134,34 @@
       "sleepBT": true,
       "magneticSwitches": false,
       "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3463,
+    "name": "ry5088_akko_k0038_1m_8k",
+    "displayName": "Verve68",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_akko_k0038_1m_8k",
+    "keyLayout": "Common68_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
       "sideLight": true
     }
   },
@@ -25670,6 +28804,34 @@
     }
   },
   {
+    "id": 3543,
+    "name": "ry6602_akko_5108_v5_3m_1k_1k",
+    "displayName": "5108 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_5108_v5_3m_1k_1k",
+    "keyLayout": "Common108_5108V5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3547,
     "name": "yc3121_fl_k2413d_1m_1k",
     "displayName": "Flame65S",
@@ -26376,6 +29538,34 @@
     }
   },
   {
+    "id": 3579,
+    "name": "ry6602_akko_5087_v5_1k_1k_3m",
+    "displayName": "5087 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_5087_v5_1k_1k_3m",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3581,
     "name": "ry6609_nbd_mk25073_vk_3m_8k_8k",
     "displayName": "VK 87 Max V2",
@@ -26405,6 +29595,38 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3582,
+    "name": "ry6602_akko_5075_v5_3m_1k_1k",
+    "displayName": "5075 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_5075_v5_3m_1k_1k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -26676,6 +29898,313 @@
       "sleepBT": false,
       "magneticSwitches": true,
       "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3599,
+    "name": "yc3123_k2505_soc",
+    "displayName": "SKYFALL 80 PRO",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2505_soc",
+    "keyLayout": "Common82_K2505~k1",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3600,
+    "name": "yc3123_k2505_soc",
+    "displayName": "HTK4180",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2505_soc",
+    "keyLayout": "Common82_K2505",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3601,
+    "name": "yc3123_k2505uk_3m_1k_soc",
+    "displayName": "HTK4180EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2505uk_3m_1k_soc",
+    "keyLayout": "Common83_K2505UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3602,
+    "name": "yc3123_k2506mxe_3m_1k_soc",
+    "displayName": "HTK4160UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2506mxe_3m_1k_soc",
+    "keyLayout": "Common67_K2506_v2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3603,
+    "name": "yc3123_k2506mxe_3m_1k_soc",
+    "displayName": "HTK4160",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2506mxe_3m_1k_soc",
+    "keyLayout": "Common67_K2506_v2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3604,
+    "name": "yc3123_k2506mxg_uk_soc",
+    "displayName": "HTK4160EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2506mxg_uk_soc",
+    "keyLayout": "Common68_K2506_UK_v2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3605,
+    "name": "ry5088_k2506he_c_3m_8k_8k",
+    "displayName": "HTK3860UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2506he_c_3m_8k_8k",
+    "keyLayout": "Common67_K2506",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3606,
+    "name": "ry5088_k2506he_c_3m_8k_8k",
+    "displayName": "HTK3860",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2506he_c_3m_8k_8k",
+    "keyLayout": "Common67_K2506",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3607,
+    "name": "ry5088_k2506hee_uk_3m_8k_8k",
+    "displayName": "HTK3860EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2506hee_uk_3m_8k_8k",
+    "keyLayout": "Common68_K2506_UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
       "sideLight": true
     }
   },
@@ -27050,6 +30579,117 @@
     }
   },
   {
+    "id": 3627,
+    "name": "ry5088_k2505_8k_8k_new_ua",
+    "displayName": "HTK3880UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2505_8k_8k_new_ua",
+    "keyLayout": "Common82_K2505~k2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3628,
+    "name": "ry5088_k2505_8k_8k_new_us",
+    "displayName": "HTK3880",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2505_8k_8k_new_us",
+    "keyLayout": "Common82_K2505~k2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3629,
+    "name": "ry5088_k2505hee_8k_uk",
+    "displayName": "HTK3880EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2505hee_8k_uk",
+    "keyLayout": "Common83_K2505UK~k1",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3631,
     "name": "pan1086_youxiang_k60s_k60_3m",
     "displayName": "KOOMZE H75",
@@ -27176,6 +30816,66 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": false
+    }
+  },
+  {
+    "id": 3640,
+    "name": "ry5088_akko_5087_v5_he_3m_8k_8k",
+    "displayName": "5087 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5087_v5_he_3m_8k_8k",
+    "keyLayout": "Common87_5087SV3",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3643,
+    "name": "ry5088_akko_5075_v5_he_3m_8k_8k_ry1049es",
+    "displayName": "5087 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5075_v5_he_3m_8k_8k_ry1049es",
+    "keyLayout": "Common82_PC75S",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "Volume_Brightness",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
     }
   },
   {
@@ -27379,6 +31079,62 @@
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3656,
+    "name": "yc3121_akko_3098s_1m_single",
+    "displayName": "3098S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "yc3121_akko_3098s_1m_single",
+    "keyLayout": "Common98_xl98",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3658,
+    "name": "ry6602_akko_air01_uk_3m_1k_1k",
+    "displayName": "Air01 UK",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20566,
+    "internalName": "ry6602_akko_air01_uk_3m_1k_1k",
+    "keyLayout": "Common84_Air01UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
     "screen": null,
     "travel": null,
     "switchReplaceable": false,
@@ -27858,6 +31614,68 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": false
+    }
+  },
+  {
+    "id": 3680,
+    "name": "ry5088_k2505_8k_8k_ry1049",
+    "displayName": "HTK4880",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2505_8k_8k_ry1049",
+    "keyLayout": "Common82_K2505",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
     }
   },
   {
@@ -28755,6 +32573,59 @@
     }
   },
   {
+    "id": 3722,
+    "name": "ry5088_akko_fun60_b_uk_3m_8k_1k",
+    "displayName": "FUN60 PRO ISO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_fun60_b_uk_3m_8k_1k",
+    "keyLayout": "Common61_gk06uk",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3723,
     "name": "ry6602_yx_k48_3m_1k_1k",
     "displayName": "K48",
@@ -29180,6 +33051,96 @@
       "magneticSwitches": true,
       "screen": true,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3738,
+    "name": "ry5088_fl_k2505_uk_3m_8k_8k",
+    "displayName": "HTK4880EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_fl_k2505_uk_3m_8k_8k",
+    "keyLayout": "Common83_K2505UK",
+    "lightLayout": "S",
+    "sideLightLayout": "oa",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3739,
+    "name": "ry6609_akko_5108s_v5_3m_8k_8k",
+    "displayName": "5108 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20556,
+    "internalName": "ry6609_akko_5108s_v5_3m_8k_8k",
+    "keyLayout": "Common108_5108V5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -29944,6 +33905,41 @@
     }
   },
   {
+    "id": 3773,
+    "name": "ry5088_akko_5108_v5_he_3m_8k_8k",
+    "displayName": "5108 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5108_v5_he_3m_8k_8k",
+    "keyLayout": "Common108_5108V5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3774,
     "name": "ry6609_sg_sg9097_e_3m_8k_1k",
     "displayName": "R96ULTRA",
@@ -30009,6 +34005,45 @@
     }
   },
   {
+    "id": 3779,
+    "name": "ry5088_akko_5075_v5_he_3m_8k_8k",
+    "displayName": "5075 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5075_v5_he_3m_8k_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3780,
     "name": "yc3123_kk_k98_pro_3m_1k",
     "displayName": "K98PRO",
@@ -30034,6 +34069,91 @@
       "magneticSwitches": false,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3782,
+    "name": "ry5088_akko_5087_v5_he_3m_8k_8k_ry1049es",
+    "displayName": "5087 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5087_v5_he_3m_8k_8k_ry1049es",
+    "keyLayout": "Common88_5087V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3785,
+    "name": "ry5088_akko_5075_uk_tmr_3m_8k_8k",
+    "displayName": "5075 V5 HE TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_5075_uk_tmr_3m_8k_8k",
+    "keyLayout": "Common83_mod007sv3he_uk",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.4,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2.5,
+        "step": 0.005,
+        "default": 1.5
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2.5,
+        "step": 0.005,
+        "default": 1.5
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -30129,6 +34249,41 @@
       "sleep24": true,
       "sleepBT": true,
       "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3791,
+    "name": "ry5088_akko_5087_v5_he_tmr_3m_8k_8k",
+    "displayName": "5087 V5 HE TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5087_v5_he_tmr_3m_8k_8k",
+    "keyLayout": "Common88_5087V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
       "screen": false,
       "sideLight": false
     }
@@ -30380,6 +34535,187 @@
     }
   },
   {
+    "id": 3800,
+    "name": "ry5088_akko_5075_us_tmr_3m_8k_8k_ry1049es",
+    "displayName": "5075 V5 HE TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_akko_5075_us_tmr_3m_8k_8k_ry1049es",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.4,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2.5,
+        "step": 0.005,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2.5,
+        "step": 0.005,
+        "default": 1.5
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3801,
+    "name": "ry5088_fl_k2507_us_3m_8k_8k",
+    "displayName": "HTK4800",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_fl_k2507_us_3m_8k_8k",
+    "keyLayout": "Common104_K2507",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 3802,
+    "name": "ry5088_fl_k2507_uk_3m_8k_8k",
+    "displayName": "HTK4800EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_fl_k2507_uk_3m_8k_8k",
+    "keyLayout": "Common104_K2507UK",
+    "lightLayout": "S",
+    "sideLightLayout": "oa",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3803,
     "name": "ry6602_s21b_3m",
     "displayName": "HKS21",
@@ -30578,6 +34914,59 @@
     }
   },
   {
+    "id": 3813,
+    "name": "ry5088_akko_5087_v5_he_tmr_us_b_3m_8k_8k",
+    "displayName": "5087 V5 HE TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5087_v5_he_tmr_us_b_3m_8k_8k",
+    "keyLayout": "Common88_5087V5HETMR",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.4,
+        "step": 0.005,
+        "default": 2.5
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2.5,
+        "step": 0.005,
+        "default": 1.5
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2.5,
+        "step": 0.005,
+        "default": 1.5
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3814,
     "name": "ry5088_osd_dk82he_uk_3m_8k_1k",
     "displayName": "DK82HE UK",
@@ -30601,6 +34990,41 @@
         "AudioVolumeMute",
         "AudioVolumeUp"
       ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3815,
+    "name": "ry5088_akko_mod68_he_3m_8k_8k",
+    "displayName": "MOD68 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_mod68_he_3m_8k_8k",
+    "keyLayout": "Common68_ROYALAXE_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
       "debounce": false,
       "sleep24": true,
       "sleepBT": true,
@@ -30681,6 +35105,34 @@
     }
   },
   {
+    "id": 3818,
+    "name": "yc3123_akko_air01_3m_1k_3818",
+    "displayName": "xG AIR 3",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 20482,
+    "internalName": "yc3123_akko_air01_3m_1k_3818",
+    "keyLayout": "Common84_Air01",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3819,
     "name": "yc3121_nbd_mk905_uk_3m",
     "displayName": "BGAM-KITTY",
@@ -30704,6 +35156,41 @@
       "sleep24": true,
       "sleepBT": true,
       "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3820,
+    "name": "ry5088_akko_mod68_he_1m_8k_8k",
+    "displayName": "MOD68 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_mod68_he_1m_8k_8k",
+    "keyLayout": "Common68_ROYALAXE_K80X68",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
       "screen": false,
       "sideLight": false
     }
@@ -30780,6 +35267,59 @@
       "sleep24": true,
       "sleepBT": true,
       "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3827,
+    "name": "ry5088_akko_5087_v5_he_uk_tmr_3m_8k_8k",
+    "displayName": "5087 V5 HE TMR ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5087_v5_he_uk_tmr_3m_8k_8k",
+    "keyLayout": "Common88_5087V5HEUK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
       "screen": false,
       "sideLight": false
     }
@@ -31033,6 +35573,68 @@
     }
   },
   {
+    "id": 3842,
+    "name": "ry5088_akko_mod007_v5_tmr_8k_8k_v500",
+    "displayName": "MOD007 V5 HE TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_mod007_v5_tmr_8k_8k_v500",
+    "keyLayout": "Common83_MOD007V5HE_TMR",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2.5,
+        "step": 0.005,
+        "default": 1.5
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2.5,
+        "step": 0.005,
+        "default": 1.5
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "MediaPlayPause",
+        "AudioVolumeDown"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3843,
     "name": "ry6609_nbd_mk26015_3m_1k_1k",
     "displayName": "IF99 PRO",
@@ -31198,6 +35800,76 @@
       "magneticSwitches": true,
       "screen": true,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3851,
+    "name": "ry5088_fl_k2501_3m_8k_8k",
+    "displayName": "T87",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "ry5088_fl_k2501_3m_8k_8k",
+    "keyLayout": "Common87_K2501",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      }
+    },
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3853,
+    "name": "ry5088_akko_fun60_ultra_tmr_3m_8k_8k",
+    "displayName": "FUN60 Ultra TMR",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_fun60_ultra_tmr_3m_8k_8k",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.4,
+        "step": 0.005,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -31414,6 +36086,41 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3869,
+    "name": "ry5088_akko_5108_v5_he_b_3m_8k_8k",
+    "displayName": "5108 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5108_v5_he_b_3m_8k_8k",
+    "keyLayout": "Common108_5108V5HE",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -31697,6 +36404,34 @@
     }
   },
   {
+    "id": 3900,
+    "name": "ry5088_akko_5087_v5_he_us_b_3m_8k_8k",
+    "displayName": "5087V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5087_v5_he_us_b_3m_8k_8k",
+    "keyLayout": "Common88_5087V5HETMR",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3901,
     "name": "ry5088_nbd_mk25025_jp_3m_8k_8k_v500h",
     "displayName": "MATATAKI JIS",
@@ -31915,6 +36650,34 @@
     }
   },
   {
+    "id": 3906,
+    "name": "ry5088_fun60maxc_3m_8k",
+    "displayName": "FUN60 MAX",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_fun60maxc_3m_8k",
+    "keyLayout": "Common61_fun60maxc",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3908,
     "name": "ry6602_sg_zyl_sg9102_a_3m_1k_1k",
     "displayName": "X83PRO",
@@ -32065,6 +36828,66 @@
       "magneticSwitches": true,
       "screen": true,
       "sideLight": true
+    }
+  },
+  {
+    "id": 3912,
+    "name": "ry6609_akko_5075b_v5_3m_8k_8k",
+    "displayName": "5075 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 3,
+    "internalName": "ry6609_akko_5075b_v5_3m_8k_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3913,
+    "name": "ry6609_akko_5087_v5_b_3m_8k_8k",
+    "displayName": "5087 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 3,
+    "internalName": "ry6609_akko_5087_v5_b_3m_8k_8k",
+    "keyLayout": "Common87_5087V5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -32687,6 +37510,38 @@
     }
   },
   {
+    "id": 3951,
+    "name": "ry5088_akko_5075_v5_he_us_b_3m_8k_8k",
+    "displayName": "5075 V5 HE-B",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5075_v5_he_us_b_3m_8k_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3953,
     "name": "ry5088_osd_ky_mk231_c_1m_8k",
     "displayName": "KY-MK231",
@@ -32722,6 +37577,116 @@
       "sleepBT": false,
       "magneticSwitches": true,
       "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3954,
+    "name": "ry6602_akko_5108_v5_iso_3m_1k_1k_argb",
+    "displayName": "5075 V5 ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_5108_v5_iso_3m_1k_1k_argb",
+    "keyLayout": "Common82_5075_v5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "LEDONOFF",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3955,
+    "name": "ry6602_akko_5075_v5_iso_3m_1k_1k",
+    "displayName": "5108 V5 ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_5075_v5_iso_3m_1k_1k",
+    "keyLayout": "Common82_5075_v5_de",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3956,
+    "name": "ry5088_akko_5098_v5_he_3m_8k_8k",
+    "displayName": "5098 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_5098_v5_he_3m_8k_8k",
+    "keyLayout": "Common98_5098",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
       "sideLight": false
     }
   },
@@ -32822,6 +37787,63 @@
       "sleepBT": true,
       "magneticSwitches": false,
       "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 3964,
+    "name": "ry5088_akko_akko_5075_v5_he_iso_3m_8k_8k",
+    "displayName": "5075 V5 HE ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_akko_5075_v5_he_iso_3m_8k_8k",
+    "keyLayout": "Common82_5075_v5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "LEDONOFF",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
       "sideLight": false
     }
   },
@@ -33391,6 +38413,43 @@
     }
   },
   {
+    "id": 3993,
+    "name": "ry6602_akko_5098_v5_3m_8k",
+    "displayName": "5098 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_5098_v5_3m_8k",
+    "keyLayout": "Common98_5098",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": {
+      "w": 420,
+      "h": 116,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
     "id": 3994,
     "name": "yc3123_dj_ak8752b_soc",
     "displayName": "AK8752",
@@ -33734,6 +38793,34 @@
     }
   },
   {
+    "id": 4010,
+    "name": "ry6602_akko_air01_us_3m_1k_1k",
+    "displayName": "Air01",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_air01_us_3m_1k_1k",
+    "keyLayout": "Common84_Air01",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 4012,
     "name": "ry6602_sg_sg9015_3m",
     "displayName": "M86",
@@ -33785,6 +38872,66 @@
         "AudioVolumeMute",
         "AudioVolumeUp"
       ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 4017,
+    "name": "ry6602_akko_k0061_3m_1k_1k",
+    "displayName": "Linx 68",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_k0061_3m_1k_1k",
+    "keyLayout": "Common68_K0061",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "id": 4018,
+    "name": "ry6602_akko_akko_mg108b_v2_3m_1k_1k",
+    "displayName": "MG108B V2",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_akko_mg108b_v2_3m_1k_1k",
+    "keyLayout": "Common108_MG108BV2",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
       "debounce": true,
       "sleep24": true,
       "sleepBT": true,
@@ -33885,6 +39032,52 @@
       "sleepBT": true,
       "magneticSwitches": true,
       "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 4031,
+    "name": "ry5088_akko_0001_hf_kf106_3m_8k_8k",
+    "displayName": "KF106",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_0001_hf_kf106_3m_8k_8k",
+    "keyLayout": "Common67_4031",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
       "sideLight": false
     }
   },
@@ -34156,6 +39349,51 @@
     }
   },
   {
+    "id": 4049,
+    "name": "ry5088_akko_raid_75_he",
+    "displayName": "RAID 75 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 22,
+    "internalName": "ry5088_akko_raid_75_he",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": null,
+        "default": 2
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": null,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 4051,
     "name": "ry5088_mb_tk75_v2_hall_3m_8k_1k_ry1049es_rt0_005",
     "displayName": "MKKB021",
@@ -34247,6 +39485,63 @@
       "sleepBT": true,
       "magneticSwitches": false,
       "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 4060,
+    "name": "ry5088_akko_akko_5075_v5_he_iso_b_1m_8k",
+    "displayName": "5075 V5 HE ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_akko_5075_v5_he_iso_b_1m_8k",
+    "keyLayout": "Common82_5075_v5",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "LEDONOFF",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
       "sideLight": false
     }
   },
@@ -34633,6 +39928,53 @@
       "magneticSwitches": true,
       "screen": false,
       "sideLight": true
+    }
+  },
+  {
+    "id": 4088,
+    "name": "ry5088_akko_fun87_he_1m_8k",
+    "displayName": "FUN87 HE",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_fun87_he_1m_8k",
+    "keyLayout": "Common88_akko_fun87_he",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.001,
+        "max": null,
+        "step": 0.001,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.001,
+        "max": null,
+        "step": 0.001,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -36064,6 +41406,38 @@
     }
   },
   {
+    "id": 4158,
+    "name": "ry5088_akko_m1v5_tmr_iso_3m_8k_8k",
+    "displayName": "M1 V5 TMR ISO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_akko_m1v5_tmr_iso_3m_8k_8k",
+    "keyLayout": "Common82_M1_V5_ISO",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "VolumeBrightnessToggle3",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 4161,
     "name": "ry5088_dm_k811_1m_8k",
     "displayName": "K811",
@@ -36667,6 +42041,96 @@
       "magneticSwitches": true,
       "screen": true,
       "sideLight": true
+    }
+  },
+  {
+    "id": 4211,
+    "name": "ry5088_001_akko_m1_tmr_iso_b_3m_8k_8k_ry1033_dfn4_v400h",
+    "displayName": "M1 V5 TMR ISO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 64,
+    "internalName": "ry5088_001_akko_m1_tmr_iso_b_3m_8k_8k_ry1033_dfn4_v400h",
+    "keyLayout": "Common82_M1_V5_ISO",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "VolumeBrightnessToggle3",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "id": 4212,
+    "name": "ry5088_001_akko_m1_tmr_iso_c_3m_8k_8k_ry1033_dfn4_v400h",
+    "displayName": "M1 V5 TMR",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 64,
+    "internalName": "ry5088_001_akko_m1_tmr_iso_c_3m_8k_8k_ry1033_dfn4_v400h",
+    "keyLayout": "Common82_M1_V5_TMR",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "VolumeBrightnessToggle3",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
     }
   },
   {
@@ -37339,1121 +42803,6 @@
       "sleepBT": true,
       "magneticSwitches": true,
       "screen": true,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 1087,
-    "name": "koodo_solar",
-    "displayName": "Solar",
-    "company": "KOODO",
-    "vendor": "KOODO",
-    "vendorId": 12625,
-    "productId": 16400,
-    "internalName": "koodo_solar",
-    "keyLayout": "Local81_KOODO_Solar",
-    "lightLayout": "",
-    "sideLightLayout": "",
-    "profiles": 1,
-    "magnetic": false,
-    "family": "yc500",
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 3391,
-    "name": "vgn_neon75_extreme_v2",
-    "displayName": "Neon75 Extreme",
-    "company": "VGN",
-    "vendor": "VGN",
-    "vendorId": 12625,
-    "productId": 20564,
-    "internalName": "vgn_neon75_extreme_v2",
-    "keyLayout": "Local82_VGN_Neon75_Extreme",
-    "lightLayout": "S",
-    "sideLightLayout": "Yt",
-    "profiles": 4,
-    "magnetic": true,
-    "family": "gen2",
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": false,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3599,
-    "name": "yc3123_k2505_soc",
-    "displayName": "SKYFALL 80 PRO",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_k2505_soc",
-    "keyLayout": "Common82_K2505~k1",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3183,
-    "name": "yc3123_fl_k2505mmxf_3m_1k",
-    "displayName": "HTK590UA",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_fl_k2505mmxf_3m_1k",
-    "keyLayout": "Common104_K2513",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [
-        "AudioVolumeUp",
-        "Null",
-        "AudioVolumeDown"
-      ],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3199,
-    "name": "yc3123_fl_k2514_3m_1k",
-    "displayName": "HTK580UA",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_fl_k2514_3m_1k",
-    "keyLayout": "Common87_K2514",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [
-        "AudioVolumeUp",
-        "Null",
-        "AudioVolumeDown"
-      ],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3251,
-    "name": "yc3123_fl_k2513h_c_uk_3m_1k",
-    "displayName": "HTK590EU",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_fl_k2513h_c_uk_3m_1k",
-    "keyLayout": "Common104_K2513UK",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [
-        "AudioVolumeUp",
-        "Null",
-        "AudioVolumeDown"
-      ],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3256,
-    "name": "yc3123_fl_k2405_3m_1k_rgb_kb_soc_v100",
-    "displayName": "K2405",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_fl_k2405_3m_1k_rgb_kb_soc_v100",
-    "keyLayout": "Common82_K2405",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3259,
-    "name": "yc3123_fl_k258_21_3m_1k",
-    "displayName": "k258-21",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_fl_k258_21_3m_1k",
-    "keyLayout": "Common21_K258",
-    "lightLayout": "S",
-    "sideLightLayout": "",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 3260,
-    "name": "yc3123_fl_k258_87_3m_1k",
-    "displayName": "k258-87",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_fl_k258_87_3m_1k",
-    "keyLayout": "Common87_K258",
-    "lightLayout": "S",
-    "sideLightLayout": "",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 3266,
-    "name": "yc3123_fl_k2514c_uk_3m_1k",
-    "displayName": "HTK580EU",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_fl_k2514c_uk_3m_1k",
-    "keyLayout": "Common87_K2514UK",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [
-        "AudioVolumeUp",
-        "Null",
-        "AudioVolumeDown"
-      ],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3279,
-    "name": "yc3123_fl_k258_87uk_3m_1k",
-    "displayName": "k258-87 UK",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_fl_k258_87uk_3m_1k",
-    "keyLayout": "Common87_K2514H_CUK",
-    "lightLayout": "S",
-    "sideLightLayout": "",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 3281,
-    "name": "yc3123_k2506mxa_ua_dm",
-    "displayName": "HTK1160UA",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_k2506mxa_ua_dm",
-    "keyLayout": "Common67_K2506MA",
-    "lightLayout": "S",
-    "sideLightLayout": "",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 3373,
-    "name": "yc3121_fl_k258_87_us_soc",
-    "displayName": "K258-87",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 13862,
-    "internalName": "yc3121_fl_k258_87_us_soc",
-    "keyLayout": "Common87_K258",
-    "lightLayout": "S",
-    "sideLightLayout": "",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "yc500",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 3374,
-    "name": "yc3121_fl_k258_87_uk_soc",
-    "displayName": "K258-87 UK",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 13862,
-    "internalName": "yc3121_fl_k258_87_uk_soc",
-    "keyLayout": "Common87_K258_UK",
-    "lightLayout": "S",
-    "sideLightLayout": "",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "yc500",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 3375,
-    "name": "yc3121_fl_k258_21_soc",
-    "displayName": "K258-21",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 13862,
-    "internalName": "yc3121_fl_k258_21_soc",
-    "keyLayout": "Common21_K258",
-    "lightLayout": "S",
-    "sideLightLayout": "",
-    "profiles": 3,
-    "magnetic": false,
-    "family": "yc500",
-    "screen": null,
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": false,
-      "sideLight": false
-    }
-  },
-  {
-    "id": 3600,
-    "name": "yc3123_k2505_soc",
-    "displayName": "HTK4180",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_k2505_soc",
-    "keyLayout": "Common82_K2505",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3601,
-    "name": "yc3123_k2505uk_3m_1k_soc",
-    "displayName": "HTK4180EU",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_k2505uk_3m_1k_soc",
-    "keyLayout": "Common83_K2505UK",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3602,
-    "name": "yc3123_k2506mxe_3m_1k_soc",
-    "displayName": "HTK4160UA",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_k2506mxe_3m_1k_soc",
-    "keyLayout": "Common67_K2506_v2",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3603,
-    "name": "yc3123_k2506mxe_3m_1k_soc",
-    "displayName": "HTK4160",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_k2506mxe_3m_1k_soc",
-    "keyLayout": "Common67_K2506_v2",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3604,
-    "name": "yc3123_k2506mxg_uk_soc",
-    "displayName": "HTK4160EU",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6150,
-    "internalName": "yc3123_k2506mxg_uk_soc",
-    "keyLayout": "Common68_K2506_UK_v2",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": false,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": true,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": false,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3605,
-    "name": "ry5088_k2506he_c_3m_8k_8k",
-    "displayName": "HTK3860UA",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_k2506he_c_3m_8k_8k",
-    "keyLayout": "Common67_K2506",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 3,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": true,
-    "features": {
-      "knob": [],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3606,
-    "name": "ry5088_k2506he_c_3m_8k_8k",
-    "displayName": "HTK3860",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_k2506he_c_3m_8k_8k",
-    "keyLayout": "Common67_K2506",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": true,
-    "features": {
-      "knob": [],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3607,
-    "name": "ry5088_k2506hee_uk_3m_8k_8k",
-    "displayName": "HTK3860EU",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_k2506hee_uk_3m_8k_8k",
-    "keyLayout": "Common68_K2506_UK",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": true,
-    "features": {
-      "knob": [],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3627,
-    "name": "ry5088_k2505_8k_8k_new_ua",
-    "displayName": "HTK3880UA",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_k2505_8k_8k_new_ua",
-    "keyLayout": "Common82_K2505~k2",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": true,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3628,
-    "name": "ry5088_k2505_8k_8k_new_us",
-    "displayName": "HTK3880",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_k2505_8k_8k_new_us",
-    "keyLayout": "Common82_K2505~k2",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": true,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3629,
-    "name": "ry5088_k2505hee_8k_uk",
-    "displayName": "HTK3880EU",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_k2505hee_8k_uk",
-    "keyLayout": "Common83_K2505UK~k1",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 4,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": null,
-    "switchReplaceable": true,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3680,
-    "name": "ry5088_k2505_8k_8k_ry1049",
-    "displayName": "HTK4880",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_k2505_8k_8k_ry1049",
-    "keyLayout": "Common82_K2505",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 3,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": {
-      "travel": {
-        "min": 0.1,
-        "max": 3.3,
-        "step": 0.01,
-        "default": 2
-      },
-      "firePress": {
-        "min": 0.01,
-        "max": 2,
-        "step": 0.01,
-        "default": null
-      },
-      "fireLift": {
-        "min": 0.01,
-        "max": 2,
-        "step": 0.01,
-        "default": null
-      },
-      "deadzone": {
-        "min": 0,
-        "max": 1,
-        "step": 0.01,
-        "default": null
-      }
-    },
-    "switchReplaceable": true,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3738,
-    "name": "ry5088_fl_k2505_uk_3m_8k_8k",
-    "displayName": "HTK4880EU",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_fl_k2505_uk_3m_8k_8k",
-    "keyLayout": "Common83_K2505UK",
-    "lightLayout": "S",
-    "sideLightLayout": "oa",
-    "profiles": 3,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 128,
-      "h": 128,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": {
-      "travel": {
-        "min": 0.1,
-        "max": 3.3,
-        "step": 0.01,
-        "default": null
-      },
-      "firePress": {
-        "min": 0.01,
-        "max": 2,
-        "step": 0.01,
-        "default": null
-      },
-      "fireLift": {
-        "min": 0.01,
-        "max": 2,
-        "step": 0.01,
-        "default": null
-      },
-      "deadzone": {
-        "min": 0,
-        "max": 1,
-        "step": 0.01,
-        "default": null
-      }
-    },
-    "switchReplaceable": true,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3801,
-    "name": "ry5088_fl_k2507_us_3m_8k_8k",
-    "displayName": "HTK4800",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_fl_k2507_us_3m_8k_8k",
-    "keyLayout": "Common104_K2507",
-    "lightLayout": "S",
-    "sideLightLayout": "$",
-    "profiles": 3,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 240,
-      "h": 135,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": {
-      "travel": {
-        "min": 0.1,
-        "max": 3.3,
-        "step": 0.01,
-        "default": 2
-      },
-      "firePress": {
-        "min": 0.01,
-        "max": 2,
-        "step": 0.01,
-        "default": null
-      },
-      "fireLift": {
-        "min": 0.01,
-        "max": 2,
-        "step": 0.01,
-        "default": null
-      },
-      "deadzone": {
-        "min": 0,
-        "max": 1,
-        "step": 0.01,
-        "default": null
-      }
-    },
-    "switchReplaceable": true,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3802,
-    "name": "ry5088_fl_k2507_uk_3m_8k_8k",
-    "displayName": "HTK4800EU",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 14234,
-    "productId": 6147,
-    "internalName": "ry5088_fl_k2507_uk_3m_8k_8k",
-    "keyLayout": "Common104_K2507UK",
-    "lightLayout": "S",
-    "sideLightLayout": "oa",
-    "profiles": 3,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": {
-      "w": 240,
-      "h": 135,
-      "mode": "16",
-      "layers": 5
-    },
-    "travel": {
-      "travel": {
-        "min": 0.1,
-        "max": 3.3,
-        "step": 0.01,
-        "default": null
-      },
-      "firePress": {
-        "min": 0.01,
-        "max": 2,
-        "step": 0.01,
-        "default": null
-      },
-      "fireLift": {
-        "min": 0.01,
-        "max": 2,
-        "step": 0.01,
-        "default": null
-      },
-      "deadzone": {
-        "min": 0,
-        "max": 1,
-        "step": 0.01,
-        "default": null
-      }
-    },
-    "switchReplaceable": false,
-    "features": {
-      "knob": [
-        "AudioVolumeDown",
-        "AudioVolumeMute",
-        "AudioVolumeUp"
-      ],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": true,
-      "sideLight": true
-    }
-  },
-  {
-    "id": 3851,
-    "name": "ry5088_fl_k2501_3m_8k_8k",
-    "displayName": "T87",
-    "company": "Hator",
-    "vendor": "Hator",
-    "vendorId": 12625,
-    "productId": 20527,
-    "internalName": "ry5088_fl_k2501_3m_8k_8k",
-    "keyLayout": "Common87_K2501",
-    "lightLayout": "S",
-    "sideLightLayout": "",
-    "profiles": 3,
-    "magnetic": true,
-    "family": "gen2",
-    "screen": null,
-    "travel": {
-      "travel": {
-        "min": 0.1,
-        "max": 3.3,
-        "step": 0.005,
-        "default": 2
-      }
-    },
-    "switchReplaceable": false,
-    "features": {
-      "knob": [],
-      "debounce": false,
-      "sleep24": true,
-      "sleepBT": true,
-      "magneticSwitches": true,
-      "screen": false,
       "sideLight": false
     }
   }
