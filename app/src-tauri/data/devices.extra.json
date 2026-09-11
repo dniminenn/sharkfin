@@ -623,5 +623,1097 @@
       "screen": true,
       "sideLight": true
     }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common104_K2513: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3183,
+    "name": "yc3123_fl_k2505mmxf_3m_1k",
+    "displayName": "HTK590UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2505mmxf_3m_1k",
+    "keyLayout": "Common104_K2513",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "Null",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common87_K2514: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3199,
+    "name": "yc3123_fl_k2514_3m_1k",
+    "displayName": "HTK580UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2514_3m_1k",
+    "keyLayout": "Common87_K2514",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "Null",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common104_K2513UK: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3251,
+    "name": "yc3123_fl_k2513h_c_uk_3m_1k",
+    "displayName": "HTK590EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2513h_c_uk_3m_1k",
+    "keyLayout": "Common104_K2513UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "Null",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common82_K2405: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3256,
+    "name": "yc3123_fl_k2405_3m_1k_rgb_kb_soc_v100",
+    "displayName": "K2405",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2405_3m_1k_rgb_kb_soc_v100",
+    "keyLayout": "Common82_K2405",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3259,
+    "name": "yc3123_fl_k258_21_3m_1k",
+    "displayName": "k258-21",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k258_21_3m_1k",
+    "keyLayout": "Common21_K258",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common87_K258: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3260,
+    "name": "yc3123_fl_k258_87_3m_1k",
+    "displayName": "k258-87",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k258_87_3m_1k",
+    "keyLayout": "Common87_K258",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common87_K2514UK: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3266,
+    "name": "yc3123_fl_k2514c_uk_3m_1k",
+    "displayName": "HTK580EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k2514c_uk_3m_1k",
+    "keyLayout": "Common87_K2514UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "Null",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common87_K2514H_CUK: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3279,
+    "name": "yc3123_fl_k258_87uk_3m_1k",
+    "displayName": "k258-87 UK",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_fl_k258_87uk_3m_1k",
+    "keyLayout": "Common87_K2514H_CUK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3281,
+    "name": "yc3123_k2506mxa_ua_dm",
+    "displayName": "HTK1160UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2506mxa_ua_dm",
+    "keyLayout": "Common67_K2506MA",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common87_K258: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3373,
+    "name": "yc3121_fl_k258_87_us_soc",
+    "displayName": "K258-87",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 13862,
+    "internalName": "yc3121_fl_k258_87_us_soc",
+    "keyLayout": "Common87_K258",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common87_K258_UK: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3374,
+    "name": "yc3121_fl_k258_87_uk_soc",
+    "displayName": "K258-87 UK",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 13862,
+    "internalName": "yc3121_fl_k258_87_uk_soc",
+    "keyLayout": "Common87_K258_UK",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3375,
+    "name": "yc3121_fl_k258_21_soc",
+    "displayName": "K258-21",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 13862,
+    "internalName": "yc3121_fl_k258_21_soc",
+    "keyLayout": "Common21_K258",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3600,
+    "name": "yc3123_k2505_soc",
+    "displayName": "HTK4180",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2505_soc",
+    "keyLayout": "Common82_K2505",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3601,
+    "name": "yc3123_k2505uk_3m_1k_soc",
+    "displayName": "HTK4180EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2505uk_3m_1k_soc",
+    "keyLayout": "Common83_K2505UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3602,
+    "name": "yc3123_k2506mxe_3m_1k_soc",
+    "displayName": "HTK4160UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2506mxe_3m_1k_soc",
+    "keyLayout": "Common67_K2506_v2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3603,
+    "name": "yc3123_k2506mxe_3m_1k_soc",
+    "displayName": "HTK4160",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2506mxe_3m_1k_soc",
+    "keyLayout": "Common67_K2506_v2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3604,
+    "name": "yc3123_k2506mxg_uk_soc",
+    "displayName": "HTK4160EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2506mxg_uk_soc",
+    "keyLayout": "Common68_K2506_UK_v2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "The published firmware's keymap table has an empty slot ahead of Escape, which tools/firmware_keymaps.py skips; the picture is the shared Common67_K2506 one, unconfirmed on this board.",
+    "id": 3605,
+    "name": "ry5088_k2506he_c_3m_8k_8k",
+    "displayName": "HTK3860UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2506he_c_3m_8k_8k",
+    "keyLayout": "Common67_K2506",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "The published firmware's keymap table has an empty slot ahead of Escape, which tools/firmware_keymaps.py skips; the picture is the shared Common67_K2506 one, unconfirmed on this board.",
+    "id": 3606,
+    "name": "ry5088_k2506he_c_3m_8k_8k",
+    "displayName": "HTK3860",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2506he_c_3m_8k_8k",
+    "keyLayout": "Common67_K2506",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "The published firmware's keymap table has an empty slot ahead of Escape, which tools/firmware_keymaps.py skips; the picture is the shared Common67_K2506 one, unconfirmed on this board.",
+    "id": 3607,
+    "name": "ry5088_k2506hee_uk_3m_8k_8k",
+    "displayName": "HTK3860EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2506hee_uk_3m_8k_8k",
+    "keyLayout": "Common68_K2506_UK",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet. Hator's keymap table for it is slot for slot the Common82_K2505~k2 copy on file for 2800 and 2857. Firmware v5.01 is published and its table is in keymap-evidence.json.",
+    "id": 3627,
+    "name": "ry5088_k2505_8k_8k_new_ua",
+    "displayName": "HTK3880UA",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2505_8k_8k_new_ua",
+    "keyLayout": "Common82_K2505~k2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet. Hator's keymap table for it is slot for slot the Common82_K2505~k2 copy on file for 2800 and 2857. Firmware v5.01 is published and its table is in keymap-evidence.json.",
+    "id": 3628,
+    "name": "ry5088_k2505_8k_8k_new_us",
+    "displayName": "HTK3880",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2505_8k_8k_new_us",
+    "keyLayout": "Common82_K2505~k2",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet. Hator's keymap table for it is slot for slot the Common83_K2505UK~k1 copy on file. Firmware v5.01 is published and its table is in keymap-evidence.json.",
+    "id": 3629,
+    "name": "ry5088_k2505hee_8k_uk",
+    "displayName": "HTK3880EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2505hee_8k_uk",
+    "keyLayout": "Common83_K2505UK~k1",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3680,
+    "name": "ry5088_k2505_8k_8k_ry1049",
+    "displayName": "HTK4880",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_k2505_8k_8k_ry1049",
+    "keyLayout": "Common82_K2505",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "id": 3738,
+    "name": "ry5088_fl_k2505_uk_3m_8k_8k",
+    "displayName": "HTK4880EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_fl_k2505_uk_3m_8k_8k",
+    "keyLayout": "Common83_K2505UK",
+    "lightLayout": "S",
+    "sideLightLayout": "oa",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet. Hator's keymap table for it is the Common104_K2507 picture on file except that it leaves r_Fn unassigned, where the picture has slot 65 from the gearhub K2507 boards.",
+    "id": 3801,
+    "name": "ry5088_fl_k2507_us_3m_8k_8k",
+    "displayName": "HTK4800",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_fl_k2507_us_3m_8k_8k",
+    "keyLayout": "Common104_K2507",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common104_K2507UK: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3802,
+    "name": "ry5088_fl_k2507_uk_3m_8k_8k",
+    "displayName": "HTK4800EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6147,
+    "internalName": "ry5088_fl_k2507_uk_3m_8k_8k",
+    "keyLayout": "Common104_K2507UK",
+    "lightLayout": "S",
+    "sideLightLayout": "oa",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build and the desktop 3.1.27 package), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-09-11 under ~/vendor-builds/hator-20260911, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content: C and Ce are S, se is $, la is oa. No hardware report yet.",
+    "_unknown": "Hator ships no picture for Common87_K2501: no SVG and no ui_info chunk in either build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 3851,
+    "name": "ry5088_fl_k2501_3m_8k_8k",
+    "displayName": "T87",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "ry5088_fl_k2501_3m_8k_8k",
+    "keyLayout": "Common87_K2501",
+    "lightLayout": "S",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      }
+    },
+    "switchReplaceable": false,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

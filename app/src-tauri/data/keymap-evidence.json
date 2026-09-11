@@ -91579,12 +91579,12 @@
     ]
   },
   "3627": {
-    "board": "(not in the registry)",
+    "board": "HTK3880UA",
     "firmware": "v501_oledv101",
     "image": "firmwareFile.bin",
     "offset": 141152,
     "copies": 1,
-    "method": "escape",
+    "method": "anchored",
     "matrix": [
       0,
       0,
@@ -92006,16 +92006,15 @@
       3,
       3,
       0
-    ],
-    "company": "Hator"
+    ]
   },
   "3628": {
-    "board": "(not in the registry)",
+    "board": "HTK3880",
     "firmware": "v501_oledv101",
     "image": "firmwareFile.bin",
     "offset": 141152,
     "copies": 1,
-    "method": "escape",
+    "method": "anchored",
     "matrix": [
       0,
       0,
@@ -92437,11 +92436,10 @@
       3,
       3,
       0
-    ],
-    "company": "Hator"
+    ]
   },
   "3629": {
-    "board": "(not in the registry)",
+    "board": "HTK3880EU",
     "firmware": "v501_oledv101",
     "image": "firmwareFile.bin",
     "offset": 141152,
@@ -92868,8 +92866,7 @@
       3,
       3,
       0
-    ],
-    "company": "Hator"
+    ]
   },
   "3701": {
     "board": "MATATAKI (JIS coalowl)",
