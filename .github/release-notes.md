@@ -1,5 +1,18 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.10
+
+**162 more boards.** Akko, MonsGeek and Hator ship the same driver under
+their own names with their own board tables, and those tables carry boards
+the shared catalogue does not: 97 Akko, 36 MonsGeek and 29 Hator, the Hator
+SKYFALL 80 PRO from issue #48 among them. The registry is 1316 boards. Akko's
+report vendor id 38ee, so on Linux the udev rule below needs installing
+again. 144 of the boards with a display can take a picture, 18 more than
+before.
+
+**The Display section says why there is no upload** on a board whose
+display size is not on file, instead of showing three rows and nothing else.
+
 ## What changed in 0.7.9
 
 **The rainbow toggle was backward on some boards.** Turning it on gave one
