@@ -656,6 +656,11 @@ def convention_ui_name(enum_key, ui_defs):
     return hits[0] if len(hits) == 1 else None
 
 
+# The vendor's catch-all record: id 9999, "万能驱", company unresolved at
+# runtime, USB id shared with two hundred magnetic boards. It describes no
+# board; one answering 9999 is derived from its own sweep instead.
+PLACEHOLDER_IDS = {9999}
+
 # Exactly the keys this script writes per device, so an override cannot
 # name a field the registry does not have (`keylayout`) and be ignored.
 KNOWN_DEVICE_FIELDS = {
@@ -808,6 +813,8 @@ def main():
     seen, devices, collisions = {}, [], []
     for d in keyboards:
         did = d["id"]
+        if did in PLACEHOLDER_IDS:
+            continue
         if did in seen:
             collisions.append(did)
             continue
