@@ -599,8 +599,15 @@ mod tests {
                 assert_eq!(got.product_id, want.product_id, "device {id} product id");
                 // The extractor may point a board at its own keymap's copy of
                 // the picture the entry names, `Name~k2`; the name still holds.
+                // An entry may also name a copy outright, for a board whose
+                // keymap is known but whose id the extractor cannot group.
                 let base = got.key_layout.split("~k").next().unwrap_or("");
-                assert_eq!(base, want.key_layout, "device {id} layout");
+                assert!(
+                    got.key_layout == want.key_layout || base == want.key_layout,
+                    "device {id} layout: {} is not {}",
+                    got.key_layout,
+                    want.key_layout
+                );
             }
         }
         assert!(wholes > 0 && overrides > 0, "expected both kinds of entry");

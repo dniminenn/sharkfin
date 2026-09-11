@@ -37399,5 +37399,40 @@
       "screen": false,
       "sideLight": true
     }
+  },
+  {
+    "id": 3599,
+    "name": "yc3123_k2505_soc",
+    "displayName": "SKYFALL 80 PRO",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2505_soc",
+    "keyLayout": "Common82_K2505~k1",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
   }
 ]

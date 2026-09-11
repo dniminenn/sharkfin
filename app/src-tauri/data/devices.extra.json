@@ -585,5 +585,43 @@
       "screen": false,
       "sideLight": true
     }
+  },
+  {
+    "_why": "Reported in issue #48. Not in the gearhub catalogue, and the vendor update channel has no record for 3599, so an extraction alone will not add it. It is in Hator's own SyncHUB build (hator.io, desktop 3.1.27), the same driver with Hator's own tables, saved under ~/vendor-builds/hator-20260911: id 3599 is HTK4180UA, yc3123_k2505_soc, the record of 2861 plus canSyncSystemInfo. The display name stays SKYFALL 80 PRO, which is what the box and the board's product string say; HTK4180UA is the SKU, and 2861 already carries it.",
+    "_evidence": "Fields from the Hator record: name, USB ids, layout, light layouts, four profiles, sleep24, sleepBT, the knob, and the 128 by 128 mode 16 display with five picture slots. Read sweep from the owner's board (0.7.9 web build, 0dd2846) agrees: identify 0x8F returns 0x0e0f = 3599 in the gen2 shape; GET_KEYMATRIX 0x8A returns a gen2 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the yc500 reads 0x89 and 0x92 answer only the opcode; 0x91 answers four u16 (120, 120, 1200, 1200) at bytes 8..15; 0xAD answers display version 0x0101 and the module name RY5060, which 2861 and 3046 ship with. The base keymap fills 86 slots and is byte for byte the table in the published firmware of the six yc3123_k2505 boards (2759, 2774, 2861, 3045, 3046, 3175): 82 plain keys, Fn at 65, a knob as consumer Vol-, Vol+ and Mute at 102, 103 and 104, and NonUsHash at 75 with no key fitted. The owner matched Common82_K2505 85 of 85 and confirmed it, so the entry names the ~k1 copy, which carries those slots. Their photo is that picture: an ANSI TKL with a knob, 82 keys, a square colour panel beside the up arrow. They report everything tried worked, edge lighting included.",
+    "_unknown": "Debounce 0x86 answers 3 at byte 1, but the record declares none and nobody has written it, so debounce stays off. Four green indicator LEDs sit beside the nav cluster with legends the photo cannot resolve.",
+    "id": 3599,
+    "name": "yc3123_k2505_soc",
+    "displayName": "SKYFALL 80 PRO",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6150,
+    "internalName": "yc3123_k2505_soc",
+    "keyLayout": "Common82_K2505~k1",
+    "lightLayout": "S",
+    "sideLightLayout": "$",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": true
+    }
   }
 ]
