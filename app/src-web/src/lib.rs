@@ -1962,6 +1962,8 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
                 "read-only"
             }
         );
+        let owner = STATE.with(|s| s.borrow().led_swap);
+        let _ = writeln!(out, "flags  : {}", registry::led_flags_note(&spec, owner));
     }
     probe_sweep(&t, &mut out).await?;
     let _ = writeln!(out, "```");

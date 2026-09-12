@@ -231,7 +231,11 @@ Opcode shared. Packet **[HW]**.
   which is which can be read off any image. 33 of the 133 boards whose
   published firmware could be read have `7` rainbow, `8` fixed, mostly Akko
   and MonsGeek but also the AttackShark X65HE and the Keydous AJ68-CP; they
-  are listed in `data/led-flags.json`. **[FW]**
+  are listed in `data/led-flags.json`. **[FW]** The vendor driver carries
+  the same fact as a constant pair on each board's class (`DAZZLE`,
+  `NORMAL`); `data/led-flags.vendor.json` lists it for 1074 boards and it
+  agrees with every firmware verdict but the X65HE's. Boards without
+  published firmware take it from there. **[JS]**
 - Two images read end to end for that. Akko ACR75 v2 (606, firmware 3.03,
   yc500): `0x10145E2` tests 7 into the hue reseed at `0x10145EC` and 8 into
   the packet's RGB at `0x1014602`, where the RT100 (946, v507) has

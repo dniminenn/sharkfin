@@ -1777,9 +1777,12 @@ pub fn contribution_bundle(
     use std::fmt::Write;
     let open = {
         let inner = state.inner.lock();
-        inner.open.as_ref().map(|o| (o.spec.clone(), o.usage))
+        inner
+            .open
+            .as_ref()
+            .map(|o| (o.spec.clone(), o.usage, inner.led_swap))
     };
-    let Some((spec, usage)) = open else {
+    let Some((spec, usage, led_swap)) = open else {
         return unregistered_bundle(&state, path.ok_or("no device connected")?);
     };
     with_open(&state, |t, _| {
@@ -1811,6 +1814,11 @@ pub fn contribution_bundle(
                 } else {
                     "read-only"
                 }
+            );
+            let _ = writeln!(
+                out,
+                "flags  : {}",
+                registry::led_flags_note(&spec, led_swap)
             );
         }
         probe_sweep(t, &mut out);

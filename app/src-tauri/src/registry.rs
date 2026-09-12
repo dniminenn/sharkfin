@@ -77,13 +77,19 @@ pub struct DeviceSpec {
     /// This board reads the LEDPARAM flags nibble the other way round: 8 is
     /// a fixed colour and 7 is the rainbow, and the seven preset colours
     /// differ. Not a field of the record: read out of each board's own
-    /// firmware into `data/led-flags.json` by `tools/led_flags.py`, and
-    /// attached here at load. The owner of a board the scan could not read
-    /// can say so from the Lighting page, which overrides this for the open
-    /// board (`set_led_flags_swapped`). Most boards keep 7 fixed, 8 rainbow
+    /// firmware into `data/led-flags.json` by `tools/led_flags.py`, else
+    /// out of the vendor driver's class for the board into
+    /// `data/led-flags.vendor.json` by `tools/vendor_led_flags.py`, and
+    /// attached here at load. The owner can say otherwise from the Lighting
+    /// page, which overrides this for the open board
+    /// (`set_led_flags_swapped`). Most boards keep 7 fixed, 8 rainbow
     /// (docs/PROTOCOL.md).
     #[serde(default, skip_deserializing)]
     pub led_flags_swapped: bool,
+    /// Where `led_flags_swapped` came from: "firmware", "vendor driver", or
+    /// empty for the default.
+    #[serde(default, skip_deserializing)]
+    pub led_flags_source: &'static str,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -320,13 +326,47 @@ pub fn build_id() -> String {
 static DEVICES_JSON: &str = include_str!("../data/devices.json");
 static LIGHT_LAYOUTS_JSON: &str = include_str!("../data/light-layouts.json");
 static LED_FLAGS_JSON: &str = include_str!("../data/led-flags.json");
+static LED_FLAGS_VENDOR_JSON: &str = include_str!("../data/led-flags.vendor.json");
 
 /// One board's LEDPARAM flags reading, out of its own firmware
-/// (`tools/led_flags.py`). `rainbow` is the nibble value that paints the
-/// rainbow: `8` on most boards, `7` on the rest.
+/// (`tools/led_flags.py`) or the vendor driver's class for it
+/// (`tools/vendor_led_flags.py`). `rainbow` is the nibble value that paints
+/// the rainbow: `8` on most boards, `7` on the rest.
 #[derive(Deserialize)]
 struct LedFlagRecord {
     rainbow: u8,
+}
+
+fn led_flag_records(json: &str, file: &str) -> std::collections::HashMap<String, LedFlagRecord> {
+    match serde_json::from_str(json) {
+        Ok(v) => v,
+        Err(e) => {
+            log::error!("data/{file} failed to parse: {e}");
+            Default::default()
+        }
+    }
+}
+
+/// The bundle's line on how this board's flags nibble is read: the two
+/// values, the evidence, and the owner's override when there is one.
+pub fn led_flags_note(spec: &DeviceSpec, owner: Option<bool>) -> String {
+    let swapped = owner.unwrap_or(spec.led_flags_swapped);
+    let pair = if swapped {
+        "7 rainbow, 8 fixed"
+    } else {
+        "7 fixed, 8 rainbow"
+    };
+    let source = if spec.led_flags_source.is_empty() {
+        "default"
+    } else {
+        spec.led_flags_source
+    };
+    match owner {
+        Some(o) if o != spec.led_flags_swapped => {
+            format!("{pair} (owner swapped; {source} says otherwise)")
+        }
+        _ => format!("{pair} ({source})"),
+    }
 }
 
 /// A malformed registry must not take the app down; callers fall back to
@@ -347,19 +387,18 @@ pub fn all() -> Vec<DeviceSpec> {
                 Default::default()
             }
         };
-    let flags: std::collections::HashMap<String, LedFlagRecord> =
-        match serde_json::from_str(LED_FLAGS_JSON) {
-            Ok(v) => v,
-            Err(e) => {
-                log::error!("data/led-flags.json failed to parse: {e}");
-                Default::default()
-            }
-        };
+    let firmware = led_flag_records(LED_FLAGS_JSON, "led-flags.json");
+    let vendor = led_flag_records(LED_FLAGS_VENDOR_JSON, "led-flags.vendor.json");
     for d in &mut devices {
         d.light = lights.get(&d.light_layout).cloned();
-        d.led_flags_swapped = flags
-            .get(&d.id.to_string())
-            .is_some_and(|r| r.rainbow == FLAGS_SWAPPED_RAINBOW);
+        let id = d.id.to_string();
+        let (swapped, source) = match (firmware.get(&id), vendor.get(&id)) {
+            (Some(r), _) => (r.rainbow == FLAGS_SWAPPED_RAINBOW, "firmware"),
+            (None, Some(r)) => (r.rainbow == FLAGS_SWAPPED_RAINBOW, "vendor driver"),
+            (None, None) => (false, ""),
+        };
+        d.led_flags_swapped = swapped;
+        d.led_flags_source = source;
     }
     devices
 }
@@ -461,22 +500,37 @@ mod tests {
     /// The flags nibble comes from each board's own firmware, not from the
     /// record. Both boards whose owners reported an inverted rainbow toggle
     /// are in the file; the X86, whose lineage reads 8 as the rainbow, is
-    /// not.
+    /// not. Boards the scan could not read take the vendor driver's
+    /// constant: the FUN60 PRO (2600, issue #49) has no published firmware
+    /// and its driver class sends 7 for the rainbow. The X65HE (2268) is the
+    /// one board where the two disagree, and the firmware wins.
     #[test]
     fn led_flags_come_from_the_firmware_scan() {
         for id in [606, 1308, 2268] {
             let d = by_id(id).unwrap_or_else(|| panic!("device {id} present"));
             assert!(d.led_flags_swapped, "device {id} reads 7 as the rainbow");
+            assert_eq!(d.led_flags_source, "firmware");
             assert!(d.led_wire().swapped);
         }
+        let fun60 = by_id(2600).expect("FUN60 PRO present");
+        assert!(fun60.led_flags_swapped);
+        assert_eq!(fun60.led_flags_source, "vendor driver");
         let x86 = by_id(1967).expect("X86 present");
         assert!(
             !x86.led_flags_swapped,
             "the X86 lineage reads 8 as the rainbow"
         );
         assert!(!x86.led_wire().swapped);
+        let firmware = all()
+            .iter()
+            .filter(|d| d.led_flags_swapped && d.led_flags_source == "firmware")
+            .count();
+        assert_eq!(firmware, 33, "boards the scan read as 7 = rainbow");
         let swapped = all().iter().filter(|d| d.led_flags_swapped).count();
-        assert_eq!(swapped, 33, "boards the scan read as 7 = rainbow");
+        assert_eq!(
+            swapped, 139,
+            "with the driver's verdict where there is no firmware"
+        );
     }
 
     /// Drawing is granted per lineage, never per family alone. yc3123 boards

@@ -431,7 +431,8 @@ const MODE_NEON: u8 = 3;
 
 /// `(fixed colour, rainbow)` flags-nibble values for a board. Most boards
 /// read `7` as the colour the packet carried and `8` as the rainbow; the
-/// boards `data/led-flags.json` records read them the other way round.
+/// boards `data/led-flags.json` and `data/led-flags.vendor.json` record
+/// read them the other way round.
 fn flags_pair(swapped: bool) -> (u8, u8) {
     if swapped {
         (FLAG_DAZZLE, FLAG_FIXED)

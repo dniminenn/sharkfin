@@ -37,8 +37,9 @@ their owners reported in issues #40 and #45.
 
 Writes app/src-tauri/data/led-flags.json, one record per board whose
 firmware could be read, both verdicts included so the file is the evidence
-rather than a list of exceptions. Boards absent from it read `8` as the
-rainbow, and their owners can say otherwise from the Lighting page.
+rather than a list of exceptions. Boards absent from it take the vendor
+driver's constant (vendor_led_flags.py), then `8`, and their owners can
+say otherwise from the Lighting page.
 
 Needs arm-none-eabi-objdump on PATH. Packages are cached under --cache, the
 same directory firmware_keymaps.py uses, so a rerun downloads nothing it

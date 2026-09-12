@@ -214,8 +214,19 @@ committed and read at load. It needs `arm-none-eabi-objdump` on PATH.
 python3 tools/led_flags.py
 ```
 
-Boards it cannot read keep `8`, and their owners can say otherwise from
-the Lighting page, which settles it for that board without a release.
+`tools/vendor_led_flags.py` reads the same fact out of the vendor
+driver's device classes, one class per board, for the boards whose
+firmware is not published. Its verdicts go in
+`app/src-tauri/data/led-flags.vendor.json`; the firmware's win where both
+exist, and they agree on every board but the X65HE.
+
+```sh
+python3 tools/vendor_led_flags.py ~/vendor-builds/gearhub-*/dist/js ~/vendor-builds/monsgeek-*/dist/js
+```
+
+Boards in neither file keep `8`. Owners can say otherwise from the
+Lighting page, which settles it for that board without a release, and
+the data bundle prints which way the board is read and by what evidence.
 
 ### ISO boards
 

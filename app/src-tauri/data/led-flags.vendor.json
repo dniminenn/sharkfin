@@ -1,0 +1,6446 @@
+{
+ "243": {
+  "board": "YZ84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "244": {
+  "board": "YZ68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "338": {
+  "board": "5075B Plus",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/462f1f21.js"
+ },
+ "431": {
+  "board": "YZ1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "478": {
+  "board": "YZ-21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "484": {
+  "board": "YZ184",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "594": {
+  "board": "PC75B Plus+",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/462f1f21.js"
+ },
+ "660": {
+  "board": "YZ1108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "771": {
+  "board": "3084BP-ISO-UK",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/462f1f21.js"
+ },
+ "790": {
+  "board": "YZ-21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "799": {
+  "board": "YZ166",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "847": {
+  "board": "YZ166",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "853": {
+  "board": "C98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "882": {
+  "board": "B67",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "888": {
+  "board": "F108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "892": {
+  "board": "MK9",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "913": {
+  "board": "C87P",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "954": {
+  "board": "KiiBoom81",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "969": {
+  "board": "MG108B",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "983": {
+  "board": "M1W",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "994": {
+  "board": "C84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1023": {
+  "board": "5108B Plus",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1041": {
+  "board": "MMD FIT68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1104": {
+  "board": "YZ68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1105": {
+  "board": "YZ68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1106": {
+  "board": "YZ84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1123": {
+  "board": "YZ-21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1149": {
+  "board": "K100Max",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1154": {
+  "board": "YZ-21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1168": {
+  "board": "K86",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1181": {
+  "board": "YZ75 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1184": {
+  "board": "YZ84 pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1200": {
+  "board": "M3W",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1215": {
+  "board": "M7W",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1220": {
+  "board": "C98 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1222": {
+  "board": "ER95",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1242": {
+  "board": "KC84 pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1244": {
+  "board": "KC75 pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1280": {
+  "board": "3098B Plus",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/462f1f21.js"
+ },
+ "1304": {
+  "board": "MOD007PC-CX ",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1308": {
+  "board": "M5W",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1318": {
+  "board": "YZ1108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1326": {
+  "board": "K19",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1343": {
+  "board": "K75RGB",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1350": {
+  "board": "KiiBoom64",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1367": {
+  "board": "MOD007B-HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1379": {
+  "board": "RT100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1419": {
+  "board": "ICE75",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1466": {
+  "board": "K85",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1528": {
+  "board": "5075B Plus-S",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/462f1f21.js"
+ },
+ "1588": {
+  "board": "MU01",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1591": {
+  "board": "YZ19",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1604": {
+  "board": "M1W HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1618": {
+  "board": "ER75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1637": {
+  "board": "MOD007B HE PC",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1674": {
+  "board": "MG75S HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1679": {
+  "board": "K75RGB",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1723": {
+  "board": "Dynatab75X-UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1724": {
+  "board": "X85PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1725": {
+  "board": "RT68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1753": {
+  "board": "RT75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1766": {
+  "board": "K20",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1767": {
+  "board": "MK12",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1781": {
+  "board": "3MRGB-101",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1812": {
+  "board": "3MRGB-207",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1815": {
+  "board": "C75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1846": {
+  "board": "AGK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1848": {
+  "board": "WALKER 75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1868": {
+  "board": "5108BP-ISO-UK",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/462f1f21.js"
+ },
+ "1876": {
+  "board": "AL75PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1879": {
+  "board": "MK18",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1882": {
+  "board": "YUNZII B75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1884": {
+  "board": "MK12",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1887": {
+  "board": "YUNZII B75 PRO ISO-FR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1888": {
+  "board": "YUNZII B75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1905": {
+  "board": "RxD 60% HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1921": {
+  "board": "MATATAKI (US)",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1923": {
+  "board": "5098B",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1932": {
+  "board": "CZ75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1933": {
+  "board": "M1 V5",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1942": {
+  "board": "MK14",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1955": {
+  "board": "HE75 Mag",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1967": {
+  "board": "X86",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1981": {
+  "board": "YUNZII L75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "1991": {
+  "board": "MU02",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/e5f016e2.js"
+ },
+ "1996": {
+  "board": "X98PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2028": {
+  "board": "MK14",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2029": {
+  "board": "kiiboom980",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2049": {
+  "board": "kiiboom81",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2053": {
+  "board": "WALKER 75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2068": {
+  "board": "RT80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2083": {
+  "board": "3MRGB-209",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2114": {
+  "board": "AGK87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2116": {
+  "board": "TITAN68HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2220": {
+  "board": "TITAN60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2221": {
+  "board": "3MRGB-208",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2227": {
+  "board": "VK MAG75 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2231": {
+  "board": "Choc 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2233": {
+  "board": "苏咚坡键盘10",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2234": {
+  "board": "VK MAG75 Lite",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2246": {
+  "board": "VK MAG 75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2247": {
+  "board": "M1 V5 TMR",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2248": {
+  "board": "3MRGB-210",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2255": {
+  "board": "AK680 MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2268": {
+  "board": "X65HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2270": {
+  "board": "X68HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2278": {
+  "board": "KF068",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2279": {
+  "board": "V99",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2281": {
+  "board": "AGK75 U2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2284": {
+  "board": "HE65 Mec",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2296": {
+  "board": "V82 RGB",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2297": {
+  "board": "V99",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2299": {
+  "board": "FUN60",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2300": {
+  "board": "RT68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2301": {
+  "board": "K68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2304": {
+  "board": "FUN60 PRO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2305": {
+  "board": "FUN60 PRO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2306": {
+  "board": "FUN60 MAX",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2307": {
+  "board": "FUN60 Ultra",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2308": {
+  "board": "X65PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2310": {
+  "board": "ZENITH PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2311": {
+  "board": "MK-BOX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2314": {
+  "board": "CZ-206",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2320": {
+  "board": "VK MAG68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2321": {
+  "board": "HHKB",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2326": {
+  "board": "Beat65-keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2328": {
+  "board": "AGK75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2330": {
+  "board": "AGK87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2334": {
+  "board": "TK75-HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2335": {
+  "board": "M82HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2336": {
+  "board": "AK680 MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2338": {
+  "board": "KF068",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2339": {
+  "board": "YZ75CZ",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2342": {
+  "board": "FF101",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2343": {
+  "board": "AK680 MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2344": {
+  "board": "KC68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2348": {
+  "board": "ZAP68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2352": {
+  "board": "FUN60 Ultra",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2356": {
+  "board": "X82PRO HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2367": {
+  "board": "PL108W",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2368": {
+  "board": "X60HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2370": {
+  "board": "X68PRO HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2371": {
+  "board": "AK680 MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2375": {
+  "board": "KiiBOOM cybrix 29",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2376": {
+  "board": "HE65 Mag",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2381": {
+  "board": "FUN60 Ultra",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2382": {
+  "board": "K19",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2383": {
+  "board": "K75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2384": {
+  "board": "KY-MK231",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2386": {
+  "board": "X107",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2387": {
+  "board": "FUN60 Ultra",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2395": {
+  "board": "CK75SE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2397": {
+  "board": "KF202",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2398": {
+  "board": "MAG75 Max",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2406": {
+  "board": "NEXA HE60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2408": {
+  "board": "X86",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2410": {
+  "board": "VK99",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2421": {
+  "board": "MATATAKI - JP",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2425": {
+  "board": "AGK75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2426": {
+  "board": "ZAP68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2436": {
+  "board": "Beat65-keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2445": {
+  "board": "RT75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2446": {
+  "board": "Chronos 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2447": {
+  "board": "NX68pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2450": {
+  "board": "GK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2453": {
+  "board": "MOD007 V5 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2454": {
+  "board": "NJ81-CP",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2464": {
+  "board": "FUN60 PRO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2465": {
+  "board": "HE68 Mag",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2469": {
+  "board": "K21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2472": {
+  "board": "X68HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2483": {
+  "board": "AL66",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2485": {
+  "board": "X68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2494": {
+  "board": "MX8.2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2496": {
+  "board": "Mechlands M75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2499": {
+  "board": "DEFENDER 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2500": {
+  "board": "AR87G",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2501": {
+  "board": "TK75-HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2507": {
+  "board": "GK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2510": {
+  "board": "ZAP68Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2515": {
+  "board": "NJ68 PRO-CP",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2516": {
+  "board": "AGK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2518": {
+  "board": "SK75 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2520": {
+  "board": "HE75 Mag",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2527": {
+  "board": "ZAP87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2534": {
+  "board": "CZ-206",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2535": {
+  "board": "Beat65-keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2536": {
+  "board": "M1 V5 TMR",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2546": {
+  "board": "K-68M",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2552": {
+  "board": "K85",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2554": {
+  "board": "ZAP68Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2555": {
+  "board": "B75pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2560": {
+  "board": "NB68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2563": {
+  "board": "RTS1 V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2572": {
+  "board": "NS68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2573": {
+  "board": "RT75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2574": {
+  "board": "DEEP80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2576": {
+  "board": "NJ98-CP",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2578": {
+  "board": "DEEP68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2581": {
+  "board": "Mineral02",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2585": {
+  "board": "M3 V5",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2586": {
+  "board": "KIIBOOM-68C",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2589": {
+  "board": "Beat68-keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2590": {
+  "board": "Beat68-keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2591": {
+  "board": "B75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2592": {
+  "board": "ALUX68 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2593": {
+  "board": "ALUX68 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2594": {
+  "board": "F68 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2598": {
+  "board": "YZ19",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2599": {
+  "board": "ALUX68 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2600": {
+  "board": "FUN60 PRO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2601": {
+  "board": "M2 V5",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2605": {
+  "board": "AK680MC",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2608": {
+  "board": "AK680MC",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2609": {
+  "board": "AK680MC",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2611": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2613": {
+  "board": "IK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2618": {
+  "board": "GK06-61",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2619": {
+  "board": "Gem02",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2621": {
+  "board": "ALUX60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2622": {
+  "board": "ALUX60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2623": {
+  "board": "CK100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2624": {
+  "board": "YC100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2626": {
+  "board": "K5",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2628": {
+  "board": "GKX68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2629": {
+  "board": "AGK75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2633": {
+  "board": "Beat75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2634": {
+  "board": "F68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2637": {
+  "board": "SMART 875",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2638": {
+  "board": "NS68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2642": {
+  "board": "AGK75 U2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2644": {
+  "board": "YUNZII QL108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2646": {
+  "board": "V99",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2648": {
+  "board": "FUN75",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2650": {
+  "board": "X68Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2651": {
+  "board": "AGK75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2652": {
+  "board": "DEEP80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2653": {
+  "board": "DEEP80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2656": {
+  "board": "AO98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "2660": {
+  "board": "X87Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2664": {
+  "board": "K268",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2667": {
+  "board": "K87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2669": {
+  "board": "GP75HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2670": {
+  "board": "MATATAKI(JIS)",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2671": {
+  "board": "Beat68-keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2674": {
+  "board": "GK61",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2675": {
+  "board": "K81",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2677": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2679": {
+  "board": "M1 V5 TMR",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2680": {
+  "board": "Beat68-keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2681": {
+  "board": "GK68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2683": {
+  "board": "MOD007S V3-HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2687": {
+  "board": "B75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2688": {
+  "board": "F108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2690": {
+  "board": "DK82 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2694": {
+  "board": "C98 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2699": {
+  "board": "Blend HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2703": {
+  "board": "MK870 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2704": {
+  "board": "MOD007S V3-HE UK",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2708": {
+  "board": "K239 UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2709": {
+  "board": "LK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2710": {
+  "board": "DEEP68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2711": {
+  "board": "DEEP68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2712": {
+  "board": "MK25022",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2721": {
+  "board": "Verve68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2723": {
+  "board": "K67",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2727": {
+  "board": "GV10M-8K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2729": {
+  "board": "JEDEL KL166",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2730": {
+  "board": "K86",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2731": {
+  "board": "K982D",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2737": {
+  "board": "Lomz 75S",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2739": {
+  "board": "MG108B",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/1131f991.js"
+ },
+ "2740": {
+  "board": "MK25020",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2743": {
+  "board": "RAY68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2746": {
+  "board": "NS67 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2749": {
+  "board": "K239 US",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2751": {
+  "board": "3MRGB-210",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2752": {
+  "board": "Nyf HE 82K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2753": {
+  "board": "5075 V3",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2755": {
+  "board": "X68MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2756": {
+  "board": "SWIFT X85",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2757": {
+  "board": "NB68 Max",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2759": {
+  "board": "HTK3180UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2761": {
+  "board": "HE68 Llte",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2762": {
+  "board": "HE68 Llte",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2763": {
+  "board": "Kanabo K6",
+  "rainbow": 7,
+  "fixed": 1,
+  "source": "gearhub-20260905/3081a235.js"
+ },
+ "2764": {
+  "board": "H60Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2766": {
+  "board": "MK-23",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2769": {
+  "board": "X85Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2770": {
+  "board": "Beat75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2771": {
+  "board": "JEDELWKL100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2772": {
+  "board": "SG8992",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2773": {
+  "board": "GT60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2774": {
+  "board": "HTK1180UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2775": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2776": {
+  "board": "SG8905",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2780": {
+  "board": "N-J100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2781": {
+  "board": "Neon75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2782": {
+  "board": "TAC75 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2785": {
+  "board": "FUN60 PRO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2786": {
+  "board": "TAC87",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/a0a0505a.js"
+ },
+ "2788": {
+  "board": "DS KEY",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2789": {
+  "board": "CAPTAIN87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2790": {
+  "board": "GKX68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2791": {
+  "board": "GEO65HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2792": {
+  "board": "X96HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2793": {
+  "board": "R86PROHE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2795": {
+  "board": "K980",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2796": {
+  "board": "RK-X44-67",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/f84781ce.js"
+ },
+ "2797": {
+  "board": "Beat75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2798": {
+  "board": "R82PROHE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2799": {
+  "board": "SEEK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2800": {
+  "board": "HTK3880UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2801": {
+  "board": "GV8M-8K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2802": {
+  "board": "SUPER75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2804": {
+  "board": "X820Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2806": {
+  "board": "K2405",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2807": {
+  "board": "5075 V3 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2808": {
+  "board": "NS75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2809": {
+  "board": "3MRGB-258",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2810": {
+  "board": "NS67",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2811": {
+  "board": "FUN68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2816": {
+  "board": "Storm68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2817": {
+  "board": "PLUX CST KB",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2819": {
+  "board": "M1 V5 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2820": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2821": {
+  "board": "K98Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2823": {
+  "board": "HTK3160UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2828": {
+  "board": "Lomz 75S",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2829": {
+  "board": "5087 V3 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2831": {
+  "board": "VK99 Gaming",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2832": {
+  "board": "Shine60",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2833": {
+  "board": "X68Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2834": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2835": {
+  "board": "EK368RT",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/703b4174.js"
+ },
+ "2836": {
+  "board": "Shine60",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2839": {
+  "board": "MOD007 V5 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "2844": {
+  "board": "R82HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2845": {
+  "board": "M2 V5 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2848": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2851": {
+  "board": "SKY75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2852": {
+  "board": "X87Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2853": {
+  "board": "HTK1880UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2854": {
+  "board": "yumi17",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2855": {
+  "board": "Yumi68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2856": {
+  "board": "HTK1880",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2857": {
+  "board": "HTK3880",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2858": {
+  "board": "HTK3880EU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2859": {
+  "board": "Neon75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2861": {
+  "board": "HTK4180UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2862": {
+  "board": "HTK4180EU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2864": {
+  "board": "X85MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2865": {
+  "board": "RT75PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2866": {
+  "board": "H60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2869": {
+  "board": "GP75HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2870": {
+  "board": "Epomaker 65",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2871": {
+  "board": "MOD007B V3-HE(US)",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2872": {
+  "board": "MOD007B V3-HE(UK)",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2873": {
+  "board": "PL108W",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2874": {
+  "board": "M3 V5 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2875": {
+  "board": "H60Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2876": {
+  "board": "HTK3860UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2879": {
+  "board": "SUPER68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2881": {
+  "board": "K0039",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2883": {
+  "board": "HE68 Llte",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2885": {
+  "board": "Mineral02",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2886": {
+  "board": "Cybrix29",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2887": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2888": {
+  "board": "GKG108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2892": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2893": {
+  "board": "KM9",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2895": {
+  "board": "RT85",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2896": {
+  "board": "X68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2897": {
+  "board": "X68 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2899": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2900": {
+  "board": "KC84 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2901": {
+  "board": "X68PRO HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2902": {
+  "board": "X68HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2903": {
+  "board": "Mineral01",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2904": {
+  "board": "Neon75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2905": {
+  "board": "Neon75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2906": {
+  "board": "DEEP80 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2907": {
+  "board": "TK101",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2909": {
+  "board": "HTK1160UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2910": {
+  "board": "HTK4160UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2912": {
+  "board": "GMK82",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2916": {
+  "board": "JK82-1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2917": {
+  "board": "HTK1860UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2918": {
+  "board": "HTK1860",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2919": {
+  "board": "HTK3860",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2920": {
+  "board": "HTK3860EU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2921": {
+  "board": "KF211",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2922": {
+  "board": "Y98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2923": {
+  "board": "AL75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2924": {
+  "board": "RAY68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2925": {
+  "board": "XL98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2928": {
+  "board": "B75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2929": {
+  "board": "X60 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2930": {
+  "board": "MK160B MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2931": {
+  "board": "YZ75 MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2932": {
+  "board": "SHOT209",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2933": {
+  "board": "MK1064",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2934": {
+  "board": "X98PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2935": {
+  "board": "X82PRO HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2936": {
+  "board": "HTK4100UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2938": {
+  "board": "X65PRO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/7804eaaa.js"
+ },
+ "2939": {
+  "board": "MATATAKI (US)",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2942": {
+  "board": "X65",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/3e1dde07.js"
+ },
+ "2943": {
+  "board": "NX87PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2949": {
+  "board": "M1 V5 TMR",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "2950": {
+  "board": "3084BP-ISO-DE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/462f1f21.js"
+ },
+ "2952": {
+  "board": "X85PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2953": {
+  "board": "SPM PL87WA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2955": {
+  "board": "Deep68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2957": {
+  "board": "Radiant",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2958": {
+  "board": "K860",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2959": {
+  "board": "G84 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2960": {
+  "board": "Nyf HE 61K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2963": {
+  "board": "VK 75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2964": {
+  "board": "X98HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/803c38d1.js"
+ },
+ "2966": {
+  "board": "SG8992",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2967": {
+  "board": "GK68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2968": {
+  "board": "R85Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2972": {
+  "board": "SG8905",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2973": {
+  "board": "NX108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2976": {
+  "board": "Beat75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2977": {
+  "board": "K80-E",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2978": {
+  "board": "K85PROHE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2980": {
+  "board": "GM870Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2981": {
+  "board": "GM870Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2982": {
+  "board": "R86PROHE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2983": {
+  "board": "Y98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2986": {
+  "board": "Rampage Fushi",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2988": {
+  "board": "X80HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2991": {
+  "board": "FK51D2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2993": {
+  "board": "AR108G",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2996": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2998": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "2999": {
+  "board": "GK61",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3001": {
+  "board": "YUNZII WOOD68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3003": {
+  "board": "FL750",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3004": {
+  "board": "K75 Ultra US",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3005": {
+  "board": "AGK75 U2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3007": {
+  "board": "GP87HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3011": {
+  "board": "ZAP87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3012": {
+  "board": "NX108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3017": {
+  "board": "MAG 68 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3020": {
+  "board": "Ceres-Wired",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3022": {
+  "board": "Air87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3025": {
+  "board": "ALUX68 AIR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3026": {
+  "board": "MATATAKI(US Separate)",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3032": {
+  "board": "H60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3033": {
+  "board": "H60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3035": {
+  "board": "ZAP68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3036": {
+  "board": "ZAP68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3037": {
+  "board": "Phantom X68RB",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3038": {
+  "board": "Phantom X68PG",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3040": {
+  "board": "B98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3041": {
+  "board": "K2405",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3043": {
+  "board": "Phantom X68RB",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3044": {
+  "board": "Phantom X68PG",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3045": {
+  "board": "HTK3180",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3046": {
+  "board": "HTK4180",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3047": {
+  "board": "HTK4160",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3048": {
+  "board": "HTK1160UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3049": {
+  "board": "HTK1160",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3050": {
+  "board": "HTK3160UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3051": {
+  "board": "HTK3160",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3054": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3055": {
+  "board": "Fib(68)",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3056": {
+  "board": "Rival",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3057": {
+  "board": "HTK3100UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3058": {
+  "board": "HTK1100UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3059": {
+  "board": "Epomaker Glyph",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3060": {
+  "board": "TK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3062": {
+  "board": "JK82-2",
+  "rainbow": 8,
+  "fixed": 0,
+  "source": "gearhub-20260905/5c49a73d.js"
+ },
+ "3063": {
+  "board": "FK51H0-B",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3065": {
+  "board": "NS87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3066": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3067": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3068": {
+  "board": "LF67R1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3069": {
+  "board": "TK35",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3070": {
+  "board": "TK35",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3071": {
+  "board": "GKG87-MK813",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3075": {
+  "board": "GK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3076": {
+  "board": "Varna Atlas",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3077": {
+  "board": "3MRGB-209",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3078": {
+  "board": "H60HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3079": {
+  "board": "H60HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3085": {
+  "board": "NX87PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3086": {
+  "board": "X82HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3087": {
+  "board": "CX68-2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3088": {
+  "board": "Hammerwolf",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3089": {
+  "board": "Final 75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3091": {
+  "board": "FUN68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3095": {
+  "board": "5087 V3",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3096": {
+  "board": "B87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3097": {
+  "board": "KF112",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3099": {
+  "board": "Verve68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3100": {
+  "board": "RT75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3102": {
+  "board": "3MRGB-208",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3103": {
+  "board": "JK61",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/1803be99.js"
+ },
+ "3104": {
+  "board": "YUNZII E87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3106": {
+  "board": "KA67",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3108": {
+  "board": "TIRUS HE80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3111": {
+  "board": "VK NB 68 Max",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3112": {
+  "board": "NS87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3113": {
+  "board": "MOD007 V5 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3114": {
+  "board": "Rampage Kaisel",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/4280c180.js"
+ },
+ "3115": {
+  "board": "IROK ND_63",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/f1ce584b.js"
+ },
+ "3116": {
+  "board": "VK 99 MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3117": {
+  "board": "ACH105",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3118": {
+  "board": "ZEUS75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3121": {
+  "board": "K77-B",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3122": {
+  "board": "MK20C",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3123": {
+  "board": "R85HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3125": {
+  "board": "K2506",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3126": {
+  "board": "K2506 UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3127": {
+  "board": "5075 V3",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3129": {
+  "board": "5075 VЗ HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3131": {
+  "board": "5087 V3 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3135": {
+  "board": "X500PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3137": {
+  "board": "GK6940 ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3138": {
+  "board": "TK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3140": {
+  "board": "MATATAKI(JIS RIDDLE)",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3142": {
+  "board": "JK61",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/1803be99.js"
+ },
+ "3144": {
+  "board": "75% HE Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3145": {
+  "board": "6990",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/3df04166.js"
+ },
+ "3146": {
+  "board": "AIR68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3147": {
+  "board": "FUN68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3148": {
+  "board": "Kreo Swarm 65",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3151": {
+  "board": "ASTRAL",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3152": {
+  "board": "RT100 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3155": {
+  "board": "Q75HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3156": {
+  "board": "XXY-820 UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3157": {
+  "board": "Q75HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3158": {
+  "board": "Dravox",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3159": {
+  "board": "Z68A",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3165": {
+  "board": "VK99 Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3166": {
+  "board": "KX69HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3167": {
+  "board": "TK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3171": {
+  "board": "K69",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3174": {
+  "board": "HTK1180",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3175": {
+  "board": "HTK1180UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3176": {
+  "board": "HTK1181",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3177": {
+  "board": "MOKURU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3179": {
+  "board": "Y98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3186": {
+  "board": "GKG108-MK921",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3189": {
+  "board": "DS KEY",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3193": {
+  "board": "KCC04A",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3194": {
+  "board": "VK MAG 68 Max",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3195": {
+  "board": "MK658",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3196": {
+  "board": "K87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3198": {
+  "board": "S87 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3203": {
+  "board": "MG75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3204": {
+  "board": "MK9060",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3205": {
+  "board": "HTK4100UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3206": {
+  "board": "OBSIDIAN II",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3211": {
+  "board": "PL108W",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3212": {
+  "board": "Y75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3213": {
+  "board": "Singular Core",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3215": {
+  "board": "IK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3217": {
+  "board": "HTK4160EU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3218": {
+  "board": "ALUX60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3219": {
+  "board": "RT68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3221": {
+  "board": "X820pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3222": {
+  "board": "MK11",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3223": {
+  "board": "RT75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3224": {
+  "board": "MK25070",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3225": {
+  "board": "ZAP68SE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3226": {
+  "board": "YZ75 PRO-CZ",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3236": {
+  "board": "XC-1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3237": {
+  "board": "Neon75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3239": {
+  "board": "SN012",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3240": {
+  "board": "Akira SK13",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3242": {
+  "board": "H60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3243": {
+  "board": "KX78HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3244": {
+  "board": "A68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3245": {
+  "board": "MG108B",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3246": {
+  "board": "yumi68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3247": {
+  "board": "VK 75 Max",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3248": {
+  "board": "APEX75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3250": {
+  "board": "VK Cyber 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3257": {
+  "board": "QY98 Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3264": {
+  "board": "C84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3267": {
+  "board": "Maegnus Magnetic Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3268": {
+  "board": "EvoFox Ronin X75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3269": {
+  "board": "Shine68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3270": {
+  "board": "Shine68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3271": {
+  "board": "MK9010",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3276": {
+  "board": "VK 87 V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3277": {
+  "board": "X98 V3",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3278": {
+  "board": "RAPID",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3280": {
+  "board": "X87S",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3281": {
+  "board": "HTK1160UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3282": {
+  "board": "VM108 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3284": {
+  "board": "K1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3289": {
+  "board": "VK Cyber 68PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3290": {
+  "board": "DK68 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3291": {
+  "board": "Coke V68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3292": {
+  "board": "AST V68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3293": {
+  "board": "C98D",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3294": {
+  "board": "N-J100 V1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3298": {
+  "board": "PanteonT27",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3299": {
+  "board": "FUN60 MAX",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3302": {
+  "board": "GK505 Eon",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3305": {
+  "board": "C87D",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3306": {
+  "board": "Evie Alice01",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3311": {
+  "board": "K21 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3316": {
+  "board": "HG68 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3318": {
+  "board": "HTK1100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3319": {
+  "board": "HTK3100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3320": {
+  "board": "HTK4100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3330": {
+  "board": "MG108B",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/d347b344.js"
+ },
+ "3331": {
+  "board": "Y98 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3332": {
+  "board": "RK A72HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3333": {
+  "board": "RK A72HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3334": {
+  "board": "K85",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3335": {
+  "board": "X80HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3336": {
+  "board": "NX108HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3337": {
+  "board": "ZEUS87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3339": {
+  "board": "MK25076",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3340": {
+  "board": "KM82 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3342": {
+  "board": "H60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3343": {
+  "board": "MK132",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3344": {
+  "board": "CMK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3345": {
+  "board": "G1011",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3349": {
+  "board": "X128B",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3350": {
+  "board": "K2516",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3351": {
+  "board": "XS98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3354": {
+  "board": "GMK80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/e708e815.js"
+ },
+ "3355": {
+  "board": "Renegade",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3356": {
+  "board": "KF109-72",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3358": {
+  "board": "Fierce-GK7",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3362": {
+  "board": "Magic A68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3363": {
+  "board": "MK25075",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3364": {
+  "board": "GXT1873 Revyn",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/9406d682.js"
+ },
+ "3365": {
+  "board": "EpomakerHE108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3366": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3367": {
+  "board": "Magic A75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3371": {
+  "board": "GK8640GW PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3376": {
+  "board": "8670",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/db0b45b7.js"
+ },
+ "3379": {
+  "board": "RK-X44-68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/b6cf237a.js"
+ },
+ "3380": {
+  "board": "MK25020",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3383": {
+  "board": "E7 68 PRO V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3384": {
+  "board": "BJ75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3386": {
+  "board": "Beat65",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3388": {
+  "board": "R701",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3389": {
+  "board": "AMGK80-001",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3390": {
+  "board": "VK MAG 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3403": {
+  "board": "HOWL 75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3404": {
+  "board": "KF305",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3409": {
+  "board": "STRIKE 700 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3411": {
+  "board": "CMK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3412": {
+  "board": "VK87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3413": {
+  "board": "971643",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3414": {
+  "board": "HG68HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3415": {
+  "board": "218",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3418": {
+  "board": "GGDJ104",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3419": {
+  "board": "MK25072",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/93e02f0e.js"
+ },
+ "3421": {
+  "board": "8670",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/26c82641.js"
+ },
+ "3422": {
+  "board": "Y108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3425": {
+  "board": "PSY P1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3427": {
+  "board": "Legion K98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3429": {
+  "board": "FUN68 ISO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3430": {
+  "board": "MK100T",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3431": {
+  "board": "Mi60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3436": {
+  "board": "H60-Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3437": {
+  "board": "HOWL 75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3438": {
+  "board": "X87Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3439": {
+  "board": "FUEGO GKB904",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3445": {
+  "board": "S98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3447": {
+  "board": "QK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3449": {
+  "board": "702",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3450": {
+  "board": "VG-209-BK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3451": {
+  "board": "X85PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3455": {
+  "board": "Kiiboom phantom81 V4",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3456": {
+  "board": "MK1064",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3459": {
+  "board": "NJ81-CP V3",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3460": {
+  "board": "Verve68T",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3461": {
+  "board": "X820UItra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3463": {
+  "board": "Verve68",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3464": {
+  "board": "H64 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3465": {
+  "board": "H64 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3466": {
+  "board": "NJ80-CP V3",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3467": {
+  "board": "H60-Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3468": {
+  "board": "H60-Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3469": {
+  "board": "Lethal-GK1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3473": {
+  "board": "ER 75PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3474": {
+  "board": "75% HE Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3475": {
+  "board": "GK7 MX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3476": {
+  "board": "M75pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3477": {
+  "board": "R86UItra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3478": {
+  "board": "XXY-820",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3481": {
+  "board": "SWIFT X85",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3482": {
+  "board": "TKG82WD8",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3486": {
+  "board": "X87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3487": {
+  "board": "K84-CZ",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3492": {
+  "board": "M101",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3493": {
+  "board": "M101",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3495": {
+  "board": "ADXMK1926",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3496": {
+  "board": "NJ98-CP V4",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3498": {
+  "board": "Wu06",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3499": {
+  "board": "Wu06",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3501": {
+  "board": "GK1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3502": {
+  "board": "X87S",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3503": {
+  "board": "MK25001",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3504": {
+  "board": "X85PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3506": {
+  "board": "R83",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3508": {
+  "board": "yumi68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3511": {
+  "board": "N98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3512": {
+  "board": "AGK75 U2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3513": {
+  "board": "Core68HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3516": {
+  "board": "MK980",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3518": {
+  "board": "EPOMAKER HE75 V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3520": {
+  "board": "KB98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3521": {
+  "board": "NJ80-AP800",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3522": {
+  "board": "AJ68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3523": {
+  "board": "Y87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3524": {
+  "board": "FL750",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3525": {
+  "board": "ST-MKS98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3526": {
+  "board": "Jelly75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3528": {
+  "board": "NX98PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3529": {
+  "board": "WALKER 75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3530": {
+  "board": "K73",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3531": {
+  "board": "K73",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3532": {
+  "board": "Luoyika K98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3533": {
+  "board": "AK1980W",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3536": {
+  "board": "AMGK80-001",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3537": {
+  "board": "AMGK80-001",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3539": {
+  "board": "GP87HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3542": {
+  "board": "D75HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3547": {
+  "board": "Flame65S",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3548": {
+  "board": "K60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3549": {
+  "board": "B98Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3552": {
+  "board": "HAVOC 75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3554": {
+  "board": "RO-MJ-97C",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3556": {
+  "board": "D98HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3558": {
+  "board": "Vantage75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3561": {
+  "board": "C84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3562": {
+  "board": "C87P",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3563": {
+  "board": "C98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3564": {
+  "board": "F108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3566": {
+  "board": "8670",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3567": {
+  "board": "AGX60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3568": {
+  "board": "CHOC 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3569": {
+  "board": "MK100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3570": {
+  "board": "KB900L",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3571": {
+  "board": "C98 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3573": {
+  "board": "TH80 V2",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/94a2a56d.js"
+ },
+ "3574": {
+  "board": "MIST75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3575": {
+  "board": "GK-98N",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3576": {
+  "board": "Krux Morr",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3578": {
+  "board": "Magnetic Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3581": {
+  "board": "VK 87 Max V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3583": {
+  "board": "AJ100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3587": {
+  "board": "Zero 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3588": {
+  "board": "KB904L",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3589": {
+  "board": "GXT873 Acira",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/9f1b4b7a.js"
+ },
+ "3590": {
+  "board": "TK75 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3591": {
+  "board": "TK75 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3595": {
+  "board": "STRIKE 700 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3598": {
+  "board": "Zero 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3599": {
+  "board": "SKYFALL 80 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3600": {
+  "board": "HTK4180",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3601": {
+  "board": "HTK4180EU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3602": {
+  "board": "HTK4160UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3603": {
+  "board": "HTK4160",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3604": {
+  "board": "HTK4160EU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3605": {
+  "board": "HTK3860UA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3606": {
+  "board": "HTK3860",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3607": {
+  "board": "HTK3860EU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3608": {
+  "board": "GXT1873 Revyn",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/022ee7d3.js"
+ },
+ "3609": {
+  "board": "Zero 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3611": {
+  "board": "Zero 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3612": {
+  "board": "SayRose B67",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3613": {
+  "board": "HE75 V2 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3615": {
+  "board": "DK84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3616": {
+  "board": "DK84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3617": {
+  "board": "DK61",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3618": {
+  "board": "DK61",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3620": {
+  "board": "ZEUS75 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3624": {
+  "board": "GV10M-8K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3626": {
+  "board": "K81Max",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3629": {
+  "board": "HTK3880EU",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3631": {
+  "board": "KOOMZE H75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3633": {
+  "board": "Epomaker EK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3638": {
+  "board": "KY MK85",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3639": {
+  "board": "KOOMZE H98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3645": {
+  "board": "Evie PAD FT02",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3647": {
+  "board": "S87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3648": {
+  "board": "EvoFox Ronin X75 Plus",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3649": {
+  "board": "Force98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3650": {
+  "board": "R68HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3654": {
+  "board": "TX87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3655": {
+  "board": "TX87PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3662": {
+  "board": "H60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3663": {
+  "board": "C800 ALU",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/0524fc53.js"
+ },
+ "3664": {
+  "board": "HE68 Llte",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3669": {
+  "board": "Ronin HS65",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3670": {
+  "board": "GY-01",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3671": {
+  "board": "TX108",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3672": {
+  "board": "TX108PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3673": {
+  "board": "TH80 V3 MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3674": {
+  "board": "TH65 Max",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/c578de66.js"
+ },
+ "3675": {
+  "board": "MK10",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3676": {
+  "board": "Magni 330",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3677": {
+  "board": "Hawk Gaming HK610S",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3678": {
+  "board": "FK51H4 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3679": {
+  "board": "T80HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3682": {
+  "board": "K67",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3683": {
+  "board": "K67",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3685": {
+  "board": "GGDJ104",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3687": {
+  "board": "TK75-V7",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3688": {
+  "board": "TK75-V7",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3691": {
+  "board": "HE60 Wired",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3692": {
+  "board": "HE60 Wireless",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3693": {
+  "board": "NS75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3694": {
+  "board": "8670",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/380a2236.js"
+ },
+ "3697": {
+  "board": "VELOX 6701",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3699": {
+  "board": "ES75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3701": {
+  "board": "MATATAKI (JIS coalowl)",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3702": {
+  "board": "HK610",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3703": {
+  "board": "G84 HE JIS",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3705": {
+  "board": "KF210-B",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3706": {
+  "board": "Redragon K736-PRO-M(PT) 3 Mode gaming keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3708": {
+  "board": "SK61HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3709": {
+  "board": "JRK108Pro Ultra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3710": {
+  "board": "YK68 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3711": {
+  "board": "KE87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3714": {
+  "board": "Magic 80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3716": {
+  "board": "BJ87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3718": {
+  "board": "SKY-PAD",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3719": {
+  "board": "M68 HE PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3720": {
+  "board": "CK75SE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3721": {
+  "board": "XL98-V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3722": {
+  "board": "FUN60 PRO ISO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3723": {
+  "board": "K48",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3725": {
+  "board": "TIRUS HE80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3726": {
+  "board": "S98 Max",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3727": {
+  "board": "HE60 Lite",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3728": {
+  "board": "PV82-V9",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3731": {
+  "board": "NX87PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3732": {
+  "board": "NX87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3733": {
+  "board": "K13",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3734": {
+  "board": "DK82HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3735": {
+  "board": "DK68HE-UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3736": {
+  "board": "DK968HE-UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3737": {
+  "board": "R98ULTRA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3740": {
+  "board": "VM71",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3741": {
+  "board": "VM87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3743": {
+  "board": "R98HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3744": {
+  "board": "YG102C",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3746": {
+  "board": "Epomaker_HE60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3747": {
+  "board": "GV8M-8K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3748": {
+  "board": "R98GT",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3750": {
+  "board": "Bladesage Q5",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3754": {
+  "board": "R98PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3755": {
+  "board": "RT75PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3756": {
+  "board": "Alpha75HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3757": {
+  "board": "Magnetic Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3758": {
+  "board": "KG993W",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3759": {
+  "board": "HE60 Lite",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3760": {
+  "board": "HK550",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3763": {
+  "board": "KOOMZE H71",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3764": {
+  "board": "G75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3765": {
+  "board": "Kiboom phantom81 V4",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3771": {
+  "board": "HK440",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3774": {
+  "board": "R96ULTRA",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3775": {
+  "board": "K19-8K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3780": {
+  "board": "K98PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3787": {
+  "board": "MK26013",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3788": {
+  "board": "R96PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3789": {
+  "board": "K21PRO-B",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3793": {
+  "board": "NJ98-CP V4S",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3794": {
+  "board": "777",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3795": {
+  "board": "TOP75J",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3796": {
+  "board": "X68MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3797": {
+  "board": "K75 Ultra UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3798": {
+  "board": "Zero 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3799": {
+  "board": "Zero 68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3803": {
+  "board": "HKS21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3804": {
+  "board": "SK75 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3805": {
+  "board": "DS KEY",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3809": {
+  "board": "HE986 UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3812": {
+  "board": "MATATAKI US",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3814": {
+  "board": "DK82HE UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3816": {
+  "board": "K21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3817": {
+  "board": "DK968",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3819": {
+  "board": "BGAM-KITTY",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "3823": {
+  "board": "SG9068",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3825": {
+  "board": "CR-F81",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3831": {
+  "board": "BJ87",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3833": {
+  "board": "TK75HEV2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3834": {
+  "board": "TK84-V1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3835": {
+  "board": "Y21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3837": {
+  "board": "DK968",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3838": {
+  "board": "MAG84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3840": {
+  "board": "K986",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3843": {
+  "board": "IF99 PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3844": {
+  "board": "K19-1K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3845": {
+  "board": "VK63",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3847": {
+  "board": "K75PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3848": {
+  "board": "ST-MKS98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3853": {
+  "board": "FUN60 Ultra TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "monsgeek-20260911/26f7a06d.js"
+ },
+ "3856": {
+  "board": "MK1061C",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3858": {
+  "board": "SN020",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3862": {
+  "board": "MK1176",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3863": {
+  "board": "MOK84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3864": {
+  "board": "H60-C",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3865": {
+  "board": "X820SE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3867": {
+  "board": "K68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3870": {
+  "board": "X83PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3871": {
+  "board": "HE968JP",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3872": {
+  "board": "K68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3878": {
+  "board": "GK8140G",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3883": {
+  "board": "HE75 V2 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3884": {
+  "board": "VGN Neon75 Air",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3885": {
+  "board": "VGN Neon75 Air",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3886": {
+  "board": "X83PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3901": {
+  "board": "MATATAKI JIS",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3902": {
+  "board": "MATATAKI JIS",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3903": {
+  "board": "R98HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3904": {
+  "board": "A0104",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3905": {
+  "board": "MKS82",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3906": {
+  "board": "FUN60 MAX",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "3908": {
+  "board": "X83PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3909": {
+  "board": "R86HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3910": {
+  "board": "R86PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3911": {
+  "board": "SG9068",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3915": {
+  "board": "YUNZII C21 Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3920": {
+  "board": "X83UItra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3921": {
+  "board": "SG9002 US",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3922": {
+  "board": "X820UItra",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3924": {
+  "board": "K114R",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3931": {
+  "board": "KY-MK231",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3933": {
+  "board": "K75TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3934": {
+  "board": "Ronin HS65",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3935": {
+  "board": "MS75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3937": {
+  "board": "GS75B",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3939": {
+  "board": "TK84-V1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3942": {
+  "board": "K75PRO V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3946": {
+  "board": "SG8948",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/c930c326.js"
+ },
+ "3947": {
+  "board": "SG9000 UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3948": {
+  "board": "MATATAKI US",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3949": {
+  "board": "H60 PRO UK",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3950": {
+  "board": "MAX K68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3953": {
+  "board": "KY-MK231",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3957": {
+  "board": "X68HE BR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3959": {
+  "board": "GXT873 Acira",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3963": {
+  "board": "T75 MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3965": {
+  "board": "ST-MKS98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3968": {
+  "board": "Maegnus Magnetic Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3970": {
+  "board": "ST-MKS82",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3971": {
+  "board": "AK8671",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3973": {
+  "board": "R86HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3980": {
+  "board": "Air 108 metallic",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3981": {
+  "board": "SG8948 UK",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/b8336f66.js"
+ },
+ "3982": {
+  "board": "STRIKE 700 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3984": {
+  "board": "MK232-V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3986": {
+  "board": "IK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3988": {
+  "board": "Zero75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3989": {
+  "board": "Magni XV",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3990": {
+  "board": "GK7002",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3991": {
+  "board": "X83PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3992": {
+  "board": "SG9004",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/d5701f87.js"
+ },
+ "3994": {
+  "board": "AK8752",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3996": {
+  "board": "ST-MKS98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3998": {
+  "board": "G68",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "3999": {
+  "board": "Minnie75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4001": {
+  "board": "T100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4002": {
+  "board": "N98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4004": {
+  "board": "MK230",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4006": {
+  "board": "ST-MKS98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4008": {
+  "board": "ST-MKS82",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4012": {
+  "board": "M86",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4015": {
+  "board": "Wood 98 Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4022": {
+  "board": "GEO75HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4024": {
+  "board": "YUNZII Wood 21 Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4030": {
+  "board": "MOD007B V3-HE(UK)",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/05ddf9b8.js"
+ },
+ "4035": {
+  "board": "Swift68 HE Lite",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4037": {
+  "board": "Swift68 Knob",
+  "rainbow": 6,
+  "fixed": 7,
+  "source": "gearhub-20260905/c70feedd.js"
+ },
+ "4038": {
+  "board": "LUNA Grid98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ },
+ "4039": {
+  "board": "X85",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4044": {
+  "board": "Muse75 Pro",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/f36b7f14.js"
+ },
+ "4045": {
+  "board": "Muse65 Pro",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/44a7e426.js"
+ },
+ "4047": {
+  "board": "AL21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4048": {
+  "board": "DK82HE US",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4051": {
+  "board": "MKKB021",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4057": {
+  "board": "CR104",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4067": {
+  "board": "Votin 84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4068": {
+  "board": "R98PROHE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4070": {
+  "board": "SG9077",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4071": {
+  "board": "G84HE  PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4072": {
+  "board": "KBDIY QK75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4076": {
+  "board": "KG183",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4077": {
+  "board": "K21",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4079": {
+  "board": "HE61",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4081": {
+  "board": "AK8402",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4084": {
+  "board": "X85PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4086": {
+  "board": "KG25",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4088": {
+  "board": "FUN87 HE",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "4089": {
+  "board": "GK6220GW",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4094": {
+  "board": "K86",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4095": {
+  "board": "ST-MKS98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4096": {
+  "board": "K1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4097": {
+  "board": "NJ98EP-V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4105": {
+  "board": "ROYALAXE XL75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4106": {
+  "board": "AK029 V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4108": {
+  "board": "7017",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4109": {
+  "board": "X98PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4110": {
+  "board": "AK029 V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4111": {
+  "board": "NERA HE65",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4112": {
+  "board": "Air 108 metallic",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4113": {
+  "board": "HE68 Pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4115": {
+  "board": "stars21v2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4121": {
+  "board": "GK6220G",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4122": {
+  "board": "GK6230GW",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4123": {
+  "board": "GK6230G",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4125": {
+  "board": "GK6950 SE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4126": {
+  "board": "K20PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4128": {
+  "board": "SORA RGB",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4129": {
+  "board": "YM75 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4130": {
+  "board": "JP-K98",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4131": {
+  "board": "CX77",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4132": {
+  "board": "VGN Neon75 Turbo",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4133": {
+  "board": "Gaming Keyboard",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4136": {
+  "board": "AK8754-CZ",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4137": {
+  "board": "Vanta X3",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4138": {
+  "board": "k808",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4139": {
+  "board": "LUNOR HE75",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4140": {
+  "board": "NJ81-MAX",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4142": {
+  "board": "AJ100",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4143": {
+  "board": "QK66",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4144": {
+  "board": "K2606 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4145": {
+  "board": "GK-A68MW",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4147": {
+  "board": "X160-B",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4151": {
+  "board": "GT60 V2",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4153": {
+  "board": "KF20",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4157": {
+  "board": "Vanta X1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4158": {
+  "board": "M1 V5 TMR ISO",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "monsgeek-20260911/a0c3a7d8.js"
+ },
+ "4161": {
+  "board": "K811",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4166": {
+  "board": "CNC60",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4169": {
+  "board": "NJ68-AP700",
+  "rainbow": 8,
+  "fixed": 0,
+  "source": "gearhub-20260905/d64c41c0.js"
+ },
+ "4178": {
+  "board": "Cake65",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4179": {
+  "board": "PL108W",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4190": {
+  "board": "GS75B",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4192": {
+  "board": "KEYZ ELITE 400 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4194": {
+  "board": "MJ-82G",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4195": {
+  "board": "SG9068-E",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4196": {
+  "board": "KC84pro",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4197": {
+  "board": "MKS84",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4201": {
+  "board": "K21-1K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4202": {
+  "board": "K19-1K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4203": {
+  "board": "Y75pro-V1",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4204": {
+  "board": "KEYZ ELITE 300 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4207": {
+  "board": "NJ81-MAX CP",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4211": {
+  "board": "M1 V5 TMR ISO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "monsgeek-20260911/26f7a06d.js"
+ },
+ "4212": {
+  "board": "M1 V5 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "monsgeek-20260911/26f7a06d.js"
+ },
+ "4214": {
+  "board": "SN032",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4216": {
+  "board": "AK8752",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4217": {
+  "board": "K004",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4221": {
+  "board": "NX98PRO",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4223": {
+  "board": "MJ-98G",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4224": {
+  "board": "AK8753",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4226": {
+  "board": "TK75 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4227": {
+  "board": "TK75 TMR",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4230": {
+  "board": "Phantom30 HE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4231": {
+  "board": "MVP",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4233": {
+  "board": "GK8774GW",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4239": {
+  "board": "GV10M-8K",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4252": {
+  "board": "GMK65",
+  "rainbow": 7,
+  "fixed": 8,
+  "source": "gearhub-20260905/3372530e.js"
+ },
+ "4253": {
+  "board": "Zeno80",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/dad89647.js"
+ },
+ "4255": {
+  "board": "YUNZII B75 PRO ISO-DE",
+  "rainbow": 8,
+  "fixed": 7,
+  "source": "gearhub-20260905/63fca49c.js"
+ }
+}

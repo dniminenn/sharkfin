@@ -402,7 +402,7 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
             />
           </label>
         </div>
-        {!colorless && (owned || param.dazzle) && (
+        {!colorless && (
           <p className="text-xs text-muted-foreground">
             {owned ? (
               <>
@@ -416,7 +416,7 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
               </>
             ) : (
               <>
-                {t("Seeing one solid colour instead of a rainbow?")}{" "}
+                {t("Rainbow where you picked a colour, or one colour where you asked for the rainbow?")}{" "}
                 <button
                   className="text-primary underline underline-offset-2"
                   onClick={() => applySwap(!swapped)}
