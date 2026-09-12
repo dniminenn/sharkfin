@@ -1,4 +1,4 @@
-Alpha. Back up from the Device tab before you rely on it.
+Beta. Back up from the Device tab before you rely on it.
 
 ## What changed in 0.8.0
 

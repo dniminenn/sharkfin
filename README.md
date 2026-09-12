@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/dniminenn/sharkfin/actions/workflows/ci.yml"><img src="https://github.com/dniminenn/sharkfin/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <img src="https://img.shields.io/badge/status-alpha-orange" alt="alpha" />
+  <img src="https://img.shields.io/badge/status-beta-blue" alt="beta" />
   <img src="https://img.shields.io/badge/Rust-CE422B?logo=rust&logoColor=white" alt="Rust" />
   <img src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue" alt="GPL-3.0-or-later" />
 </p>
@@ -35,7 +35,7 @@ channel. sharkfin never flashes firmware.
 
 ## Supported boards
 
-**Alpha, so back up first.**
+**Beta, so back up first.**
 
 1112 of 1316 accept changes, 200 more once the board itself has said which
 command set it speaks, 4 are read-only. 331 are drawn out of the box
