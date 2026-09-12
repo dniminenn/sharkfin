@@ -138,8 +138,6 @@ slower than the vendor app at the same slider position and could not reach
 their fastest. Read out of the X65HE image: the speed byte is a frame
 divider that starts at 0 there, at 1 on yc500.
 
-The registry is 1154 boards, 4 of them confirmed on hardware.
-
 You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
 Edge or another Chromium browser. Same app, same keyboard.
