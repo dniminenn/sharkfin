@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // A board the registry does not know, described from its own answers. The
 // family came from the board, not from a file, so the owner sees what was
-// detected and allows writes with a click; the report flow is one click away
-// so the board gets a real entry.
+// detected and allows writes with a click. The check walks the board to
+// working and the report flow gets it a real entry; both are one click away.
 import { useState } from "react";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
@@ -14,10 +14,12 @@ import { allowUnregistered, type ConnectedDevice } from "@/lib/backend";
 export default function UnregisteredNotice({
   device,
   onAllowed,
+  onCheck,
   onContribute,
 }: {
   device: ConnectedDevice;
   onAllowed: () => void;
+  onCheck: () => void;
   onContribute: () => void;
 }) {
   const [busy, setBusy] = useState(false);
@@ -43,15 +45,18 @@ export default function UnregisteredNotice({
       <span className="min-w-0 flex-1 text-muted-foreground">
         {device.readOnly
           ? t(
-              "sharkfin has no command set on file for this keyboard. It answers like a {family} board, so sharkfin can read it. Allow changes to write to it, and please send a report so its entry can be completed.",
+              "sharkfin has no entry for this keyboard. It answers like a {family} board, so sharkfin can read it. Run setup to allow changes and get it working, and send a report so it gets an entry.",
               { family },
             )
           : t(
-              "Changes allowed for this session. Please send a report so this board can be added.",
+              "Changes allowed. Please send a report so this board can be added.",
             )}
       </span>
+      <Button size="sm" onClick={onCheck}>
+        {t("Run setup")}
+      </Button>
       {device.readOnly && (
-        <Button size="sm" onClick={allow} disabled={busy}>
+        <Button size="sm" variant="ghost" onClick={allow} disabled={busy}>
           {t("Allow changes")}
         </Button>
       )}

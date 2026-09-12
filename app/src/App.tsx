@@ -24,7 +24,10 @@ import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { t, LOCALES, locale, setLocale } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
+import { loadOwner } from "@/lib/owner-record";
+import { loadWizard, setupDone } from "@/lib/wizard";
 import {
+  applyOwnerRecord,
   scan,
   type ConnectedDevice,
   type DiscoveredUnknown,
@@ -40,9 +43,12 @@ import DevicePage from "@/pages/Device";
 import PaintPage from "@/pages/Paint";
 import MacrosPage from "@/pages/Macros";
 import ContributePage from "@/pages/Contribute";
+import CheckPage from "@/pages/Check";
+import CheckIcon from "@/components/CheckIcon";
 import SwitchesPage, { hasSwitches } from "@/pages/Switches";
 
 type Page =
+  | "check"
   | "lighting"
   | "paint"
   | "keymap"
@@ -53,7 +59,12 @@ type Page =
 
 const readOnly = (d: ConnectedDevice) => d.readOnly;
 
-const NAV: { id: Page; label: string; icon: typeof Lightbulb }[] = [
+const NAV: {
+  id: Page;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
+  { id: "check", label: "Setup", icon: CheckIcon },
   { id: "lighting", label: "Lighting", icon: Lightbulb },
   { id: "paint", label: "Paint", icon: Brush },
   { id: "keymap", label: "Keys", icon: Keyboard },
@@ -90,6 +101,36 @@ export default function App() {
       setPage("contribute");
     }
   }, [device, unknown]);
+
+  // A board the owner has walked through the check keeps what the check
+  // established. The record is applied once per connect; it sends nothing
+  // to the board, so a doubled effect is harmless.
+  const applied = useRef<string | null>(null);
+  useEffect(() => {
+    if (!device) {
+      applied.current = null;
+      return;
+    }
+    const key = `${device.spec.id}:${device.path}`;
+    if (applied.current === key) return;
+    applied.current = key;
+    const record = loadOwner(device.spec.id);
+    if (!record) return;
+    applyOwnerRecord(record)
+      .then(() => doScan())
+      .catch(() => {
+        applied.current = null;
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [device?.spec.id, device?.path]);
+
+  // The check earns a place in the nav on a board sharkfin does not know
+  // or cannot write, until it has been run once. Everywhere else it is a
+  // button on the Contribute tab.
+  const needsCheck =
+    !!device &&
+    (device.spec.unregistered || device.readOnly) &&
+    !setupDone(loadWizard(device.spec.id));
 
   const doScan = useCallback(async () => {
     try {
@@ -128,7 +169,10 @@ export default function App() {
         </div>
         <Separator />
         <nav className="flex flex-col gap-1 p-2">
-          {NAV.filter(({ id }) => id !== "switches" || hasSwitches(device)).map(
+          {NAV.filter(
+            ({ id }) =>
+              (id !== "switches" || hasSwitches(device)) && (id !== "check" || needsCheck),
+          ).map(
             ({ id, label, icon: Icon }) => (
               <button
                 key={id}
@@ -235,6 +279,7 @@ export default function App() {
           <UnregisteredNotice
             device={device}
             onAllowed={doScan}
+            onCheck={() => setPage("check")}
             onContribute={() => setPage("contribute")}
           />
         ) : (
@@ -244,6 +289,13 @@ export default function App() {
           )
         )}
         <div className="flex-1 overflow-auto">
+          {page === "check" && (
+            <CheckPage
+              device={device}
+              onContribute={() => setPage("contribute")}
+              onRescan={doScan}
+            />
+          )}
           {page === "lighting" && <LightingPage device={device} />}
           {page === "paint" && <PaintPage device={device} />}
           {page === "keymap" && (
@@ -253,7 +305,11 @@ export default function App() {
           {page === "macros" && <MacrosPage device={device} />}
           {page === "settings" && <DevicePage device={device} />}
           {page === "contribute" && (
-            <ContributePage device={device} unknown={unknown} />
+            <ContributePage
+              device={device}
+              unknown={unknown}
+              onCheck={() => setPage("check")}
+            />
           )}
         </div>
       </main>

@@ -34,6 +34,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::scan,
             commands::allow_unregistered,
+            commands::apply_owner_record,
+            commands::set_switch_trial,
             commands::get_switches,
             commands::set_switch_key,
             commands::set_switch_keys,

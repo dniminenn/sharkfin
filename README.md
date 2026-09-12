@@ -22,10 +22,12 @@ Remap keys, set the RGB, record macros and change device settings on 1316
 keyboards built on ROYUAN hardware: Attack Shark, Hator, ikbc, NOPPOO,
 Epomaker, Akko, MEETION, rongyuan and more.
 
-**Use a USB cable.** The 2.4 GHz receiver also works when it relays the
-settings channel; some receivers do not, and then only the cable does.
-Bluetooth has no settings channel. Factory reset and display pictures need
-the cable. sharkfin never flashes firmware.
+**Use a USB cable.** Over a 2.4 GHz receiver sharkfin reads whatever the
+receiver relays: some carry the settings channel, some carry nothing, and
+the same model ships with both, so there is no per-board answer. Plug the
+receiver in and the app tells you which yours is. Writes need the cable:
+factory reset, display pictures and Setup. Bluetooth has no settings
+channel. sharkfin never flashes firmware.
 
 **[Use it in a browser](https://app.getsharkfin.com/) ·
 [Download](https://github.com/dniminenn/sharkfin/releases) ·

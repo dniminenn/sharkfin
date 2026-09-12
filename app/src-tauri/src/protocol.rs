@@ -1777,7 +1777,10 @@ impl LedParam {
         };
         if !dazzle && nibble != fixed {
             if let Some(&(pr, pg, pb)) = presets.get(nibble as usize) {
-                if !matches!(mode, MODE_MUSIC_2 | MODE_MUSIC_3 | MODE_USER_PICTURE) {
+                if !matches!(
+                    mode,
+                    MODE_MUSIC_2 | MODE_MUSIC_3 | MODE_USER_PICTURE | MODE_SCREEN_COLOR
+                ) {
                     (r, g, b) = (pr, pg, pb);
                 }
             }
@@ -2267,6 +2270,24 @@ mod tests {
         let p = LedParam::from_reply(&reply).unwrap();
         assert_eq!((p.r, p.g, p.b), (0x00, 0xFF, 0xFF));
         assert!(!p.dazzle);
+    }
+
+    /// Screen Colour always goes out with a zero nibble, which is also
+    /// preset index 0. Reading it back must keep the board's own colour.
+    #[test]
+    fn led_screen_color_keeps_its_rgb() {
+        let mut reply = [0u8; 64];
+        reply[0] = cmd::GET_LEDPARAM;
+        reply[1] = MODE_SCREEN_COLOR;
+        reply[2] = 2;
+        reply[3] = 1;
+        reply[4] = 0;
+        reply[5..8].copy_from_slice(&[0x10, 0x20, 0xF0]);
+        let p = LedParam::from_reply(&reply).unwrap();
+        assert_eq!((p.r, p.g, p.b), (0x10, 0x20, 0xF0));
+        assert!(!p.dazzle);
+        let again = LedParam::from_reply(&p.to_packet()).map(|q| (q.r, q.g, q.b));
+        assert_eq!(again, None, "a packet is not a reply");
     }
 
     // The firmware reads the announce back byte for byte (0x23F1E in the

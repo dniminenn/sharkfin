@@ -123,6 +123,17 @@ export interface ScanResult {
 
 export type SwitchAccess = "none" | "read" | "write" | "global";
 
+/** The owner's answers about their own board, from the check. Flags land on
+ * the spec only for a board the registry does not know; `switchWrites` is
+ * the owner's felt round trip and applies to any board whose columns read. */
+export interface OwnerRecord {
+  allowed: boolean;
+  magnetic: boolean;
+  sideLight: boolean | null;
+  switchWrites: boolean;
+  profiles: number | null;
+}
+
 /** One key's magnetic-switch settings, millimetres. */
 export interface KeySwitch {
   slot: number;
@@ -201,6 +212,13 @@ export interface DeviceSettings {
 export const scan = () => invoke<ScanResult>("scan");
 /** The owner allows writes to a board the registry does not know, this session. */
 export const allowUnregistered = () => invoke<void>("allow_unregistered");
+/** What the owner established about this board in the check. Sends nothing;
+ * applied on every connect so the board keeps what the check unlocked. */
+export const applyOwnerRecord = (record: OwnerRecord) =>
+  invoke<void>("apply_owner_record", { record });
+/** Open one slot's switch columns to the check's felt test, or close it. */
+export const setSwitchTrial = (slot: number | null) =>
+  invoke<void>("set_switch_trial", { slot });
 export const getSwitches = () => invoke<SwitchSettings>("get_switches");
 export const setSwitchKey = (key: KeySwitch) => invoke<void>("set_switch_key", { key });
 /** One or two keys in one visit; a snap pair goes through here. */

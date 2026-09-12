@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { Bug, Check, Copy, FileDown, Keyboard } from "lucide-react";
+import CheckIcon from "@/components/CheckIcon";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PageHeader, Section } from "@/components/Page";
@@ -11,6 +12,7 @@ import { t } from "@/lib/i18n";
 import { deviceLabel } from "@/lib/brands";
 import { useBoardLayout } from "@/lib/layout-loader";
 import { layoutBundle } from "@/lib/layout-infer";
+import { checkReport, hasReport, loadWizard, setupDone } from "@/lib/wizard";
 import {
   buildId,
   contributionBundle,
@@ -36,15 +38,19 @@ function issueUrl(
 export default function ContributePage({
   device,
   unknown,
+  onCheck,
 }: {
   device: ConnectedDevice | null;
   unknown: DiscoveredUnknown | null;
+  onCheck: () => void;
 }) {
   const [version, setVersion] = useState<string | null>(null);
   const [bundle, setBundle] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   const { pending, inference, rejected } = useBoardLayout(device);
+  // A run of the check has answers to carry, whatever else the bundle says.
+  const checked = device ? loadWizard(device.spec.id) : null;
   // Answered neither as a keyboard nor as a receiver; nothing to report from it.
   const silent = !device && !!unknown && unknown.deviceId === null;
   // A registered board drawn from its built-in picture has nothing left
@@ -52,7 +58,12 @@ export default function ContributePage({
   // the owner replaced the built-in one; a rejection means none fit.
   // Either is what a report carries.
   const wanted =
-    !device || device.spec.unregistered || device.readOnly || !!inference || !!rejected;
+    !device ||
+    device.spec.unregistered ||
+    device.readOnly ||
+    !!inference ||
+    !!rejected ||
+    setupDone(checked);
 
   useEffect(() => {
     buildId()
@@ -74,6 +85,10 @@ export default function ContributePage({
             : null;
       if (picture) {
         text = text.replace(/```\s*$/, "") + "\n" + picture.replace(/^```\n/, "");
+      }
+      // The check's answers ride in the same fence.
+      if (device && hasReport(checked)) {
+        text = text.replace(/```\s*$/, "") + "\n" + checkReport(device, checked, version) + "\n```";
       }
       setBundle(text);
       setCopied(false);
@@ -152,6 +167,20 @@ export default function ContributePage({
           <p className="text-sm text-muted-foreground">
             {t("This device did not answer as a keyboard or as a receiver. Connect the keyboard by cable and it will appear here.")}
           </p>
+        )}
+
+        {device && (
+          <div className="flex flex-wrap items-center gap-3 text-sm">
+            <Button size="sm" variant="ghost" onClick={onCheck}>
+              <CheckIcon className="mr-1 h-3.5 w-3.5" />
+              {hasReport(checked) ? t("Run setup again") : t("Run setup")}
+            </Button>
+            <span className="text-muted-foreground">
+              {hasReport(checked)
+                ? t("its answers ride along with the bundle")
+                : t("a few tests and questions; a board that already works can skip it")}
+            </span>
+          </div>
         )}
 
         {!silent && (

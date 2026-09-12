@@ -401,7 +401,9 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     return () => {
       live = false;
     };
-  }, [name, id, readMatrices, attempt]);
+    // A magnetic yc500 board addresses its keymap pages differently, so a
+    // change to that flag makes every cached read stale.
+  }, [name, id, readMatrices, attempt, device?.spec.magnetic]);
 
   const confirm = useCallback(() => {
     setInference((inf) => {

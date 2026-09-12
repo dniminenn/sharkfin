@@ -3,7 +3,7 @@
 use std::time::{Duration, Instant};
 
 use parking_lot::Mutex;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::hid::{self, HidError, Link, Transport};
 use crate::protocol::hall;
@@ -36,6 +36,29 @@ struct Inner {
     /// than on the spec so the spec keeps describing the board as shipped.
     /// Cleared with the handle.
     led_swap: Option<bool>,
+    /// What the owner established about this board in the check, applied
+    /// by the frontend on every connect. Cleared with the handle.
+    owner: OwnerRecord,
+    /// One slot the check may write switch columns to while its felt test
+    /// runs on a lineage without firmware evidence. Nothing else opens;
+    /// the Switches page stays as it was. Cleared with the handle.
+    switch_trial: Option<u8>,
+}
+
+/// The owner's answers about their own board, from the check. The registry
+/// describes the board as shipped; this is what the owner has seen it do.
+/// Spec overlays land only on a board the registry does not know, so a
+/// registry entry is never contradicted by a click. `switch_writes` is the
+/// owner's felt round trip on a lineage whose firmware has not been read,
+/// and applies to any board whose columns can be read.
+#[derive(Clone, Copy, Debug, Default, Deserialize)]
+#[serde(rename_all = "camelCase", default)]
+pub struct OwnerRecord {
+    pub allowed: bool,
+    pub magnetic: bool,
+    pub side_light: Option<bool>,
+    pub switch_writes: bool,
+    pub profiles: Option<u8>,
 }
 
 struct OpenDevice {
@@ -55,14 +78,14 @@ struct OpenDevice {
 }
 
 impl OpenDevice {
-    fn connected(&self, unregistered_ok: bool) -> ConnectedDevice {
+    fn connected(&self, unregistered_ok: bool, owner_hall: bool) -> ConnectedDevice {
         let read_only =
             !self.spec.writes_supported() || (self.spec.unregistered && !unregistered_ok);
         ConnectedDevice {
             path: self.path.clone(),
             device_id: self.spec.id,
             read_only,
-            switches: switch_access(&self.spec, self.revision, read_only),
+            switches: switch_access(&self.spec, self.revision, read_only, owner_hall),
             revision: self.revision,
             spec: self.spec.clone(),
             link: self.transport.link(),
@@ -90,9 +113,16 @@ pub enum SwitchAccess {
     Global,
 }
 
-pub fn switch_access(spec: &DeviceSpec, revision: Option<u16>, read_only: bool) -> SwitchAccess {
+/// `owner_hall`: the owner's felt round trip stands in for firmware
+/// evidence on a board whose columns read.
+pub fn switch_access(
+    spec: &DeviceSpec,
+    revision: Option<u16>,
+    read_only: bool,
+    owner_hall: bool,
+) -> SwitchAccess {
     if spec.hall_reads(revision) {
-        if spec.hall_writes(revision) && !read_only {
+        if (spec.hall_writes(revision) || owner_hall) && !read_only {
             SwitchAccess::Write
         } else {
             SwitchAccess::Read
@@ -172,6 +202,8 @@ impl Default for AppState {
                 stalled: false,
                 unregistered_ok: false,
                 led_swap: None,
+                owner: OwnerRecord::default(),
+                switch_trial: None,
             }),
         }
     }
@@ -266,8 +298,9 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                 open.battery = receiver_battery(&open.transport);
             }
             let ok = inner.unregistered_ok;
+            let hall = inner.owner.switch_writes;
             return Ok(ScanResult {
-                connected: Some(inner.open.as_ref().unwrap().connected(ok)),
+                connected: Some(inner.open.as_ref().unwrap().connected(ok, hall)),
                 unknown: vec![],
                 open_failed: false,
                 stalled: false,
@@ -347,7 +380,9 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                     };
                     inner.unregistered_ok = false;
                     inner.led_swap = None;
-                    connected = Some(open.connected(false));
+                    inner.owner = OwnerRecord::default();
+                    inner.switch_trial = None;
+                    connected = Some(open.connected(false, false));
                     inner.open = Some(open);
                     break;
                 }
@@ -434,6 +469,55 @@ pub fn allow_unregistered(state: tauri::State<AppState>) -> Result<(), String> {
         Some(_) => Err("this board is in the registry; nothing to allow".into()),
         None => Err("no device connected".into()),
     }
+}
+
+/// Apply what the owner established in the check. Sends nothing. The
+/// frontend keeps the record by device id and applies it on every connect,
+/// so a board walked through the check once keeps what the check unlocked.
+#[tauri::command(async)]
+pub fn apply_owner_record(
+    state: tauri::State<AppState>,
+    record: OwnerRecord,
+) -> Result<(), String> {
+    let mut inner = state.inner.lock();
+    let open = inner.open.as_mut().ok_or("no device connected")?;
+    if open.spec.unregistered {
+        // The derived spec says no; the record is the only other word, so
+        // it sets the flag both ways and a withdrawn yes goes back to no.
+        open.spec.magnetic = record.magnetic;
+        open.spec.features.magnetic_switches = record.magnetic;
+        if let Some(side) = record.side_light {
+            open.spec.features.side_light = side;
+        }
+        if let Some(n) = record.profiles {
+            open.spec.profiles = n.clamp(1, 8);
+        }
+        if record.allowed {
+            inner.unregistered_ok = true;
+        }
+    }
+    // A record lands after a test, never during one, so no trial outlives it.
+    inner.switch_trial = None;
+    inner.owner = record;
+    Ok(())
+}
+
+/// Open one slot's switch columns to the check's felt test, or close it.
+/// Sends nothing. The test writes the key, reads it back, asks the owner,
+/// and puts it back; only after that does the owner record say whether the
+/// lineage may be written at all.
+#[tauri::command(async)]
+pub fn set_switch_trial(state: tauri::State<AppState>, slot: Option<u8>) -> Result<(), String> {
+    let mut inner = state.inner.lock();
+    let open = inner.open.as_ref().ok_or("no device connected")?;
+    if slot.is_some() && !open.spec.hall_reads(open.revision) {
+        return Err(format!(
+            "{} has no magnetic switches sharkfin can read",
+            open.spec.label()
+        ));
+    }
+    inner.switch_trial = slot;
+    Ok(())
 }
 
 fn receiver_battery(t: &Transport) -> Option<u8> {
@@ -777,7 +861,7 @@ pub fn set_key_layer(
         let inner = state.inner.lock();
         let open = inner.open.as_ref().ok_or("no device connected")?;
         if !matches!(
-            switch_access(&open.spec, open.revision, false),
+            switch_access(&open.spec, open.revision, false, inner.owner.switch_writes),
             SwitchAccess::Write | SwitchAccess::Global
         ) {
             return Err(format!(
@@ -1280,10 +1364,22 @@ pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSetting
     })
 }
 
-fn require_hall_writes(state: &tauri::State<AppState>) -> Result<hall::Format, String> {
+/// `slots`: the keys a write addresses, so the check's trial can open just
+/// those; `None` is a write to every key, which no trial covers.
+fn require_hall_writes(
+    state: &tauri::State<AppState>,
+    slots: Option<&[u8]>,
+) -> Result<hall::Format, String> {
     let inner = state.inner.lock();
     let open = inner.open.as_ref().ok_or("no device connected")?;
-    if !open.spec.hall_writes(open.revision) {
+    let reads = open.spec.hall_reads(open.revision);
+    let owner_hall = inner.owner.switch_writes && reads;
+    let trial = reads
+        && match (inner.switch_trial, slots) {
+            (Some(t), Some(s)) => !s.is_empty() && s.iter().all(|&k| k == t),
+            _ => false,
+        };
+    if !open.spec.hall_writes(open.revision) && !owner_hall && !trial {
         return Err(format!(
             "sharkfin has not read {}'s firmware for its switch settings, so it will not write them",
             open.spec.label()
@@ -1311,7 +1407,8 @@ pub fn set_switch_keys(
     state: tauri::State<AppState>,
     keys: Vec<hall::KeySwitch>,
 ) -> Result<(), String> {
-    let f = require_hall_writes(&state)?;
+    let slots: Vec<u8> = keys.iter().map(|k| k.slot).collect();
+    let f = require_hall_writes(&state, Some(&slots))?;
     if keys.is_empty() || keys.len() > 2 {
         return Err("one or two keys at a time".into());
     }
@@ -1353,7 +1450,7 @@ pub fn set_switches_all(
     key: hall::KeySwitch,
     modes: Vec<u8>,
 ) -> Result<(), String> {
-    let f = require_hall_writes(&state)?;
+    let f = require_hall_writes(&state, None)?;
     flash_cooldown(&state);
     let out = with_writable(&state, |t, _| {
         let n = hall::WRITE_COLUMNS.len();
@@ -1409,9 +1506,11 @@ pub fn set_switch_preset(state: tauri::State<AppState>, preset: u8) -> Result<()
     {
         let inner = state.inner.lock();
         let open = inner.open.as_ref().ok_or("no device connected")?;
-        let access = switch_access(&open.spec, open.revision, false);
+        let access = switch_access(&open.spec, open.revision, false, inner.owner.switch_writes);
+        // The check's trial puts the preset back after its one key.
+        let trial = inner.switch_trial.is_some() && open.spec.hall_reads(open.revision);
         if open.spec.family != "yc500"
-            || !matches!(access, SwitchAccess::Write | SwitchAccess::Global)
+            || !(trial || matches!(access, SwitchAccess::Write | SwitchAccess::Global))
         {
             return Err(format!("{} has no switch presets", open.spec.label()));
         }
@@ -1443,7 +1542,7 @@ pub fn set_switches_global(
     {
         let inner = state.inner.lock();
         let open = inner.open.as_ref().ok_or("no device connected")?;
-        if switch_access(&open.spec, open.revision, false) != SwitchAccess::Global {
+        if switch_access(&open.spec, open.revision, false, false) != SwitchAccess::Global {
             return Err(format!(
                 "{} takes its switch settings per key, not as one record",
                 open.spec.label()

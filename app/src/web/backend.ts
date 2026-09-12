@@ -129,6 +129,17 @@ export interface ScanResult {
 
 export type SwitchAccess = "none" | "read" | "write" | "global";
 
+/** The owner's answers about their own board, from the check. Flags land on
+ * the spec only for a board the registry does not know; `switchWrites` is
+ * the owner's felt round trip and applies to any board whose columns read. */
+export interface OwnerRecord {
+  allowed: boolean;
+  magnetic: boolean;
+  sideLight: boolean | null;
+  switchWrites: boolean;
+  profiles: number | null;
+}
+
 /** One key's magnetic-switch settings, millimetres. */
 export interface KeySwitch {
   slot: number;
@@ -331,6 +342,17 @@ export const buildId = (): Promise<string> =>
 export const allowUnregistered = (): Promise<void> =>
   withCore(async () => {
     core.allow_unregistered();
+  });
+/** What the owner established about this board in the check. Sends nothing;
+ * applied on every connect so the board keeps what the check unlocked. */
+export const applyOwnerRecord = (record: OwnerRecord): Promise<void> =>
+  withCore(async () => {
+    core.apply_owner_record(JSON.stringify(record));
+  });
+/** Open one slot's switch columns to the check's felt test, or close it. */
+export const setSwitchTrial = (slot: number | null): Promise<void> =>
+  withCore(async () => {
+    core.set_switch_trial(slot ?? undefined);
   });
 
 export const getSwitches = (): Promise<SwitchSettings> =>

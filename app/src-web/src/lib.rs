@@ -407,9 +407,16 @@ enum SwitchAccess {
     Global,
 }
 
-fn switch_access(spec: &DeviceSpec, revision: Option<u16>, read_only: bool) -> SwitchAccess {
+/// `owner_hall`: the owner's felt round trip stands in for firmware
+/// evidence on a board whose columns read.
+fn switch_access(
+    spec: &DeviceSpec,
+    revision: Option<u16>,
+    read_only: bool,
+    owner_hall: bool,
+) -> SwitchAccess {
     if spec.hall_reads(revision) {
-        if spec.hall_writes(revision) && !read_only {
+        if (spec.hall_writes(revision) || owner_hall) && !read_only {
             SwitchAccess::Write
         } else {
             SwitchAccess::Read
@@ -439,7 +446,7 @@ fn open_switches() -> Result<(Option<u16>, SwitchAccess), String> {
             !open.spec.writes_supported() || (open.spec.unregistered && !s.unregistered_ok);
         Ok((
             open.revision,
-            switch_access(&open.spec, open.revision, read_only),
+            switch_access(&open.spec, open.revision, read_only, s.owner.switch_writes),
         ))
     })
 }
@@ -483,11 +490,30 @@ struct AppState {
     /// LEDPARAM flags nibble, when they have given one. Kept here rather
     /// than on the spec so the spec keeps describing the board as shipped.
     led_swap: Option<bool>,
+    /// What the owner established about this board in the check, applied
+    /// by the frontend on every connect. Cleared with the session.
+    owner: OwnerRecord,
+    /// One slot the check may write switch columns to while its felt test
+    /// runs on a lineage without firmware evidence; mirrors commands.rs.
+    switch_trial: Option<u8>,
     last_flash: Option<(f64, f64)>,
     /// One clock for every command write: when the last one was claimed,
     /// and the floor its class asked for. Both halves matter, since the
     /// quiet a write needs after it is a property of that write.
     last_cmd: Option<(f64, f64)>,
+}
+
+/// The owner's answers about their own board, from the check; mirrors
+/// commands.rs. Spec overlays land only on a board the registry does not
+/// know; the switch-write evidence applies to any board whose columns read.
+#[derive(Clone, Copy, Debug, Default, serde::Deserialize)]
+#[serde(rename_all = "camelCase", default)]
+struct OwnerRecord {
+    allowed: bool,
+    magnetic: bool,
+    side_light: Option<bool>,
+    switch_writes: bool,
+    profiles: Option<u8>,
 }
 
 thread_local! {
@@ -727,7 +753,7 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
                 path: "webhid".into(),
                 device_id: id,
                 read_only,
-                switches: switch_access(&spec, revision, read_only),
+                switches: switch_access(&spec, revision, read_only, false),
                 revision,
                 spec: spec.clone(),
                 link: transport.link(),
@@ -737,6 +763,8 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
                 let mut s = s.borrow_mut();
                 s.unregistered_ok = false;
                 s.led_swap = None;
+                s.owner = OwnerRecord::default();
+                s.switch_trial = None;
                 s.open = Some(Open {
                     transport: Rc::new(transport),
                     spec,
@@ -852,7 +880,7 @@ pub fn status() -> Result<JsValue, JsValue> {
                     path: "webhid".into(),
                     device_id: o.spec.id,
                     read_only,
-                    switches: switch_access(&o.spec, o.revision, read_only),
+                    switches: switch_access(&o.spec, o.revision, read_only, s.owner.switch_writes),
                     revision: o.revision,
                     spec: o.spec.clone(),
                     link: o.transport.link(),
@@ -903,6 +931,51 @@ pub async fn set_led_param(param_json: String) -> Result<(), JsValue> {
         .await
         .map_err(fail)?;
     Ok(())
+}
+
+/// Apply what the owner established in the check; mirrors commands.rs.
+/// Sends nothing.
+#[wasm_bindgen]
+pub fn apply_owner_record(record_json: String) -> Result<(), JsValue> {
+    let record: OwnerRecord = serde_json::from_str(&record_json).map_err(|e| e.to_string())?;
+    STATE.with(|s| {
+        let mut s = s.borrow_mut();
+        let open = s.open.as_mut().ok_or("no device connected")?;
+        if open.spec.unregistered {
+            open.spec.magnetic = record.magnetic;
+            open.spec.features.magnetic_switches = record.magnetic;
+            if let Some(side) = record.side_light {
+                open.spec.features.side_light = side;
+            }
+            if let Some(n) = record.profiles {
+                open.spec.profiles = n.clamp(1, 8);
+            }
+            if record.allowed {
+                s.unregistered_ok = true;
+            }
+        }
+        s.switch_trial = None;
+        s.owner = record;
+        Ok(())
+    })
+}
+
+/// Open one slot's switch columns to the check's felt test, or close it;
+/// mirrors commands.rs. Sends nothing.
+#[wasm_bindgen]
+pub fn set_switch_trial(slot: Option<u8>) -> Result<(), JsValue> {
+    STATE.with(|s| {
+        let mut s = s.borrow_mut();
+        let open = s.open.as_ref().ok_or("no device connected")?;
+        if slot.is_some() && !open.spec.hall_reads(open.revision) {
+            return Err(JsValue::from(format!(
+                "{} has no magnetic switches sharkfin can read",
+                open.spec.label()
+            )));
+        }
+        s.switch_trial = slot;
+        Ok(())
+    })
 }
 
 #[wasm_bindgen]
@@ -1551,9 +1624,20 @@ pub async fn get_switches() -> Result<JsValue, JsValue> {
     to_js(&hall::assemble(f, &columns, &dks_all))
 }
 
-fn require_hall_writes(spec: &DeviceSpec) -> Result<hall::Format, JsValue> {
+/// `slots`: the keys a write addresses, so the check's trial can open just
+/// those; `None` is a write to every key, which no trial covers.
+fn require_hall_writes(spec: &DeviceSpec, slots: Option<&[u8]>) -> Result<hall::Format, JsValue> {
     let (revision, _) = open_switches()?;
-    if spec.hall_writes(revision) {
+    let reads = spec.hall_reads(revision);
+    let (owner_hall, trial) = STATE.with(|s| {
+        let s = s.borrow();
+        let trial = match (s.switch_trial, slots) {
+            (Some(t), Some(k)) => !k.is_empty() && k.iter().all(|&x| x == t),
+            _ => false,
+        };
+        (s.owner.switch_writes && reads, trial && reads)
+    });
+    if spec.hall_writes(revision) || owner_hall || trial {
         hall_format(spec)
     } else {
         Err(JsValue::from(format!(
@@ -1578,7 +1662,8 @@ pub async fn set_switch_keys(keys_json: String) -> Result<(), JsValue> {
     flash_cooldown().await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
-    let f = require_hall_writes(&spec)?;
+    let slots: Vec<u8> = keys.iter().map(|k| k.slot).collect();
+    let f = require_hall_writes(&spec, Some(&slots))?;
     if keys
         .iter()
         .any(|k| k.kind == hall::KIND_SNAP && usize::from(k.snap_partner) >= f.slots())
@@ -1609,7 +1694,7 @@ pub async fn set_switches_all(key_json: String, modes: Vec<u8>) -> Result<(), Js
     flash_cooldown().await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
-    let f = require_hall_writes(&spec)?;
+    let f = require_hall_writes(&spec, None)?;
     let n = hall::WRITE_COLUMNS.len();
     for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
         let values: Vec<u16> = (0..f.slots())
@@ -1653,9 +1738,13 @@ pub async fn get_switch_preset() -> Result<Option<u8>, JsValue> {
 
 #[wasm_bindgen]
 pub async fn set_switch_preset(preset: u8) -> Result<(), JsValue> {
-    let (_, access) = open_switches()?;
+    let (revision, access) = open_switches()?;
     let (t, spec) = get_open(true)?;
-    if spec.family != "yc500" || !matches!(access, SwitchAccess::Write | SwitchAccess::Global) {
+    // The check's trial puts the preset back after its one key.
+    let trial = STATE.with(|s| s.borrow().switch_trial.is_some()) && spec.hall_reads(revision);
+    if spec.family != "yc500"
+        || !(trial || matches!(access, SwitchAccess::Write | SwitchAccess::Global))
+    {
         return Err(format!("{} has no switch presets", spec.label()).into());
     }
     if preset > hall::PRESET_CUSTOM {
