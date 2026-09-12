@@ -1,5 +1,18 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.7.11
+
+**The rainbow toggle is right on 106 more boards.** The vendor's driver
+carries, for each board, which way its firmware reads the colour flag. Where
+a board's firmware is not published, sharkfin now takes the answer from
+there instead of assuming. The MonsGeek FUN60 PRO from issue #49 is one of
+them: picking a colour gave a rainbow and asking for the rainbow gave one
+colour.
+
+**The "Swap them" link shows whenever a colour is in play,** in either
+direction, and the data bundle prints which way the board is read and by
+what evidence.
+
 ## What changed in 0.7.10
 
 **162 more boards.** Akko, MonsGeek and Hator ship the same driver under
