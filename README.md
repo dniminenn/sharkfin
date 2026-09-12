@@ -83,7 +83,7 @@ board drawn for everyone who owns one.
   rate-limited, because the pattern goes into the keyboard's flash.
 - **Macros.** Record key and mouse sequences with per-event delays into the
   50 onboard slots, then bind a key to one: repeat, toggle, or while-held.
-- **Profiles.** Three of them, onboard.
+- **Profiles.** Stored on the board. Most boards have four, some three or two.
 - **Backup.** Export everything to a file and restore it later.
 - **Device.** Debounce, Windows-key lock, WASD/arrow swap, backlight off,
   host-OS auto-detect, sleep timeouts, factory reset.
