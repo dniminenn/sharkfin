@@ -1,5 +1,26 @@
 Alpha. Back up from the Device tab before you rely on it.
 
+## What changed in 0.8.0
+
+**Setup.** A keyboard sharkfin does not know can now be set up by its
+owner. Setup shows the picture and asks if it is yours, allows changes,
+has you press a few keys, turns the backlight red and asks what you see,
+switches profile and back, remaps one key you choose, and on a board with
+magnetic switches sets one key to a light touch and asks how it feels.
+Every write is read back and put back. What you answer is kept for that
+keyboard, so it works on your computer from then on, and it rides along
+with the data bundle so it can work for everyone with the same board.
+Setup runs over the cable only. A board that already works does not need
+it; the Contribute tab has a "Run setup" button all the same.
+
+**Switch settings on boards whose firmware has not been read** can be
+opened by Setup's felt test, for that keyboard only: the write has to
+read back and you have to feel it.
+
+**Screen Colour read back as red.** A board sitting in that mode showed
+red on the Lighting tab whatever colour it had; it keeps its own colour
+now.
+
 ## What changed in 0.7.11
 
 **The rainbow toggle is right on 106 more boards.** The vendor's driver
@@ -123,9 +144,10 @@ You can also use sharkfin without installing anything, at
 [app.getsharkfin.com](https://app.getsharkfin.com/), in Chrome,
 Edge or another Chromium browser. Same app, same keyboard.
 
-Use a USB cable. The 2.4 GHz receiver also works when it relays the
-settings channel; some receivers do not. Bluetooth has no settings
-channel.
+Use a USB cable. Over the 2.4 GHz receiver sharkfin reads whatever the
+receiver relays: some carry the settings channel, some carry nothing, and
+the same model ships with both. Writes need the cable. Bluetooth has no
+settings channel.
 
 **Linux** needs a udev rule before either the app or the browser
 can reach the keyboard. The .deb and .rpm install it; replug the
