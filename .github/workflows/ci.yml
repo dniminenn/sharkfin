@@ -54,6 +54,14 @@ jobs:
           npx tsc --noEmit
           npm run build
 
+      # Sourcemaps name every package that ends up in the bundle, which is
+      # what the notices file is generated from.
+      - name: Third-party notices are current
+        working-directory: app
+        run: |
+          npx vite build --sourcemap
+          python3 ../tools/notices.py --check
+
       - name: Frontend unit tests
         working-directory: app
         run: npx vitest run

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 shadcn <https://ui.shadcn.com>
+// SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-License-Identifier: MIT
+
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"

@@ -162,5 +162,8 @@ is in [CONTRIBUTING.md](CONTRIBUTING.md); the wire protocol is in
 
 ## License
 
-GPL-3.0-or-later. sharkfin is an independent project, not affiliated with
-or endorsed by Attack Shark, ROYUAN or any keyboard brand.
+GPL-3.0-or-later. Components redistributed inside the builds keep their own
+terms, listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+
+sharkfin is an independent project, not affiliated with or endorsed by
+Attack Shark, ROYUAN or any keyboard brand.

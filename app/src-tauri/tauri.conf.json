@@ -34,15 +34,29 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
+    "publisher": "dniminenn",
+    "homepage": "https://github.com/dniminenn/sharkfin",
+    "copyright": "Copyright (C) 2026 dniminenn",
+    "license": "GPL-3.0-or-later",
+    "licenseFile": "../../LICENSE",
+    "shortDescription": "Configurator for Attack Shark / ROYUAN keyboards",
+    "resources": {
+      "../../LICENSE": "LICENSE",
+      "../../THIRD-PARTY-NOTICES.md": "THIRD-PARTY-NOTICES.md"
+    },
     "linux": {
       "deb": {
         "files": {
-          "/usr/lib/udev/rules.d/70-sharkfin.rules": "../../packaging/70-sharkfin.rules"
+          "/usr/lib/udev/rules.d/70-sharkfin.rules": "../../packaging/70-sharkfin.rules",
+          "/usr/share/doc/sharkfin/copyright": "../../LICENSE",
+          "/usr/share/doc/sharkfin/THIRD-PARTY-NOTICES.md": "../../THIRD-PARTY-NOTICES.md"
         }
       },
       "rpm": {
         "files": {
-          "/usr/lib/udev/rules.d/70-sharkfin.rules": "../../packaging/70-sharkfin.rules"
+          "/usr/lib/udev/rules.d/70-sharkfin.rules": "../../packaging/70-sharkfin.rules",
+          "/usr/share/doc/sharkfin/copyright": "../../LICENSE",
+          "/usr/share/doc/sharkfin/THIRD-PARTY-NOTICES.md": "../../THIRD-PARTY-NOTICES.md"
         }
       }
     }

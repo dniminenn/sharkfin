@@ -2,6 +2,9 @@
   "name": "sharkfin",
   "private": true,
   "version": "0.8.0",
+  "license": "GPL-3.0-or-later",
+  "author": "dniminenn",
+  "repository": "https://github.com/dniminenn/sharkfin",
   "type": "module",
   "scripts": {
     "dev": "vite",

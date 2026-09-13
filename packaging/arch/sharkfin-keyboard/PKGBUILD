@@ -56,6 +56,8 @@ package() {
   install -Dm0755 "app/src-tauri/target/release/$_pkgname" -t "$pkgdir/usr/bin/"
   install -Dm0644 "packaging/$_pkgname.desktop" -t "$pkgdir/usr/share/applications/"
   install -Dm0644 "packaging/70-$_pkgname.rules" -t "$pkgdir/usr/lib/udev/rules.d/"
+  install -Dm0644 'LICENSE' -t "$pkgdir/usr/share/licenses/$pkgname/"
+  install -Dm0644 'THIRD-PARTY-NOTICES.md' -t "$pkgdir/usr/share/licenses/$pkgname/"
   local _size
   for _size in 32 128; do
     install -Dm0644 "app/src-tauri/icons/${_size}x${_size}.png" \

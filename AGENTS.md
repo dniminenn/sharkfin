@@ -60,6 +60,7 @@ cd app        && npx tsc --noEmit && npx tsc -p tsconfig.web.json --noEmit && np
 cd app/src-tauri && cargo fmt --check && cargo clippy --all-targets -- -D warnings && cargo test --lib
 python3 tools/coverage.py --markdown   # regenerates docs/BOARDS.md
 python3 tools/lint_layouts.py          # pictures and registry
+python3 tools/notices.py --check       # after a dependency change
 ```
 
 CI runs all of these on three operating systems, plus a check that

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023 shadcn <https://ui.shadcn.com>
+// SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-License-Identifier: MIT
+
 "use client"
 
 import { useTheme } from "next-themes"
