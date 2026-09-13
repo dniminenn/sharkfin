@@ -3,6 +3,10 @@
 // Typed wrappers around the Tauri command layer.
 import { invoke } from "@tauri-apps/api/core";
 
+/** Which build is running. The web backend exports "browser"; data
+ * bundles carry it so a report says where it came from. */
+export const BUILD: "app" | "browser" = "app";
+
 export interface DeviceFeatures {
   knob: string[];
   debounce: boolean;

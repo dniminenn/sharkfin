@@ -8,6 +8,8 @@
 import init, * as core from "../../src-web/pkg/sharkfin_web";
 import { takePicked } from "./file-store";
 
+export const BUILD: "app" | "browser" = "browser";
+
 export interface DeviceFeatures {
   knob: string[];
   debounce: boolean;

@@ -13,6 +13,7 @@ import { deviceLabel } from "@/lib/brands";
 import { useBoardLayout } from "@/lib/layout-loader";
 import { layoutBundle } from "@/lib/layout-infer";
 import { checkReport, hasReport, loadWizard, setupDone } from "@/lib/wizard";
+import { host } from "@/lib/host";
 import {
   buildId,
   contributionBundle,
@@ -75,6 +76,9 @@ export default function ContributePage({
     setBusy(true);
     try {
       let text = await contributionBundle(device ? undefined : unknown?.path);
+      // The backend cannot see the webview's OS, and a no-op replace is the
+      // right outcome if the header ever changes.
+      text = text.replace(/^(sharkfin .*data bundle)$/m, `$1\nhost   : ${host()}`);
       // One paste carries everything: the picture the match found and the
       // owner's answer ride inside the same fence as the sweep.
       const picture =
