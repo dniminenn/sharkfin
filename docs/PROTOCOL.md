@@ -48,9 +48,20 @@ opcode.
 | `0xF7` | status | reply below |
 | `0xF6` | select relay target | `[0xF6, 10]` keyboard **[HW]**, `5` mouse, `13` both **[JS]** |
 | `0xFC` | release a relayed reply for reading | bare opcode **[HW]** |
-| `0xF1` | receiver id, u16 LE at `[1]` | only receivers in the vendor's own table; `4011` is not in it **[JS]** |
-| `0xF0` | receiver USB version | `[1]`, `[2]` **[JS]** |
-| `0xFB` | receiver RF version | `[3]` **[JS]** |
+| `0xF1` | none | unsupported on `4011`, replays the previous reply **[HW]** |
+| `0xF0` | none | unsupported on `4011`, replays the previous reply **[HW]** |
+| `0xFB` | not a version | answers, but the value follows link state **[HW]** |
+
+The vendor reads a receiver's own versions with `0xF0` for USB and `0x80`
+for RF, both decoded `(reply[2]<<8) | reply[1]`, and both gated on
+`company == "cherry"` **[JS]**. On a `3151:4011` all three rows above were
+round-tripped against a `0xF7` baseline taken immediately before each, with
+two nonsense opcodes as controls. `0xF0` and `0xF1` replayed the baseline.
+`0xFB` returned `00 64 00 01 00` with the keyboard offline and
+`00 64 01 01 00` with it online, so it carries link state, not a version.
+`0x80` sent to the receiver is relayed to the keyboard and returns the
+keyboard's revision. A receiver's own RF version is not readable on
+non-Cherry hardware.
 
 Status reply:
 
@@ -395,11 +406,15 @@ Bit `128` locks the keyboard. The vendor's setter writes Mac mode at bit
 
 | | |
 |---|---|
-| Firmware revision | `GET 0x80` → `(reply[2]<<8) \| reply[1]` |
+| Firmware revision | `GET 0x80` → `(reply[2]<<8) \| reply[1]`, rendered as hex **[HW]** |
 | Factory reset | yc500 `0x02`, needs ~4 s **[HW]**. gen2 `0x01` **[FW]** (`2268_v309`). Bare opcode. |
 | Auto-OS | `SET 0x17 [0\|1]`, `GET 0x97` → `reply[1] == 1` |
 | Report rate | gen2 GET `0x83` **[HW]**. SET `0x03` **[FW]**. yc500 vendor setter is a stub returning false **[JS]** |
 | gen2 options | `GET 0x89` **[HW]**. Decoded fields at bytes 1..4, meanings unestablished **[FW]** |
+
+Each nibble of the revision pair is a decimal digit, so reply `02 01` is
+`0x102` and reads as `102`. The same digits name the firmware package. No
+version field in the 377 cached package names holds a hex letter.
 
 ## Macros
 
