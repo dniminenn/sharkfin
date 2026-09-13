@@ -1,5 +1,15 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.8.1
+
+**ANSI boards no longer get an ISO picture.** The firmware on many boards
+maps the two ISO-only keys whether or not they are fitted, and an Attack
+Shark K86 from issue #51 maps both plus the US backslash on an ANSI shell.
+sharkfin took the pair as proof of ISO and drew a key beside left Shift
+that was not there. The ISO picture is now offered only after you say no
+to the plain one, and Setup has a "My keyboard has no such key" button
+for the two keys it adds.
+
 ## What changed in 0.8.0
 
 **Setup.** A keyboard sharkfin does not know can now be set up by its
