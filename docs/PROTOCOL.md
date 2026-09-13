@@ -824,9 +824,16 @@ Flashing.
 A second HID dialect on a different product ID. sharkfin never sends any
 of this. Host framing **[JS]** is from the vendor's base device class.
 The dispatcher **[FW]** is from the 1724 bootloader (first 20 KB, load
-`0x01000000`). Not round-tripped on hardware.
+`0x01000000`).
 
-### Enter boot [JS]
+Boot entry and the USB image transfer have since been run end to end on a
+K86 (1168): the board entered boot, took 3397 chunks and answered the
+verify with `0x55`, and came back up on the new image. That was a user
+recovering their own board with a tool built from this file, reported by
+mail, not a round-trip on a bench here. The display-chip path below is
+still unexercised, and so is RF.
+
+### Enter boot [JS] [HW]
 
 App mode, Bit7:
 
@@ -838,21 +845,29 @@ App mode, Bit7:
 
 USB re-enumerates as a boot PID. The vendor's boot table:
 
-| vid:pid |
-|---|
-| `3151:4036` |
-| `3151:502a` |
-| `3151:504d` |
-| `046a:012e` |
-| `046a:0130` |
+| vid:pid | |
+|---|---|
+| `3151:4036` | |
+| `3151:502a` | |
+| `3151:504d` | |
+| `046a:012e` | |
+| `046a:0130` | |
+| `3151:4016` | K86 (1168), app PID `3151:4015` **[HW]** |
 
 Which PID a given board lands on is not established beyond that table.
 A second vendor table adds `3151:5024`.
 
+`3151:4016` is not in either vendor table. It was read off a K86 that
+entered boot and re-enumerated there. That board's app PID is
+`3151:4015`, one below. Whether the boot PID is always the app PID plus
+one is untested: no second board has been seen in boot mode. Over a
+hundred yc500 boards share `3151:4015`, so a tool that assumes the
+vendor tables are complete will not find them.
+
 RF stays on the same USB path. Status opcode `0xF7`: the base class
 treats boot as reply `[7]` and `[8]` both 1, and done as both 0.
 
-### USB image transfer [JS] [FW]
+### USB image transfer [JS] [FW] [HW]
 
 Raw 64-byte reports, no Bit7. The host skips a prefix of the file and
 sends the rest. The prefix is a host convention, not the 1724 write
@@ -907,6 +922,7 @@ Stay in app mode. Bit7 on the command reports, no checksum on the data.
 | | |
 |---|---|
 | Sibling images | Same USB PID does not mean the same PCB. A wrong image that fails to run can leave the board unable to answer `0x7F`, so boot is unreachable without SWD. |
+| Boot PID table | The vendor tables are incomplete. A K86 (1168) boots to `3151:4016`, which is in neither. A tool that only looks for the listed PIDs will report no board while one sits in the bootloader. |
 | No USB dump | The dispatcher has no read. Flash contents never come out over USB. |
 | Bootloader is kept | The host never sends the file prefix above. A board that can still enter boot can be written again. The 1724 write base is `0x01010200`, which is not either skip. |
 | `0x30` | Display-chip boot, not USB boot. |
