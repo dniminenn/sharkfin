@@ -10,11 +10,13 @@
 //   left Shift gives up a unit to NonUsBackslash beside it
 //   Enter gives up a unit to NonUsHash beside it
 //
-// The result is offered like any other candidate and matched against the
-// board's own keymap. Scoring alone does not keep it away from an ANSI
-// board: the two pictures differ by one slot out of eighty-odd, so an ISO
-// variant can outrank the picture that is actually right by a rounding
-// error. What keeps them apart is looksIso below. Enter stays rectangular
+// The result is offered behind the picture it was built from, never ahead
+// of it. The keymap cannot tell the two apart: the firmware maps the ISO
+// positions whether or not a key sits there, so on an ANSI board the
+// derived picture explains two more entries than the right one and would
+// outscore it. An Attack Shark K86 reports NonUsBackslash, NonUsHash and
+// the US backslash all at once with an ANSI shell. The owner picks the
+// derived picture by saying no to the plain one. Enter stays rectangular
 // rather than becoming the tall ISO key: this is for identifying and
 // editing keys, not for a faithful render.
 import type { BoardLayout, LayoutKey } from "@/lib/layout-loader";
@@ -23,14 +25,13 @@ const NON_US_BACKSLASH = 100; // 0x64, beside left Shift
 const NON_US_HASH = 50; // 0x32, beside Enter
 
 /**
- * Does this board report keys that only an ISO layout has?
+ * Could this board be ISO: does it report both keys only an ISO layout has?
  *
- * Both of them, not either. One alone is not evidence: an ANSI board is
- * built on the same PCB as its ISO version and its firmware maps the empty
- * position anyway. A Cypher 81 reports NonUsBackslash at slot 10 with no
- * such key on the board, and no firmware keymap on record carries one of
- * the two without the other. Taking either as ISO drew a key the owner
- * could not press.
+ * Necessary, not sufficient. A board without both cannot be ISO, so its
+ * derivation is never built. A board with both may still be ANSI: it
+ * shares a PCB with its ISO version and the firmware maps the empty
+ * positions anyway. Most keymaps on record carry both, and a Cypher 81
+ * carries one with no key on the board.
  */
 export function looksIso(matrix: number[]): boolean {
   let backslash = false;

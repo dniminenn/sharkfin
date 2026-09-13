@@ -234,15 +234,20 @@ Almost every layout the vendor ships is ANSI, and ISO boards keep turning
 up. The difference is mechanical: left Shift gives up a unit to
 NonUsBackslash, Enter gives up one to NonUsHash. So when a board reports
 both of those keys, `app/src/lib/iso.ts` derives the ISO version of
-every candidate picture and lets it compete on the same footing.
+every candidate picture.
 
-Both, because one alone means nothing. An ANSI board shares a PCB with its
-ISO version, and the firmware maps the unfitted position anyway: a Cypher
-81 reports NonUsBackslash at a slot with no key on it.
-
-A board whose picture already carries slot data is drawn as shipped
-instead of matched, so the derived version is offered there too. Without
-it those two keys have no key to click and cannot be remapped at all.
+The keymap says only that the board could be ISO, not that it is. An ANSI
+board shares a PCB with its ISO version, and the firmware maps the
+unfitted positions anyway: most keymaps on record carry both usages, and
+an Attack Shark K86 carries both plus the US backslash on an ANSI shell.
+A Cypher 81 carries NonUsBackslash alone, so a board without both is
+never derived. The derived picture explains two more entries than its
+parent and would outscore it on every such board, so it is offered
+behind the plain picture instead, and the owner reaches it by saying no
+to that one. A board whose shipped picture already fits is not offered
+the derivation at all; its owner asks for other pictures from the Keys
+tab. In setup, a derived picture asks for its two added keys, and an
+owner with no such key says so, which moves on to the next picture.
 
 A derived picture names no file on disk, so its bundle carries the
 geometry under `picture json:` and bakes like a pasted drawing, and a

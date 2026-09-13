@@ -141,13 +141,16 @@ export function inferSlots(base: BoardLayout, matrix: number[]): Inference {
 const bodyOf = (name: string) =>
   name.endsWith(ISO_SUFFIX) ? name.slice(0, -ISO_SUFFIX.length) : name;
 
+const derived = (inf: Inference) => inf.layoutName.endsWith(ISO_SUFFIX);
+
 /** Order the pictures offered for a board so each body appears once, its
- *  variants together, best first. Ranked flat, an ISO derivation beats its
- *  own ANSI parent on every ANSI board whose keymap parks the two ISO
- *  usages in unfitted slots, since it explains two more entries at no
- *  cost; the top of the list is then eight derivations of different
- *  bodies and the plain picture the board has is never reached. The
- *  registry's own suggestion leads whichever way it scores. */
+ *  plain picture first and its ISO derivation behind it. Ranked by score,
+ *  a derivation beats its own parent on every ANSI board whose keymap
+ *  parks the two ISO usages in unfitted slots, since it explains two more
+ *  entries at no cost, and the score cannot tell that board from an ISO
+ *  one. So the owner decides: the plain picture is asked about first and a
+ *  no moves on to the derivation. Bodies rank by their best variant, the
+ *  registry's own suggestion leading whichever way it scores. */
 export function rankCandidates(
   candidates: Inference[],
   suggested: string,
@@ -164,13 +167,15 @@ export function rankCandidates(
     b.f1 - a.f1 || a.ambiguous.length - b.ambiguous.length;
   const bodies = [...byBody.entries()].map(([body, list]) => {
     list.sort(better);
-    return { body, list };
+    const best = list[0];
+    list.sort((a, b) => Number(derived(a)) - Number(derived(b)));
+    return { body, list, best };
   });
   const wanted = bodyOf(suggested);
   bodies.sort(
     (a, b) =>
       Number(b.body === wanted) - Number(a.body === wanted) ||
-      better(a.list[0], b.list[0]),
+      better(a.best, b.best),
   );
   return bodies.slice(0, maxBodies).flatMap((g) => g.list);
 }

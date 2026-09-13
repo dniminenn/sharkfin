@@ -194,6 +194,10 @@ const USAGE_TO_CODE: Record<number, string> = Object.fromEntries(
 const ISO_USAGES = [100, 50];
 const ISO_CODES: Record<number, string> = { 50: "Backslash" };
 
+/** One of the two keys a derived ISO picture adds. On a derived picture an
+ *  owner with no such key answers that instead of pressing a neighbour. */
+export const isIsoKey = (usage: number) => ISO_USAGES.includes(usage);
+
 /** The KeyboardEvent.code a key sending this usage produces. */
 export const codeForUsage = (usage: number): string | undefined =>
   USAGE_TO_CODE[usage] ?? ISO_CODES[usage];

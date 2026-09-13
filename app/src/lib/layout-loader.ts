@@ -283,22 +283,11 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
             if (alt && alt.f1 >= fit + RETHINK_MARGIN && alt.matchRate >= MATCH_BAR) {
               offers.push(alt);
             }
-            // An ISO board reports two keys an ANSI picture does not draw,
-            // and a key the picture omits cannot be remapped at all. The
-            // margin above must not gate this one: the derived picture is
-            // the shipped picture plus two keys, which moves the score by
-            // less than the margin on any board this size.
-            if (matrices.some(looksIso)) {
-              const iso = isoVariant(named);
-              const isoAlt = iso && bestMatch(iso, isoName(name), matrices);
-              if (
-                isoAlt &&
-                isoAlt.matchRate >= MATCH_BAR &&
-                isoAlt.matched > (alt?.matched ?? 0)
-              ) {
-                offers.push(isoAlt);
-              }
-            }
+            // The ISO derivation of the shipped picture is not offered
+            // here. The keymap cannot say whether the board is ISO, and a
+            // picture the board already agrees with is not doubted on its
+            // account; an ISO owner reaches it through sweep(), where it
+            // sits behind the plain picture.
             offers.sort((a, b) => b.f1 - a.f1);
             // Only a confirmation of THIS picture counts. Treating any
             // stored answer as a yes would adopt an unreviewed assignment
@@ -360,7 +349,8 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       // An ISO board reports two keys no ANSI picture draws, and almost
       // every shipped picture is ANSI. Rather than leave those keys
       // undrawable until someone contributes a layout, derive the ISO
-      // version of each candidate and let it compete on the same footing.
+      // version of each candidate that could be ISO. It is offered behind
+      // its plain picture, since the keymap alone cannot pick between them.
       const wantsIso = matrices.some(looksIso);
       const candidates: Inference[] = [];
       let closest: Inference | null = null;

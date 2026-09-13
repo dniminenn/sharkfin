@@ -42,6 +42,7 @@ import {
   codeForUsage,
   didNotTake,
   freshState,
+  isIsoKey,
   judgePress,
   loadWizard,
   pendingWrite,
@@ -713,9 +714,20 @@ function KeysStep({
       )}
       <div className="flex flex-wrap items-center gap-2">
         {current ? (
-          <Button size="sm" variant="ghost" onClick={() => onDone("skipped")}>
-            {t("Skip")}
-          </Button>
+          <>
+            {lay.layout.iso && lay.pending && isIsoKey(current.usage) && (
+              // The picture is a derivation, and the key asked for is one
+              // it added. The keymap alone cannot say whether the key is
+              // there, so the owner says: no key means the derivation is
+              // wrong, and the test moves to the next picture.
+              <Button size="sm" variant="ghost" onClick={lay.reject}>
+                {t("My keyboard has no such key")}
+              </Button>
+            )}
+            <Button size="sm" variant="ghost" onClick={() => onDone("skipped")}>
+              {t("Skip")}
+            </Button>
+          </>
         ) : lay.pending && misses.length === 0 && boardOk !== "no" ? (
           <>
             <span className="mr-2 text-sm font-medium">{t("Use this picture for your board?")}</span>

@@ -18,9 +18,10 @@ const inf = (layoutName: string, f1: number, ambiguous = 0): Inference =>
   }) as Inference;
 
 describe("rankCandidates", () => {
-  it("keeps a body's plain picture reachable behind its ISO derivation", () => {
+  it("leads with a body's plain picture, its ISO derivation behind it", () => {
     // Nine bodies. On an ANSI board that parks the ISO usages in unfitted
-    // slots, every derivation outscores every plain picture.
+    // slots, every derivation outscores every plain picture, and the
+    // score cannot tell that board from an ISO one.
     const cands: Inference[] = [];
     for (let i = 0; i < 9; i++) {
       cands.push(inf(`Body${i}`, 0.98 - i * 0.001));
@@ -28,7 +29,7 @@ describe("rankCandidates", () => {
     }
     const ranked = rankCandidates(cands, "Unknown", 8);
     const names = ranked.map((c) => c.layoutName);
-    expect(names.slice(0, 2)).toEqual([isoName("Body0"), "Body0"]);
+    expect(names.slice(0, 2)).toEqual(["Body0", isoName("Body0")]);
     expect(names).toContain("Body7");
     expect(names).not.toContain("Body8");
     expect(new Set(names.map((n) => n.replace(/\+iso$/, ""))).size).toBe(8);
@@ -42,10 +43,10 @@ describe("rankCandidates", () => {
       inf(isoName("Named"), 0.95),
     ];
     const names = rankCandidates(cands, "Named", 8).map((c) => c.layoutName);
-    // A tie inside a body keeps its input order.
+    // The plain picture leads its derivation whichever scores higher.
     expect(names).toEqual([
-      isoName("Named"),
       "Named",
+      isoName("Named"),
       "Other",
       isoName("Other"),
     ]);
