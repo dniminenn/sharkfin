@@ -33,6 +33,20 @@ channel. sharkfin never flashes firmware.
 [Download](https://github.com/dniminenn/sharkfin/releases) ·
 [Is my board supported?](docs/BOARDS.md)**
 
+By brand, with what each board has:
+[Attack Shark](https://getsharkfin.com/boards/attack-shark) ·
+[Akko](https://getsharkfin.com/boards/akko) ·
+[Epomaker](https://getsharkfin.com/boards/epomaker) ·
+[Hator](https://getsharkfin.com/boards/hator) ·
+[Kreo](https://getsharkfin.com/boards/kreo) ·
+[MageGee](https://getsharkfin.com/boards/magegee) ·
+[MonsGeek](https://getsharkfin.com/boards/monsgeek) ·
+[Royalaxe](https://getsharkfin.com/boards/royalaxe) ·
+[Skyloong](https://getsharkfin.com/boards/skyloong) ·
+[Womier](https://getsharkfin.com/boards/womier) ·
+[YUNZII](https://getsharkfin.com/boards/yunzii) ·
+[every brand](https://getsharkfin.com/boards/)
+
 ## Supported boards
 
 **Beta, so back up first.**
