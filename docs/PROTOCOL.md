@@ -819,6 +819,29 @@ Both families: `0x22` display options, `0x27` display language, `0x28`
 clock. `0x30`/`0x31` are display-chip boot in both families. See
 Flashing.
 
+### Clock [FW] [HW]
+
+`0x28`, Bit7. The fields sit past the checksum. The vendor's app sends the
+host's local time on every connect, both families, the same builder.
+
+RT100 (`1379 v108_oledv104`, yc500): the dispatch table entry for `0x28`
+is a handler of its own at `0x24498`, not the reject stub the unimplemented
+display opcodes share. It reads bytes 8 to 14 and nothing else. Every field
+below is a store into the clock structure at `0x221a0`.
+
+Round-tripped on a K86 (2730), gen2: the panel's clock shows what was sent.
+
+| byte | |
+|---|---|
+| 8, 9 | year, big-endian |
+| 10 | month, 1..12 |
+| 11 | day |
+| 12 | hour, 0..23 |
+| 13 | minute |
+| 14 | second |
+
+No read. The board answers nothing useful and keeps time itself from there.
+
 ## Flashing
 
 A second HID dialect on a different product ID. sharkfin never sends any

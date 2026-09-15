@@ -53,6 +53,7 @@ pub mod cmd {
     pub const SET_FN_ONE: u8 = 0x15;
     pub const SET_MACRO: u8 = 0x16; // NB: 0x0B is the base class value
     pub const SET_AUTO_OS: u8 = 0x17; // [op, 0|1]
+    pub const SET_OLED_CLOCK: u8 = 0x28; // display clock, both families
 
     pub const GET_PROFILE: u8 = 0x85; // reply[1]
     pub const GET_KBOPTION: u8 = 0x86; // flags in reply[2..5]
@@ -1169,6 +1170,28 @@ pub fn screen_page_packets(
         .collect()
 }
 
+/// Year big-endian at 8..10, then month, day, hour, minute, second, one byte
+/// each: all past the checksum, which covers 0..=6 only. The RT100 image
+/// reads bytes 8 to 14 and nothing else.
+pub fn clock_packet(
+    year: u16,
+    month: u8,
+    day: u8,
+    hour: u8,
+    minute: u8,
+    second: u8,
+) -> [u8; REPORT_LEN] {
+    let mut buf = packet(cmd::SET_OLED_CLOCK, &[], Checksum::Bit7);
+    buf[8] = (year >> 8) as u8;
+    buf[9] = (year & 0xFF) as u8;
+    buf[10] = month;
+    buf[11] = day;
+    buf[12] = hour;
+    buf[13] = minute;
+    buf[14] = second;
+    buf
+}
+
 /// Per-key colours: 128 slots × RGB = 384 bytes, indexed by matrix slot.
 pub const PER_KEY_BYTES: usize = 384;
 const USERPIC_PAGE_DATA: usize = 56;
@@ -2283,5 +2306,20 @@ mod tests {
     #[test]
     fn a_frame_that_does_not_fit_the_display_is_refused() {
         assert!(screen_pixels(&[0; 12], 4, 4, "16").is_err());
+    }
+
+    // The vendor's builder writes the fields past the checksum byte, so the
+    // checksum is that of a bare opcode whatever the time.
+    #[test]
+    fn the_clock_sits_past_the_checksum() {
+        let pkt = clock_packet(2001, 2, 3, 4, 5, 6);
+        assert_eq!(pkt[0], cmd::SET_OLED_CLOCK);
+        assert_eq!(
+            pkt[7],
+            0xFF - cmd::SET_OLED_CLOCK,
+            "checksum of the opcode alone"
+        );
+        assert_eq!(&pkt[8..15], &[0x07, 0xD1, 2, 3, 4, 5, 6]);
+        assert!(pkt[15..].iter().all(|&b| b == 0));
     }
 }

@@ -25,6 +25,7 @@ import {
   getSettings,
   importConfig,
   setAutoOs,
+  setClock,
   setDebounce,
   setOptions,
   setSleep,
@@ -206,6 +207,15 @@ export default function DevicePage({
     setAutoOs(enabled).catch((e) => toast.error(t("Write failed: {e}", { e })));
   };
 
+  const doSetClock = async () => {
+    try {
+      await setClock(new Date());
+      toast.success(t("Clock set."));
+    } catch (e) {
+      toast.error(t("Could not set the clock: {e}", { e: String(e) }));
+    }
+  };
+
   const doReset = async () => {
     try {
       await factoryReset();
@@ -382,6 +392,25 @@ export default function DevicePage({
                 {t("sharkfin reads this display but cannot draw on it: its size is not recorded.")}
               </p>
             )}
+            <div className="pt-2">
+              <Row
+                label={t("Clock")}
+                hint={
+                  device.link === "receiver"
+                    ? t("Connect the keyboard by cable to set the clock.")
+                    : t("Set to this computer's time.")
+                }
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={device.link === "receiver"}
+                  onClick={doSetClock}
+                >
+                  {t("Set clock")}
+                </Button>
+              </Row>
+            </div>
           </div>
         </Section>
       )}

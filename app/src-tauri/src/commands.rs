@@ -992,6 +992,27 @@ pub fn factory_reset(state: tauri::State<AppState>) -> Result<(), String> {
     })
 }
 
+/// The display's clock. The frontend passes the host's local time, the way
+/// the vendor's app does.
+#[tauri::command(async)]
+pub fn set_clock(
+    state: tauri::State<AppState>,
+    year: u16,
+    month: u8,
+    day: u8,
+    hour: u8,
+    minute: u8,
+    second: u8,
+) -> Result<(), String> {
+    require_cable(&state)?;
+    write_gap(&state, SETTING_GAP);
+    with_writable(&state, |t, _| {
+        t.send(&crate::protocol::clock_packet(
+            year, month, day, hour, minute, second,
+        ))
+    })
+}
+
 fn key_gap(state: &tauri::State<AppState>) {
     write_gap(state, KEY_GAP)
 }

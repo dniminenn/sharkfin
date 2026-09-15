@@ -61,6 +61,7 @@ pub fn run() {
             commands::set_side_light,
             commands::set_auto_os,
             commands::factory_reset,
+            commands::set_clock,
             commands::write_per_key,
             commands::write_screen_image,
             commands::read_macro,
