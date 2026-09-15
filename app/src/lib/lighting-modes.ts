@@ -5,9 +5,10 @@
 // entry carries a light table gets that table's effects, labelled from
 // MODE_LABELS, which also knows the two effects only some boards have.
 //
-// Omitted: 13 (custom per-key, the Paint page), 20 and 22 (music sync), 21
-// (screen color) and 25 (the vendor's effect editor); those need a
-// host-side data feed.
+// Omitted: 13 (custom per-key, the Paint page), 20 and 22 (music sync) and
+// 21 (screen color); those need a host-side data feed. 25 is labelled so a
+// read-back shows something after the Paint page sends an animation, but it
+// is not offered as a pick: it takes an upload, not a click.
 
 export interface LightMode {
   value: number;
@@ -49,4 +50,5 @@ export const MODE_LABELS: Record<number, string> = Object.fromEntries([
   ...BE_MODES.map((m) => [m.value, m.label]),
   [23, "Train"],
   [24, "Endless"],
+  [25, "Animation"],
 ]);

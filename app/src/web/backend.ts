@@ -393,6 +393,11 @@ export const setAutoOs = (enabled: boolean) => withCore(() => core.set_auto_os(e
 export const factoryReset = () => withCore(() => core.factory_reset());
 export const writePerKey = (colors: number[], activate: boolean) =>
   withCore(() => core.write_per_key(new Uint8Array(colors), activate));
+/** gen2 only. `frames` is `count` blocks of 384 colour bytes (as writePerKey).
+ *  No delay: the board advances one frame every 50 ms regardless of what is
+ *  sent, so timing comes only from how many frames each pattern gets. */
+export const writeKeyAnimation = (frames: number[], count: number) =>
+  withCore(() => core.write_key_animation(new Uint8Array(frames), count));
 export const getLedParam = (): Promise<LedParam> =>
   withCore(async () => JSON.parse((await core.get_led_param()) as string));
 export const setLedParam = (param: LedParam) =>

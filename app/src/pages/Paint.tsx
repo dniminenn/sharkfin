@@ -6,6 +6,7 @@ import {
   PaintBucket,
   Paintbrush,
   Pipette,
+  Play,
   Plus,
   Save,
   Send,
@@ -13,11 +14,14 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import { PageHeader, Strip } from "@/components/Page";
 import { useBoardLayout, type LayoutKey } from "@/lib/layout-loader";
-import { writePerKey, type ConnectedDevice } from "@/lib/backend";
+import { writeKeyAnimation, writePerKey, type ConnectedDevice } from "@/lib/backend";
+import { buildAnimation } from "@/lib/key-animation";
 
 const SLOTS = 128;
 const PALETTE = [
@@ -38,6 +42,14 @@ const STORE = "sharkfin.perkey";
 const SWATCH_STORE = "sharkfin.perkey.swatches";
 const PATTERNS_STORE = "sharkfin.patterns";
 const MAX_PATTERNS = 6;
+// Frames, not seconds: the board's frame time depends on the animation's
+// own frame count, so the sliders ask for frames directly.
+const MIN_HOLD = 1;
+const MAX_HOLD = 60;
+const DEFAULT_HOLD = 12;
+const MIN_FADE = 0;
+const MAX_FADE = 30;
+const DEFAULT_FADE = 8;
 
 // One working pattern per board, so switching keyboards switches canvases.
 // "default" is the bucket used before a board is connected; it doubles as
@@ -143,6 +155,9 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
   const [tool, setTool] = useState<"brush" | "picker">("brush");
   const [hover, setHover] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
+  const [animating, setAnimating] = useState(false);
+  const [hold, setHold] = useState(DEFAULT_HOLD);
+  const [fade, setFade] = useState(DEFAULT_FADE);
   const painting = useRef(false);
   const history = useRef<string[][]>([]);
   const board = useRef(boardKey);
@@ -243,6 +258,33 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
   };
 
   const saved = useMemo(() => book[boardKey] ?? [], [book, boardKey]);
+
+  // Only gen2 boards speak SET_USERGIF; the other family reads the same
+  // opcode as a sleep-timer write.
+  const canAnimate = connected && device?.spec.family === "gen2" && saved.length >= 2;
+
+  // Plays the saved patterns back in the order they were saved. The
+  // board's frame time depends on the animation's own frame count, so
+  // the hold and the crossfade are both built as frame counts here: each
+  // pattern is repeated `hold` times, then interpolated frames fade into
+  // the next pattern, wrapping from the last pattern back to the first.
+  // Also flash, also rate-limited by the backend.
+  const sendAnimation = useCallback(async () => {
+    setAnimating(true);
+    try {
+      const built = buildAnimation(saved, hold, fade);
+      await writeKeyAnimation(built.patterns.flatMap(toBlob), built.patterns.length);
+      toast.success(
+        built.shortened
+          ? t("Animation sent, but the hold was shortened to fit the keyboard's frame limit")
+          : t("Animation sent to the keyboard"),
+      );
+    } catch (e) {
+      toast.error(`${e}`);
+    } finally {
+      setAnimating(false);
+    }
+  }, [saved, hold, fade]);
 
   const savePattern = () => {
     setBook((prev) => {
@@ -421,6 +463,57 @@ export default function PaintPage({ device }: { device: ConnectedDevice | null }
                 <Save className="h-4 w-4" />
               </Button>
             )}
+          </div>
+
+          <div className="flex w-full flex-wrap items-center gap-3 pt-1">
+            <span className="text-xs text-muted-foreground">{t("Animate")}</span>
+            <div className="flex min-w-40 flex-1 items-center gap-2">
+              <Label className="text-xs text-muted-foreground">{t("Hold")}</Label>
+              <Slider
+                className="max-w-48"
+                min={MIN_HOLD}
+                max={MAX_HOLD}
+                step={1}
+                value={[hold]}
+                onValueChange={([v]) => setHold(v)}
+              />
+              <span className="w-20 text-xs text-muted-foreground">
+                {t("{n} frames", { n: hold })}
+              </span>
+            </div>
+            <div className="flex min-w-40 flex-1 items-center gap-2">
+              <Label className="text-xs text-muted-foreground">{t("Fade")}</Label>
+              <Slider
+                className="max-w-48"
+                min={MIN_FADE}
+                max={MAX_FADE}
+                step={1}
+                value={[fade]}
+                onValueChange={([v]) => setFade(v)}
+              />
+              <span className="w-20 text-xs text-muted-foreground">
+                {t("{n} frames", { n: fade })}
+              </span>
+            </div>
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={!canAnimate || animating}
+              title={
+                canAnimate
+                  ? t("Play the saved patterns back as an animation")
+                  : t("Save at least two patterns on a gen2 board to animate them")
+              }
+              onClick={sendAnimation}
+            >
+              <Play className="mr-1 h-4 w-4" />
+              {animating ? t("Sending…") : t("Send animation")}
+            </Button>
+            <p className="w-full text-xs text-muted-foreground">
+              {t("Sending switches the keyboard to its own animation effect.")}{" "}
+              {t("A frame lasts roughly 50 to 130 ms depending on the animation's length, and the loop wraps cleanly.")}{" "}
+              {t("The Lighting page, or the Apply to keyboard button above, brings the still picture back.")}
+            </p>
           </div>
       </Strip>
 

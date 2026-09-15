@@ -62,6 +62,7 @@ pub fn run() {
             commands::set_auto_os,
             commands::factory_reset,
             commands::write_per_key,
+            commands::write_key_animation,
             commands::write_screen_image,
             commands::read_macro,
             commands::write_macro,

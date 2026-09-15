@@ -182,7 +182,7 @@ pub const GEN2_CMDS: FamilyCmds = FamilyCmds {
 /// index there is a single-slot write. Fn packets lead with host OS: 0 win,
 /// 1 mac, 2 android, 3 ios.
 pub mod gen2 {
-    use super::{apply_checksum, packet, Checksum, GEN2_CMDS, REPORT_LEN};
+    use super::{apply_checksum, packet, Checksum, LedParam, LedWire, GEN2_CMDS, REPORT_LEN};
 
     const BULK_SENTINEL: u8 = 0xFF;
     const FN_SYS_WIN: u8 = 0;
@@ -293,6 +293,72 @@ pub mod gen2 {
                 buf[5] = (page == blob.len().div_ceil(56) - 1) as u8;
                 apply_checksum(&mut buf, Checksum::Bit7);
                 buf[8..8 + chunk.len()].copy_from_slice(chunk);
+                buf
+            })
+            .collect()
+    }
+
+    /// Vendor name SET_USERGIF. gen2-only: yc500 reads this opcode as
+    /// SET_SLEEPTIME, a different register, so callers must refuse it off
+    /// this family.
+    pub const SET_USERGIF: u8 = 0x12;
+
+    /// LightUserColor. The only mode that plays an upload back: with mode
+    /// 13 (UserPicture) selected instead, frame k just sits as a static
+    /// pattern in slot k+1 and never cycles. **[HW]**
+    pub const MODE_USER_COLOR: u8 = 25;
+
+    /// LEDPARAM for the animation player, sent immediately before the start
+    /// packet: any SET_LEDPARAM re-initialises the animation engine, so
+    /// nothing else may land between this and the frames. Vendor bytes
+    /// **[HW]**: wire speed 4 (slowest), brightness 4, flags 0x07 (fixed
+    /// colour, option 0), RGB (250, 255, 250).
+    pub fn usergif_player_packet() -> [u8; REPORT_LEN] {
+        LedParam {
+            mode: MODE_USER_COLOR,
+            speed: 0,
+            brightness: 4,
+            option: 0,
+            dazzle: false,
+            r: 250,
+            g: 255,
+            b: 250,
+        }
+        .to_packet_for(LedWire::GEN2)
+    }
+
+    /// Starts an animation upload. Caller waits 300 ms before the first
+    /// frame; the vendor UI waits a further 500 ms on top of that.
+    pub fn usergif_start_packet() -> [u8; REPORT_LEN] {
+        packet(SET_USERGIF, &[0, 0, 0, 0, 0, 0], Checksum::Bit7)
+    }
+
+    /// One animated frame, seven 56-byte pages: [0x12, frame, page(0..6), 1,
+    /// frame_count, delay lo, delay hi, ck7] + 56 data bytes. `blob` is the
+    /// same 378-byte slot order as `userpic_packets`; unlike that builder,
+    /// every page here is padded to 56 bytes, never shortened.
+    pub fn usergif_frame_packets(
+        frame: u8,
+        frame_count: u8,
+        delay: u16,
+        blob: &[u8],
+    ) -> Vec<[u8; REPORT_LEN]> {
+        let blob = &blob[..blob.len().min(PER_KEY_BYTES)];
+        let delay = delay.to_le_bytes();
+        (0..7u8)
+            .map(|page| {
+                let mut buf = [0u8; REPORT_LEN];
+                buf[0] = SET_USERGIF;
+                buf[1] = frame;
+                buf[2] = page;
+                buf[3] = 1;
+                buf[4] = frame_count;
+                buf[5] = delay[0];
+                buf[6] = delay[1];
+                apply_checksum(&mut buf, Checksum::Bit7);
+                let start = (page as usize * 56).min(blob.len());
+                let end = (start + 56).min(blob.len());
+                buf[8..8 + (end - start)].copy_from_slice(&blob[start..end]);
                 buf
             })
             .collect()
@@ -2124,6 +2190,45 @@ mod tests {
         assert_eq!(&pages[6][..6], &[0x0C, 0, 0xFF, 6, 42, 1]);
         assert_eq!(&pages[6][8..8 + 42], &[0xCD; 42]);
         assert_eq!(pages[6][8 + 42], 0, "tail padded with zeros");
+    }
+
+    #[test]
+    /// Verified on a K86 (device 2730): mode 25 selected this way, sent
+    /// right before the start packet, is what makes the frames cycle.
+    fn gen2_usergif_player_packet_matches_hardware() {
+        let buf = gen2::usergif_player_packet();
+        assert_eq!(
+            &buf[..9],
+            &[cmd::SET_LEDPARAM, 25, 4, 4, 0x07, 250, 255, 250, 0xDD]
+        );
+    }
+
+    #[test]
+    /// Vendor JS only (SET_USERGIF), untested on hardware. Bytes pinned
+    /// against `setUserGifStart`/`setUserGif` in the gen2 driver class.
+    fn gen2_usergif_start_packet_matches_the_vendor_js() {
+        let buf = gen2::usergif_start_packet();
+        assert_eq!(&buf[..8], &[0x12, 0, 0, 0, 0, 0, 0, 0xED]);
+        assert!(buf[8..].iter().all(|&b| b == 0));
+    }
+
+    #[test]
+    /// Same source as above. Byte 3 is a constant 1, not a length or last
+    /// flag; byte 4 is the frame count, not this page's byte count.
+    fn gen2_usergif_frame_packets_match_the_vendor_js() {
+        let blob = [0xABu8; PER_KEY_BYTES];
+        let pages = gen2::usergif_frame_packets(1, 3, 500, &blob);
+        assert_eq!(pages.len(), 7);
+        assert_eq!(&pages[0][..8], &[0x12, 1, 0, 1, 3, 0xF4, 0x01, 0xF3]);
+        assert_eq!(&pages[0][8..8 + 56], &[0xAB; 56]);
+        // last page: 378 - 6*56 = 42 real bytes, padded with zeros
+        assert_eq!(&pages[6][..8], &[0x12, 1, 6, 1, 3, 0xF4, 0x01, 0xED]);
+        assert_eq!(&pages[6][8..8 + 42], &[0xAB; 42]);
+        assert_eq!(&pages[6][8 + 42..], &[0; 14]);
+        // frame index and delay are per-frame, page index walks 0..6 every time
+        let other = gen2::usergif_frame_packets(0, 3, 500, &blob);
+        assert_eq!(other[0][1], 0, "frame index in byte 1");
+        assert_eq!(&other[0][4..7], &pages[0][4..7], "count and delay repeat");
     }
 
     #[test]

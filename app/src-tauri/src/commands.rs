@@ -148,6 +148,13 @@ const FLASH_PAGE_GAP: Duration = Duration::from_millis(100);
 /// stalled an X86. Hold the device lock so poll stays off the wire.
 const FLASH_SETTLE: Duration = Duration::from_secs(2);
 
+/// Vendor JS: 300 ms after SET_USERGIF's start packet, plus 500 ms the
+/// vendor UI adds on top before the first frame. Verified on a K86.
+const USERGIF_START_GAP: Duration = Duration::from_millis(800);
+
+/// Vendor JS: 5 ms between SET_USERGIF pages. Verified on a K86.
+const USERGIF_PAGE_GAP: Duration = Duration::from_millis(5);
+
 /// Single-slot key writes are flash. X86: nine at 150 ms stalled. One per
 /// click is fine; a loop is not.
 const KEY_GAP: Duration = Duration::from_millis(400);
@@ -1113,6 +1120,80 @@ pub fn write_per_key(
         Ok(())
     });
     // Spaced from the end of the batch, not from before it began.
+    stamp_write(&state);
+    out
+}
+
+/// Per-key animation, gen2 only (vendor name SET_USERGIF). `frames` is
+/// `count` blocks of `PER_KEY_BYTES` colour bytes, same shape as
+/// `write_per_key`; gen2's 378-slot layout is truncated from it the same
+/// way. No delay parameter: the delay header sets both the frame time and
+/// the wrap behaviour on a K86 (2730), and delay equal to the frame count
+/// is the value that wraps the loop cleanly (any lower leaves a dark gap
+/// at the end of each loop), so the caller never picks it. yc500 reads
+/// this opcode as SET_SLEEPTIME, a different register, so the family is
+/// checked before anything is sent. LEDPARAM mode 25 is the animation
+/// player and must be set immediately before the start packet, with
+/// nothing else in between: verified on a K86.
+#[tauri::command(async)]
+pub fn write_key_animation(
+    state: tauri::State<AppState>,
+    frames: Vec<u8>,
+    count: u8,
+) -> Result<(), String> {
+    let per_frame = crate::protocol::PER_KEY_BYTES;
+    if count == 0 {
+        return Err("need at least one frame".into());
+    }
+    if frames.len() != per_frame * count as usize {
+        return Err(format!(
+            "expected {} colour bytes for {count} frames, got {}",
+            per_frame * count as usize,
+            frames.len()
+        ));
+    }
+    // Checked before the upload starts: the other family's driver reads
+    // this opcode as SET_SLEEPTIME, so a misaddressed write must never reach
+    // the wire, not even the start packet.
+    {
+        let inner = state.inner.lock();
+        let family = inner
+            .open
+            .as_ref()
+            .ok_or("no keyboard connected")?
+            .spec
+            .family
+            .clone();
+        if family != "gen2" {
+            return Err(
+                "sharkfin can only send key animations to this family of board so far.".into(),
+            );
+        }
+    }
+    flash_cooldown(&state);
+    let out = with_writable(&state, |t, fc| {
+        if need(fc)?.name != "gen2" {
+            return Err(HidError::Protocol(
+                "key animation only exists on this family of board".into(),
+            ));
+        }
+        // Selects the player and re-initialises the animation engine; the
+        // start packet must follow immediately, nothing else in between.
+        t.send(&crate::protocol::gen2::usergif_player_packet())?;
+        t.send(&crate::protocol::gen2::usergif_start_packet())?;
+        std::thread::sleep(USERGIF_START_GAP);
+        // Delay equal to the frame count is what wraps the loop cleanly on
+        // a K86; anything less leaves a dark gap at the end of each loop.
+        let delay = count as u16;
+        for (k, frame) in frames.chunks(per_frame).enumerate() {
+            for pkt in crate::protocol::gen2::usergif_frame_packets(k as u8, count, delay, frame) {
+                t.send(&pkt)?;
+                std::thread::sleep(USERGIF_PAGE_GAP);
+            }
+        }
+        std::thread::sleep(FLASH_SETTLE);
+        Ok(())
+    });
     stamp_write(&state);
     out
 }
