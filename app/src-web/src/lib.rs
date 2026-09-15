@@ -1335,6 +1335,25 @@ pub async fn factory_reset() -> Result<(), JsValue> {
     Ok(())
 }
 
+/// The display's clock, from the host's local time; see commands.rs.
+#[wasm_bindgen]
+pub async fn set_clock(
+    year: u16,
+    month: u8,
+    day: u8,
+    hour: u8,
+    minute: u8,
+    second: u8,
+) -> Result<(), JsValue> {
+    require_cable()?;
+    gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
+    let _busy = acquire().await;
+    let (t, _) = get_open(true)?;
+    let pkt = protocol::clock_packet(year, month, day, hour, minute, second);
+    t.send(&pkt).await.map_err(fail)?;
+    Ok(())
+}
+
 /// Blocks until FLASH_COOLDOWN has passed since the last flash-backed upload.
 async fn flash_cooldown() {
     gap(|s| &mut s.last_flash, FLASH_COOLDOWN_MS).await;
