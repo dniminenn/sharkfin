@@ -54,21 +54,21 @@
   {"code":"ArrowUp","type":"key","x":651,"y":139,"w":40,"h":40,"text":"↑","matrixIndex":null,"matrixEntry":[0,0,82,0],"hidUsage":82,"consumerUsage":null},
   {"code":"ArrowRight","type":"key","x":697,"y":185,"w":40,"h":40,"text":"→","matrixIndex":null,"matrixEntry":[0,0,79,0],"hidUsage":79,"consumerUsage":null},
   {"code":"ShiftLeft","type":"key","x":1,"y":139,"w":48,"h":40,"text":"Shift","matrixIndex":null,"matrixEntry":[0,0,225,0],"hidUsage":225,"consumerUsage":null},
-  {"code":"IntlBackslash","type":"key","x":55,"y":139,"w":40,"h":40,"text":"<   >","matrixIndex":null,"matrixEntry":[0,0,100,0],"hidUsage":100,"consumerUsage":null},
+  {"code":"IntlBackslash","type":"key","x":55,"y":139,"w":40,"h":40,"text":"<   > |","matrixIndex":null,"matrixEntry":[0,0,100,0],"hidUsage":100,"consumerUsage":null},
   {"code":"KeyZ","type":"key","x":101,"y":139,"w":40,"h":40,"text":"Y","matrixIndex":null,"matrixEntry":[0,0,29,0],"hidUsage":29,"consumerUsage":null},
   {"code":"KeyX","type":"key","x":147,"y":139,"w":40,"h":40,"text":"X","matrixIndex":null,"matrixEntry":[0,0,27,0],"hidUsage":27,"consumerUsage":null},
   {"code":"KeyC","type":"key","x":193,"y":139,"w":40,"h":40,"text":"C","matrixIndex":null,"matrixEntry":[0,0,6,0],"hidUsage":6,"consumerUsage":null},
   {"code":"KeyV","type":"key","x":239,"y":139,"w":40,"h":40,"text":"V","matrixIndex":null,"matrixEntry":[0,0,25,0],"hidUsage":25,"consumerUsage":null},
   {"code":"KeyB","type":"key","x":285,"y":139,"w":40,"h":40,"text":"B","matrixIndex":null,"matrixEntry":[0,0,5,0],"hidUsage":5,"consumerUsage":null},
   {"code":"KeyN","type":"key","x":331,"y":139,"w":40,"h":40,"text":"N","matrixIndex":null,"matrixEntry":[0,0,17,0],"hidUsage":17,"consumerUsage":null},
-  {"code":"KeyM","type":"key","x":377,"y":139,"w":40,"h":40,"text":"M","matrixIndex":null,"matrixEntry":[0,0,16,0],"hidUsage":16,"consumerUsage":null},
+  {"code":"KeyM","type":"key","x":377,"y":139,"w":40,"h":40,"text":"M µ","matrixIndex":null,"matrixEntry":[0,0,16,0],"hidUsage":16,"consumerUsage":null},
   {"code":"Comma","type":"key","x":423,"y":139,"w":40,"h":40,"text":", ;","matrixIndex":null,"matrixEntry":[0,0,54,0],"hidUsage":54,"consumerUsage":null},
   {"code":"Period","type":"key","x":469,"y":139,"w":40,"h":40,"text":".:","matrixIndex":null,"matrixEntry":[0,0,55,0],"hidUsage":55,"consumerUsage":null},
   {"code":"Slash","type":"key","x":515,"y":139,"w":40,"h":40,"text":"- _","matrixIndex":null,"matrixEntry":[0,0,56,0],"hidUsage":56,"consumerUsage":null},
   {"code":"ShiftRight","type":"key","x":561,"y":139,"w":84,"h":40,"text":"Shift","matrixIndex":null,"matrixEntry":[0,0,229,0],"hidUsage":229,"consumerUsage":null},
-  {"code":"Home","type":"key","x":697,"y":1,"w":40,"h":40,"text":"Pos1","matrixIndex":null,"matrixEntry":[0,0,74,0],"hidUsage":74,"consumerUsage":null},
+  {"code":"Delete","type":"key","x":697,"y":1,"w":40,"h":40,"text":"Entf","matrixIndex":null,"matrixEntry":[0,0,76,0],"hidUsage":76,"consumerUsage":null},
   {"code":"PageUp","type":"key","x":697,"y":93,"w":40,"h":40,"text":"Bild▴","matrixIndex":null,"matrixEntry":[0,0,75,0],"hidUsage":75,"consumerUsage":null},
   {"code":"PageDown","type":"key","x":697,"y":139,"w":40,"h":40,"text":"Bild▾","matrixIndex":null,"matrixEntry":[0,0,78,0],"hidUsage":78,"consumerUsage":null},
-  {"code":"Delete","type":"key","x":697,"y":47,"w":40,"h":40,"text":"Entf","matrixIndex":null,"matrixEntry":[0,0,76,0],"hidUsage":76,"consumerUsage":null}
+  {"code":"Home","type":"key","x":697,"y":47,"w":40,"h":40,"text":"Pos1","matrixIndex":null,"matrixEntry":[0,0,74,0],"hidUsage":74,"consumerUsage":null}
  ]
 }

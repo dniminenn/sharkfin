@@ -32,6 +32,10 @@ const TOLERATED = new Set([
   // September 2026 pictures: a UK quote key, Spanish and German Insert and
   // End, a keypad Fn combo, and a backquote engraved with a stray backslash.
   "'@", "Inser", "Fin", "Einfg", "Ende", "Fn/C", "\\`~",
+  // Mid-September 2026: the NJ98EP national variants, the Red75 and 5075
+  // DE pictures, ISO punctuation keys and the UK quote key.
+  "* + ~", "' #", "> < |", ": .", ",;", "#'", "/", ".", "; .", "^ ' [",
+  "* + ]", "=+ }", "><\\", "' @", "| \\", "* } + ]",
 ]);
 
 function tolerated(label: string): boolean {

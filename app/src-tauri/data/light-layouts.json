@@ -1,5 +1,5 @@
 {
- "T9": {
+ "F7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -69,7 +69,7 @@
    }
   ]
  },
- "M9": {
+ "tf": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -88,7 +88,7 @@
    }
   ]
  },
- "eg": {
+ "af": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -136,7 +136,7 @@
    }
   ]
  },
- "N9": {
+ "O7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -156,7 +156,7 @@
    }
   ]
  },
- "B9": {
+ "U7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -175,7 +175,7 @@
    }
   ]
  },
- "S": {
+ "K": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -291,7 +291,7 @@
    }
   ]
  },
- "Ga": {
+ "da": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -407,7 +407,7 @@
    }
   ]
  },
- "V9": {
+ "z7": {
   "rgb": false,
   "brightnessMax": 9,
   "effects": [
@@ -416,7 +416,7 @@
    }
   ]
  },
- "at": {
+ "Ye": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -773,7 +773,7 @@
    }
   ]
  },
- "tg": {
+ "nf": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -898,7 +898,7 @@
    }
   ]
  },
- "O9": {
+ "j7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -1023,7 +1023,7 @@
    }
   ]
  },
- "Rk": {
+ "I5": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -1487,7 +1487,7 @@
    }
   ]
  },
- "U9": {
+ "H7": {
   "rgb": true,
   "brightnessMax": 6,
   "effects": [
@@ -1611,6 +1611,35 @@
    }
   ]
  },
+ "X": {
+  "rgb": true,
+  "brightnessMax": 4,
+  "effects": [
+   {
+    "mode": 4,
+    "speedMax": 3,
+    "rgb": true
+   },
+   {
+    "mode": 7,
+    "speedMax": 3,
+    "rgb": true
+   },
+   {
+    "mode": 1,
+    "rgb": true
+   },
+   {
+    "mode": 2,
+    "speedMax": 3,
+    "rgb": true
+   },
+   {
+    "mode": 3,
+    "speedMax": 3
+   }
+  ]
+ },
  "oa": {
   "rgb": true,
   "brightnessMax": 4,
@@ -1640,7 +1669,40 @@
    }
   ]
  },
- "r1": {
+ "G7": {
+  "rgb": true,
+  "brightnessMax": 4,
+  "effects": [
+   {
+    "mode": 1,
+    "rgb": true
+   },
+   {
+    "mode": 2,
+    "speedMax": 4,
+    "rgb": true
+   },
+   {
+    "mode": 3,
+    "speedMax": 4
+   },
+   {
+    "mode": 4,
+    "speedMax": 4
+   },
+   {
+    "mode": 6,
+    "speedMax": 4,
+    "rgb": true
+   },
+   {
+    "mode": 7,
+    "speedMax": 4,
+    "rgb": true
+   }
+  ]
+ },
+ "o1": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -1669,7 +1731,7 @@
    }
   ]
  },
- "z9": {
+ "W7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -1727,7 +1789,7 @@
    }
   ]
  },
- "j9": {
+ "Y7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -1750,7 +1812,7 @@
    }
   ]
  },
- "H9": {
+ "X7": {
   "rgb": true,
   "brightnessMax": 5,
   "effects": [
@@ -1816,30 +1878,7 @@
    }
   ]
  },
- "G9": {
-  "rgb": true,
-  "brightnessMax": 4,
-  "effects": [
-   {
-    "mode": 4,
-    "speedMax": 3
-   },
-   {
-    "mode": 1,
-    "rgb": true
-   },
-   {
-    "mode": 2,
-    "speedMax": 3,
-    "rgb": true
-   },
-   {
-    "mode": 3,
-    "speedMax": 3
-   }
-  ]
- },
- "W9": {
+ "q7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -1898,7 +1937,7 @@
    }
   ]
  },
- "ig": {
+ "rf": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -1923,7 +1962,7 @@
    }
   ]
  },
- "Y9": {
+ "Z7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -2019,7 +2058,7 @@
    }
   ]
  },
- "X9": {
+ "J7": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
@@ -2043,7 +2082,31 @@
    }
   ]
  },
- "q9": {
+ "Q7": {
+  "rgb": true,
+  "brightnessMax": 4,
+  "effects": [
+   {
+    "mode": 4,
+    "speedMax": 4,
+    "rgb": true
+   },
+   {
+    "mode": 1,
+    "rgb": true
+   },
+   {
+    "mode": 3,
+    "speedMax": 4
+   },
+   {
+    "mode": 2,
+    "speedMax": 4,
+    "rgb": true
+   }
+  ]
+ },
+ "eA": {
   "rgb": true,
   "brightnessMax": 4,
   "effects": [
