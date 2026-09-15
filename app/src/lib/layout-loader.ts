@@ -13,6 +13,7 @@ import {
   type Inference,
 } from "@/lib/layout-infer";
 import { isoName, isoVariant, looksIso, resolvePicture } from "@/lib/iso";
+import { stubLayout } from "@/lib/layout-index";
 
 export interface LayoutKey {
   code: string;
@@ -352,11 +353,31 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       // version of each candidate that could be ISO. It is offered behind
       // its plain picture, since the keymap alone cannot pick between them.
       const wantsIso = matrices.some(looksIso);
+      // The digest scores like the pictures do, so only the ones worth
+      // offering are fetched; the rest of the collection stays on disk.
+      const { default: LAYOUT_INDEX } = await import("virtual:layout-index");
+      if (!live) return;
+      const wanted = new Set<string>();
+      let closestStem: string | null = null;
+      let closestF1 = -1;
+      for (const [stem, entries] of Object.entries(LAYOUT_INDEX.entries)) {
+        if (stem === UNKNOWN_NAME) continue;
+        const inf = bestMatch(stubLayout(entries), stem, matrices);
+        if (!inf) continue;
+        if (inf.matchRate >= MATCH_BAR) wanted.add(stem);
+        if (inf.f1 > closestF1) {
+          closestF1 = inf.f1;
+          closestStem = stem;
+        }
+        const born = LAYOUT_INDEX.iso[stem];
+        if (!wantsIso || !born) continue;
+        const isoInf = bestMatch(stubLayout(entries.concat(born)), isoName(stem), matrices);
+        if (isoInf && isoInf.matchRate >= MATCH_BAR) wanted.add(stem);
+      }
+      if (closestStem) wanted.add(closestStem);
       const candidates: Inference[] = [];
       let closest: Inference | null = null;
-      for (const path of Object.keys(VENDOR)) {
-        const stem = path.slice("./layouts/vendor/".length, -".json".length);
-        if (stem === UNKNOWN_NAME) continue;
+      for (const stem of wanted) {
         const geometry = await loadVendor(stem);
         if (!live) return;
         if (!geometry) continue;

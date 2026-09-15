@@ -7,9 +7,10 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
 import { licenseAssets } from "./vite-license-assets";
+import { layoutIndex } from "./vite-layout-index";
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), licenseAssets()],
+  plugins: [react(), tailwindcss(), licenseAssets(), layoutIndex()],
 
   resolve: {
     alias: [
