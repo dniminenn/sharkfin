@@ -1061,8 +1061,9 @@ pub mod hall {
 // Displays. Registry mode picks the announce/page opcode pair (16 vs 24).
 // yc500 length is a u16; refuse frames past 65535 bytes. yc3123 (gen2,
 // internalName prefix) reads length as u32; `registry::screen_draw` has the
-// split. Do not send the flash erase (yc500 0x2C, gen2 0xAC). One frame,
-// currently showing. docs/PROTOCOL.md, Displays.
+// split. Do not send the flash erase (yc500 0x2C, gen2 0xAC). One frame, or
+// several played as an animation where `registry::ScreenDrawRules::animates`,
+// currently showing. docs/PROTOCOL.md, Screens.
 
 /// Data bytes per page. The header is bytes 0..8, the checksum byte 7.
 pub const SCREEN_PAGE_DATA: usize = 56;

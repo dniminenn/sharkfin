@@ -264,16 +264,19 @@ impl DeviceSpec {
                 max_frame: usize::from(u16::MAX),
                 max_dim: 255,
                 mode24: true,
+                animates: false,
             }),
             "gen2" if self.internal_name.starts_with("yc3123_") => Some(ScreenDrawRules {
                 max_frame: u32::MAX as usize,
                 max_dim: u16::MAX,
                 mode24: false,
+                animates: true,
             }),
             "gen2" if self.internal_name.starts_with("ry5088_") => Some(ScreenDrawRules {
                 max_frame: usize::from(u16::MAX),
                 max_dim: 255,
                 mode24: false,
+                animates: false,
             }),
             _ => None,
         }
@@ -286,10 +289,17 @@ impl DeviceSpec {
 /// `max_dim` is not cosmetic. yc500 and ry5088 read the box from its low
 /// bytes and subtract; a 320-wide panel arrives as width 64. yc3123 reads
 /// the high bytes and has no such limit.
+///
+/// `animates` is whether this lineage plays more than one frame: one
+/// announce sized to frame 0 plus the frame count, then each frame's own
+/// pages with `[1]` set to the frame and the page index restarting at 0.
+/// Round-tripped on a K86 (2730) **[HW]**; yc500 and ry5088 have not shown a
+/// second frame.
 pub struct ScreenDrawRules {
     pub max_frame: usize,
     pub max_dim: u16,
     pub mode24: bool,
+    pub animates: bool,
 }
 
 /// What a data bundle calls this build. Version alone is not enough: the
@@ -521,12 +531,14 @@ mod tests {
         // 320x172 RGB565 is 110080 bytes: over the u16, within the u32.
         assert!(usize::from(screen.w) * usize::from(screen.h) * 2 <= rules.max_frame);
         assert!(!rules.mode24, "mode 24 has no yc3123 image behind it");
+        assert!(rules.animates);
 
         let rt100 = by_id(1379).expect("RT100 present");
         assert_eq!(rt100.family, "yc500");
         let rules = rt100.screen_draw().expect("yc500 draws");
         assert_eq!(rules.max_frame, usize::from(u16::MAX));
         assert!(rules.mode24);
+        assert!(!rules.animates, "no yc500 board has shown a second frame");
 
         // The k2401e is yc3121-lineage with a 121552-byte panel and no
         // published firmware; its frame must still exceed the u16 limit.
@@ -543,6 +555,7 @@ mod tests {
         let rules = nj81.screen_draw().expect("ry5088 draws");
         assert_eq!(rules.max_frame, usize::from(u16::MAX));
         assert_eq!(rules.max_dim, 255);
+        assert!(!rules.animates);
         assert!(!rules.mode24, "gen2 has no mode 24 opcode at all");
 
         // A gen2 lineage whose firmware was never disassembled stays

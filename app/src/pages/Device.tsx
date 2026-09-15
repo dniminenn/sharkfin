@@ -21,7 +21,7 @@ import {
   exportConfig,
   factoryReset,
   getScreenVersion,
-  writeScreenImage,
+  writeScreenFrames,
   getSettings,
   importConfig,
   setAutoOs,
@@ -43,18 +43,28 @@ const SLEEP_MAX = 3600;
 const DEEP_MIN = 600;
 
 // Drawing only where firmware is known to parse the frame. Three lineages;
-// every other gen2 board is refused here and in the backend.
+// every other gen2 board is refused here and in the backend. `animates` is
+// whether the firmware plays more than one frame; one lineage has shown it.
 function drawRules(
   spec: DeviceSpec,
-): { maxFrame: number; maxDim: number; mode24: boolean } | null {
+): { maxFrame: number; maxDim: number; mode24: boolean; animates: boolean } | null {
   if (spec.family === "yc500")
-    return { maxFrame: 65535, maxDim: 255, mode24: true };
+    return { maxFrame: 65535, maxDim: 255, mode24: true, animates: false };
   if (spec.family !== "gen2") return null;
   if (spec.internalName.startsWith("yc3123_"))
-    return { maxFrame: 0xffffffff, maxDim: 65535, mode24: false };
+    return { maxFrame: 0xffffffff, maxDim: 65535, mode24: false, animates: true };
   if (spec.internalName.startsWith("ry5088_"))
-    return { maxFrame: 65535, maxDim: 255, mode24: false };
+    return { maxFrame: 65535, maxDim: 255, mode24: false, animates: false };
   return null;
+}
+
+// The frame count byte, and each frame is a flash slot on the board.
+const MAX_FRAMES = 255;
+
+function frameBytes(spec: DeviceSpec): number {
+  if (!spec.screen) return 0;
+  const { w, h, mode } = spec.screen;
+  return w * h * (mode === "24" ? 3 : 2);
 }
 
 function canDraw(spec: DeviceSpec): boolean {
@@ -63,7 +73,12 @@ function canDraw(spec: DeviceSpec): boolean {
   const { w, h, mode } = spec.screen;
   if (mode !== "16" && !(mode === "24" && rules.mode24)) return false;
   if (w > rules.maxDim || h > rules.maxDim) return false;
-  return w * h * (mode === "24" ? 3 : 2) <= rules.maxFrame;
+  return frameBytes(spec) <= rules.maxFrame;
+}
+
+function canAnimate(spec: DeviceSpec): boolean {
+  const rules = drawRules(spec);
+  return !!rules && rules.animates && canDraw(spec);
 }
 
 // No firmware evidence for the draw path, as opposed to a panel we cannot address.
@@ -140,35 +155,45 @@ export default function DevicePage({
     };
   }, [device]);
 
-  // The display wants exactly its own pixels, so the picture is scaled here
+  // The display wants exactly its own pixels, so each picture is scaled here
   // and handed over as plain RGB. Everything about the display's byte order
-  // lives in the backend, where the pacing is.
+  // and framing lives in the backend, where the pacing is.
   const [drawing, setDrawing] = useState(false);
-  const drawImage = async (file: File) => {
+  const [hold, setHold] = useState(100);
+  const drawImages = async (files: File[]) => {
     const screen = device?.spec.screen;
     if (!screen) return;
+    if (files.length > MAX_FRAMES) {
+      toast.error(t("At most {n} pictures in one animation.", { n: MAX_FRAMES }));
+      return;
+    }
     setDrawing(true);
     try {
-      const bitmap = await createImageBitmap(file);
       const canvas = document.createElement("canvas");
       canvas.width = screen.w;
       canvas.height = screen.h;
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error(t("could not prepare the picture"));
-      // Cover rather than stretch: a squashed photo looks like a bug.
-      const scale = Math.max(screen.w / bitmap.width, screen.h / bitmap.height);
-      const w = bitmap.width * scale;
-      const h = bitmap.height * scale;
-      ctx.drawImage(bitmap, (screen.w - w) / 2, (screen.h - h) / 2, w, h);
-      const { data } = ctx.getImageData(0, 0, screen.w, screen.h);
-      const rgb = new Array<number>(screen.w * screen.h * 3);
-      for (let i = 0, j = 0; i < data.length; i += 4) {
-        rgb[j++] = data[i];
-        rgb[j++] = data[i + 1];
-        rgb[j++] = data[i + 2];
+      const rgb: number[] = [];
+      for (const file of files) {
+        const bitmap = await createImageBitmap(file);
+        // Cover rather than stretch: a squashed photo looks like a bug.
+        const scale = Math.max(screen.w / bitmap.width, screen.h / bitmap.height);
+        const w = bitmap.width * scale;
+        const h = bitmap.height * scale;
+        ctx.clearRect(0, 0, screen.w, screen.h);
+        ctx.drawImage(bitmap, (screen.w - w) / 2, (screen.h - h) / 2, w, h);
+        const { data } = ctx.getImageData(0, 0, screen.w, screen.h);
+        for (let i = 0; i < data.length; i += 4) {
+          rgb.push(data[i], data[i + 1], data[i + 2]);
+        }
       }
-      await writeScreenImage(rgb);
-      toast.success(t("Picture sent to the display."));
+      await writeScreenFrames(rgb, files.length, hold);
+      toast.success(
+        files.length === 1
+          ? t("Picture sent to the display.")
+          : t("{n} pictures sent to the display.", { n: files.length }),
+      );
     } catch (e) {
       toast.error(t("Could not draw the picture: {e}", { e: String(e) }));
     } finally {
@@ -343,13 +368,16 @@ export default function DevicePage({
                 <input
                   type="file"
                   accept="image/*"
+                  multiple={canAnimate(device.spec)}
                   className="block w-full text-sm file:mr-3 file:rounded-md file:border-0
                              file:bg-secondary file:px-3 file:py-1.5 file:text-sm"
                   disabled={drawing || device.link === "receiver"}
                   onChange={(e) => {
-                    const file = e.target.files?.[0];
+                    const files = Array.from(e.target.files ?? []).sort((a, b) =>
+                      a.name.localeCompare(b.name),
+                    );
                     e.target.value = "";
-                    if (file) drawImage(file);
+                    if (files.length) drawImages(files);
                   }}
                 />
                 <p className="text-xs text-muted-foreground">
@@ -357,8 +385,28 @@ export default function DevicePage({
                     ? t("Connect the keyboard by cable to send a picture.")
                     : drawing
                       ? t("Writing. Leave the keyboard plugged in.")
-                      : t("The picture is scaled to fit and replaces what is on the display.")}
+                      : canAnimate(device.spec)
+                        ? t("Pick one picture, or select several for an animation, played in name order. Each is scaled to fit and together they replace what is on the display.")
+                        : t("The picture is scaled to fit and replaces what is on the display.")}
                 </p>
+                {canAnimate(device.spec) && (
+                  <div className="space-y-2 pt-2">
+                    <div className="flex justify-between text-sm">
+                      <Label>{t("Hold each picture")}</Label>
+                      <span className="text-muted-foreground">{hold}</span>
+                    </div>
+                    <Slider
+                      min={1}
+                      max={255}
+                      step={1}
+                      value={[hold]}
+                      onValueChange={([v]) => setHold(v)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      {t("Higher is slower. Only an animation uses it.")}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             {device.spec.screen &&

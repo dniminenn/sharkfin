@@ -1348,11 +1348,12 @@ const SCREEN_PAGE_GAP_MS: f64 = 5.0;
 const SCREEN_READY_TRIES: u32 = 10;
 const SCREEN_READY_GAP_MS: f64 = 100.0;
 
-/// Draw one still frame on the display. `rgb` is `w * h * 3` in row order;
-/// the column order and pixel format the display wants are applied here.
-/// Lands in flash, so it takes the flash cooldown.
+/// One picture, or `frames` of them played in order with `delay` on each.
+/// `rgb` is `frames * w * h * 3` in row order; the column order and pixel
+/// format the display wants are applied per frame. Lands in flash, so it
+/// takes the flash cooldown.
 #[wasm_bindgen]
-pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
+pub async fn write_screen_frames(rgb: Vec<u8>, frames: u8, delay: u8) -> Result<(), JsValue> {
     require_cable()?;
     let (screen, rules) = {
         let (_, spec) = get_open(false)?;
@@ -1386,23 +1387,52 @@ pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
             "this display is larger than sharkfin can address on this board",
         ));
     }
-    let data = protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)
+    if frames == 0 {
+        return Err(JsValue::from_str("no picture to send"));
+    }
+    if frames > 1 && !rules.animates {
+        return Err(JsValue::from_str(
+            "sharkfin can only play an animation on this family of board so far. This one \
+             has not shown where a second picture goes.",
+        ));
+    }
+    let frame_len = usize::from(screen.w) * usize::from(screen.h) * 3;
+    if rgb.len() != frame_len * usize::from(frames) {
+        return Err(format!(
+            "expected {} bytes of RGB for {frames} {} by {} pictures, got {}",
+            frame_len * usize::from(frames),
+            screen.w,
+            screen.h,
+            rgb.len()
+        )
+        .into());
+    }
+    let pixels = rgb
+        .chunks(frame_len)
+        .map(|f| protocol::screen_pixels(f, screen.w, screen.h, &screen.mode))
+        .collect::<Result<Vec<_>, _>>()
         .map_err(|e| JsValue::from_str(&e))?;
-    if data.len() > rules.max_frame {
+    // The frame limit is per lineage; see the note in commands.rs. Each
+    // frame goes out in its own pages, so each is checked on its own.
+    if pixels.iter().any(|f| f.len() > rules.max_frame) {
         return Err(JsValue::from_str(
             "this display takes a bigger frame than sharkfin can safely send yet",
         ));
     }
+    // A still goes out with the delay every evidenced upload carried.
+    let delay = if frames == 1 { 0 } else { delay };
 
     flash_cooldown().await;
     let _busy = acquire().await;
     let (t, _) = get_open(true)?;
+    // The announce is sized to frame 0; the board learns the rest of the
+    // count from `frames` and reads each frame's own length off its pages.
     let pkt = protocol::screen_announce_packet(
         announce,
         0,
-        1,
-        0,
-        data.len() as u32,
+        frames,
+        delay,
+        pixels[0].len() as u32,
         (0, 0, screen.w, screen.h),
         0,
     );
@@ -1424,9 +1454,11 @@ pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
     if !ready {
         return Err(JsValue::from_str("the display did not accept the picture"));
     }
-    for page in protocol::screen_page_packets(page_op, 0, 1, 0, &data) {
-        t.send(&page).await.map_err(fail)?;
-        sleep_ms(SCREEN_PAGE_GAP_MS).await;
+    for (k, frame) in pixels.iter().enumerate() {
+        for page in protocol::screen_page_packets(page_op, k as u8, frames, delay, frame) {
+            t.send(&page).await.map_err(fail)?;
+            sleep_ms(SCREEN_PAGE_GAP_MS).await;
+        }
     }
     sleep_ms(FLASH_SETTLE_MS).await;
     Ok(())
