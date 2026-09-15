@@ -1,18 +1,15 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-//! Wire protocol for ROYUAN (VID 0x3151) keyboards: 64-byte HID feature
-//! reports, report ID 0, on the vendor collection (usage page 0xFFFF, usage 2).
-//! Opcodes below are the CommonKbYc500 family (X86 = device 1967),
-//! hardware-verified. Bulk reads reply with raw pages, no opcode echo.
+//! 64-byte HID feature reports, report ID 0, vendor collection 0xFFFF usage 2.
+//! `cmd` is yc500 (X86, device 1967), hardware-verified. Bulk reads return
+//! raw pages, no opcode echo.
 
-/// ROYUAN's own USB vendor ID, which most of these boards use. It is not the
-/// only one: see `registry::vendor_ids()`, which is what discovery scans for.
+/// Most boards. Discovery scans `registry::vendor_ids()`, not this constant.
 pub const VENDOR_ID: u16 = 0x3151;
 pub const USAGE_PAGE: u16 = 0xFFFF;
 pub const USAGE: u16 = 0x0002;
-/// Usages the settings collection has been seen under on that page. Almost
-/// every board reports `2`; the Akko ACR75 v2 (device 606) reports `1`,
-/// and the vendor's own driver looks for both.
+/// Settings collection usages on 0xFFFF. Almost every board reports 2;
+/// device 606 reports 1. The vendor driver accepts both.
 pub const USAGES: [u16; 2] = [0x0001, 0x0002];
 pub const REPORT_LEN: usize = 64;
 
@@ -71,30 +68,23 @@ pub mod cmd {
     pub const GET_AUTO_OS: u8 = 0x97; // reply[1] == 1
     pub const GET_REVISION: u8 = 0x80; // (reply[2] << 8) | reply[1]
 
-    /// The screen's own firmware version, and the one screen command that
-    /// means the same thing in both families. A board that answers has a
-    /// display; one that echoes does not.
+    /// Screen firmware version. Same opcode in both families. A board that
+    /// answers has a display; an echo means none.
     pub const GET_OLED_VERSION: u8 = 0xAD;
 
-    /// Erases the whole flash chip, pictures and all, and takes about 55
-    /// seconds. It is a write sitting in the read range. On yc500 the
-    /// RT100 image routes it onto the same flag as 0x2C, so it is not the
-    /// read the vendor's table once claimed. Never send it while sweeping,
-    /// and never on a board of unknown family.
+    /// Flash-chip erase, about 55 s. A write sitting in the read range.
+    /// yc500 maps it to the same flag as 0x2C. Never send while sweeping,
+    /// never on an unknown family.
     pub const GEN2_FLASH_CHIP_ERASE: u8 = 0xAC;
 }
 
-// Report rate is not configurable on this family: the vendor's own
-// setReportRate is a stub returning false, with no override in the chain.
+// No report-rate command: the vendor's setReportRate is a stub.
 
-/// Per-family opcode table. The two families overlap: several of one
-/// family's write opcodes land on a *different* live register of the other
-/// (e.g. yc500 SET_KEYMATRIX 0x09 is gen2 SET_KBOPTION), so every
-/// family-dependent command must resolve through this table rather than the
-/// `cmd` constants. `None` = the family has no such command, or its opcode
-/// is not documented. LEDPARAM, GET_MACRO and identify are identical
-/// across both; FN and USERPIC share opcodes but not packet shapes, so
-/// their gen2 builders live in the `gen2` module.
+/// Per-family opcodes. Families overlap: yc500 SET_KEYMATRIX 0x09 is gen2
+/// SET_KBOPTION. Family-dependent commands go through this table, never the
+/// `cmd` constants. `None` means the family has no such command. LEDPARAM,
+/// GET_MACRO and identify are shared. FN and USERPIC share opcodes but not
+/// shapes; gen2 builders live in `gen2`.
 #[derive(Debug)]
 pub struct FamilyCmds {
     pub name: &'static str,
@@ -156,10 +146,9 @@ pub const YC500_CMDS: FamilyCmds = FamilyCmds {
     kboption: Some((cmd::SET_KBOPTION, cmd::GET_KBOPTION)),
 };
 
-/// Confirmed against the X65HE firmware (2268_v309), not against hardware.
-/// Revision, auto-OS and edge light share yc500's opcodes. Single-slot key
-/// writes reuse SET_KEYMATRIX with byte 2 below 255 (255 selects paged bulk
-/// mode), so they go through the gen2 builders below, not `set_key_one`.
+/// From X65HE firmware (2268_v309), not hardware. Revision, auto-OS and
+/// edge light share yc500 opcodes. Single-slot key writes use SET_KEYMATRIX
+/// with byte 2 below 255; 255 is bulk. Use the gen2 builders, not `set_key_one`.
 pub const GEN2_CMDS: FamilyCmds = FamilyCmds {
     name: "gen2",
     set_profile: 0x04,
@@ -189,11 +178,9 @@ pub const GEN2_CMDS: FamilyCmds = FamilyCmds {
     kboption: None,
 };
 
-/// gen2 keymap packets, read out of the X65HE firmware's own handlers. The
-/// shapes differ from yc500 beyond opcodes: reads and bulk writes carry a
-/// 0xFF sentinel in byte 2, single-slot writes put the slot there instead,
-/// and Fn-layer packets lead with a host-OS byte (0 win, 1 mac, 2 android,
-/// 3 ios).
+/// gen2 keymap packets. Reads and bulk writes put 0xFF in byte 2; a slot
+/// index there is a single-slot write. Fn packets lead with host OS: 0 win,
+/// 1 mac, 2 android, 3 ios.
 pub mod gen2 {
     use super::{apply_checksum, packet, Checksum, GEN2_CMDS, REPORT_LEN};
 
@@ -312,12 +299,9 @@ pub mod gen2 {
     }
 }
 
-/// yc500 magnetic boards keep four keymap sub-layers a profile and address
-/// them as one linear slot: `profile * 4 + sublayer` on `0x05`, `0x09`,
-/// `0x13` and `0x89` (the 1618 `0x89` handler reads `base + byte1 * 512`
-/// with no other index, and its switch block is `slot >> 2`). The vendor's
-/// class scales the same way for every magnetic board. Other boards use
-/// the profile as is.
+/// Magnetic yc500: four keymap sub-layers per profile, addressed as
+/// `profile * 4 + sublayer` on 0x05, 0x09, 0x13 and 0x89. Other boards use
+/// the profile as-is.
 pub fn yc500_profile_slot(magnetic: bool, profile: u8, sublayer: u8) -> u8 {
     if magnetic {
         profile * 4 + sublayer
@@ -335,10 +319,8 @@ pub fn yc500_profile_from_slot(magnetic: bool, slot: u8) -> u8 {
     }
 }
 
-/// yc500's paged bulk keymap write, decoded from the vendor's yc500 class:
-/// [0x09, profile, 0xF8, 1, page, 0, 0, ck7] + 56 data bytes, 9 pages.
-/// Documented for completeness; sharkfin's UI uses the verified single-slot
-/// write instead.
+/// yc500 bulk keymap: `[0x09, profile, 0xF8, 1, page, 0, 0, ck7]` plus 56
+/// bytes, 9 pages. Unused; the UI writes one slot.
 pub fn yc500_bulk_keymatrix_packets(profile: u8, matrix: &[u8; 512]) -> Vec<[u8; REPORT_LEN]> {
     (0..9u8)
         .map(|page| {
@@ -365,8 +347,8 @@ pub fn family_cmds(family: &str) -> Option<&'static FamilyCmds> {
     }
 }
 
-/// Sleep timeouts, seconds. Writes land at bytes 8..16 but reads come back at
-/// bytes 1..9 -- the vendor's encode and decode genuinely disagree.
+/// Sleep timeouts, seconds. Writes land at bytes 8..16; reads come back at
+/// 1..9. The vendor encode and decode disagree.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SleepTimes {
@@ -429,10 +411,9 @@ pub struct SledParam {
 
 const MODE_NEON: u8 = 3;
 
-/// `(fixed colour, rainbow)` flags-nibble values for a board. Most boards
-/// read `7` as the colour the packet carried and `8` as the rainbow; the
-/// boards `data/led-flags.json` and `data/led-flags.vendor.json` record
-/// read them the other way round.
+/// `(fixed colour, rainbow)` nibble pair. Most boards: 7 is the packet
+/// colour, 8 is rainbow. `led-flags.json` / `led-flags.vendor.json` list
+/// the boards that read them the other way round.
 fn flags_pair(swapped: bool) -> (u8, u8) {
     if swapped {
         (FLAG_DAZZLE, FLAG_FIXED)
@@ -441,9 +422,8 @@ fn flags_pair(swapped: bool) -> (u8, u8) {
     }
 }
 
-/// Near-black stores fine but renders as "all LEDs off" (verified on an X86),
-/// which reads as a dead board. Backlight-off is KBOPTION's job; a colour
-/// write is floored to stay visible.
+/// Near-black stores but renders as all LEDs off (X86). Backlight-off is
+/// KBOPTION; a colour write is floored so the board still looks alive.
 const COLOR_FLOOR: u8 = 8;
 
 fn floor_black(r: u8, g: u8, b: u8) -> (u8, u8, u8) {
@@ -519,23 +499,12 @@ impl SledParam {
     }
 }
 
-// ---------------------------------------------------------------------------
-// Magnetic switches
-//
-// Per-key travel settings, read out of the boards' own firmware. Two column
-// formats share the opcodes and packet shapes. gen2 (ry5088 lineage: 2268
-// X65HE, 2116 TITAN68HE, 3708 SK61HE) keeps 128 slots a column, hundredths
-// of a millimetre, u16 little-endian for the travel columns and a byte for
-// the rest. yc500 (yc3121 lineage from firmware 2.00: 1618 ER75) keeps 126
-// slots a column, one byte each, tenths of a millimetre with a one-tenth
-// offset: the key fires when its live travel exceeds the byte, so byte b is
-// (b+1)/10 mm. The GET returns raw 64-byte pages, the SET takes 56-byte
-// pages or one slot. Neither handler checks bounds: a page past the column
-// or a slot past the end writes into the neighbouring arrays, so the bounds
-// live here and are the whole protection. The `last` flag on the final
-// packet makes the firmware save the block to flash (an erase and a program)
-// and apply it; packets without it sit in RAM unapplied.
-// docs/PROTOCOL.md, "Magnetic switches". **[FW]**
+// Magnetic switches. Two column formats, same opcodes. gen2: 128 slots,
+// hundredths of a millimetre, u16 LE travel. yc500 from firmware 2.00: 126
+// slots, one byte, tenths with a +1/10 offset (byte b fires at (b+1)/10 mm).
+// Firmware does not check bounds; a page or slot past the end writes
+// neighbouring arrays. `last` on the final packet commits to flash; without
+// it the block sits in RAM. docs/PROTOCOL.md, Magnetic switches.
 pub mod hall {
     use super::{packet, Checksum, REPORT_LEN};
     use serde::{Deserialize, Serialize};
@@ -591,7 +560,6 @@ pub mod hall {
     pub const GEN2_MIN_RT_MM: f64 = 0.01;
     pub const GEN2_MAX_DEAD_MM: f64 = 3.40;
 
-    /// Which column layout the board's firmware keeps.
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "lowercase")]
     pub enum Format {
@@ -608,7 +576,6 @@ pub mod hall {
             }
         }
 
-        /// Slots in every column.
         pub fn slots(self) -> usize {
             match self {
                 Format::Gen2 => 128,
@@ -616,7 +583,6 @@ pub mod hall {
             }
         }
 
-        /// Wire unit of the travel columns.
         pub fn unit_mm(self) -> f64 {
             match self {
                 Format::Gen2 => 0.01,
@@ -624,7 +590,6 @@ pub mod hall {
             }
         }
 
-        /// Whether this column is two bytes a slot.
         pub fn wide(self, subop: u8) -> bool {
             self == Format::Gen2
                 && matches!(
@@ -659,7 +624,6 @@ pub mod hall {
             }
         }
 
-        /// Millimetres to a column value.
         pub fn to_wire(self, subop: u8, mm: f64) -> u16 {
             match self {
                 Format::Gen2 => {
@@ -683,7 +647,6 @@ pub mod hall {
             }
         }
 
-        /// A column value in millimetres.
         pub fn to_mm(self, subop: u8, wire: u16) -> f64 {
             match self {
                 Format::Gen2 => f64::from(wire) * 0.01,
@@ -767,7 +730,6 @@ pub mod hall {
         }
     }
 
-    /// One key as the owner sees it, millimetres.
     #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
     pub struct KeySwitch {
@@ -892,7 +854,6 @@ pub mod hall {
     /// mode first.
     pub const WRITE_COLUMNS: [u8; 6] = [MODE, TRAVEL, LIFT, RT_PRESS, RT_LIFT, DEAD_BOTTOM];
 
-    /// Everything read back for the page.
     pub const READ_COLUMNS: [u8; 9] = [
         MODE,
         TRAVEL,
@@ -1097,41 +1058,11 @@ pub mod hall {
         }
     }
 }
-// ---------------------------------------------------------------------------
-// Displays
-//
-// Evidenced against two boards' own firmware, one per pixel mode: an RT100
-// (device 1379, v108_oledv104, mode 16) and a Dynatab75X-UK (device 1723,
-// v102_oledv103, mode 24). The RT100's command dispatch is a comparison
-// tree at 0x24C00 over a 42-entry jump table at 0x24C2A; decoding that
-// table gives the same opcodes for the commands already verified on
-// hardware (0x09 keymap, 0x0C per-key colour, 0x11 debounce, 0x12 sleep),
-// which is what says the decode is right.
-//
-// The two images are mirrors. The RT100 handles 0xA5/0x25 and sends
-// 0xA9/0x29 to its reject entry; the Dynatab (dispatch 0x23D1E, announce
-// 0x2311C, pages 0x231AA) handles 0xA9/0x29 and rejects 0xA5/0x25. Each
-// board implements exactly the pair its vendor record's mode declares, so
-// the mode picks the pair and nothing else does.
-//
-// Both announce handlers read the report the same way: [1] frame index,
-// [2] frame count, [3] frame delay, [4..6] length as u16 LE, [8..12] the
-// bounding box. Bytes 12..19, the box's high half, the length's high half
-// and the vendor's layer byte, are never read: the length these images
-// know is a u16, which is why yc500 frames past 65535 bytes are refused.
-// yc3123 images (devices 2730 and 2936, gen2 family, keyed by the
-// internalName prefix) parse the same packets but read the length as a
-// u32 from [4], [5], [16], [17], all bytes this builder already fills, so
-// their limit is wider; registry.rs `screen_draw` carries the split. The
-// page handlers check [1] against the frame the announce recorded and
-// count bytes against the announced length, so a page that disagrees is
-// dropped rather than written.
-//
-// Not evidenced, and so not done here: erasing the flash chip (0x2C on
-// yc500, 0xAC on gen2; the RT100 image routes yc500's 0xAC onto the same
-// flag as 0x2C, so it is not the read the vendor's table claims), picture
-// slots, and what byte 18 of the announce selects. This writes one frame
-// to whatever the board is already showing.
+// Displays. Registry mode picks the announce/page opcode pair (16 vs 24).
+// yc500 length is a u16; refuse frames past 65535 bytes. yc3123 (gen2,
+// internalName prefix) reads length as u32; `registry::screen_draw` has the
+// split. Do not send the flash erase (yc500 0x2C, gen2 0xAC). One frame,
+// currently showing. docs/PROTOCOL.md, Displays.
 
 /// Data bytes per page. The header is bytes 0..8, the checksum byte 7.
 pub const SCREEN_PAGE_DATA: usize = 56;
@@ -1209,7 +1140,6 @@ pub fn screen_announce_packet(
     buf
 }
 
-/// Every data page for one frame, in order.
 pub fn screen_page_packets(
     opcode: u8,
     frame: u8,
@@ -1243,10 +1173,8 @@ pub fn screen_page_packets(
 pub const PER_KEY_BYTES: usize = 384;
 const USERPIC_PAGE_DATA: usize = 56;
 
-/// Upload page `page` (0..7) of the colour blob, yc500 shape: the header
-/// carries the total length at bytes 2-3 and the page index at byte 4;
-/// data starts at byte 8. Hardware-verified on an X86. gen2 firmware
-/// parses this header differently -- use `gen2::userpic_packets` there.
+/// yc500 USERPIC page: length at bytes 2-3, page index at byte 4, data at 8.
+/// gen2 parses this header differently; use `gen2::userpic_packets`.
 pub fn userpic_write_packet(page: u8, blob: &[u8]) -> [u8; REPORT_LEN] {
     let len = PER_KEY_BYTES as u16;
     let mut buf = packet(
@@ -1268,11 +1196,9 @@ pub fn userpic_read_packet(page: u8) -> [u8; REPORT_LEN] {
     packet(cmd::GET_USERPIC, &[0, page], Checksum::Bit7)
 }
 
-/// Onboard macros: 50 slots × 256 bytes. Hardware-verified on an X86 (write,
-/// read-back, restore). The write opcode is the subclass override 0x16 used
-/// with the base class's packet format -- the base declares 0x0B and the
-/// method that sends it reads the field at call time, so the subclass value
-/// wins.
+/// Onboard macros: 50 slots x 256 bytes. Write opcode is the subclass
+/// override 0x16 on the base packet shape (base declares 0x0B; the sender
+/// reads the field at call time).
 pub const MACRO_SLOTS: u8 = 50;
 pub const MACRO_BYTES: usize = 256;
 const MACRO_PAGE_DATA: usize = 56;
@@ -1452,9 +1378,8 @@ pub fn macro_write_packet(
     buf
 }
 
-/// Keyboard option bits (reply[2]). The vendor's `system` bit is written at
-/// position 2 but read at position 1; sharkfin never writes it -- Win/Mac is
-/// board-side state. Keyboard-lock is deliberately not exposed.
+/// Keyboard option bits (reply[2]). Vendor writes `system` at bit 2 and
+/// reads it at bit 1; sharkfin never writes it. Keyboard-lock is not exposed.
 #[derive(Clone, Copy, Debug, Default, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct KbOptions {
@@ -1522,11 +1447,9 @@ pub fn parse_device_id(reply: &[u8]) -> Option<u32> {
     }
 }
 
-/// The 2.4 GHz receiver. It enumerates the same collection as the keyboard,
-/// answers these opcodes itself and relays anything else to the device
-/// selected with `SELECT`. Its replies never echo the opcode, so a status
-/// reply is told apart by its device-kind byte. Round-tripped on an X86
-/// receiver (3151:4011); docs/PROTOCOL.md, "2.4 GHz receiver".
+/// 2.4 GHz receiver. Same collection as the keyboard. Answers these opcodes
+/// itself; anything else is relayed after SELECT. Replies never echo the
+/// opcode; tell status apart by the device-kind byte. docs/PROTOCOL.md.
 pub mod receiver {
     use super::{packet, Checksum, REPORT_LEN};
 
@@ -1679,8 +1602,7 @@ const COMMON_COLORS: [(u8, u8, u8); 7] = [
     (0xFF, 0x00, 0xFF),
 ];
 
-/// Preset colours 0..6 on the lineage that swaps the flags nibble (Akko
-/// ACR75 v2, firmware 3.03, table at file offset 0x1F158): red, green, blue,
+/// Preset colours 0..6 on the swapped-nibble lineage: red, green, blue,
 /// orange, magenta, amber, warm white.
 const COMMON_COLORS_SWAPPED: [(u8, u8, u8); 7] = [
     (0xFF, 0x00, 0x00),

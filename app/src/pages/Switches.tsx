@@ -1,13 +1,9 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Magnetic-switch settings: actuation and release point, rapid trigger and
-// its sensitivities, bottom dead zone, and the per-key kinds (dynamic
-// keystroke, mod-tap, toggle, snap) with the keymap sub-layers they act on.
-// Read where the board has columns; written only where the board's own
-// firmware has been read (registry gate). yc500 boards below firmware 2.00
-// take one board-wide record instead and report nothing back. Each write is
-// a flash save on the board, so the page applies on a button, never on a
-// slider move.
+// Magnetic switches. Read where columns exist; write only where firmware
+// has been read (registry gate). yc500 below 2.00 takes one board-wide
+// record and reports nothing back. Each write is a flash save: button, not
+// slider.
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";

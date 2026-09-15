@@ -20,8 +20,8 @@ pub struct DeviceFeatures {
     pub magnetic_switches: bool,
     #[serde(default)]
     pub screen: bool,
-    /// Physical edge light. The firmware answers `0x88` regardless, so this
-    /// registry flag is the only reliable signal.
+    /// Physical edge light. Firmware answers `0x88` regardless; this flag is
+    /// the only reliable signal.
     #[serde(default)]
     pub side_light: bool,
 }
@@ -48,30 +48,22 @@ pub struct DeviceSpec {
     pub magnetic: bool,
     #[serde(default = "family_unknown")]
     pub family: String,
-    /// The display's size and pixel format, absent on a board without one.
-    /// Geometry is per board: 128x128, 160x80, 240x135 and 320x172 all
-    /// ship, so nothing may assume a default.
+    /// Display size and pixel format. 128x128, 160x80, 240x135 and 320x172
+    /// all ship; nothing may assume a default.
     #[serde(default)]
     pub screen: Option<ScreenSpec>,
-    /// Ranges the vendor's UI offers for a magnetic board's travel
-    /// settings, in millimetres. Most magnetic records carry none; the
-    /// vendor's driver then falls back to defaults keyed on the firmware
-    /// revision, which the app reads at connect.
+    /// Vendor travel ranges, millimetres. Most magnetic records carry none;
+    /// the driver then keys defaults on firmware revision, read at connect.
     #[serde(default)]
     pub travel: Option<TravelSpec>,
-    /// The vendor lets the owner declare a different switch model.
     #[serde(default)]
     pub switch_replaceable: bool,
     pub features: DeviceFeatures,
-    /// Built from the board's own answers because the registry has no
-    /// entry for its id (`derive.rs`). Never true for a shipped entry. The
-    /// app says so and asks the owner before the first write.
+    /// Built from the board's own answers (`derive.rs`). Never true for a
+    /// shipped entry. The app asks before the first write.
     #[serde(default)]
     pub unregistered: bool,
-    /// The backlight effects this board's firmware has, from the vendor's
-    /// per-board light table (`data/light-layouts.json`, keyed by
-    /// `light_layout`). Absent when the table has no entry; the app then
-    /// shows the common set.
+    /// Absent: the common set.
     #[serde(default, skip_deserializing)]
     pub light: Option<LightLayoutSpec>,
     /// This board reads the LEDPARAM flags nibble the other way round: 8 is
@@ -86,8 +78,7 @@ pub struct DeviceSpec {
     /// (docs/PROTOCOL.md).
     #[serde(default, skip_deserializing)]
     pub led_flags_swapped: bool,
-    /// Where `led_flags_swapped` came from: "firmware", "vendor driver", or
-    /// empty for the default.
+    /// "firmware", "vendor driver", or empty for the default.
     #[serde(default, skip_deserializing)]
     pub led_flags_source: &'static str,
 }
@@ -103,8 +94,7 @@ pub struct ScreenSpec {
     pub layers: u8,
 }
 
-/// One slider's range as the vendor ships it, millimetres; a `None` is a
-/// piece the record left out, not a zero.
+/// `None` is omitted, not zero.
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TravelRange {
@@ -118,11 +108,9 @@ pub struct TravelRange {
     pub default: Option<f64>,
 }
 
-/// One backlight effect as the vendor's table lists it for a light layout.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LightEffectSpec {
-    /// LEDPARAM mode byte.
     pub mode: u8,
     /// Highest speed the vendor offers; absent for effects with no motion.
     #[serde(default)]
@@ -147,10 +135,8 @@ pub struct LightLayoutSpec {
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TravelSpec {
-    /// Actuation and release point.
     #[serde(default)]
     pub travel: Option<TravelRange>,
-    /// Rapid trigger press sensitivity.
     #[serde(default)]
     pub fire_press: Option<TravelRange>,
     /// Rapid trigger release sensitivity.
@@ -165,10 +151,8 @@ fn family_unknown() -> String {
     "unknown".into()
 }
 
-/// Families whose command set is established: yc500 by hardware round-trips
-/// on an X86, gen2 by disassembling its own firmware (docs/PROTOCOL.md).
-/// Anything else is read-only, because the two families' opcodes collide and
-/// a misaddressed write lands on a live register.
+/// Families whose command set is established. Anything else is read-only:
+/// the two families' opcodes collide and a misaddressed write is live.
 const KNOWN_FAMILIES: &[&str] = &["yc500", "gen2"];
 
 impl DeviceSpec {
@@ -296,26 +280,21 @@ impl DeviceSpec {
     }
 }
 
-/// The limits `screen_draw` grants: the largest frame the board's firmware
-/// can count, the largest panel its bounding box can address, and whether
-/// the mode 24 opcode pair is evidenced for it.
+/// Limits `screen_draw` grants: max frame the firmware can count, max panel
+/// the bounding box can address, and whether mode 24 is evidenced.
 ///
-/// `max_dim` is not cosmetic. yc500 and the ry5088 display chip both read
-/// the bounding box from its low bytes only, and the chip turns them into a
-/// size by subtracting. A 320-wide panel arrives as a width of 64 and the
-/// picture is laid out wrong rather than refused, so the check belongs
-/// here. yc3123 reads the box's high bytes and has no such limit.
+/// `max_dim` is not cosmetic. yc500 and ry5088 read the box from its low
+/// bytes and subtract; a 320-wide panel arrives as width 64. yc3123 reads
+/// the high bytes and has no such limit.
 pub struct ScreenDrawRules {
     pub max_frame: usize,
     pub max_dim: u16,
     pub mode24: bool,
 }
 
-/// What a data bundle calls this build. The version alone does not identify
-/// one: the browser app is deployed straight from master, and a bug report can
-/// arrive from any commit between two releases. `SHARKFIN_COMMIT` comes from
-/// each crate's build script and is absent when building from a release
-/// tarball, which has no git metadata.
+/// What a data bundle calls this build. Version alone is not enough: the
+/// browser app deploys from master. `SHARKFIN_COMMIT` comes from the build
+/// script and is absent in a release tarball.
 pub fn build_id() -> String {
     match option_env!("SHARKFIN_COMMIT") {
         Some(commit) => format!("{} ({commit})", env!("CARGO_PKG_VERSION")),
@@ -328,10 +307,8 @@ static LIGHT_LAYOUTS_JSON: &str = include_str!("../data/light-layouts.json");
 static LED_FLAGS_JSON: &str = include_str!("../data/led-flags.json");
 static LED_FLAGS_VENDOR_JSON: &str = include_str!("../data/led-flags.vendor.json");
 
-/// One board's LEDPARAM flags reading, out of its own firmware
-/// (`tools/led_flags.py`) or the vendor driver's class for it
-/// (`tools/vendor_led_flags.py`). `rainbow` is the nibble value that paints
-/// the rainbow: `8` on most boards, `7` on the rest.
+/// One board's LEDPARAM flags reading. `rainbow` is the nibble that paints
+/// the rainbow: 8 on most boards, 7 on the rest.
 #[derive(Deserialize)]
 struct LedFlagRecord {
     rainbow: u8,
@@ -369,8 +346,8 @@ pub fn led_flags_note(spec: &DeviceSpec, owner: Option<bool>) -> String {
     }
 }
 
-/// A malformed registry must not take the app down; callers fall back to
-/// treating the board as unknown.
+/// A malformed registry must not take the app down. Callers treat the board
+/// as unknown.
 pub fn all() -> Vec<DeviceSpec> {
     let mut devices: Vec<DeviceSpec> = match serde_json::from_str(DEVICES_JSON) {
         Ok(v) => v,
@@ -411,11 +388,9 @@ pub fn by_id(id: u32) -> Option<DeviceSpec> {
     all().into_iter().find(|d| d.id == id)
 }
 
-/// Every USB vendor ID in the registry. Most of these boards are ROYUAN's
-/// `0x3151`, but a minority ship under the brand's own ID, and discovery that
-/// looks only for `0x3151` leaves those owners staring at an empty app while
-/// the support list claims their board works. Derived from the registry so
-/// the two can never disagree.
+/// Every USB vendor ID in the registry. Most boards are 0x3151; a minority
+/// ship under the brand's own ID. Derived from the registry so the two
+/// cannot disagree.
 pub fn vendor_ids() -> &'static [u16] {
     static IDS: OnceLock<Vec<u16>> = OnceLock::new();
     IDS.get_or_init(|| {

@@ -1,6 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Typed wrappers around the Tauri command layer.
 import { invoke } from "@tauri-apps/api/core";
 
 /** Which build is running. The web backend exports "browser"; data

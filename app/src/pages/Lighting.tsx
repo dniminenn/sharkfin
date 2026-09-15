@@ -62,12 +62,7 @@ function rgbToHex(r: number, g: number, b: number) {
 const isNearBlack = (c: { r: number; g: number; b: number }) =>
   Math.max(c.r, c.g, c.b) < 8;
 
-// Lighting is onboard state: every write lands in flash, the same as a key
-// or a macro. Measured on an X86, 39 of them a second apart wedged the
-// firmware even though nothing exceeded its rate limit, because the limit
-// was never the problem. So a drag changes nothing on the board: the
-// picture follows your finger, and the keyboard is written once, when you
-// let go.
+// Lighting is flash. Drag previews; write once on release.
 const WRITE_GAP = 300;
 
 /** The effects to offer: the board's own table when the registry has one,

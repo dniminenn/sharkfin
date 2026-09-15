@@ -1,11 +1,9 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// The same build id as src-tauri/build.rs. This crate compiles registry.rs by
-// path rather than linking the desktop crate, so `SHARKFIN_COMMIT` has to be
-// set here too or the browser build reports a bare version. Keep the two in
-// step; the browser app is deployed from master, so its commit is the only
-// thing that identifies a bundle.
+// Same build id as src-tauri/build.rs. This crate compiles registry.rs by
+// path, so SHARKFIN_COMMIT has to be set here too. Browser deploys from
+// master; the commit is what identifies a bundle.
 fn main() {
     if let Some(commit) = git_commit() {
         println!("cargo:rustc-env=SHARKFIN_COMMIT={commit}");
@@ -17,13 +15,11 @@ fn main() {
     }
 }
 
-/// `None` when git is unavailable or this is not a checkout. A modified tree
-/// is marked, so a bundle from a local build is never mistaken for the
-/// released commit.
+/// `None` when git is unavailable or this is not a checkout. A dirty tree
+/// is marked so a local build is not mistaken for the released commit.
 fn git_commit() -> Option<String> {
-    // Only this repo's own .git counts. A tarball unpacked inside an unrelated
-    // checkout would otherwise report that repo's commit, which is worse in a
-    // bug report than reporting none.
+    // Only this repo's .git. A tarball inside some other checkout would
+    // otherwise report that repo's commit.
     if !std::path::Path::new("../../.git").exists() {
         return None;
     }

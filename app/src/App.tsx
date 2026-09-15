@@ -85,8 +85,7 @@ export default function App() {
   const guided = useRef<number | null>(null);
   const guidedUnknown = useRef<string | null>(null);
 
-  // Read-only boards can't do anything on the other tabs; point their owner
-  // at the report flow once per board, never repeatedly.
+  // Read-only: Contribute once per board, not on every scan.
   useEffect(() => {
     if (device && readOnly(device) && guided.current !== device.deviceId) {
       guided.current = device.deviceId;
@@ -94,7 +93,7 @@ export default function App() {
     }
   }, [device]);
 
-  // Boards the registry doesn't know can only be reported; same guidance.
+  // Unknown board: same.
   useEffect(() => {
     if (!device && unknown && guidedUnknown.current !== unknown.path) {
       guidedUnknown.current = unknown.path;
@@ -102,9 +101,7 @@ export default function App() {
     }
   }, [device, unknown]);
 
-  // A board the owner has walked through the check keeps what the check
-  // established. The record is applied once per connect; it sends nothing
-  // to the board, so a doubled effect is harmless.
+  // Apply the check record once per connect. Sends nothing.
   const applied = useRef<string | null>(null);
   useEffect(() => {
     if (!device) {
@@ -124,9 +121,8 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [device?.spec.id, device?.path]);
 
-  // The check earns a place in the nav on a board sharkfin does not know
-  // or cannot write, until it has been run once. Everywhere else it is a
-  // button on the Contribute tab.
+  // Setup tab while the board is unknown or read-only and the check has
+  // not been run. Everywhere else it is a button on Contribute.
   const needsCheck =
     !!device &&
     (device.spec.unregistered || device.readOnly) &&

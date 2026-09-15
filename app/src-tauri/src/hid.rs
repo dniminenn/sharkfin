@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-//! hidapi transport to the vendor collection, by cable or through the 2.4 GHz
-//! receiver's relay.
+//! hidapi transport to the vendor collection, cable or 2.4 GHz relay.
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::thread::sleep;
@@ -31,8 +30,7 @@ pub enum HidError {
 }
 
 impl HidError {
-    /// The firmware has stalled its control endpoint. Nothing gets through
-    /// until the device is re-enumerated or at least reopened.
+    /// Control endpoint stalled. Nothing gets through until re-enum or reopen.
     pub fn is_stall(&self) -> bool {
         match self {
             HidError::Api(e) => {
@@ -51,7 +49,6 @@ pub struct DiscoveredDevice {
     pub product_id: u16,
     pub product: String,
     pub manufacturer: String,
-    /// Which usage the settings collection reported on the vendor page.
     pub usage: u16,
 }
 
@@ -73,19 +70,13 @@ pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
         .collect()
 }
 
-/// Minimum gap between feature-report writes. The firmware stalls its control
-/// endpoint if written to much faster than this -- once stalled it rejects
-/// everything until the device is re-enumerated, so this is a hard floor
-/// rather than a nicety. The vendor's own class waits 500 ms after batch
-/// operations; 12 ms per report is the sustainable rate measured on an X86.
+/// Minimum gap between feature-report writes. Faster stalls the endpoint
+/// until re-enum. 12 ms per report is the sustainable rate on an X86.
 const MIN_WRITE_GAP: Duration = Duration::from_millis(12);
 
-/// Receiver bookkeeping. The vendor allows 500 ms for the receiver to accept
-/// a packet and 1 s for a reply to come back over the air, polling status
-/// every 100 ms and resting 10 ms between its own exchanges with the
-/// receiver. A reply is ready about 100 ms after the send on an X86, so the
-/// deadlines are kept and the poll runs as fast as the write floor allows:
-/// a 100 ms tick would round every exchange up to 200.
+/// Receiver deadlines from the vendor (500 ms to accept, 1 s for a reply).
+/// A reply is ready about 100 ms after send on an X86; poll at the write
+/// floor. A 100 ms tick would round every exchange up to 200.
 const RECEIVER_SEND_DEADLINE: Duration = Duration::from_millis(500);
 const RECEIVER_READ_DEADLINE: Duration = Duration::from_millis(1000);
 const RECEIVER_TICK: Duration = Duration::from_millis(5);
@@ -110,12 +101,8 @@ pub struct Transport {
     selected: AtomicBool,
 }
 
-/// A rolling record of what actually reached the wire, so a stall can be
-/// read back instead of guessed at. Six stalls on one X86 produced no
-/// evidence beyond "it stopped answering"; this is that evidence.
-///
-/// Opcode and direction only: payloads can carry a keymap, and this ends up
-/// in a log a user pastes into an issue.
+/// Rolling record of what reached the wire, opcode and direction only.
+/// Payloads can carry a keymap; this ends up in a log an owner pastes.
 const TRACE_LEN: usize = 48;
 
 static TRACE: std::sync::Mutex<std::collections::VecDeque<(std::time::Instant, char, u8)>> =

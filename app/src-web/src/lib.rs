@@ -1,11 +1,9 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-//! Browser build. `protocol.rs` and `registry.rs` are the desktop app's own
-//! files, included by path so the evidenced packet builders ship unmodified;
-//! this crate replaces only the hidapi transport (with WebHID) and the Tauri
-//! command layer (with wasm-bindgen exports). Timing rules -- report pacing,
-//! flash cooldowns, key and light gaps -- mirror src-tauri/src/commands.rs
-//! and live here rather than in the UI, so no caller can wedge a keyboard.
+//! Browser build. `protocol.rs` and `registry.rs` included by path.
+//! WebHID replaces hidapi; wasm-bindgen replaces Tauri commands. Pacing
+//! (report gap, flash cooldown, key and light floors) lives here, same
+//! numbers as commands.rs, not in the UI.
 #![allow(dead_code)]
 
 #[path = "../../src-tauri/src/derive.rs"]
@@ -80,9 +78,8 @@ extern "C" {
 
 #[derive(Debug)]
 enum HidErr {
-    /// The exchange failed at the USB layer. On this firmware that almost
-    /// always means the control endpoint stalled, which nothing but a replug
-    /// fixes, so it is treated exactly like the desktop's stall path.
+    /// USB-layer failure. On this firmware that is almost always a stalled
+    /// endpoint. Replug. Same path as the desktop stall.
     Stall(String),
     NoHandshake,
     KeyboardOffline,
@@ -373,12 +370,7 @@ const FLASH_COOLDOWN_MS: f64 = 10_000.0;
 const FLASH_PAGE_GAP_MS: f64 = 100.0;
 const FLASH_SETTLE_MS: f64 = 2_000.0;
 const KEY_GAP_MS: f64 = 400.0;
-/// Lighting is onboard state, so every write lands in flash; see the note
-/// on the desktop constant.
 const LIGHT_GAP_MS: f64 = 1000.0;
-/// Everything else a user can hold down or click repeatedly: profile
-/// switches, debounce and sleep sliders, auto-OS, reset. Flash class: all
-/// of it survives a power cycle; see the note on the desktop constant.
 const SETTING_GAP_MS: f64 = 1000.0;
 const PER_KEY_MODE: u8 = 13;
 
@@ -483,29 +475,20 @@ struct AppState {
     open: Option<Open>,
     stalled: bool,
     busy: bool,
-    /// The owner of a board the registry does not know has confirmed the
-    /// detected family and allowed writes. Cleared with the session.
+    /// Unregistered: owner allowed writes this session. Cleared with the session.
     unregistered_ok: bool,
-    /// The owner's own answer to which way round this board reads the
-    /// LEDPARAM flags nibble, when they have given one. Kept here rather
-    /// than on the spec so the spec keeps describing the board as shipped.
+    /// Owner override for the LEDPARAM flags nibble. Kept off the spec.
     led_swap: Option<bool>,
-    /// What the owner established about this board in the check, applied
-    /// by the frontend on every connect. Cleared with the session.
+    /// Check answers. Cleared with the session.
     owner: OwnerRecord,
-    /// One slot the check may write switch columns to while its felt test
-    /// runs on a lineage without firmware evidence; mirrors commands.rs.
+    /// Slot the check may write switch columns to. Mirrors commands.rs.
     switch_trial: Option<u8>,
     last_flash: Option<(f64, f64)>,
-    /// One clock for every command write: when the last one was claimed,
-    /// and the floor its class asked for. Both halves matter, since the
-    /// quiet a write needs after it is a property of that write.
+    /// Last write claim: instant and the quiet that write required after itself.
     last_cmd: Option<(f64, f64)>,
 }
 
-/// The owner's answers about their own board, from the check; mirrors
-/// commands.rs. Spec overlays land only on a board the registry does not
-/// know; the switch-write evidence applies to any board whose columns read.
+/// Owner answers from the check. Mirrors commands.rs.
 #[derive(Clone, Copy, Debug, Default, serde::Deserialize)]
 #[serde(rename_all = "camelCase", default)]
 struct OwnerRecord {
@@ -520,9 +503,8 @@ thread_local! {
     static STATE: RefCell<AppState> = RefCell::new(AppState::default());
 }
 
-/// JS is single-threaded but async calls interleave, and interleaving two
-/// report exchanges corrupts both. This is the async stand-in for the
-/// desktop's mutex; ops are short, so polling is fine.
+/// JS is single-threaded but async calls interleave; two exchanges at once
+/// corrupt both. Stand-in for the desktop mutex. Ops are short, so poll.
 struct BusyGuard;
 
 async fn acquire() -> BusyGuard {
@@ -599,14 +581,8 @@ fn fail(e: HidErr) -> String {
         e.to_string()
     }
 }
-
-/// Claims the next slot on a clock and waits for it.
-///
-/// The slot is claimed before awaiting, not after waking: callers that only
-/// read the clock all compute the same deadline and then fire together,
-/// which is the flood this exists to prevent. The wait is the stricter of
-/// the two floors involved, so a key write's 400 ms of quiet is not cut
-/// short by a lighting write following it.
+/// Claim the next slot on a clock, then wait. Claim before awaiting so
+/// waiters cannot share a deadline. Wait is the stricter of the two floors.
 async fn gap(last: impl Fn(&mut AppState) -> &mut Option<(f64, f64)> + Copy, min_ms: f64) {
     let now = js_now();
     let wait = STATE.with(|s| {
@@ -629,11 +605,9 @@ async fn gap(last: impl Fn(&mut AppState) -> &mut Option<(f64, f64)> + Copy, min
         sleep_ms(wait).await;
     }
 }
-
-/// Waits out whatever quiet the last write declared, without claiming the
-/// clock. Reads share the wire with flash-class writes, and a read landing
-/// in a write's quiet window stalls the endpoint just as another write
-/// would: an X86 wedged on a keymap read 120 ms after a profile switch.
+/// Wait out the last write's quiet without claiming the clock. A read in
+/// that window stalls like another write: X86, keymap read 120 ms after a
+/// profile switch.
 async fn read_quiet() {
     let wait = STATE.with(|s| match s.borrow().last_cmd {
         Some((prev, min)) => prev + min - js_now(),
@@ -846,7 +820,6 @@ pub fn allow_unregistered() -> Result<(), JsValue> {
     })
 }
 
-/// Which build this is, for the UI to show and a reporter to quote.
 #[wasm_bindgen]
 pub fn build_id() -> String {
     registry::build_id()
@@ -860,8 +833,7 @@ pub fn vendor_ids() -> Vec<u16> {
     registry::vendor_ids().to_vec()
 }
 
-/// Cached connection state; the JS scan loop combines this with
-/// `navigator.hid` device presence.
+/// JS scan loop combines this with `navigator.hid` presence.
 #[wasm_bindgen]
 pub fn status() -> Result<JsValue, JsValue> {
     #[derive(serde::Serialize)]
@@ -892,7 +864,6 @@ pub fn status() -> Result<JsValue, JsValue> {
     })
 }
 
-/// The JS side calls this on a `disconnect` event (cable pulled).
 #[wasm_bindgen]
 pub fn drop_session() {
     STATE.with(|s| s.borrow_mut().open = None);
@@ -2112,7 +2083,6 @@ pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
     Ok(out.into())
 }
 
-/// Dev escape hatch, same as the desktop's.
 #[wasm_bindgen]
 pub async fn raw_command(
     opcode: u8,

@@ -2,25 +2,18 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! A board the registry does not know, described from its own answers.
 //!
-//! The registry entry for a board decides two things the app cannot read
-//! off the wire: its name, and which command family it speaks. Everything
-//! else in an entry is transcribed from the same read sweep the Contribute
-//! tab collects. The name comes from the USB product string. The family
-//! comes from how the board answers the two keymap reads, which is how it
-//! has been established for every hand-added board so far: yc500 returns
-//! its keymap on `0x89` and a fixed all-0xFF table on `0x8A`; gen2 returns
-//! options on `0x89`, echoing the opcode, and its keymap on `0x8A`. The
-//! sleep registers sit at different bytes in the two families and serve as
-//! a contradiction check. Anything that does not fit both ways stays
-//! unknown, and an unknown board is read-only.
+//! Name from the USB product string. Family from the two keymap reads:
+//! yc500 returns the keymap on 0x89 and all-0xFF on 0x8A; gen2 returns
+//! options on 0x89 (opcode echo) and the keymap on 0x8A. Sleep timers sit
+//! at different bytes and contradict a wrong call. Anything that fits both
+//! ways or neither stays unknown, and unknown is read-only.
 //!
-//! All inputs are replies to reads that are harmless in both families
-//! (see `BUNDLE_PROBES` in commands.rs); nothing here touches the board.
+//! Inputs are replies to reads that are harmless in both families
+//! (`BUNDLE_PROBES`); nothing here touches the board.
 use crate::registry::{DeviceFeatures, DeviceSpec};
 
 pub const REPORT_LEN: usize = 64;
 
-/// The 4-byte slot entries of a keymap page or table, in order.
 fn entries(bytes: &[u8]) -> impl Iterator<Item = &[u8]> {
     (0..bytes.len() / 4).map(move |i| &bytes[i * 4..i * 4 + 4])
 }
@@ -33,10 +26,9 @@ fn plain_keys(page: &[u8]) -> usize {
         .count()
 }
 
-/// A 64-byte page that is a keymap page and not an opcode-echoing reply.
-/// Eight of sixteen slots is the bar: page 0 of every factory keymap seen
-/// carries Esc, grave, Tab, CapsLock, both left modifiers and the first
-/// columns of letters, and an options reply carries none.
+/// A 64-byte page that is a keymap, not an opcode echo. Eight of sixteen
+/// slots is the bar: factory page 0 always has Esc and the left column;
+/// an options reply has none.
 fn keymap_page(page: &[u8]) -> bool {
     page.len() >= REPORT_LEN && plain_keys(&page[..REPORT_LEN]) >= 8
 }
@@ -61,9 +53,8 @@ fn sleep_at(reply: &[u8], at: usize) -> Option<[u16; 4]> {
     Some(out)
 }
 
-/// The command family a board speaks, from the replies to `0x89 [0,0]`,
-/// `0x8A [0,0xFF,0,0]`, `0x91` and `0x92`. `None` when the answers do not
-/// agree on one family.
+/// Family from replies to `0x89 [0,0]`, `0x8A [0,0xFF,0,0]`, `0x91` and
+/// `0x92`. `None` when they do not agree.
 pub fn detect_family(r89: &[u8], r8a: &[u8], r91: &[u8], r92: &[u8]) -> Option<&'static str> {
     let yc500 = keymap_page(r89) && all_ff(r8a);
     let gen2 = keymap_page(r8a) && !keymap_page(r89) && r89.first() == Some(&0x89);
@@ -116,10 +107,8 @@ pub struct Sweep<'a> {
     pub keymap: &'a [u8],
 }
 
-/// A registered board whose entry does not know its family takes the family
-/// its own answers settle on, and the same consent gate as a board with no
-/// entry: the identity is on file, the command set is the board's word.
-/// Features the entry left blank fill from the sweep.
+/// A registered board with unknown family takes the family its answers
+/// settle, and the same consent gate as a board with no entry.
 pub fn settle_family(mut spec: DeviceSpec, derived: &DeviceSpec) -> DeviceSpec {
     spec.family = derived.family.clone();
     spec.unregistered = true;
@@ -132,10 +121,8 @@ pub fn settle_family(mut spec: DeviceSpec, derived: &DeviceSpec) -> DeviceSpec {
     spec
 }
 
-/// A registry entry for a board that has none, marked `unregistered` so
-/// the app can say so and ask before it writes. The picture is `Unknown`,
-/// which makes the Keys page match one against the board and ask the owner
-/// to confirm it, as it does for hand-added boards.
+/// Registry entry for a board that has none, marked `unregistered`. Picture
+/// is `Unknown` so the Keys page matches one against the board.
 pub fn derive_spec(
     id: u32,
     vendor_id: u16,

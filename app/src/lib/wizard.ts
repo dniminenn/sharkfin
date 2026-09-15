@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-// The rules of the check-your-board wizard, kept apart from the page so they
-// can be tested: which keys to ask for, which remap to offer, what an answer
-// about the colour means, and the report that goes out with the bundle.
+// Check rules, apart from the page so they can be tested.
 import type { ConnectedDevice, KeySwitch, LedParam, SledParam, SwitchSettings } from "@/lib/backend";
 import type { BoardLayout } from "@/lib/layout-loader";
 import { CODE_TO_USAGE, usageLabel } from "@/lib/hid-usages";

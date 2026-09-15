@@ -42,10 +42,8 @@ const SLEEP_MIN = 60;
 const SLEEP_MAX = 3600;
 const DEEP_MIN = 600;
 
-// Mirrors DeviceSpec::screen_draw in registry.rs: drawing is offered only
-// where firmware is known to parse the frame, either the keyboard's own or
-// the display chip's. Three lineages qualify; every other gen2 board is
-// refused, in the backend as well as here.
+// Drawing only where firmware is known to parse the frame. Three lineages;
+// every other gen2 board is refused here and in the backend.
 function drawRules(
   spec: DeviceSpec,
 ): { maxFrame: number; maxDim: number; mode24: boolean } | null {
@@ -68,9 +66,7 @@ function canDraw(spec: DeviceSpec): boolean {
   return w * h * (mode === "24" ? 3 : 2) <= rules.maxFrame;
 }
 
-// The boards drawing is refused on because no firmware evidences the path,
-// as opposed to a board sharkfin supports but whose panel or mode it cannot
-// address.
+// No firmware evidence for the draw path, as opposed to a panel we cannot address.
 function drawsElsewhere(spec: DeviceSpec): boolean {
   return drawRules(spec) === null;
 }
@@ -103,10 +99,7 @@ function Row({
   );
 }
 
-// Debounce and sleep are onboard settings, so every write lands in flash.
-// A drag changes nothing on the board: the number follows your finger and
-// the keyboard is written once, when you let go. Same reasoning as the
-// Lighting page, and the same reason an X86 wedged under a slider.
+// Debounce and sleep are flash. Drag previews; write once on release.
 
 export default function DevicePage({
   device,

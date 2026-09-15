@@ -1,9 +1,7 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-// The check-your-board wizard. Reads first, then three writes, each behind
-// its own button: a colour, a profile switch and back, one key. Its state
-// lives in localStorage by device id, so a replug lands back on the same
-// step. Nothing here writes from an effect.
+// Check-your-board. Reads first, then writes behind buttons. State by
+// device id in localStorage so a replug resumes. Nothing writes from an effect.
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, Minus, RotateCcw, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -109,9 +107,8 @@ export default function CheckPage({
   const lastId = useRef<number | null>(null);
   const unplugged = useRef(false);
 
-  // Load the run for this board; count a replug when the same board comes
-  // back after leaving mid-run. StrictMode runs this twice on mount, which
-  // is harmless: the second pass sees the same id and does nothing.
+  // Load this board's run. Count a replug if it left mid-run. StrictMode
+  // double-mount is harmless: second pass sees the same id.
   useEffect(() => {
     if (id === undefined) {
       if (lastId.current !== null) {
@@ -165,8 +162,7 @@ export default function CheckPage({
     setHeld({ id, s: freshState() });
   };
 
-  // The keys and remap steps work from the board's own keymap. A read, so
-  // an effect is fine.
+  // Keys and remap need the board's keymap. A read, so an effect is fine.
   const step = state?.step;
   useEffect(() => {
     if (!device || keymap || (step !== "keys" && step !== "remap")) return;
@@ -238,9 +234,8 @@ export default function CheckPage({
   const family = spec.family ?? "unknown";
   const known = family === "gen2" || family === "yc500";
 
-  // The owner record is what makes an unregistered board work between
-  // sessions: saved by device id, applied to the backend now and on every
-  // connect. Applying sends nothing to the board.
+  // Owner record: saved by device id, applied now and on every connect.
+  // Applying sends nothing.
   const commitOwner: Commit = async (p) => {
     const record = { ...(loadOwner(spec.id) ?? emptyRecord()), ...p };
     saveOwner(spec.id, record);
@@ -248,8 +243,7 @@ export default function CheckPage({
     onRescan();
     return record;
   };
-  // Applied for the length of a test, never saved: the saved answer is
-  // whatever the test proves.
+  // Applied for the length of a test, never saved.
   const trialOwner: Commit = async (p) => {
     const record = { ...(loadOwner(spec.id) ?? emptyRecord()), ...p };
     await applyOwnerRecord(record);
@@ -257,8 +251,7 @@ export default function CheckPage({
     return record;
   };
 
-  // The record re-applies on connect, so this shows only when it was never
-  // given, or storage was blocked.
+  // Shows only when the grant was never given, or storage was blocked.
   const needsGrant = device.readOnly && spec.unregistered;
   const grant = needsGrant && (
     <Banner>

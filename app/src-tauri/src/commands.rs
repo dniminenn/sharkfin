@@ -20,37 +20,27 @@ struct Inner {
     api: Option<hidapi::HidApi>,
     open: Option<OpenDevice>,
     last_flash: Option<Instant>,
-    /// One clock for every write: when the last one was claimed, and the
-    /// floor its class asked for. Both halves matter, since the quiet a
-    /// write needs after it is a property of that write, not the next one.
+    /// Last write claim: instant, and the quiet that write required after itself.
     last_write: Option<(Instant, Duration)>,
-    /// Set when the firmware stalls. Reopening a stalled device does not
-    /// recover it and the extra traffic keeps it pinned, so scanning stops
-    /// until the hardware disappears from the bus, i.e. someone replugs.
+    /// Firmware stalled. Reopen does not recover it; extra traffic pins it.
+    /// Scan stops until the device leaves the bus (a replug).
     stalled: bool,
-    /// The owner of a board the registry does not know has confirmed the
-    /// detected family and allowed writes. Cleared with the handle.
+    /// Unregistered board: owner allowed writes this session. Cleared with the handle.
     unregistered_ok: bool,
-    /// The owner's own answer to which way round this board reads the
-    /// LEDPARAM flags nibble, when they have given one. Kept here rather
-    /// than on the spec so the spec keeps describing the board as shipped.
-    /// Cleared with the handle.
+    /// Owner override for the LEDPARAM flags nibble. Kept off the spec so
+    /// the spec still describes the board as shipped. Cleared with the handle.
     led_swap: Option<bool>,
-    /// What the owner established about this board in the check, applied
-    /// by the frontend on every connect. Cleared with the handle.
+    /// Check answers, applied by the frontend on connect. Cleared with the handle.
     owner: OwnerRecord,
-    /// One slot the check may write switch columns to while its felt test
-    /// runs on a lineage without firmware evidence. Nothing else opens;
-    /// the Switches page stays as it was. Cleared with the handle.
+    /// Slot the check may write switch columns to during its felt test.
+    /// Nothing else opens. Cleared with the handle.
     switch_trial: Option<u8>,
 }
 
-/// The owner's answers about their own board, from the check. The registry
-/// describes the board as shipped; this is what the owner has seen it do.
-/// Spec overlays land only on a board the registry does not know, so a
-/// registry entry is never contradicted by a click. `switch_writes` is the
-/// owner's felt round trip on a lineage whose firmware has not been read,
-/// and applies to any board whose columns can be read.
+/// Owner answers from the check. Spec overlays apply only to an unregistered
+/// board, so a registry entry is never contradicted by a click. `switch_writes`
+/// is a felt round trip standing in for unread firmware, on any board whose
+/// columns read.
 #[derive(Clone, Copy, Debug, Default, Deserialize)]
 #[serde(rename_all = "camelCase", default)]
 pub struct OwnerRecord {
@@ -70,7 +60,6 @@ struct OpenDevice {
     /// Reported by the receiver alongside identify; there is no such number
     /// by cable.
     battery: Option<u8>,
-    /// The settings collection's usage on the vendor page, for the bundle.
     usage: u16,
     /// The `0x80` reply as a u16, read once at connect. Gates the yc500
     /// switch columns, which arrived with firmware 2.00.
@@ -99,8 +88,7 @@ impl OpenDevice {
     }
 }
 
-/// What the Switches page may do with this board. One source of truth for
-/// both frontends; the rules live on `DeviceSpec`.
+/// Rules live on `DeviceSpec`. Both frontends.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum SwitchAccess {
@@ -143,52 +131,33 @@ fn read_revision(t: &Transport, spec: &DeviceSpec) -> Option<u16> {
     (v != 0).then_some(v)
 }
 
-/// How long a successful exchange vouches for the connection. Below this,
-/// `scan` answers from cache instead of putting another identify round-trip on
-/// the wire -- the frontend polls, and every poll used to contend with real
-/// work and add to the write pressure that stalls the endpoint.
+/// How long a successful exchange vouches for the connection. `scan` answers
+/// from cache inside this window. Frontend polls; another identify per poll
+/// stalls the endpoint.
 const LIVENESS_TTL: Duration = Duration::from_secs(20);
 
-/// Per-key colour and macro uploads land in flash. Back to back they stall
-/// the control endpoint within a couple of batches: measured on an X86,
-/// 7 reports every 500 ms dies after ~13, every 3 s survives indefinitely.
-/// Enforced here rather than in the UI so no caller can wedge a keyboard.
+/// Per-key colour and macros land in flash. X86: 7 reports / 500 ms dies
+/// after ~13; 3 s survives. Enforced here so no caller can skip it.
 const FLASH_COOLDOWN: Duration = Duration::from_secs(10);
 
-/// Spacing between pages inside one upload. Transport's 12 ms floor pushes
-/// the whole batch out in under 100 ms, which is far harder than anything
-/// the firmware was measured surviving.
+/// Gap between pages of one upload. Transport's 12 ms floor would dump a
+/// batch in under 100 ms.
 const FLASH_PAGE_GAP: Duration = Duration::from_millis(100);
 
-/// How long the board is left completely alone after a flash batch. The
-/// vendor waits 500 ms; two uploads at that pace stalled an X86, so assume
-/// the commit takes longer than the vendor thinks and hold the device lock
-/// throughout, which also keeps the frontend's polling off the wire.
+/// Idle after a flash batch. Vendor waits 500 ms; two uploads at that pace
+/// stalled an X86. Hold the device lock so poll stays off the wire.
 const FLASH_SETTLE: Duration = Duration::from_secs(2);
 
-/// Single-slot key writes persist to onboard storage, so they are flash
-/// writes too. Measured on an X86: nine of them 150 ms apart stalled the
-/// control endpoint. One per click is fine; anything in a loop is not.
+/// Single-slot key writes are flash. X86: nine at 150 ms stalled. One per
+/// click is fine; a loop is not.
 const KEY_GAP: Duration = Duration::from_millis(400);
 
-/// Lighting is onboard state: `factory_reset` wipes it alongside profiles,
-/// keymaps and macros, so every one of these writes lands in flash. It was
-/// paced as though it were a volatile register, and an X86 wedged after 39
-/// writes a second apart without once breaching that floor. Flash is
-/// documented above as surviving indefinitely only at 3 s.
-///
-/// The frontend now writes on release rather than per drag event, so a
-/// gesture costs one write and this floor is rarely reached at all.
+/// Lighting is flash (`factory_reset` wipes it). 1 s floor. Frontend writes
+/// on release, so a gesture is one packet.
 const LIGHT_GAP: Duration = Duration::from_millis(1000);
 
-/// Everything else a user can hold down or click repeatedly: profile
-/// switches, debounce and sleep sliders, auto-OS, reset.
-///
-/// Treated as flash, because it is: every one of these survives a power
-/// cycle, which is what onboard storage means, and `factory_reset` wipes
-/// them alongside the keymaps and macros. Lighting was paced as a volatile
-/// register on the same reasoning and wedged an X86 after 39 writes. The
-/// cost of being wrong the other way is a slider that lags.
+/// Profile, debounce, sleep, auto-OS, reset: flash, same 1 s floor. Too
+/// short wedges; too long makes a slider lag.
 const SETTING_GAP: Duration = Duration::from_millis(1000);
 
 impl Default for AppState {
@@ -252,10 +221,8 @@ pub struct ScanResult {
     pub keyboard_offline: bool,
 }
 
-/// Light mode that displays an uploaded per-key pattern.
 const PER_KEY_MODE: u8 = 13;
 
-/// Shown whenever the firmware has stalled. Only a replug clears it.
 pub const STALL_MESSAGE: &str =
     "The keyboard stopped responding. Unplug it, wait ten seconds, and plug it back in.";
 
@@ -274,13 +241,10 @@ impl Inner {
     }
 }
 
-// Every command is `async` so Tauri runs it off the main thread. A command
-// on the main thread blocks the window for as long as the board takes to
-// answer: ten milliseconds by cable, but through the 2.4 GHz receiver each
-// exchange waits about 150 ms on the radio, which freezes animation and
-// scrolling for every read.
+// async so Tauri runs off the main thread. Cable is ~10 ms; the receiver is
+// ~150 ms per exchange and would freeze the window.
 
-/// Open and identify the first recognized board; frontend polls this.
+/// Open and identify. Frontend polls.
 #[tauri::command(async)]
 pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
     let mut inner = state.inner.lock();
@@ -316,8 +280,8 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
     };
 
     if inner.stalled {
-        // Opening a stalled device does not recover it, and the traffic keeps
-        // it wedged. Wait for it to leave the bus, which is what a replug does.
+        // Reopen does not recover a stall; extra traffic pins it. Wait for
+        // the device to leave the bus (a replug).
         if found.is_empty() {
             inner.stalled = false;
         } else {
@@ -412,9 +376,8 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
     })
 }
 
-/// A registry entry for a board that has none, from the same read-only
-/// probes the data bundle collects (`derive.rs`). `None` when the answers
-/// do not settle the family, and the board stays an unknown row.
+/// Registry entry from read-only probes (`derive.rs`). `None` if the answers
+/// do not settle a family; the board stays an unknown row.
 fn derive_from_board(t: &Transport, id: u32, d: &hid::DiscoveredDevice) -> Option<DeviceSpec> {
     let read = |op: u8, payload: &[u8]| t.read_raw_page(op, payload, Checksum::Bit7).ok();
     let r89 = read(0x89, &[0, 0])?;
@@ -456,8 +419,7 @@ fn derive_from_board(t: &Transport, id: u32, d: &hid::DiscoveredDevice) -> Optio
     ))
 }
 
-/// The owner has read what was detected about a board the registry does
-/// not know and allows writes to it for this session.
+/// Session grant: writes allowed on this unregistered board. Sends nothing.
 #[tauri::command(async)]
 pub fn allow_unregistered(state: tauri::State<AppState>) -> Result<(), String> {
     let mut inner = state.inner.lock();
@@ -471,9 +433,8 @@ pub fn allow_unregistered(state: tauri::State<AppState>) -> Result<(), String> {
     }
 }
 
-/// Apply what the owner established in the check. Sends nothing. The
-/// frontend keeps the record by device id and applies it on every connect,
-/// so a board walked through the check once keeps what the check unlocked.
+/// Apply check answers. Sends nothing. Frontend stores the record by device
+/// id and applies it on every connect.
 #[tauri::command(async)]
 pub fn apply_owner_record(
     state: tauri::State<AppState>,
@@ -502,10 +463,9 @@ pub fn apply_owner_record(
     Ok(())
 }
 
-/// Open one slot's switch columns to the check's felt test, or close it.
-/// Sends nothing. The test writes the key, reads it back, asks the owner,
-/// and puts it back; only after that does the owner record say whether the
-/// lineage may be written at all.
+/// Open one slot for the check's switch felt test, or close it. Sends nothing.
+/// The test writes, reads back, asks, and restores; only then may the record
+/// allow switch writes.
 #[tauri::command(async)]
 pub fn set_switch_trial(state: tauri::State<AppState>, slot: Option<u8>) -> Result<(), String> {
     let mut inner = state.inner.lock();
@@ -527,11 +487,9 @@ fn receiver_battery(t: &Transport) -> Option<u8> {
         .map(|s| s.keyboard_battery)
 }
 
-/// Factory reset waits for the cable: a bare opcode with no read-back, not
-/// sent through a receiver, on a link that drops a packet when the board has
-/// dozed off between the status poll and the send. Screen frames wait too:
-/// a thousand pages over a link that drops one when the board dozes, and the
-/// vendor's own app disables picture upload in wireless mode.
+/// Factory reset and screen frames: cable only. Bare opcode, no read-back;
+/// the receiver drops a packet if the board dozed. A screen frame is a
+/// thousand pages.
 fn require_cable(state: &tauri::State<AppState>) -> Result<(), String> {
     let inner = state.inner.lock();
     match &inner.open {
@@ -542,28 +500,23 @@ fn require_cable(state: &tauri::State<AppState>) -> Result<(), String> {
     }
 }
 
-/// The two families assign the same opcodes to different registers, so a
-/// command that is not opcode-identical across families must go through the
-/// resolved table -- `None` means the family is unknown and only shared
-/// commands are safe.
+/// Family-dependent commands go through the resolved table. `None` means
+/// unknown family: only shared opcodes are safe.
 fn need(fc: Option<&'static FamilyCmds>) -> Result<&'static FamilyCmds, HidError> {
     fc.ok_or_else(|| HidError::Protocol("this board's protocol family is unknown".into()))
 }
 
-/// Runs `f` against the open device, then records liveness. A stalled endpoint
-/// invalidates the handle: the firmware will refuse everything until it is
-/// reopened, and silently retrying forever is worse than reconnecting.
+/// Run `f` on the open device, then record liveness. A stall invalidates the
+/// handle. Retrying forever is worse than reconnecting.
 fn run<T>(
     state: &tauri::State<AppState>,
     require_writable: bool,
     f: impl FnOnce(&Transport, Option<&'static FamilyCmds>) -> Result<T, HidError>,
 ) -> Result<T, String> {
     let mut inner = state.inner.lock();
-    // Reads share the wire with flash-class writes, and a read landing in a
-    // write's quiet window stalls the endpoint just as another write would:
-    // an X86 wedged on a keymap read 120 ms after a profile switch. Writes
-    // pace themselves through the gap claims, so only reads wait here, with
-    // the lock held so nothing else reaches the board meanwhile.
+    // Reads share the wire with flash writes. A read in a write's quiet
+    // window stalls the same way: X86, keymap read 120 ms after a profile
+    // switch. Writes already claimed the gap; only reads wait here, lock held.
     if !require_writable {
         if let Some((prev, min)) = inner.last_write {
             let until = prev + min;
@@ -615,9 +568,8 @@ fn with_open<T>(
     run(state, false, f)
 }
 
-/// Only boards on a protocol family we have actually verified accept writes.
-/// Another family's opcodes land on different registers, and a keymap page
-/// write is not recoverable from a mistake.
+/// Writes only on a verified family. The other family's opcodes land on
+/// different registers; a keymap page write is not recoverable.
 fn with_writable<T>(
     state: &tauri::State<AppState>,
     f: impl FnOnce(&Transport, Option<&'static FamilyCmds>) -> Result<T, HidError>,
@@ -668,12 +620,9 @@ pub fn set_led_param(state: tauri::State<AppState>, param: LedParam) -> Result<(
     })
 }
 
-/// Which way round this board reads the LEDPARAM flags nibble, from the
-/// owner rather than the registry. The two lineages disagree about it
-/// (`docs/PROTOCOL.md`), so a board whose entry has it the wrong way round
-/// shows a solid colour where the owner asked for the rainbow. This changes
-/// how the next packet is encoded and how a reply is read; it sends nothing,
-/// and it lasts as long as the handle.
+/// Owner override for the LEDPARAM flags nibble. Sends nothing; lasts as
+/// long as the handle. Wrong way round shows a solid colour where rainbow
+/// was asked for.
 #[tauri::command(async)]
 pub fn set_led_flags_swapped(state: tauri::State<AppState>, swapped: bool) -> Result<(), String> {
     let mut inner = state.inner.lock();
@@ -693,12 +642,9 @@ pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
     })
 }
 
-/// The display's own firmware version, or `None` on a board without one.
-///
-/// `0xAD` is the one screen command that means the same thing in both
-/// families, so it is safe to send without knowing which one this is. An
-/// unimplemented command echoes the previous reply rather than failing, so
-/// a reply that does not lead with the opcode is a board with no display.
+/// Display firmware version, or `None`. `0xAD` is shared across families.
+/// Unimplemented commands echo the previous reply, so a reply that does not
+/// lead with the opcode means no display.
 #[tauri::command(async)]
 pub fn get_screen_version(state: tauri::State<AppState>) -> Result<Option<u16>, String> {
     with_open(&state, |t, _| {
@@ -736,11 +682,9 @@ pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), Str
     })
 }
 
-/// 512-byte matrix: 128 slots × 4 bytes, read as 8 raw pages. gen2 payloads
-/// carry a 0xFF sentinel and put the page a byte later. `profile` is the
-/// wire value: on yc500 magnetic boards the caller has already folded the
-/// sub-layer in (`protocol::yc500_profile_slot`); on gen2 it rides in the
-/// payload's fourth byte and the Fn layer has none.
+/// 512-byte matrix, 8 raw pages. gen2: 0xFF sentinel, page a byte later.
+/// `profile` is the wire value (yc500 magnetic already folded). gen2 Fn has
+/// no sub-layer; OS rides in the fourth payload byte.
 fn read_matrix(
     t: &Transport,
     fc: &'static FamilyCmds,
@@ -795,7 +739,6 @@ fn key_write_packet(
     Ok(pkt)
 }
 
-/// Which build this is, for the UI to show and a reporter to quote.
 #[tauri::command(async)]
 pub fn build_id() -> String {
     registry::build_id()
@@ -807,9 +750,7 @@ pub fn read_keymap(state: tauri::State<AppState>, profile: u8) -> Result<Vec<u8>
     with_open(&state, |t, fc| read_matrix(t, need(fc)?, profile, 0, false))
 }
 
-/// One of the four keymap sub-layers of a profile. Sub-layer 0 is the
-/// keymap; 1..3 hold the actions of dynamic-keystroke, mod-tap and toggle
-/// keys on magnetic boards.
+/// Sub-layer 0 is the keymap; 1..3 are DKS, mod-tap, toggle on magnetic boards.
 #[tauri::command(async)]
 pub fn read_keymap_layer(
     state: tauri::State<AppState>,
@@ -843,8 +784,7 @@ pub fn set_key(
     set_key_layer(state, profile, 0, slot, value, fn_layer)
 }
 
-/// One slot in one keymap sub-layer. Sub-layers past 0 exist only on
-/// magnetic boards; the Fn layer has none.
+/// Sub-layers past 0: magnetic only. Fn has none.
 #[tauri::command(async)]
 pub fn set_key_layer(
     state: tauri::State<AppState>,
@@ -1036,9 +976,8 @@ pub fn set_auto_os(state: tauri::State<AppState>, enabled: bool) -> Result<(), S
     })
 }
 
-/// A backup covers every profile the board claims. Capping it at three left
-/// a fourth editable in the app and absent from the file, so a restore wiped
-/// work the user could see. Eight is the most any registry entry claims.
+/// Highest profile count any registry entry claims. A backup must cover all
+/// of them.
 pub const MAX_PROFILES: u8 = 8;
 
 /// Wipes every onboard profile, keymap, macro and light setting. Firmware
@@ -1053,24 +992,13 @@ pub fn factory_reset(state: tauri::State<AppState>) -> Result<(), String> {
     })
 }
 
-/// Spaces key writes by KEY_GAP.
 fn key_gap(state: &tauri::State<AppState>) {
     write_gap(state, KEY_GAP)
 }
 
-/// Every write waits on one clock, so two callers cannot interleave their
-/// way past the floor: a lighting slider and a debounce slider moving
-/// together used to put both streams on the endpoint at once.
-///
-/// The slot is claimed before sleeping, not after waking. Waiters that only
-/// read the clock all compute the same deadline and then fire together,
-/// which is the flood this exists to prevent. Claiming first also means the
-/// clock only ever moves forward, so a thread delayed on the lock cannot
-/// stamp a stale instant over a newer one.
-///
-/// The wait is the stricter of the two floors involved. A key write needs
-/// 400 ms of quiet after it whatever comes next, so following it with a
-/// lighting write must not shorten that to 250 ms.
+/// One clock for every write. Claim the slot before sleeping so waiters
+/// cannot share a deadline and fire together. Wait is the stricter of the
+/// last write's floor and `min`.
 fn write_gap(state: &tauri::State<AppState>, min: Duration) {
     let now = Instant::now();
     let next = {
@@ -1100,13 +1028,10 @@ fn stamp_write(state: &tauri::State<AppState>) {
     state.inner.lock().last_write = Some((Instant::now(), KEY_GAP));
 }
 
-/// Spaces lighting writes by LIGHT_GAP.
 fn light_gap(state: &tauri::State<AppState>) {
     write_gap(state, LIGHT_GAP)
 }
 
-/// Blocks until FLASH_COOLDOWN has passed since the last flash-backed upload,
-/// then stamps the clock for the next caller.
 fn flash_cooldown(state: &tauri::State<AppState>) {
     let now = Instant::now();
     let next = {
@@ -1127,14 +1052,9 @@ fn flash_cooldown(state: &tauri::State<AppState>) {
     write_gap(state, FLASH_PAGE_GAP);
 }
 
-/// Upload 384 bytes of per-key colour (128 slots × RGB, matrix order) and
-/// optionally switch the backlight to the pattern mode that shows it.
-/// The packet shape is per family; gen2 carries 126 of the 128 slots.
-///
-/// Write-only by design: `GET_USERPIC` returns stable data that does *not*
-/// reflect what was just written, so the board is not a source of truth here
-/// and the host keeps the pattern. Verified visually on an X86; the gen2
-/// shape is read out of the X65HE firmware (2268_v309).
+/// 384 bytes of per-key colour (128 slots x RGB, matrix order). Optionally
+/// switch to the pattern mode that shows it. gen2 carries 126 of 128 slots.
+/// `GET_USERPIC` does not reflect the write; the host keeps the pattern.
 #[tauri::command(async)]
 pub fn write_per_key(
     state: tauri::State<AppState>,
@@ -1197,26 +1117,18 @@ pub fn write_per_key(
     out
 }
 
-/// Gap between screen pages. The vendor uses 2 ms wired and 5 ms in a
-/// browser; the transport's own floor is already stricter than either, and
-/// a full 240x135 frame is over a thousand pages, so pacing this like a
-/// seven-page per-key upload would take minutes.
+/// Screen page gap. A 240x135 frame is over a thousand pages; flash-style
+/// pacing would take minutes.
 const SCREEN_PAGE_GAP: Duration = Duration::from_millis(5);
 /// How long the board is given to answer the announce, polled the way the
 /// vendor polls it.
 const SCREEN_READY_TRIES: u32 = 10;
 const SCREEN_READY_GAP: Duration = Duration::from_millis(100);
 
-/// Draw one still frame on the board's display.
-///
-/// `rgb` is `w * h * 3` bytes in row order; the display's own column order
-/// and pixel format are applied here rather than in the UI. The whole
-/// display is rewritten, so there is no partial-update path to get wrong.
-///
-/// This lands in flash, so it takes the flash cooldown like any other
-/// upload. The announce is polled until the board says it is ready and the
-/// pages are abandoned if it never does, which is what stops a half-written
-/// frame going out at the board's expense.
+/// One still frame. `rgb` is `w * h * 3` row-major; column order and pixel
+/// format are applied here. Flash, so the cooldown applies. Poll the announce
+/// until ready; abandon the pages if it never is, so a half-written frame
+/// does not go out.
 #[tauri::command(async)]
 pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result<(), String> {
     require_cable(&state)?;
@@ -1311,8 +1223,6 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
     out
 }
 
-/// What the open board's switch columns look like, and whether they may be
-/// read at all.
 fn hall_format(state: &tauri::State<AppState>) -> Result<hall::Format, String> {
     let inner = state.inner.lock();
     let open = inner.open.as_ref().ok_or("no device connected")?;
@@ -1326,8 +1236,6 @@ fn hall_format(state: &tauri::State<AppState>) -> Result<hall::Format, String> {
         .ok_or_else(|| "no switch column format for this family".to_string())
 }
 
-/// Magnetic-switch settings for every slot: the mode column, the travel
-/// columns and the per-kind columns, raw pages assembled into millimetres.
 #[tauri::command(async)]
 pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSettings, String> {
     let f = hall_format(&state)?;
@@ -1389,12 +1297,9 @@ fn require_hall_writes(
         .ok_or_else(|| "no switch column format for this family".to_string())
 }
 
-/// One key's switch settings: one packet a column, the last one flagged so
-/// the firmware saves the block and applies it; that save is a flash erase
-/// and program, so it takes the flash cooldown. A dynamic-keystroke,
-/// mod-tap or snap key gets its extra columns after the plain six. The
-/// sub-layer keymap entries those kinds act on are written separately
-/// (`set_key_layer`).
+/// One key's switch settings. Last packet of the block is flagged (flash
+/// erase and program), so the cooldown applies. Advanced kinds add columns
+/// after the plain six; their keymap sub-layers are `set_key_layer`.
 #[tauri::command(async)]
 pub fn set_switch_key(state: tauri::State<AppState>, key: hall::KeySwitch) -> Result<(), String> {
     set_switch_keys(state, vec![key])
@@ -1572,9 +1477,8 @@ fn check_macro_slot(slot: u8) -> Result<(), String> {
     Ok(())
 }
 
-/// 256-byte blob over four raw pages. Unlike `GET_USERPIC`, this read does
-/// reflect the last write (verified on an X86), so the board is a usable
-/// source of truth for macros.
+/// 256-byte blob over four raw pages. Unlike `GET_USERPIC`, this read
+/// reflects the last write, so the board is a source of truth for macros.
 #[tauri::command(async)]
 pub fn read_macro(state: tauri::State<AppState>, slot: u8) -> Result<Macro, String> {
     check_macro_slot(slot)?;
@@ -1786,27 +1690,13 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
     out
 }
 
-/// Read opcodes from both family tables. All reads, all harmless; on a board
-/// that doesn't implement one, the firmware echoes its previous reply, which
-/// is itself a data point.
+/// Read probes, both families. Unimplemented opcodes echo the previous reply.
 ///
-/// Not every opcode above 0x80 belongs here. Both families put their flash
-/// chip erase within reach of it: gen2 at 0xAC outright, and on yc500 the
-/// same byte triggers the same display-chip command as the 0x2C erase (the
-/// RT100 firmware routes both handlers through one flag), even though the
-/// vendor's table lists it as a read. Sweeping the range blind would wipe a
-/// screen board's pictures. Anything added here has to be evidenced as a
-/// harmless read in *both* families, because the sweep runs before the
-/// family is known.
+/// Do not sweep 0x80.. blind. gen2 0xAC erases the flash chip; on yc500 the
+/// same byte is the 0x2C display erase. The sweep runs before the family is
+/// known. Every entry must be a harmless read in both families.
 ///
-/// The keymap pages carry the whole base layer, so a report names its
-/// layout without a second round trip. Both shapes are pure reads in both
-/// families: the gen2 0x89 handler answers options without reading the
-/// payload (2454 firmware at 0x155A2, 2730 at 0x11DEC), the gen2 0x8A bulk
-/// read copies a 64-byte flash page into the reply (2454 at 0x15616, 2730
-/// at 0x11E3A), and yc500 answers 0x8A from a fixed table, reading only
-/// the profile byte (1379 at 0x23C18), which is the all-0xFF reply older
-/// bundles show.
+/// Keymap pages go in so a report names the layout without a second trip.
 const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x80 revision", 0x80, &[]),
     ("0x83 report rate (gen2)", 0x83, &[]),
@@ -1975,7 +1865,6 @@ fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<S
     Ok(out)
 }
 
-/// Dev escape hatch.
 #[tauri::command(async)]
 pub fn raw_command(
     state: tauri::State<AppState>,

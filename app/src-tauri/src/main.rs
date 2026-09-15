@@ -1,12 +1,11 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
+// Windows GUI subsystem: no extra console in release. Do not remove.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-/// A GUI-subsystem binary starts with no console, so printing goes nowhere.
-/// Borrowing the console of whatever launched it is what makes `--version`
-/// answerable from a shell; when there is no parent console, as when
-/// launched from Explorer, the call fails and nothing is lost.
+/// GUI-subsystem binaries have no console. Attach the parent's so
+/// `--version` works from a shell. From Explorer the call fails and
+/// nothing is lost.
 #[cfg(windows)]
 fn attach_parent_console() {
     #[link(name = "kernel32")]
@@ -20,12 +19,10 @@ fn attach_parent_console() {
 #[cfg(not(windows))]
 fn attach_parent_console() {}
 
-/// WebKitGTK's DMA-BUF renderer and the Nvidia driver do not agree on
-/// Wayland: the window comes up blank and the process is gone in under a
-/// second, leaving `Gdk-Message: Error 71 (Protocol error) dispatching to
-/// Wayland display` behind. Turning that renderer off is the only known
-/// escape. Only where the two actually meet, and never over a choice the
-/// user or a launcher has already made.
+/// WebKitGTK DMA-BUF and Nvidia on Wayland: blank window, process gone
+/// in under a second (`Gdk-Message: Error 71`). Turning the renderer off
+/// is the only known escape. Only where both are present, and never over
+/// a choice already made.
 #[cfg(target_os = "linux")]
 fn disable_dmabuf_renderer() {
     const VAR: &str = "WEBKIT_DISABLE_DMABUF_RENDERER";
@@ -45,9 +42,7 @@ fn disable_dmabuf_renderer() {
 fn disable_dmabuf_renderer() {}
 
 fn main() {
-    // Answered before the window opens, so asking which build is installed
-    // does not mean launching the app and reading the Contribute tab.
-    // args_os, not args: the latter panics on a non-UTF-8 argument, and a
+    // Before the window. `args_os`: `args` panics on non-UTF-8, and a
     // launcher passing one should still open the app.
     if std::env::args_os()
         .skip(1)
