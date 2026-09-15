@@ -1125,12 +1125,18 @@ const SCREEN_PAGE_GAP: Duration = Duration::from_millis(5);
 const SCREEN_READY_TRIES: u32 = 10;
 const SCREEN_READY_GAP: Duration = Duration::from_millis(100);
 
-/// One still frame. `rgb` is `w * h * 3` row-major; column order and pixel
-/// format are applied here. Flash, so the cooldown applies. Poll the announce
+/// One picture, or `frames` of them played in order with `delay` on each.
+/// `rgb` is `frames * w * h * 3` row-major; column order and pixel format
+/// are applied per frame. Flash, so the cooldown applies. Poll the announce
 /// until ready; abandon the pages if it never is, so a half-written frame
 /// does not go out.
 #[tauri::command(async)]
-pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result<(), String> {
+pub fn write_screen_frames(
+    state: tauri::State<AppState>,
+    rgb: Vec<u8>,
+    frames: u8,
+    delay: u8,
+) -> Result<(), String> {
     require_cable(&state)?;
     let (screen, rules) = {
         let inner = state.inner.lock();
@@ -1177,20 +1183,56 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
     if screen.w > rules.max_dim || screen.h > rules.max_dim {
         return Err("this display is larger than sharkfin can address on this board".into());
     }
-    let data = crate::protocol::screen_pixels(&rgb, screen.w, screen.h, &screen.mode)?;
+    if frames == 0 {
+        return Err("no picture to send".into());
+    }
+    if frames > 1 && !rules.animates {
+        return Err(
+            "sharkfin can only play an animation on this family of board so far. This one \
+             has not shown where a second picture goes."
+                .into(),
+        );
+    }
+    let frame_len = usize::from(screen.w) * usize::from(screen.h) * 3;
+    if rgb.len() != frame_len * usize::from(frames) {
+        return Err(format!(
+            "expected {} bytes of RGB for {frames} {} by {} pictures, got {}",
+            frame_len * usize::from(frames),
+            screen.w,
+            screen.h,
+            rgb.len()
+        ));
+    }
+    let pixels = rgb
+        .chunks(frame_len)
+        .map(|f| crate::protocol::screen_pixels(f, screen.w, screen.h, &screen.mode))
+        .collect::<Result<Vec<_>, _>>()?;
     // The frame limit is per lineage: yc500 and ry5088 images read the
     // length as a u16 and nothing wider, yc3123 images read a u32. A frame
     // past what the firmware can count would truncate silently, so it is
-    // refused instead.
-    if data.len() > rules.max_frame {
+    // refused instead. Each frame goes out in its own pages, so each is
+    // checked on its own.
+    if pixels.iter().any(|f| f.len() > rules.max_frame) {
         return Err("this display takes a bigger frame than sharkfin can safely send yet".into());
     }
+    // A still goes out with the delay every evidenced upload carried.
+    let delay = if frames == 1 { 0 } else { delay };
 
     flash_cooldown(&state);
     let out = with_writable(&state, |t, _| {
         let bbox = (0, 0, screen.w, screen.h);
-        let pkt =
-            crate::protocol::screen_announce_packet(announce, 0, 1, 0, data.len() as u32, bbox, 0);
+        // The announce is sized to frame 0; the board learns the rest of
+        // the count from `frames` and reads each frame's own length off
+        // its pages.
+        let pkt = crate::protocol::screen_announce_packet(
+            announce,
+            0,
+            frames,
+            delay,
+            pixels[0].len() as u32,
+            bbox,
+            0,
+        );
         let mut ready = false;
         for _ in 0..SCREEN_READY_TRIES {
             // The announce is a write dressed as a read: it answers, but
@@ -1212,9 +1254,12 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
                 "the display did not accept the picture".into(),
             ));
         }
-        for page in crate::protocol::screen_page_packets(page_op, 0, 1, 0, &data) {
-            t.send(&page)?;
-            std::thread::sleep(SCREEN_PAGE_GAP);
+        for (k, frame) in pixels.iter().enumerate() {
+            for page in crate::protocol::screen_page_packets(page_op, k as u8, frames, delay, frame)
+            {
+                t.send(&page)?;
+                std::thread::sleep(SCREEN_PAGE_GAP);
+            }
         }
         std::thread::sleep(FLASH_SETTLE);
         Ok(())

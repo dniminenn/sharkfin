@@ -756,6 +756,22 @@ the u32 length split the firmware reads.
 `0x2C` and `0xAC` set the same flag (bit 0 of `0x20166`). `0xAC`
 additionally preloads the `AA AA 55 55` reply.
 
+### Animation, yc3123 [HW]
+
+Round-tripped on a K86 (2730): two 240×135 frames, played in order. This
+is the vendor's own framing, not a stream.
+
+| | |
+|---|---|
+| announce | one: `[1]` 0, `[2]` frame count `N`, `[3]` delay, length frame 0's byte length |
+| pages, frame `k` | `[1]` `k`, `[2]` `N`, `[3]` delay, page index restarting at 0 |
+| delay | `[3]` on the announce and every page; 50 flickers, 255 is the longest hold |
+
+One announce per frame with `[1]` = `n` plays a band of unwritten flash
+sweeping the panel. Frame `n` is stored at `n × 65536` in flash; packing
+frames back to back with one announce plays the second one 736 bytes
+early. Delay units are not established.
+
 ### Drawing, ry5088 gen2 [FW]
 
 The keyboard forwards the frame to a display chip. That chip parses the

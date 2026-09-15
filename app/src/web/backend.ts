@@ -406,9 +406,10 @@ export const getProfile = (): Promise<number> => withCore(() => core.get_profile
 /** The display's firmware version, or null on a board without one. */
 export const getScreenVersion = (): Promise<number | null> =>
   withCore(async () => (await core.get_screen_version()) ?? null);
-/** Draw one still frame. `rgb` is w*h*3 bytes in row order. */
-export const writeScreenImage = (rgb: number[]): Promise<void> =>
-  withCore(() => core.write_screen_image(new Uint8Array(rgb)));
+/** One picture, or `frames` of them played in order, each held for `delay`
+ * (1 to 255). `rgb` is frames*w*h*3 bytes in row order. */
+export const writeScreenFrames = (rgb: number[], frames: number, delay: number): Promise<void> =>
+  withCore(() => core.write_screen_frames(new Uint8Array(rgb), frames, delay));
 export const setProfile = (profile: number) => withCore(() => core.set_profile(profile));
 export const readKeymap = (profile: number): Promise<number[]> =>
   withCore(async () => Array.from(await core.read_keymap(profile)));

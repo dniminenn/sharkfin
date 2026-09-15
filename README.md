@@ -100,7 +100,9 @@ board drawn for everyone who owns one.
 - **Profiles.** Stored on the board. Most boards have four, some three or two.
 - **Backup.** Export everything to a file and restore it later.
 - **Device.** Debounce, Windows-key lock, WASD/arrow swap, backlight off,
-  host-OS auto-detect, sleep timeouts, factory reset.
+  host-OS auto-detect, sleep timeouts, factory reset. On boards with a
+  display, a picture for it, or several played in order where the firmware
+  holds more than one.
 - **Colorways.** The whole app re-skins like a keycap set swap: Abyss,
   Olivia, Laser, Botanical, 8008.
 
