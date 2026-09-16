@@ -256,6 +256,11 @@ export const setAutoOs = (enabled: boolean) =>
 export const factoryReset = () => invoke<void>("factory_reset");
 export const writePerKey = (colors: number[], activate: boolean) =>
   invoke<void>("write_per_key", { colors, activate });
+/** gen2 only. `frames` is `count` blocks of 384 colour bytes (as writePerKey).
+ *  No delay: the board advances one frame every 50 ms regardless of what is
+ *  sent, so timing comes only from how many frames each pattern gets. */
+export const writeKeyAnimation = (frames: number[], count: number) =>
+  invoke<void>("write_key_animation", { frames, count });
 export const getLedParam = () => invoke<LedParam>("get_led_param");
 export const setLedParam = (param: LedParam) =>
   invoke<void>("set_led_param", { param });

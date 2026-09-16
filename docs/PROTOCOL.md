@@ -490,6 +490,59 @@ re-enumeration. Individual reports needed ~12 ms spacing. **[HW]**
 This cadence is not evidenced on gen2. The gen2 commit-to-flash behaviour
 above is.
 
+### Animation, gen2 [JS] [HW]
+
+`SET_USERGIF 0x12` uploads several per-key frames, each shaped like one
+`SET_USERPIC` upload. Wire format from vendor JS (`5e635fe2.js`,
+`setUserGifStart`, `setUserGif`); playback verified on a K86 (device
+2730). yc500 reads this opcode as `SET_SLEEPTIME`, a different register,
+so this is gen2 only.
+
+The player is LEDPARAM mode 25 (`LightUserColor`), and it must be set
+immediately before the start packet, with nothing else in between: any
+`SET_LEDPARAM` write re-initialises the animation engine. **[HW]**
+
+| SET_LEDPARAM byte | value |
+|---|---|
+| mode | `25` |
+| speed | `4` (the slowest wire value) |
+| brightness | `4` |
+| flags | `0x07` (option `0`, fixed colour) |
+| R, G, B | `250, 255, 250` |
+
+Mode 13 (`UserPicture`) does not play the upload back: frame `k` just
+sits as a static pattern in slot `k + 1`, and selecting mode 25 after the
+upload instead of before does not start it either. **[HW]**
+
+Start, one packet, then wait 300 ms; the vendor UI waits a further
+500 ms on top before the first frame:
+
+| byte | value |
+|---|---|
+| 0 | `0x12` |
+| 1..6 | `0` |
+| 7 | Bit7 checksum |
+
+Frame `k` of `N` frames, seven pages, 5 ms apart, data at byte 8 padded
+to 56 bytes on every page (unlike `SET_USERPIC`'s shorter final page):
+
+| byte | value |
+|---|---|
+| 0 | `0x12` |
+| 1 | frame index `k` |
+| 2 | page, 0..6 |
+| 3 | `1` |
+| 4 | frame count `N` |
+| 5, 6 | delay, u16 little-endian |
+| 7 | Bit7 checksum |
+| 8..63 | 56 colour bytes, matrix order, same 378-byte layout as `SET_USERPIC` |
+
+| observation | **[HW]** |
+|---|---|
+| delay sets the frame time | delay 50 with 100 frames: 50 ms a frame. Delay 192 with 192 frames: about 128 ms a frame. Unit and formula not established, on a K86 (2730) |
+| delay sets the wrap too | delay equal to the frame count wraps the loop with only a blink; below it, the loop ends in a dark gap (delay 50 with 192 frames: 3.1 s dark; delay 0 or 2: about 1 s of frames then dark or flicker), on a K86 (2730) |
+| frames | land in flash indexed by frame number, from a firmware trace; the vendor UI allows up to 255 |
+
 ## Magnetic switches [FW]
 
 Two column formats share the opcodes and packet shapes. Which one a board

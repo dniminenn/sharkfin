@@ -1489,6 +1489,74 @@ pub async fn write_per_key(colors: Vec<u8>, activate: bool) -> Result<(), JsValu
     Ok(())
 }
 
+/// Vendor JS: 300 ms after SET_USERGIF's start packet, plus 500 ms the
+/// vendor UI adds on top before the first frame. Verified on a K86.
+const USERGIF_START_GAP_MS: f64 = 800.0;
+/// Vendor JS: 5 ms between SET_USERGIF pages. Verified on a K86.
+const USERGIF_PAGE_GAP_MS: f64 = 5.0;
+
+/// Per-key animation, gen2 only (vendor name SET_USERGIF). Same shape and
+/// pacing as commands.rs::write_key_animation. No delay parameter: the
+/// delay header sets both the frame time and the wrap behaviour on a K86
+/// (2730), and delay equal to the frame count is the value that wraps the
+/// loop cleanly (any lower leaves a dark gap at the end of each loop), so
+/// the caller never picks it. yc500 reads this opcode as SET_SLEEPTIME, a
+/// different register, so the family is checked before anything is
+/// sent. LEDPARAM mode 25 is the animation player and must be set
+/// immediately before the start packet, with nothing else in between:
+/// verified on a K86.
+#[wasm_bindgen]
+pub async fn write_key_animation(frames: Vec<u8>, count: u8) -> Result<(), JsValue> {
+    let per_frame = protocol::PER_KEY_BYTES;
+    if count == 0 {
+        return Err(JsValue::from_str("need at least one frame"));
+    }
+    if frames.len() != per_frame * count as usize {
+        return Err(format!(
+            "expected {} colour bytes for {count} frames, got {}",
+            per_frame * count as usize,
+            frames.len()
+        )
+        .into());
+    }
+    {
+        let (_, spec) = get_open(false)?;
+        if spec.family != "gen2" {
+            return Err(JsValue::from_str(
+                "sharkfin can only send key animations to this family of board so far.",
+            ));
+        }
+    }
+    flash_cooldown().await;
+    let _busy = acquire().await;
+    let (t, spec) = get_open(true)?;
+    if spec.family != "gen2" {
+        return Err(JsValue::from_str(
+            "key animation only exists on this family of board",
+        ));
+    }
+    // Selects the player and re-initialises the animation engine; the start
+    // packet must follow immediately, nothing else in between.
+    t.send(&protocol::gen2::usergif_player_packet())
+        .await
+        .map_err(fail)?;
+    t.send(&protocol::gen2::usergif_start_packet())
+        .await
+        .map_err(fail)?;
+    sleep_ms(USERGIF_START_GAP_MS).await;
+    // Delay equal to the frame count is what wraps the loop cleanly on a
+    // K86; anything less leaves a dark gap at the end of each loop.
+    let delay = count as u16;
+    for (k, frame) in frames.chunks(per_frame).enumerate() {
+        for pkt in protocol::gen2::usergif_frame_packets(k as u8, count, delay, frame) {
+            t.send(&pkt).await.map_err(fail)?;
+            sleep_ms(USERGIF_PAGE_GAP_MS).await;
+        }
+    }
+    sleep_ms(FLASH_SETTLE_MS).await;
+    Ok(())
+}
+
 fn check_macro_slot(slot: u8) -> Result<(), String> {
     if slot >= protocol::MACRO_SLOTS {
         return Err(format!(

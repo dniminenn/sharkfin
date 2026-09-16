@@ -94,7 +94,8 @@ board drawn for everyone who owns one.
   in flash. Edge-light controls appear on boards
   that have edge LEDs.
 - **Paint.** Colour individual keys, then send. Sending is manual and
-  rate-limited, because the pattern goes into the keyboard's flash.
+  rate-limited, because the pattern goes into the keyboard's flash. On
+  gen2 boards, saved patterns can also be played back as an animation.
 - **Macros.** Record key and mouse sequences with per-event delays into the
   50 onboard slots, then bind a key to one: repeat, toggle, or while-held.
 - **Profiles.** Stored on the board. Most boards have four, some three or two.
