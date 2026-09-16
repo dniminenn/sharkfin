@@ -4,6 +4,9 @@
 share opcodes that mean different things. Resolve the family from the
 device record, never from the USB product ID.
 
+AJAZZ and AULA boards on the driveall stack are a separate protocol with
+nothing in common with this one. See `PROTOCOL-DRIVEALL.md`.
+
 sharkfin speaks a subset of this and never flashes firmware. Nothing here
 is needed to use the app.
 

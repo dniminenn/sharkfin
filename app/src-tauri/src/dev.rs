@@ -1,17 +1,29 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! Helpers for the hardware-test examples.
-use crate::hid::{discover, DiscoveredDevice, HidError, Link, Transport};
+use crate::hid::{discover, DiscoveredDevice, HidError, Link, Stack, Transport};
 use crate::protocol::{cmd, Checksum, LedParam};
 use crate::registry;
 
 pub fn discover_all() -> Result<Vec<DiscoveredDevice>, HidError> {
-    let api = hidapi::HidApi::new()?;
+    let api = hidapi::HidApi::new().map_err(|e| HidError::Transport(e.to_string()))?;
     Ok(discover(&api))
 }
 
 pub fn identify_and_read(path: &str) -> Result<String, HidError> {
-    let api = hidapi::HidApi::new()?;
+    let api = hidapi::HidApi::new().map_err(|e| HidError::Transport(e.to_string()))?;
+    // Discovery lists driveall boards too, and the ROYUAN opcodes below are
+    // writes on that collection.
+    if let Some(d) = discover(&api).into_iter().find(|d| d.path == path) {
+        if crate::protocol::driveall::is_collection(d.usage_page, d.usage) {
+            let t = Transport::open_stack(&api, path, Stack::Driveall)?;
+            let i = t.identify_driveall()?;
+            return Ok(format!(
+                "driveall: vid {:04x} pid {:04x} version {:04x} rtPrecision {}\n",
+                i.vid, i.pid, i.version, i.rt_precision
+            ));
+        }
+    }
     let t = Transport::open(&api, path)?;
     let id = t.identify()?;
     let spec = registry::by_id(id);

@@ -23,9 +23,10 @@ cargo test --lib       # protocol tests, no hardware needed (app/src-tauri/)
 
 The browser build is the same frontend with `@/lib/backend` aliased to
 `src/web/backend.ts`, which drives the `app/src-web` wasm crate over WebHID.
-That crate includes `protocol.rs` and `registry.rs` from `src-tauri` by path
-rather than copying them, so the wire format cannot drift between the two
-builds; only the transport and the command layer differ. It needs
+That crate includes the protocol, wire, ops, session and registry modules
+from `src-tauri` by path rather than copying them, so neither the wire
+format nor what a board is allowed to do can drift between the two builds.
+Only the state plumbing differs. It needs
 `rustup target add wasm32-unknown-unknown` and
 [wasm-pack](https://rustwasm.github.io/wasm-pack/).
 
@@ -83,7 +84,27 @@ both families' GET commands), check the replies against
 `*_roundtrip` examples. Adding the family to `KNOWN_FAMILIES` in
 `app/src-tauri/src/registry.rs` is the only code change. Every
 family-dependent opcode already routes through the tables in
-`app/src-tauri/src/protocol.rs`.
+`app/src-tauri/src/protocol/`.
+
+## Where the code lives
+
+There are two backends. The desktop one is `app/src-tauri/src/commands.rs`,
+blocking, over hidapi. The browser one is `app/src-web/src/lib.rs`, async,
+over WebHID. They hold their own state and nothing else: everything they
+both do is written once and shared by `#[path]`.
+
+| file | |
+|---|---|
+| `protocol/` | packets and payloads, a file per stack |
+| `wire.rs` | `Node` is the four primitives a backend provides, `Wire` every exchange derived from them: relay, roundtrip, chunking, identify |
+| `ops.rs` | the conversations a command has with a board |
+| `session.rs` | what a connected board lets the owner do |
+| `registry.rs`, `derive.rs` | which board this is, and what it supports |
+
+A new command is a function in `ops.rs` and a short shim in each backend.
+Writing the conversation twice is how a safety gate once existed in the
+desktop build and not the browser one, so the shim should hold state
+access and nothing else.
 
 ## Regenerating vendor data
 

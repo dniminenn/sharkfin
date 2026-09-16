@@ -22,7 +22,7 @@ CANONICAL = {"Common80_k72x86"}
 
 # Mirrors KNOWN_FAMILIES in app/src-tauri/src/registry.rs. Anything else is
 # read-only. Keep the two in step or this report describes a different app.
-WRITABLE_FAMILIES = ("yc500", "gen2")
+WRITABLE_FAMILIES = ("yc500", "gen2", "driveall")
 
 
 def layouts_present() -> tuple[set[str], set[str]]:

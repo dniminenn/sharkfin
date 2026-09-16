@@ -3,14 +3,18 @@
 use std::time::{Duration, Instant};
 
 use parking_lot::Mutex;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::hid::{self, HidError, Link, Transport};
+use crate::hid::{self, HidError, Link, Stack, Transport};
+use crate::ops::{self, check_macro_slot, key_write_packet, need};
+use crate::protocol::driveall;
 use crate::protocol::hall;
 use crate::protocol::{
     cmd, family_cmds, Checksum, FamilyCmds, KbOptions, LedParam, Macro, SledParam, SleepTimes,
 };
 use crate::registry::{self, DeviceSpec};
+use crate::session::{switch_access, DeviceSettings, OwnerRecord, SavedConfig, SwitchAccess};
+use crate::wire::block_on;
 
 pub struct AppState {
     inner: Mutex<Inner>,
@@ -37,20 +41,6 @@ struct Inner {
     switch_trial: Option<u8>,
 }
 
-/// Owner answers from the check. Spec overlays apply only to an unregistered
-/// board, so a registry entry is never contradicted by a click. `switch_writes`
-/// is a felt round trip standing in for unread firmware, on any board whose
-/// columns read.
-#[derive(Clone, Copy, Debug, Default, Deserialize)]
-#[serde(rename_all = "camelCase", default)]
-pub struct OwnerRecord {
-    pub allowed: bool,
-    pub magnetic: bool,
-    pub side_light: Option<bool>,
-    pub switch_writes: bool,
-    pub profiles: Option<u8>,
-}
-
 struct OpenDevice {
     path: String,
     transport: Transport,
@@ -62,8 +52,10 @@ struct OpenDevice {
     battery: Option<u8>,
     usage: u16,
     /// The `0x80` reply as a u16, read once at connect. Gates the yc500
-    /// switch columns, which arrived with firmware 2.00.
+    /// switch columns, which arrived with firmware 2.00. Driveall: device-info
+    /// version bytes.
     revision: Option<u16>,
+    driveall: Option<driveall::DeviceInfo>,
 }
 
 impl OpenDevice {
@@ -86,49 +78,6 @@ impl OpenDevice {
     fn scaled_profiles(&self) -> bool {
         self.spec.family == "yc500" && self.spec.magnetic
     }
-}
-
-/// Rules live on `DeviceSpec`. Both frontends.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "lowercase")]
-pub enum SwitchAccess {
-    None,
-    /// Columns can be read, not written.
-    Read,
-    /// Columns can be read and written.
-    Write,
-    /// No columns: one board-wide record can be written, nothing read back.
-    Global,
-}
-
-/// `owner_hall`: the owner's felt round trip stands in for firmware
-/// evidence on a board whose columns read.
-pub fn switch_access(
-    spec: &DeviceSpec,
-    revision: Option<u16>,
-    read_only: bool,
-    owner_hall: bool,
-) -> SwitchAccess {
-    if spec.hall_reads(revision) {
-        if (spec.hall_writes(revision) || owner_hall) && !read_only {
-            SwitchAccess::Write
-        } else {
-            SwitchAccess::Read
-        }
-    } else if spec.hall_global(revision) && !read_only {
-        SwitchAccess::Global
-    } else {
-        SwitchAccess::None
-    }
-}
-
-/// `0x80` as a u16, `None` when the family is unknown or the board does not
-/// answer. Zero counts as no answer.
-fn read_revision(t: &Transport, spec: &DeviceSpec) -> Option<u16> {
-    let op = family_cmds(&spec.family)?.get_revision?;
-    let rev = t.roundtrip(op, &[], Checksum::Bit7).ok()?;
-    let v = (u16::from(rev[2]) << 8) | u16::from(rev[1]);
-    (v != 0).then_some(v)
 }
 
 /// How long a successful exchange vouches for the connection. `scan` answers
@@ -299,10 +248,14 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
     let mut connected = None;
     let mut open_failed = false;
     let mut keyboard_offline = false;
-
     for d in found {
         let api = inner.api.as_ref().unwrap();
-        let transport = match Transport::open(api, &d.path) {
+        let stack = if driveall::is_collection(d.usage_page, d.usage) {
+            Stack::Driveall
+        } else {
+            Stack::Royuan
+        };
+        let transport = match Transport::open_stack(api, &d.path, stack) {
             Ok(t) => t,
             Err(e) => {
                 log::warn!("open {} failed: {e}", d.path);
@@ -310,13 +263,53 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                 continue;
             }
         };
+        if stack == Stack::Driveall {
+            match transport.identify_driveall() {
+                Ok(info) => {
+                    let spec = registry::by_usb(info.vid, info.pid)
+                        .or_else(|| registry::by_usb(d.vendor_id, d.product_id))
+                        .unwrap_or_else(|| driveall_unregistered(&info, &d));
+                    let revision = Some(info.version);
+                    let open = OpenDevice {
+                        path: d.path,
+                        transport,
+                        spec,
+                        last_ok: Instant::now(),
+                        battery: None,
+                        usage: d.usage,
+                        revision,
+                        driveall: Some(info),
+                    };
+                    inner.unregistered_ok = false;
+                    inner.led_swap = None;
+                    inner.owner = OwnerRecord::default();
+                    inner.switch_trial = None;
+                    connected = Some(open.connected(false, false));
+                    inner.open = Some(open);
+                    break;
+                }
+                Err(_) => unknown.push(DiscoveredUnknown {
+                    path: d.path,
+                    product_id: d.product_id,
+                    product: d.product,
+                    device_id: None,
+                }),
+            }
+            continue;
+        }
         match transport.identify() {
             Ok(id) => match registry::by_id(id)
                 .map(|spec| {
                     // An entry from the vendor's older table knows the board
                     // but not its command set; the board says which.
                     if spec.family == "unknown" {
-                        match derive_from_board(&transport, id, &d) {
+                        match block_on(ops::derive_sweep(
+                            &transport,
+                            id,
+                            d.vendor_id,
+                            d.product_id,
+                            &d.product,
+                        )) {
                             Some(derived) => crate::derive::settle_family(spec, &derived),
                             None => spec,
                         }
@@ -324,15 +317,22 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                         spec
                     }
                 })
-                .or_else(|| derive_from_board(&transport, id, &d))
-            {
+                .or_else(|| {
+                    block_on(ops::derive_sweep(
+                        &transport,
+                        id,
+                        d.vendor_id,
+                        d.product_id,
+                        &d.product,
+                    ))
+                }) {
                 Some(spec) => {
                     let battery = if transport.link() == Link::Receiver {
                         receiver_battery(&transport)
                     } else {
                         None
                     };
-                    let revision = read_revision(&transport, &spec);
+                    let revision = block_on(ops::read_revision(&transport, &spec));
                     let open = OpenDevice {
                         path: d.path,
                         transport,
@@ -341,6 +341,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                         battery,
                         usage: d.usage,
                         revision,
+                        driveall: None,
                     };
                     inner.unregistered_ok = false;
                     inner.led_swap = None;
@@ -376,47 +377,64 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
     })
 }
 
-/// Registry entry from read-only probes (`derive.rs`). `None` if the answers
-/// do not settle a family; the board stays an unknown row.
-fn derive_from_board(t: &Transport, id: u32, d: &hid::DiscoveredDevice) -> Option<DeviceSpec> {
-    let read = |op: u8, payload: &[u8]| t.read_raw_page(op, payload, Checksum::Bit7).ok();
-    let r89 = read(0x89, &[0, 0])?;
-    let r8a = read(0x8A, &[0, 0xFF, 0, 0])?;
-    let r91 = read(0x91, &[])?;
-    let r92 = read(0x92, &[])?;
-    let family = crate::derive::detect_family(&r89, &r8a, &r91, &r92)?;
-    let mut keymap = Vec::with_capacity(512);
-    for page in 0..8u8 {
-        let reply = if family == "gen2" {
-            read(
-                0x8A,
-                &crate::protocol::gen2::keymatrix_read_payload(0, page),
-            )?
-        } else {
-            read(0x89, &[0, page])?
-        };
-        keymap.extend_from_slice(&reply);
-    }
-    let before = read(0x97, &[])?;
-    let oled = read(0xAD, &[])?;
-    let sweep = crate::derive::Sweep {
-        r89: &r89,
-        r8a: &r8a,
-        r91: &r91,
-        r92: &r92,
-        oled: &oled,
-        before_oled: &before,
-        keymap: &keymap,
+fn driveall_unregistered(info: &driveall::DeviceInfo, d: &hid::DiscoveredDevice) -> DeviceSpec {
+    let id = (u32::from(info.vid) << 16) | u32::from(info.pid);
+    let name = if d.product.is_empty() {
+        format!("{:04X}:{:04X}", info.vid, info.pid)
+    } else {
+        d.product.clone()
     };
-    log::info!("device id {id} is not in the registry; answers as {family}");
-    Some(crate::derive::derive_spec(
+    DeviceSpec {
         id,
-        d.vendor_id,
-        d.product_id,
-        &d.product,
-        family,
-        &sweep,
-    ))
+        name: format!("unregistered_{id:08x}"),
+        display_name: name,
+        company: String::new(),
+        vendor: String::new(),
+        vendor_id: info.vid,
+        product_id: info.pid,
+        internal_name: "driveall_unregistered".into(),
+        key_layout: "Unknown".into(),
+        light_layout: "Driveall19".into(),
+        side_light_layout: String::new(),
+        profiles: 1,
+        magnetic: false,
+        family: "driveall".into(),
+        screen: None,
+        travel: None,
+        switch_replaceable: false,
+        features: registry::DeviceFeatures {
+            knob: vec![],
+            debounce: false,
+            sleep24: false,
+            sleep_bt: false,
+            magnetic_switches: false,
+            screen: false,
+            side_light: false,
+        },
+        unregistered: true,
+        light: None,
+        led_flags_swapped: false,
+        led_flags_source: "",
+    }
+}
+
+fn driveall_info(state: &tauri::State<AppState>) -> Result<driveall::DeviceInfo, String> {
+    state
+        .inner
+        .lock()
+        .open
+        .as_ref()
+        .and_then(|o| o.driveall.clone())
+        .ok_or_else(|| "no driveall device info".into())
+}
+
+fn is_driveall(state: &tauri::State<AppState>) -> bool {
+    state
+        .inner
+        .lock()
+        .open
+        .as_ref()
+        .is_some_and(|o| o.spec.family == "driveall")
 }
 
 /// Session grant: writes allowed on this unregistered board. Sends nothing.
@@ -498,12 +516,6 @@ fn require_cable(state: &tauri::State<AppState>) -> Result<(), String> {
         }
         _ => Ok(()),
     }
-}
-
-/// Family-dependent commands go through the resolved table. `None` means
-/// unknown family: only shared opcodes are safe.
-fn need(fc: Option<&'static FamilyCmds>) -> Result<&'static FamilyCmds, HidError> {
-    fc.ok_or_else(|| HidError::Protocol("this board's protocol family is unknown".into()))
 }
 
 /// Run `f` on the open device, then record liveness. A stall invalidates the
@@ -602,6 +614,13 @@ fn led_wire(state: &tauri::State<AppState>) -> crate::protocol::LedWire {
 
 #[tauri::command(async)]
 pub fn get_led_param(state: tauri::State<AppState>) -> Result<LedParam, String> {
+    if is_driveall(&state) {
+        return with_open(&state, |t, _| {
+            let raw = t.driveall_get(driveall::GET_LED_EFFECT, driveall::LED_LEN, 0)?;
+            driveall::led_from_wire(&raw)
+                .ok_or_else(|| HidError::Protocol("bad LED effect reply".into()))
+        });
+    }
     let wire = led_wire(&state);
     with_open(&state, |t, _| {
         let reply = t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)?;
@@ -613,6 +632,9 @@ pub fn get_led_param(state: tauri::State<AppState>) -> Result<LedParam, String> 
 #[tauri::command(async)]
 pub fn set_led_param(state: tauri::State<AppState>, param: LedParam) -> Result<(), String> {
     light_gap(&state);
+    if is_driveall(&state) {
+        return with_writable(&state, |t, _| t.driveall_rmw(driveall::rmw_led(&param)));
+    }
     let wire = led_wire(&state);
     with_writable(&state, |t, _| {
         t.send(&param.to_packet_for(wire))?;
@@ -635,6 +657,15 @@ pub fn set_led_flags_swapped(state: tauri::State<AppState>, swapped: bool) -> Re
 
 #[tauri::command(async)]
 pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
+    if is_driveall(&state) {
+        let inner = state.inner.lock();
+        return Ok(inner
+            .open
+            .as_ref()
+            .and_then(|o| o.driveall.as_ref())
+            .map(|i| i.current_profile)
+            .unwrap_or(0));
+    }
     let scaled = scaled_profiles(&state);
     with_open(&state, |t, fc| {
         let reply = t.roundtrip(need(fc)?.get_profile, &[], Checksum::Bit7)?;
@@ -647,6 +678,9 @@ pub fn get_profile(state: tauri::State<AppState>) -> Result<u8, String> {
 /// lead with the opcode means no display.
 #[tauri::command(async)]
 pub fn get_screen_version(state: tauri::State<AppState>) -> Result<Option<u16>, String> {
+    if is_driveall(&state) {
+        return Ok(None);
+    }
     with_open(&state, |t, _| {
         let reply = t.roundtrip(crate::protocol::cmd::GET_OLED_VERSION, &[], Checksum::Bit7)?;
         if reply[0] != crate::protocol::cmd::GET_OLED_VERSION {
@@ -659,6 +693,9 @@ pub fn get_screen_version(state: tauri::State<AppState>) -> Result<Option<u16>, 
 
 #[tauri::command(async)]
 pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), String> {
+    if is_driveall(&state) {
+        return Err("this board has no profile-switch command".into());
+    }
     write_gap(&state, SETTING_GAP);
     let profile = crate::protocol::yc500_profile_slot(scaled_profiles(&state), profile, 0);
     with_writable(&state, |t, fc| {
@@ -682,63 +719,6 @@ pub fn set_profile(state: tauri::State<AppState>, profile: u8) -> Result<(), Str
     })
 }
 
-/// 512-byte matrix, 8 raw pages. gen2: 0xFF sentinel, page a byte later.
-/// `profile` is the wire value (yc500 magnetic already folded). gen2 Fn has
-/// no sub-layer; OS rides in the fourth payload byte.
-fn read_matrix(
-    t: &Transport,
-    fc: &'static FamilyCmds,
-    profile: u8,
-    sublayer: u8,
-    fn_layer: bool,
-) -> Result<Vec<u8>, HidError> {
-    let mut matrix = Vec::with_capacity(512);
-    for page in 0..8u8 {
-        let (opcode, payload): (u8, Vec<u8>) = match (fc.name == "gen2", fn_layer) {
-            (true, false) => (
-                fc.get_keymatrix,
-                crate::protocol::gen2::keymatrix_layer_read_payload(profile, page, sublayer)
-                    .to_vec(),
-            ),
-            (true, true) => (
-                cmd::GET_FN,
-                crate::protocol::gen2::fn_read_payload(profile, page).to_vec(),
-            ),
-            (false, false) => (fc.get_keymatrix, vec![profile, page]),
-            (false, true) => (cmd::GET_FN, vec![profile, page]),
-        };
-        let reply = t.read_raw_page(opcode, &payload, Checksum::Bit7)?;
-        matrix.extend_from_slice(&reply);
-    }
-    Ok(matrix)
-}
-
-fn key_write_packet(
-    fc: &'static FamilyCmds,
-    profile: u8,
-    sublayer: u8,
-    slot: u8,
-    value: [u8; 4],
-    fn_layer: bool,
-) -> Result<[u8; crate::protocol::REPORT_LEN], HidError> {
-    if fc.name == "gen2" {
-        return Ok(if fn_layer {
-            crate::protocol::gen2::set_fn_key_packet(profile, slot, value)
-        } else {
-            crate::protocol::gen2::set_layer_key_packet(profile, slot, sublayer, value)
-        });
-    }
-    let opcode = if fn_layer {
-        fc.set_fn_one
-    } else {
-        fc.set_key_one
-    }
-    .ok_or_else(|| HidError::Protocol("no single-slot key write for this family".into()))?;
-    let mut pkt = crate::protocol::packet(opcode, &[profile, slot], Checksum::Bit7);
-    pkt[8..12].copy_from_slice(&value);
-    Ok(pkt)
-}
-
 #[tauri::command(async)]
 pub fn build_id() -> String {
     registry::build_id()
@@ -746,8 +726,16 @@ pub fn build_id() -> String {
 
 #[tauri::command(async)]
 pub fn read_keymap(state: tauri::State<AppState>, profile: u8) -> Result<Vec<u8>, String> {
+    if is_driveall(&state) {
+        return with_open(&state, |t, _| {
+            let raw = t.driveall_get(driveall::GET_KEY, driveall::KEYMAP_LEN, 0)?;
+            Ok(driveall::keymap_from_driveall(&raw))
+        });
+    }
     let profile = crate::protocol::yc500_profile_slot(scaled_profiles(&state), profile, 0);
-    with_open(&state, |t, fc| read_matrix(t, need(fc)?, profile, 0, false))
+    with_open(&state, |t, fc| {
+        block_on(ops::read_matrix(t, need(fc)?, profile, 0, false))
+    })
 }
 
 /// Sub-layer 0 is the keymap; 1..3 are DKS, mod-tap, toggle on magnetic boards.
@@ -757,19 +745,33 @@ pub fn read_keymap_layer(
     profile: u8,
     sublayer: u8,
 ) -> Result<Vec<u8>, String> {
+    if is_driveall(&state) {
+        if sublayer != 0 {
+            return Err("this board has no keymap sub-layers".into());
+        }
+        return read_keymap(state, profile);
+    }
     if sublayer > 3 {
         return Err("sub-layer out of range (0..3)".into());
     }
     let scaled = scaled_profiles(&state);
     let profile = crate::protocol::yc500_profile_slot(scaled, profile, sublayer);
     with_open(&state, |t, fc| {
-        read_matrix(t, need(fc)?, profile, sublayer, false)
+        block_on(ops::read_matrix(t, need(fc)?, profile, sublayer, false))
     })
 }
 
 #[tauri::command(async)]
 pub fn read_fn_keymap(state: tauri::State<AppState>, layer: u8) -> Result<Vec<u8>, String> {
-    with_open(&state, |t, fc| read_matrix(t, need(fc)?, layer, 0, true))
+    if is_driveall(&state) {
+        return with_open(&state, |t, _| {
+            let raw = t.driveall_get(driveall::GET_FN_KEY, driveall::KEYMAP_LEN, 0)?;
+            Ok(driveall::keymap_from_driveall(&raw))
+        });
+    }
+    with_open(&state, |t, fc| {
+        block_on(ops::read_matrix(t, need(fc)?, layer, 0, true))
+    })
 }
 
 /// One slot: [op, profile, slot, 0.., ck7, value×4].
@@ -794,6 +796,14 @@ pub fn set_key_layer(
     value: [u8; 4],
     fn_layer: bool,
 ) -> Result<(), String> {
+    if is_driveall(&state) {
+        if sublayer != 0 {
+            return Err("this board has no keymap sub-layers".into());
+        }
+        key_gap(&state);
+        let plan = driveall::rmw_key(slot, value, fn_layer)?;
+        return with_writable(&state, |t, _| t.driveall_rmw(plan));
+    }
     if sublayer > 3 || (sublayer > 0 && fn_layer) {
         return Err("sub-layer out of range".into());
     }
@@ -829,23 +839,24 @@ pub fn set_key_layer(
     })
 }
 
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct DeviceSettings {
-    pub debounce: u8,
-    pub sleep: SleepTimes,
-    /// Absent on families whose option bitfield is not decoded.
-    pub options: Option<KbOptions>,
-    /// Firmware revision as reported by 0x80, e.g. 0x0102 -> "1.02".
-    pub revision: String,
-    /// Board auto-detects the host OS and switches its Win/Mac layer.
-    pub auto_os: bool,
-    /// Present only when the firmware answers 0x88.
-    pub side_light: Option<SledParam>,
-}
-
 #[tauri::command(async)]
 pub fn get_settings(state: tauri::State<AppState>) -> Result<DeviceSettings, String> {
+    if is_driveall(&state) {
+        let inner = state.inner.lock();
+        let info = inner.open.as_ref().and_then(|o| o.driveall.as_ref());
+        let revision = match info {
+            Some(i) => i.version_string(),
+            None => "unknown".into(),
+        };
+        return Ok(DeviceSettings {
+            debounce: 0,
+            sleep: SleepTimes::default(),
+            options: None,
+            revision,
+            auto_os: false,
+            side_light: None,
+        });
+    }
     let has_side_light = {
         let inner = state.inner.lock();
         inner
@@ -856,46 +867,7 @@ pub fn get_settings(state: tauri::State<AppState>) -> Result<DeviceSettings, Str
     };
     let swapped = led_wire(&state).swapped;
     with_open(&state, |t, fc| {
-        let fc = need(fc)?;
-        let deb = t.roundtrip(fc.get_debounce, &[], Checksum::Bit7)?;
-        let slp = t.roundtrip(fc.get_sleeptime, &[], Checksum::Bit7)?;
-        let opt = match fc.kboption {
-            Some((_, get)) => Some(t.roundtrip(get, &[0], Checksum::Bit7)?),
-            None => None,
-        };
-        let revision = match fc.get_revision {
-            Some(op) => {
-                let rev = t.roundtrip(op, &[], Checksum::Bit7)?;
-                format!("{}.{:02}", rev[2], rev[1])
-            }
-            None => "unknown".into(),
-        };
-        let auto = fc
-            .auto_os
-            .and_then(|(_, get)| t.roundtrip(get, &[], Checksum::Bit7).ok());
-        // Only probe the edge light on boards that physically have one.
-        let sled = match (has_side_light, fc.sled) {
-            (true, Some((_, get))) => t
-                .roundtrip(get, &[], Checksum::Bit7)
-                .ok()
-                .and_then(|r| SledParam::from_reply_on(&r, swapped)),
-            _ => None,
-        };
-        Ok(DeviceSettings {
-            debounce: deb[fc.debounce_at],
-            sleep: SleepTimes::from_reply_expecting(&slp, fc.get_sleeptime, fc.sleep_reply_at)
-                .ok_or_else(|| HidError::Protocol("bad SLEEPTIME reply".into()))?,
-            options: match (opt, fc.kboption) {
-                (Some(o), Some((_, get))) => Some(
-                    KbOptions::from_reply_expecting(&o, get)
-                        .ok_or_else(|| HidError::Protocol("bad KBOPTION reply".into()))?,
-                ),
-                _ => None,
-            },
-            revision,
-            auto_os: auto.map(|r| r[1] == 1).unwrap_or(false),
-            side_light: sled,
-        })
+        block_on(ops::read_settings(t, need(fc)?, has_side_light, swapped))
     })
 }
 
@@ -1006,7 +978,11 @@ pub fn set_clock(
 ) -> Result<(), String> {
     require_cable(&state)?;
     write_gap(&state, SETTING_GAP);
-    with_writable(&state, |t, _| {
+    with_writable(&state, |t, fc| {
+        // Shared across the ROYUAN families, so no opcode is taken from the
+        // table, but resolving it still refuses a family that does not have
+        // the packet at all. The byte means something else on driveall.
+        need(fc)?;
         t.send(&crate::protocol::clock_packet(
             year, month, day, hour, minute, second,
         ))
@@ -1088,6 +1064,19 @@ pub fn write_per_key(
             crate::protocol::PER_KEY_BYTES,
             colors.len()
         ));
+    }
+    if is_driveall(&state) {
+        flash_cooldown(&state);
+        let out = with_writable(&state, |t, _| {
+            t.driveall_set(
+                driveall::SET_CUSTOM_LED,
+                0,
+                &driveall::custom_led_to_wire(&colors),
+                true,
+            )
+        });
+        stamp_write(&state);
+        return out;
     }
     flash_cooldown(&state);
     let wire = led_wire(&state);
@@ -1204,7 +1193,11 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
     // past what the firmware can count would truncate silently, so it is
     // refused instead.
     if data.len() > rules.max_frame {
-        return Err("this display takes a bigger frame than sharkfin can safely send yet".into());
+        return Err(format!(
+            "this picture is {} bytes; the board's firmware only counts up to {}",
+            data.len(),
+            rules.max_frame
+        ));
     }
 
     flash_cooldown(&state);
@@ -1240,6 +1233,7 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
         std::thread::sleep(FLASH_SETTLE);
         Ok(())
     });
+    // Spaced from the end of the batch, not from before it began.
     stamp_write(&state);
     out
 }
@@ -1247,18 +1241,18 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
 fn hall_format(state: &tauri::State<AppState>) -> Result<hall::Format, String> {
     let inner = state.inner.lock();
     let open = inner.open.as_ref().ok_or("no device connected")?;
-    if !open.spec.hall_reads(open.revision) {
-        return Err(format!(
-            "{} has no magnetic switches sharkfin can read",
-            open.spec.label()
-        ));
-    }
-    hall::Format::for_family(&open.spec.family)
-        .ok_or_else(|| "no switch column format for this family".to_string())
+    ops::hall_format(&open.spec, open.revision)
 }
 
 #[tauri::command(async)]
 pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSettings, String> {
+    if is_driveall(&state) {
+        let info = driveall_info(&state)?;
+        return with_open(&state, |t, _| {
+            let raw = t.driveall_get(driveall::GET_MAGNETIC_RT, driveall::RT_LEN, 0)?;
+            Ok(driveall::rt_from_wire(&raw, &info))
+        });
+    }
     let f = hall_format(&state)?;
     with_open(&state, |t, _| {
         let column = |subop: u8| -> Result<Vec<u8>, HidError> {
@@ -1301,21 +1295,16 @@ fn require_hall_writes(
 ) -> Result<hall::Format, String> {
     let inner = state.inner.lock();
     let open = inner.open.as_ref().ok_or("no device connected")?;
-    let reads = open.spec.hall_reads(open.revision);
-    let owner_hall = inner.owner.switch_writes && reads;
-    let trial = reads
-        && match (inner.switch_trial, slots) {
-            (Some(t), Some(s)) => !s.is_empty() && s.iter().all(|&k| k == t),
-            _ => false,
-        };
-    if !open.spec.hall_writes(open.revision) && !owner_hall && !trial {
-        return Err(format!(
-            "sharkfin has not read {}'s firmware for its switch settings, so it will not write them",
-            open.spec.label()
-        ));
+    if !crate::session::hall_write_allowed(
+        &open.spec,
+        open.revision,
+        inner.owner.switch_writes,
+        inner.switch_trial,
+        slots,
+    ) {
+        return Err(crate::session::hall_write_refusal(&open.spec));
     }
-    hall::Format::for_family(&open.spec.family)
-        .ok_or_else(|| "no switch column format for this family".to_string())
+    ops::hall_format(&open.spec, open.revision)
 }
 
 /// One key's switch settings. Last packet of the block is flagged (flash
@@ -1333,6 +1322,17 @@ pub fn set_switch_keys(
     state: tauri::State<AppState>,
     keys: Vec<hall::KeySwitch>,
 ) -> Result<(), String> {
+    if is_driveall(&state) {
+        let _ = require_hall_writes(
+            &state,
+            Some(&keys.iter().map(|k| k.slot).collect::<Vec<_>>()),
+        )?;
+        let plan = driveall::rmw_switches(keys, driveall_info(&state)?);
+        flash_cooldown(&state);
+        let out = with_writable(&state, |t, _| t.driveall_rmw(plan));
+        stamp_write(&state);
+        return out;
+    }
     let slots: Vec<u8> = keys.iter().map(|k| k.slot).collect();
     let f = require_hall_writes(&state, Some(&slots))?;
     if keys.is_empty() || keys.len() > 2 {
@@ -1363,6 +1363,7 @@ pub fn set_switch_keys(
         }
         Ok(())
     });
+    // Spaced from the end of the batch, not from before it began.
     stamp_write(&state);
     out
 }
@@ -1376,6 +1377,14 @@ pub fn set_switches_all(
     key: hall::KeySwitch,
     modes: Vec<u8>,
 ) -> Result<(), String> {
+    if is_driveall(&state) {
+        let _ = require_hall_writes(&state, None)?;
+        let plan = driveall::rmw_switches_all(&key, driveall_info(&state)?);
+        flash_cooldown(&state);
+        let out = with_writable(&state, |t, _| t.driveall_rmw(plan));
+        stamp_write(&state);
+        return out;
+    }
     let f = require_hall_writes(&state, None)?;
     flash_cooldown(&state);
     let out = with_writable(&state, |t, _| {
@@ -1404,6 +1413,7 @@ pub fn set_switches_all(
         std::thread::sleep(FLASH_SETTLE);
         Ok(())
     });
+    // Spaced from the end of the batch, not from before it began.
     stamp_write(&state);
     out
 }
@@ -1484,18 +1494,9 @@ pub fn set_switches_global(
         std::thread::sleep(FLASH_SETTLE);
         Ok(())
     });
+    // Spaced from the end of the batch, not from before it began.
     stamp_write(&state);
     out
-}
-
-fn check_macro_slot(slot: u8) -> Result<(), String> {
-    if slot >= crate::protocol::MACRO_SLOTS {
-        return Err(format!(
-            "macro slot {slot} out of range (0..{})",
-            crate::protocol::MACRO_SLOTS
-        ));
-    }
-    Ok(())
 }
 
 /// 256-byte blob over four raw pages. Unlike `GET_USERPIC`, this read
@@ -1503,6 +1504,12 @@ fn check_macro_slot(slot: u8) -> Result<(), String> {
 #[tauri::command(async)]
 pub fn read_macro(state: tauri::State<AppState>, slot: u8) -> Result<Macro, String> {
     check_macro_slot(slot)?;
+    if is_driveall(&state) {
+        let space = driveall_info(&state)?.macro_space;
+        return with_open(&state, |t, _| {
+            block_on(ops::driveall_read_macro(t, slot, space))
+        });
+    }
     with_open(&state, |t, _| {
         let mut blob = [0u8; crate::protocol::MACRO_BYTES];
         for page in 0..4u8 {
@@ -1517,6 +1524,15 @@ pub fn read_macro(state: tauri::State<AppState>, slot: u8) -> Result<Macro, Stri
 #[tauri::command(async)]
 pub fn write_macro(state: tauri::State<AppState>, slot: u8, data: Macro) -> Result<(), String> {
     check_macro_slot(slot)?;
+    if is_driveall(&state) {
+        let space = driveall_info(&state)?.macro_space;
+        flash_cooldown(&state);
+        let out = with_writable(&state, |t, _| {
+            block_on(ops::driveall_write_macro(t, slot, &data, space))
+        });
+        stamp_write(&state);
+        return out;
+    }
     let blob = data.to_blob()?;
     flash_cooldown(&state);
     let out = with_writable(&state, |t, fc| {
@@ -1538,24 +1554,6 @@ pub fn write_macro(state: tauri::State<AppState>, slot: u8, data: Macro) -> Resu
     out
 }
 
-/// Everything sharkfin can read back from a board, as one restorable file.
-/// Per-key colour is absent by necessity: the firmware never reports it.
-#[derive(Serialize, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct SavedConfig {
-    version: u8,
-    device_id: u32,
-    family: String,
-    board: String,
-    profiles: Vec<Vec<u8>>,
-    fn_layers: Vec<Vec<u8>>,
-    led: LedParam,
-    side_light: Option<SledParam>,
-    debounce: u8,
-    sleep: SleepTimes,
-    options: Option<KbOptions>,
-}
-
 #[tauri::command(async)]
 pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<String, String> {
     let spec = {
@@ -1574,14 +1572,14 @@ pub fn export_config(state: tauri::State<AppState>, path: String) -> Result<Stri
         let mut profiles = Vec::new();
         let mut fn_layers = Vec::new();
         for p in 0..n {
-            profiles.push(read_matrix(
+            profiles.push(block_on(ops::read_matrix(
                 t,
                 fc,
                 crate::protocol::yc500_profile_slot(scaled, p, 0),
                 0,
                 false,
-            )?);
-            fn_layers.push(read_matrix(t, fc, p, 0, true)?);
+            ))?);
+            fn_layers.push(block_on(ops::read_matrix(t, fc, p, 0, true))?);
         }
         let led = t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)?;
         let deb = t.roundtrip(fc.get_debounce, &[], Checksum::Bit7)?;
@@ -1663,7 +1661,7 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
                 } else {
                     crate::protocol::yc500_profile_slot(scaled, p as u8, 0)
                 };
-                let current = read_matrix(t, fc, wire, 0, fn_layer)?;
+                let current = block_on(ops::read_matrix(t, fc, wire, 0, fn_layer))?;
                 for slot in 0..128usize {
                     let want: [u8; 4] = target[slot * 4..slot * 4 + 4].try_into().unwrap();
                     if current[slot * 4..slot * 4 + 4] != want {
@@ -1713,69 +1711,6 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
 
 /// Read probes, both families. Unimplemented opcodes echo the previous reply.
 ///
-/// Do not sweep 0x80.. blind. gen2 0xAC erases the flash chip; on yc500 the
-/// same byte is the 0x2C display erase. The sweep runs before the family is
-/// known. Every entry must be a harmless read in both families.
-///
-/// Keymap pages go in so a report names the layout without a second trip.
-const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
-    ("0x80 revision", 0x80, &[]),
-    ("0x83 report rate (gen2)", 0x83, &[]),
-    ("0x84 profile (gen2)", 0x84, &[]),
-    ("0x85 profile (yc500)", 0x85, &[]),
-    ("0x86 options/debounce", 0x86, &[0]),
-    ("0x87 backlight", 0x87, &[]),
-    ("0x88 edge light", 0x88, &[]),
-    ("0x89 keymap/options p0", 0x89, &[0, 0]),
-    ("0x89 keymap (yc500) p1", 0x89, &[0, 1]),
-    ("0x89 keymap (yc500) p2", 0x89, &[0, 2]),
-    ("0x89 keymap (yc500) p3", 0x89, &[0, 3]),
-    ("0x89 keymap (yc500) p4", 0x89, &[0, 4]),
-    ("0x89 keymap (yc500) p5", 0x89, &[0, 5]),
-    ("0x89 keymap (yc500) p6", 0x89, &[0, 6]),
-    ("0x89 keymap (yc500) p7", 0x89, &[0, 7]),
-    ("0x89 keymap (yc500) p8", 0x89, &[0, 8]),
-    ("0x8A keymap (gen2) p0", 0x8A, &[0, 0xFF, 0, 0]),
-    ("0x8A keymap (gen2) p1", 0x8A, &[0, 0xFF, 1, 0]),
-    ("0x8A keymap (gen2) p2", 0x8A, &[0, 0xFF, 2, 0]),
-    ("0x8A keymap (gen2) p3", 0x8A, &[0, 0xFF, 3, 0]),
-    ("0x8A keymap (gen2) p4", 0x8A, &[0, 0xFF, 4, 0]),
-    ("0x8A keymap (gen2) p5", 0x8A, &[0, 0xFF, 5, 0]),
-    ("0x8A keymap (gen2) p6", 0x8A, &[0, 0xFF, 6, 0]),
-    ("0x8A keymap (gen2) p7", 0x8A, &[0, 0xFF, 7, 0]),
-    ("0x8B macro s0 p0", 0x8B, &[0, 0]),
-    ("0x8C userpic p0", 0x8C, &[0, 0]),
-    ("0x8F identify", 0x8F, &[]),
-    ("0x90 fn layer p0", 0x90, &[0, 0]),
-    ("0x91 debounce/sleep", 0x91, &[]),
-    ("0x92 sleep (yc500)", 0x92, &[]),
-    ("0x97 auto-OS (yc500)", 0x97, &[]),
-    ("0xAD OLED version", 0xAD, &[]),
-];
-
-fn probe_sweep(t: &Transport, out: &mut String) {
-    use std::fmt::Write;
-    let _ = writeln!(
-        out,
-        "\nread sweep, both families' GET opcodes; an unimplemented \
-         command echoes the previous reply:"
-    );
-    for (label, opcode, payload) in BUNDLE_PROBES {
-        match t.read_raw_page(*opcode, payload, Checksum::Bit7) {
-            Ok(reply) => {
-                let hex: String = reply.iter().fold(String::new(), |mut s, b| {
-                    let _ = write!(s, "{b:02x} ");
-                    s
-                });
-                let _ = writeln!(out, "{label:<24} {}", hex.trim_end());
-            }
-            Err(e) => {
-                let _ = writeln!(out, "{label:<24} error: {e}");
-            }
-        }
-    }
-}
-
 /// Everything a developer needs from a board they don't own, as text the
 /// owner pastes into a GitHub issue. Read-only. `path` reaches a discovered
 /// board the registry does not know; without it the open board is used.
@@ -1831,7 +1766,7 @@ pub fn contribution_bundle(
                 registry::led_flags_note(&spec, led_swap)
             );
         }
-        probe_sweep(t, &mut out);
+        let _ = block_on(ops::probe_sweep(t, &mut out));
         let _ = writeln!(out, "```");
         Ok(out)
     })
@@ -1852,7 +1787,12 @@ fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<S
             .into_iter()
             .find(|d| d.path == path)
             .ok_or("that keyboard is no longer there")?;
-        let t = Transport::open(api, &path).map_err(err_str)?;
+        let stack = if driveall::is_collection(d.usage_page, d.usage) {
+            hid::Stack::Driveall
+        } else {
+            hid::Stack::Royuan
+        };
+        let t = Transport::open_stack(api, &path, stack).map_err(err_str)?;
         (d, t)
     };
     let mut out = String::new();
@@ -1866,8 +1806,8 @@ fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<S
     let _ = writeln!(out, "board  : {product} (not in the registry)");
     let _ = writeln!(
         out,
-        "usb    : {:04x}:{:04x}  collection usage {}",
-        d.vendor_id, d.product_id, d.usage
+        "usb    : {:04x}:{:04x}  collection {:04x} usage {}",
+        d.vendor_id, d.product_id, d.usage_page, d.usage
     );
     match t.identify() {
         Ok(id) => {
@@ -1881,7 +1821,7 @@ fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<S
             let _ = writeln!(out, "identify: no answer");
         }
     }
-    probe_sweep(&t, &mut out);
+    let _ = block_on(ops::probe_sweep(&t, &mut out));
     let _ = writeln!(out, "```");
     Ok(out)
 }

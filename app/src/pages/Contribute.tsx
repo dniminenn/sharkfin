@@ -172,6 +172,11 @@ export default function ContributePage({
             {t("This device did not answer as a keyboard or as a receiver. Connect the keyboard by cable and it will appear here.")}
           </p>
         )}
+        {!device && !unknown && (
+          <p className="text-sm text-muted-foreground">
+            {t("sharkfin only sees a keyboard that exposes a settings interface it speaks. A board can be plugged in, typing fine, and still not appear here: it may use a protocol sharkfin has no driver for. Nothing can be collected from it from this page.")}
+          </p>
+        )}
 
         {device && (
           <div className="flex flex-wrap items-center gap-3 text-sm">

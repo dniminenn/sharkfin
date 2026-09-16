@@ -66,20 +66,27 @@ const isNearBlack = (c: { r: number; g: number; b: number }) =>
 const WRITE_GAP = 300;
 
 /** The effects to offer: the board's own table when the registry has one,
- *  else the common set. Speed is capped at the wire's 0..4 whatever the
- *  vendor's slider claims. */
+ *  else the common set. Speed is capped at the ROYUAN wire's 0..4 whatever
+ *  the vendor's slider claims; see the note on the LEDPARAM table.
+ *
+ *  MODE_LABELS numbers ROYUAN's effects. Driveall numbers its own, and the
+ *  two tables have nothing to do with each other, so its effects are shown
+ *  by number rather than under a name that belongs to another board. That
+ *  also keeps the ones ROYUAN has no entry for, which dropping by label
+ *  would have hidden. */
 function modesFor(device: ConnectedDevice | null): { modes: LightMode[]; brightnessMax: number } {
   const table = device?.spec.light;
   if (!table) return { modes: BE_MODES, brightnessMax: 4 };
+  const named = device?.spec.family !== "driveall";
   const modes: LightMode[] = table.effects
-    .filter((e) => e.mode in MODE_LABELS)
+    .filter((e) => !named || e.mode in MODE_LABELS)
     .map((e) => ({
       value: e.mode,
-      label: MODE_LABELS[e.mode],
+      label: named ? MODE_LABELS[e.mode] : t("Effect {n}", { n: e.mode }),
       options: e.options ?? undefined,
       noColor: !e.rgb,
       noSpeed: e.speedMax == null,
-      speedMax: Math.min(e.speedMax ?? 4, 4),
+      speedMax: named ? Math.min(e.speedMax ?? 4, 4) : (e.speedMax ?? 4),
     }));
   return { modes, brightnessMax: Math.max(1, table.brightnessMax) };
 }
@@ -244,8 +251,11 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
   const hex = rgbToHex(param.r, param.g, param.b);
   const colorless = mode?.noColor ?? false;
   // The preview is timed from the firmware of the two families; a board
-  // whose family is still unknown is drawn on the gen2 clock.
+  // whose family is still unknown is drawn on the gen2 clock. Driveall
+  // effect numbers are its own, so drawing them on that clock would animate
+  // somebody else's effect under this board's number.
   const family: Family = device.spec.family === "yc500" ? "yc500" : "gen2";
+  const previewable = device.spec.family !== "driveall";
 
   const slider = (
     label: string,
@@ -280,7 +290,7 @@ export default function LightingPage({ device }: { device: ConnectedDevice | nul
         hint={t("Backlight effect, color and motion. Changes apply live.")}
       />
 
-      {!resolving && !opts?.ledOff && (
+      {!resolving && !opts?.ledOff && previewable && (
         <EffectPreview
             layout={layout}
             family={family}

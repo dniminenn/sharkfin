@@ -31,7 +31,7 @@ VENDOR_LAYOUTS = ROOT / "app/src/lib/layouts/vendor"
 
 # Mirrors KNOWN_FAMILIES in app/src-tauri/src/registry.rs plus the marker
 # for boards identified but not yet classified.
-FAMILIES = {"yc500", "gen2", "unknown"}
+FAMILIES = {"yc500", "gen2", "driveall", "unknown"}
 
 # Layouts that live outside the vendor directory. Mirrors CANONICAL in
 # tools/coverage.py.

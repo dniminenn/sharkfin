@@ -9,38 +9,13 @@ use std::time::{Duration, Instant};
 use hidapi::{HidApi, HidDevice};
 use parking_lot::Mutex;
 
-use crate::protocol::{self, receiver, Checksum, REPORT_LEN, USAGES, USAGE_PAGE};
+use crate::protocol::{driveall, REPORT_LEN, USAGES, USAGE_PAGE};
+use crate::wire::{block_on, Wire, WireError};
+pub use crate::wire::{LinkKind as Link, Stack};
 
-#[derive(Debug, thiserror::Error)]
-pub enum HidError {
-    #[error("hidapi: {0}")]
-    Api(#[from] hidapi::HidError),
-    #[error("no ROYUAN device found (is the keyboard connected by USB cable?)")]
-    NotFound,
-    #[error("device did not answer the identify handshake")]
-    NoHandshake,
-    #[error("the receiver is paired, but the keyboard is asleep or switched off")]
-    KeyboardOffline,
-    #[error("the receiver did not accept a packet to relay")]
-    ReceiverBusy,
-    #[error("short feature report ({0} bytes)")]
-    ShortRead(usize),
-    #[error("{0}")]
-    Protocol(String),
-}
-
-impl HidError {
-    /// Control endpoint stalled. Nothing gets through until re-enum or reopen.
-    pub fn is_stall(&self) -> bool {
-        match self {
-            HidError::Api(e) => {
-                let m = e.to_string();
-                m.contains("Protocol error") || m.contains("ioctl")
-            }
-            _ => false,
-        }
-    }
-}
+/// The shared error. hid.rs keeps the old name so the desktop
+/// backend reads the same as before.
+pub use crate::wire::WireError as HidError;
 
 #[derive(Clone, Debug, serde::Serialize)]
 pub struct DiscoveredDevice {
@@ -50,14 +25,16 @@ pub struct DiscoveredDevice {
     pub product: String,
     pub manufacturer: String,
     pub usage: u16,
+    pub usage_page: u16,
 }
 
 pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
-    api.device_list()
+    let mut found: Vec<DiscoveredDevice> = api
+        .device_list()
         .filter(|d| {
-            d.usage_page() == USAGE_PAGE
-                && USAGES.contains(&d.usage())
-                && crate::registry::vendor_ids().contains(&d.vendor_id())
+            crate::registry::vendor_ids().contains(&d.vendor_id())
+                && (is_royuan_collection(d.usage_page(), d.usage())
+                    || driveall::is_collection(d.usage_page(), d.usage()))
         })
         .map(|d| DiscoveredDevice {
             path: d.path().to_string_lossy().into_owned(),
@@ -66,32 +43,28 @@ pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
             product: d.product_string().unwrap_or_default().to_string(),
             manufacturer: d.manufacturer_string().unwrap_or_default().to_string(),
             usage: d.usage(),
+            usage_page: d.usage_page(),
         })
-        .collect()
+        .collect();
+    // FF68 before FF67: the AK029 probe used FF68.
+    found.sort_by_key(|d| match d.usage_page {
+        driveall::USAGE_PAGE_FF68 => 0u8,
+        driveall::USAGE_PAGE_FF67 => 1,
+        _ => 2,
+    });
+    found
+}
+
+fn is_royuan_collection(usage_page: u16, usage: u16) -> bool {
+    usage_page == USAGE_PAGE && USAGES.contains(&usage)
 }
 
 /// Minimum gap between feature-report writes. Faster stalls the endpoint
 /// until re-enum. 12 ms per report is the sustainable rate on an X86.
-const MIN_WRITE_GAP: Duration = Duration::from_millis(12);
-
-/// Receiver deadlines from the vendor (500 ms to accept, 1 s for a reply).
-/// A reply is ready about 100 ms after send on an X86; poll at the write
-/// floor. A 100 ms tick would round every exchange up to 200.
-const RECEIVER_SEND_DEADLINE: Duration = Duration::from_millis(500);
-const RECEIVER_READ_DEADLINE: Duration = Duration::from_millis(1000);
-const RECEIVER_TICK: Duration = Duration::from_millis(5);
-const RECEIVER_REST: Duration = Duration::from_millis(10);
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
-pub enum Link {
-    Usb,
-    Receiver,
-}
+const MIN_WRITE_GAP: Duration = Duration::from_millis(crate::wire::MIN_WRITE_GAP);
 
 pub struct Transport {
     dev: HidDevice,
-    pub settle: Duration,
     last_write: Mutex<Option<Instant>>,
     /// Set once identify has succeeded through the receiver's relay. Every
     /// send and read then goes through the select/release handshake.
@@ -99,6 +72,9 @@ pub struct Transport {
     /// The receiver keeps its relay target until told otherwise; the vendor
     /// selects once and never again unless the target changes.
     selected: AtomicBool,
+    stack: Stack,
+    /// Base for the millisecond clock the receiver deadlines run on.
+    started: Instant,
 }
 
 /// Rolling record of what reached the wire, opcode and direction only.
@@ -134,23 +110,20 @@ pub fn wire_trace() -> String {
 
 impl Transport {
     pub fn open(api: &HidApi, path: &str) -> Result<Self, HidError> {
+        Self::open_stack(api, path, Stack::Royuan)
+    }
+
+    pub fn open_stack(api: &HidApi, path: &str, stack: Stack) -> Result<Self, HidError> {
         let cpath = std::ffi::CString::new(path).expect("hid path with NUL");
-        let dev = api.open_path(&cpath)?;
+        let dev = api.open_path(&cpath).map_err(api_err)?;
         Ok(Self {
             dev,
-            settle: Duration::from_millis(10),
             last_write: Mutex::new(None),
             relay: AtomicBool::new(false),
             selected: AtomicBool::new(false),
+            stack,
+            started: Instant::now(),
         })
-    }
-
-    pub fn link(&self) -> Link {
-        if self.relay.load(Ordering::Relaxed) {
-            Link::Receiver
-        } else {
-            Link::Usb
-        }
     }
 
     fn pace(&self) {
@@ -164,39 +137,42 @@ impl Transport {
         *last = Some(Instant::now());
     }
 
-    pub fn send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidError> {
-        if self.relay.load(Ordering::Relaxed) {
-            self.relay_send(buf)
+    /// One report to the node: feature reports on ROYUAN, output/input on
+    /// driveall.
+    fn raw_send_blocking(&self, buf: &[u8; REPORT_LEN]) -> Result<(), WireError> {
+        let op = if self.stack == Stack::Driveall {
+            buf[1]
         } else {
-            self.raw_send(buf)
-        }
-    }
-
-    pub fn read(&self) -> Result<[u8; REPORT_LEN], HidError> {
-        if self.relay.load(Ordering::Relaxed) {
-            self.relay_read()
-        } else {
-            self.raw_read()
-        }
-    }
-
-    /// One feature report to whatever is on the other end of the node: the
-    /// keyboard by cable, or the receiver itself.
-    fn raw_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidError> {
-        trace_wire('W', buf[0]);
+            buf[0]
+        };
+        trace_wire('W', op);
         self.pace();
         let mut wire = [0u8; REPORT_LEN + 1];
         wire[1..].copy_from_slice(buf);
-        self.dev.send_feature_report(&wire)?;
+        if self.stack == Stack::Driveall {
+            self.dev.write(&wire).map_err(api_err)?;
+        } else {
+            self.dev.send_feature_report(&wire).map_err(api_err)?;
+        }
         Ok(())
     }
 
-    fn raw_read(&self) -> Result<[u8; REPORT_LEN], HidError> {
+    fn raw_read_blocking(&self) -> Result<[u8; REPORT_LEN], WireError> {
         trace_wire('R', 0);
         let mut wire = [0u8; REPORT_LEN + 1];
-        let n = self.dev.get_feature_report(&mut wire)?;
+        let n = if self.stack == Stack::Driveall {
+            self.dev.read_timeout(&mut wire, 500).map_err(api_err)?
+        } else {
+            self.dev.get_feature_report(&mut wire).map_err(api_err)?
+        };
         if n < 8 {
-            return Err(HidError::ShortRead(n));
+            return Err(WireError::ShortRead(n));
+        }
+        // Driveall chunk addresses step by report length minus the 8-byte
+        // header. A board answering in 32-byte reports would have every
+        // address past the first wrong, so it is refused, not guessed at.
+        if self.stack == Stack::Driveall && n != REPORT_LEN && n != REPORT_LEN + 1 {
+            return Err(WireError::ShortRead(n));
         }
         let mut out = [0u8; REPORT_LEN];
         // tolerate platforms that keep the report-ID byte
@@ -207,147 +183,160 @@ impl Transport {
         }
         Ok(out)
     }
+}
 
-    /// The receiver's own status. Answered by the receiver whether or not a
-    /// keyboard is paired; `None` when the node is a keyboard on a cable.
-    pub fn receiver_status(&self) -> Result<Option<receiver::Status>, HidError> {
-        self.raw_send(&receiver::status_packet())?;
-        sleep(RECEIVER_REST);
-        Ok(receiver::parse_status(&self.raw_read()?))
+/// Sort a hidapi failure into the two the session cares about. Only a
+/// stalled control endpoint is worth dropping the handle and asking for a
+/// replug; on hidraw that is the ioctl reporting the stall. Anything else
+/// is passing, and reporting it as a stall would leave a working board
+/// unusable until it is unplugged.
+fn api_err(e: hidapi::HidError) -> WireError {
+    let m = e.to_string();
+    if is_stall_message(&m) {
+        WireError::Stall(m)
+    } else {
+        WireError::Transport(m)
+    }
+}
+
+/// hidapi has no error code for a stall, only the message the platform
+/// gave it. On hidraw both halves of an endpoint stall come back through
+/// the failing ioctl.
+fn is_stall_message(m: &str) -> bool {
+    m.contains("Protocol error") || m.contains("ioctl")
+}
+
+impl crate::wire::Node for Transport {
+    fn stack(&self) -> Stack {
+        self.stack
     }
 
-    fn relay_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidError> {
-        let deadline = Instant::now() + RECEIVER_SEND_DEADLINE;
-        let mut ready = false;
-        loop {
-            match self.receiver_status()? {
-                Some(s) if !s.keyboard_online => return Err(HidError::KeyboardOffline),
-                Some(s) if s.can_send => {
-                    ready = true;
-                    break;
-                }
-                _ => {}
-            }
-            if Instant::now() >= deadline {
-                break;
-            }
-            sleep(RECEIVER_TICK);
-        }
-        if !ready {
-            self.selected.store(false, Ordering::Relaxed);
-            return Err(HidError::ReceiverBusy);
-        }
-        if !self.selected.load(Ordering::Relaxed) {
-            self.raw_send(&receiver::select_keyboard_packet())?;
-            sleep(RECEIVER_REST);
-            self.selected.store(true, Ordering::Relaxed);
-        }
-        self.raw_send(buf)
+    fn relay(&self) -> bool {
+        self.relay.load(Ordering::Relaxed)
     }
 
-    fn relay_read(&self) -> Result<[u8; REPORT_LEN], HidError> {
-        let deadline = Instant::now() + RECEIVER_READ_DEADLINE;
-        let mut ready = false;
-        loop {
-            if matches!(self.receiver_status()?, Some(s) if s.reply_ready) {
-                ready = true;
-                break;
-            }
-            if Instant::now() >= deadline {
-                break;
-            }
-            sleep(RECEIVER_TICK);
-        }
-        if !ready {
-            return Err(HidError::NoHandshake);
-        }
-        self.raw_send(&receiver::release_packet())?;
-        sleep(RECEIVER_REST);
-        self.raw_read()
+    fn set_relay(&self, on: bool) {
+        self.relay.store(on, Ordering::Relaxed);
+    }
+
+    fn selected(&self) -> bool {
+        self.selected.load(Ordering::Relaxed)
+    }
+
+    fn set_selected(&self, on: bool) {
+        self.selected.store(on, Ordering::Relaxed);
+    }
+
+    fn now_ms(&self) -> f64 {
+        self.started.elapsed().as_secs_f64() * 1000.0
+    }
+
+    async fn sleep_ms(&self, ms: u64) {
+        sleep(Duration::from_millis(ms));
+    }
+
+    async fn raw_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), WireError> {
+        self.raw_send_blocking(buf)
+    }
+
+    async fn raw_read(&self) -> Result<[u8; REPORT_LEN], WireError> {
+        self.raw_read_blocking()
+    }
+}
+
+/// The blocking face of [`Wire`]. The conversation itself lives in
+/// `wire.rs` and is shared with the browser build; these only park on it.
+impl Transport {
+    pub fn send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), WireError> {
+        block_on(Wire::send(self, buf))
+    }
+
+    pub fn read(&self) -> Result<[u8; REPORT_LEN], WireError> {
+        block_on(Wire::read(self))
+    }
+
+    pub fn link(&self) -> Link {
+        Wire::link(self)
+    }
+
+    pub fn stack(&self) -> Stack {
+        <Self as crate::wire::Node>::stack(self)
+    }
+
+    pub fn receiver_status(&self) -> Result<Option<crate::protocol::receiver::Status>, WireError> {
+        block_on(Wire::receiver_status(self))
     }
 
     pub fn roundtrip(
         &self,
         opcode: u8,
         payload: &[u8],
-        checksum: Checksum,
-    ) -> Result<[u8; REPORT_LEN], HidError> {
-        let pkt = protocol::packet(opcode, payload, checksum);
-        self.send(&pkt)?;
-        let expected = opcode;
-        for attempt in 0..5 {
-            sleep(self.settle * (attempt + 1));
-            let reply = self.read()?;
-            if reply[0] == expected {
-                return Ok(reply);
-            }
-        }
-        Err(HidError::NoHandshake)
+        checksum: crate::protocol::Checksum,
+    ) -> Result<[u8; REPORT_LEN], WireError> {
+        block_on(Wire::roundtrip(self, opcode, payload, checksum))
     }
 
-    /// Round-trip a packet the caller built. The screen announce sets fields
-    /// past the checksum byte, so it cannot be expressed as an opcode plus a
-    /// payload the way `roundtrip` wants.
-    pub fn roundtrip_packet(&self, pkt: &[u8; REPORT_LEN]) -> Result<[u8; REPORT_LEN], HidError> {
-        self.send(pkt)?;
-        for attempt in 0..5 {
-            sleep(self.settle * (attempt + 1));
-            let reply = self.read()?;
-            if reply[0] == pkt[0] {
-                return Ok(reply);
-            }
-        }
-        Err(HidError::NoHandshake)
+    pub fn roundtrip_packet(&self, pkt: &[u8; REPORT_LEN]) -> Result<[u8; REPORT_LEN], WireError> {
+        block_on(Wire::roundtrip_packet(self, pkt))
     }
 
-    /// For bulk reads whose replies are raw pages (no opcode echo).
     pub fn read_raw_page(
         &self,
         opcode: u8,
         payload: &[u8],
-        checksum: Checksum,
-    ) -> Result<[u8; REPORT_LEN], HidError> {
-        let pkt = protocol::packet(opcode, payload, checksum);
-        self.send(&pkt)?;
-        sleep(self.settle);
-        self.read()
+        checksum: crate::protocol::Checksum,
+    ) -> Result<[u8; REPORT_LEN], WireError> {
+        block_on(Wire::read_raw_page(self, opcode, payload, checksum))
     }
 
-    fn try_identify(&self) -> Option<u32> {
-        for _ in 0..3 {
-            if let Ok(reply) = self.roundtrip(protocol::cmd::GET_USB_VERSION, &[], Checksum::Bit7) {
-                if let Some(id) = protocol::parse_device_id(&reply) {
-                    return Some(id);
-                }
-            }
-        }
-        None
+    pub fn driveall_get(
+        &self,
+        cmd: u8,
+        content_size: usize,
+        addr: u16,
+    ) -> Result<Vec<u8>, WireError> {
+        block_on(Wire::driveall_get(self, cmd, content_size, addr))
     }
 
-    /// 0x8F identify; returns the registry device ID. A node that does not
-    /// answer by cable is asked whether it is a receiver, and identify is
-    /// repeated through the relay when it is one with a keyboard awake.
-    pub fn identify(&self) -> Result<u32, HidError> {
-        if self.relay.load(Ordering::Relaxed) {
-            return self.try_identify().ok_or(HidError::NoHandshake);
-        }
-        if let Some(id) = self.try_identify() {
-            return Ok(id);
-        }
-        let Some(status) = self.receiver_status()? else {
-            return Err(HidError::NoHandshake);
-        };
-        if !status.has_keyboard || !status.keyboard_online {
-            return Err(HidError::KeyboardOffline);
-        }
-        self.relay.store(true, Ordering::Relaxed);
-        self.selected.store(false, Ordering::Relaxed);
-        match self.try_identify() {
-            Some(id) => Ok(id),
-            None => {
-                self.relay.store(false, Ordering::Relaxed);
-                Err(HidError::NoHandshake)
-            }
-        }
+    pub fn driveall_set(
+        &self,
+        cmd: u8,
+        addr: u16,
+        data: &[u8],
+        last_on_final: bool,
+    ) -> Result<(), WireError> {
+        block_on(Wire::driveall_set(self, cmd, addr, data, last_on_final))
+    }
+
+    pub fn driveall_rmw(&self, r: driveall::Rmw) -> Result<(), WireError> {
+        block_on(Wire::driveall_rmw(self, r))
+    }
+
+    pub fn identify(&self) -> Result<u32, WireError> {
+        block_on(Wire::identify(self))
+    }
+
+    pub fn identify_driveall(&self) -> Result<driveall::DeviceInfo, WireError> {
+        block_on(Wire::identify_driveall(self))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Only a stalled endpoint drops the handle and asks for a replug.
+    /// Reporting every hidapi failure as one leaves a working board
+    /// unusable until it is unplugged, which is worse than the error.
+    #[test]
+    fn only_a_stall_message_counts_as_a_stall() {
+        assert!(is_stall_message(
+            "hidapi error: ioctl (GFEATURE): Protocol error"
+        ));
+        assert!(is_stall_message("ioctl (SFEATURE): Broken pipe"));
+        assert!(!is_stall_message("hidapi error: device disconnected"));
+        assert!(!is_stall_message(
+            "HidD_SetFeature: (0x00000001) Incorrect function."
+        ));
     }
 }

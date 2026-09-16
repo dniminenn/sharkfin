@@ -152,8 +152,8 @@ fn family_unknown() -> String {
 }
 
 /// Families whose command set is established. Anything else is read-only:
-/// the two families' opcodes collide and a misaddressed write is live.
-const KNOWN_FAMILIES: &[&str] = &["yc500", "gen2"];
+/// the two ROYUAN families' opcodes collide and a misaddressed write is live.
+const KNOWN_FAMILIES: &[&str] = &["yc500", "gen2", "driveall"];
 
 impl DeviceSpec {
     /// What a human calls this board.
@@ -208,6 +208,7 @@ impl DeviceSpec {
             && match self.family.as_str() {
                 "gen2" => true,
                 "yc500" => revision.is_some_and(|r| r >= Self::YC500_HALL_REVISION),
+                "driveall" => true,
                 _ => false,
             }
     }
@@ -216,11 +217,25 @@ impl DeviceSpec {
     /// path were read out of their own images (ry5088 on gen2, three
     /// images; yc3121 on yc500, the ER75's 2.00 image). The other gen2
     /// lineages share the family, not the evidence.
+    ///
+    /// Driveall qualifies on the whole family. Its command enum is one
+    /// table, not two that collide, so cmd 39 cannot mean something else
+    /// on another board; the SN34F280 HE image implements it at a known
+    /// region base, and the vendor driver sends it to every board whose
+    /// entry carries a performance route. The AK820 Pro images say nothing
+    /// either way: those boards have no performance route and no magnetic
+    /// switches to configure.
+    /// A board that is not in the registry never qualifies on its lineage:
+    /// its internal name is made up at connect, not read off a vendor
+    /// table, and its `magnetic` flag is the owner's click. Writes there go
+    /// through the felt round trip in `hall_write_allowed` instead.
     pub fn hall_writes(&self, revision: Option<u16>) -> bool {
-        self.hall_reads(revision)
+        !self.unregistered
+            && self.hall_reads(revision)
             && match self.family.as_str() {
                 "gen2" => self.internal_name.starts_with("ry5088_"),
                 "yc500" => self.internal_name.starts_with("yc3121_"),
+                "driveall" => self.internal_name.starts_with("driveall_"),
                 _ => false,
             }
     }
@@ -388,6 +403,13 @@ pub fn by_id(id: u32) -> Option<DeviceSpec> {
     all().into_iter().find(|d| d.id == id)
 }
 
+/// Driveall boards identify by USB vid/pid, not a ROYUAN 0x8F id.
+pub fn by_usb(vendor_id: u16, product_id: u16) -> Option<DeviceSpec> {
+    all()
+        .into_iter()
+        .find(|d| d.family == "driveall" && d.vendor_id == vendor_id && d.product_id == product_id)
+}
+
 /// Every USB vendor ID in the registry. Most boards are 0x3151; a minority
 /// ship under the brand's own ID. Derived from the registry so the two
 /// cannot disagree.
@@ -442,6 +464,20 @@ mod tests {
             .find(|d| d.id == 2268)
             .expect("X65HE present");
         assert!(x65.hall_writes(None));
+    }
+
+    /// A board that is not in the registry has a made-up internal name and
+    /// an owner-set `magnetic` flag, so it must not qualify on its lineage.
+    /// `driveall_unregistered` used to pass the `driveall_` test and open
+    /// switch writes on one click of the check.
+    #[test]
+    fn an_unregistered_board_never_qualifies_on_its_lineage() {
+        let ak029 = by_id(32837).expect("AK029 present");
+        assert!(ak029.hall_writes(None));
+        let mut invented = ak029.clone();
+        invented.unregistered = true;
+        assert!(invented.hall_reads(None));
+        assert!(!invented.hall_writes(None));
     }
 
     /// The vendor's light table names every layout the registry uses, bar
@@ -579,7 +615,7 @@ mod tests {
     fn every_device_has_a_family_and_unevidenced_ones_are_read_only() {
         for d in all() {
             assert!(!d.family.is_empty(), "device {} has no family", d.id);
-            let known = matches!(d.family.as_str(), "yc500" | "gen2");
+            let known = matches!(d.family.as_str(), "yc500" | "gen2" | "driveall");
             assert_eq!(d.writes_supported(), known, "device {}", d.id);
         }
     }

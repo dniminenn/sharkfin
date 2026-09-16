@@ -203,12 +203,15 @@ function PlainRows({
   unit,
   onChange,
   travelLabel,
+  rtOnly,
 }: {
   value: KeySwitch;
   ranges: ReturnType<typeof rangesFor>;
   unit: number;
   onChange: (k: KeySwitch) => void;
   travelLabel?: string;
+  /** The board's block holds one travel point and no dead zone. */
+  rtOnly?: boolean;
 }) {
   return (
     <>
@@ -219,13 +222,15 @@ function PlainRows({
         unit={unit}
         onChange={(v) => onChange({ ...value, travel: v })}
       />
-      <Row
-        label={t("Release point")}
-        value={value.lift}
-        r={ranges.travel}
-        unit={unit}
-        onChange={(v) => onChange({ ...value, lift: v })}
-      />
+      {!rtOnly && (
+        <Row
+          label={t("Release point")}
+          value={value.lift}
+          r={ranges.travel}
+          unit={unit}
+          onChange={(v) => onChange({ ...value, lift: v })}
+        />
+      )}
       <div className="flex items-center justify-between text-sm">
         <div>
           <Label>{t("Rapid trigger")}</Label>
@@ -254,13 +259,15 @@ function PlainRows({
         disabled={!value.rapidTrigger}
         onChange={(v) => onChange({ ...value, rtLift: v })}
       />
-      <Row
-        label={t("Bottom dead zone")}
-        value={value.deadBottom}
-        r={ranges.deadzone}
-        unit={unit}
-        onChange={(v) => onChange({ ...value, deadBottom: v })}
-      />
+      {!rtOnly && (
+        <Row
+          label={t("Bottom dead zone")}
+          value={value.deadBottom}
+          r={ranges.deadzone}
+          unit={unit}
+          onChange={(v) => onChange({ ...value, deadBottom: v })}
+        />
+      )}
     </>
   );
 }
@@ -457,6 +464,10 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
 
   const writable = canWriteSwitches(device);
   const unit = settings.unitMm;
+  // Driveall's 8-byte slot is the actuation point, the two rapid-trigger
+  // points and a flag. It carries no second travel point, no dead zone and
+  // no kind, so the controls for those are not offered.
+  const rtOnly = settings.format === "driveall";
   const ranges = rangesFor(device, unit);
   const bySlot = new Map(settings.keys.map((k) => [k.slot, k]));
   const keysBySlot = new Map(
@@ -656,7 +667,13 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
         {draftAll && (
           <Section title={t("All keys")} hint={t("Written to every key at once. Keys with a kind keep it.")}>
             <div className="space-y-4">
-              <PlainRows value={draftAll} ranges={ranges} unit={unit} onChange={setDraftAll} />
+              <PlainRows
+                value={draftAll}
+                ranges={ranges}
+                unit={unit}
+                onChange={setDraftAll}
+                rtOnly={rtOnly}
+              />
               <Button size="sm" onClick={applyAll} disabled={!writable || busy}>
                 {busy ? t("Writing. Leave the keyboard plugged in.") : t("Apply to all keys")}
               </Button>
@@ -666,37 +683,42 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
         {draftKey && selected && (
           <Section title={<span className="font-mono">{selected.text ?? selected.code}</span>}>
             <div className="space-y-4">
-              <div className="flex items-center justify-between text-sm">
-                <Label>{t("Kind")}</Label>
-                <Select
-                  value={String(draftKey.kind)}
-                  onValueChange={(v) => setDraftKey({ ...draftKey, kind: Number(v) })}
-                  disabled={!writable}
-                >
-                  <SelectTrigger className="w-48">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {KINDS.map((k) => (
-                      <SelectItem key={k.value} value={String(k.value)}>
-                        {k.label()}
-                      </SelectItem>
-                    ))}
-                    {!KINDS.some((k) => k.value === draftKey.kind) && (
-                      <SelectItem value={String(draftKey.kind)}>
-                        {t("Unknown kind {n}", { n: draftKey.kind })}
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-              <p className="text-xs text-muted-foreground">{kindHint(draftKey.kind)}</p>
+              {!rtOnly && (
+                <>
+                  <div className="flex items-center justify-between text-sm">
+                    <Label>{t("Kind")}</Label>
+                    <Select
+                      value={String(draftKey.kind)}
+                      onValueChange={(v) => setDraftKey({ ...draftKey, kind: Number(v) })}
+                      disabled={!writable}
+                    >
+                      <SelectTrigger className="w-48">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {KINDS.map((k) => (
+                          <SelectItem key={k.value} value={String(k.value)}>
+                            {k.label()}
+                          </SelectItem>
+                        ))}
+                        {!KINDS.some((k) => k.value === draftKey.kind) && (
+                          <SelectItem value={String(draftKey.kind)}>
+                            {t("Unknown kind {n}", { n: draftKey.kind })}
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{kindHint(draftKey.kind)}</p>
+                </>
+              )}
               <PlainRows
                 value={draftKey}
                 ranges={ranges}
                 unit={unit}
                 onChange={setDraftKey}
                 travelLabel={draftKey.kind === KIND_DKS ? t("Second point") : undefined}
+                rtOnly={rtOnly}
               />
               {draftKey.kind === KIND_DKS && (
                 <DksRows

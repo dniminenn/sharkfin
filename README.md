@@ -5,7 +5,7 @@
 <h1 align="center">sharkfin</h1>
 
 <p align="center">
-  Open-source configurator for Attack Shark and other ROYUAN keyboards.<br/>
+  Open-source configurator for Attack Shark and other keyboards.<br/>
   Linux, Windows, macOS, or straight from a Chromium browser.
 </p>
 
@@ -18,9 +18,9 @@
 
 ![keymap editor](docs/keys-abyss.png)
 
-Remap keys, set the RGB, record macros and change device settings on 1382
-keyboards built on ROYUAN hardware: Attack Shark, Hator, ikbc, NOPPOO,
-Epomaker, Akko, MEETION, rongyuan and more.
+Remap keys, set the RGB, record macros and change device settings on 1383
+keyboards: Attack Shark, Hator, ikbc, NOPPOO, Epomaker, Akko, MEETION,
+rongyuan, AJAZZ and more.
 
 **Use a USB cable.** Over a 2.4 GHz receiver sharkfin reads whatever the
 receiver relays: some carry the settings channel, some carry nothing, and
@@ -144,7 +144,7 @@ install it; replug the keyboard after installing. For the AppImage or the
 browser, one line, then replug:
 
 ```sh
-echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|0db0|145f|14a5|2ea8|3121|3299|331a|374a|379a|38a9|38ee|391d|3984|39a8|39ab|54ab", MODE="0660", TAG+="uaccess"' \
+echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|0c45|0db0|145f|14a5|2ea8|3121|3299|331a|374a|379a|38a9|38ee|391d|3984|39a8|39ab|54ab", MODE="0660", TAG+="uaccess"' \
   | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \
   && sudo udevadm control --reload-rules && sudo udevadm trigger
 ```

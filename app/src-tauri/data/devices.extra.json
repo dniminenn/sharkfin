@@ -8228,5 +8228,43 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #56. USB 0C45:8045, driveall collection FF68, not a ROYUAN board. The AJAZZMOUSE AK029 V2 at 3151:5030 is a different keyboard.",
+    "_evidence": "Owner probe: AA 10 30 identify on FF68 usage 0x61, reply 55 10 with vid 0C45 pid 8045. The driveall entry for 3141:32837 carries a performance route, trip 0.1-3.4mm step 0.01 default 1.2, and advancedKeys RS/SOCD/DKS/MT/TGL, so the vendor sends cmd 39 to this board. The SN34F280 HE image implements 23 and 39 at a known region base with the block shape the JS describes. Write cmds 34, 35, 36, 37, 38 sit in the AK820 Pro 8099 image's SET switch. Keys, Fn, lighting, macros, rapid trigger.",
+    "_unknown": "No picture: Keys shows a slot grid until a contribute match, though the vendor entry has the 29-key list. Profile count is not in the probe, pinned to 1. Only the RT block is written: no DKS (cmd 40), no SOCD, MT or TGL, and the slot has no second travel point or dead zone, so the Switches page hides them. Byte 0 is the fitted axis type and is left as read. Effect count is capped at the 19 the vendor tables name; brightness and speed are the vendor's 1-6. Side light GET 29 is not in the HE dispatcher, so the edge-light flag stays off. Report rate and calibration are not implemented.",
+    "id": 32837,
+    "name": "driveall_ak029",
+    "displayName": "AK029",
+    "company": "AJAZZ",
+    "vendor": "AJAZZ",
+    "vendorId": 3141,
+    "productId": 32837,
+    "internalName": "driveall_ak029",
+    "keyLayout": "Unknown",
+    "lightLayout": "Driveall19",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": true,
+    "family": "driveall",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.4,
+        "step": 0.01,
+        "default": 1.2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

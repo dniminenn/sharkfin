@@ -287,6 +287,10 @@ export default function DevicePage({
   }
 
   const wireless = device.spec.features.sleep24 || device.spec.features.sleepBT;
+  // Driveall carries these in a settings block sharkfin does not write yet,
+  // and the backup file is a ROYUAN dump. Showing the controls would only
+  // hand the owner an error when they touch one.
+  const driveall = device.spec.family === "driveall";
 
   return (
     <div className="mx-auto max-w-3xl space-y-8 p-6">
@@ -300,25 +304,27 @@ export default function DevicePage({
         })}
       />
 
-      <Section title={t("Switches")}>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <Label>{t("Debounce")}</Label>
-              <span className="text-muted-foreground">{s.debounce}</span>
+      {!driveall && (
+        <Section title={t("Switches")}>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <Label>{t("Debounce")}</Label>
+                <span className="text-muted-foreground">{s.debounce}</span>
+              </div>
+              <Slider
+                min={1}
+                max={10}
+                step={1}
+                value={[s.debounce]}
+                onValueChange={([v]) => pushDebounce(v)}
+                onValueCommit={([v]) => commitDebounce(v)}
+              />
+              <p className="text-xs text-muted-foreground">
+                {t("Lower reacts faster; raise it if a switch starts chattering.")}
+              </p>
             </div>
-            <Slider
-              min={1}
-              max={10}
-              step={1}
-              value={[s.debounce]}
-              onValueChange={([v]) => pushDebounce(v)}
-              onValueCommit={([v]) => commitDebounce(v)}
-            />
-            <p className="text-xs text-muted-foreground">
-              {t("Lower reacts faster; raise it if a switch starts chattering.")}
-            </p>
-          </div>
-      </Section>
+        </Section>
+      )}
 
       {(device.spec.screen || screenVersion !== null) && (
         <Section title={t("Display")}>
@@ -415,101 +421,107 @@ export default function DevicePage({
         </Section>
       )}
 
-      <Section title={t("Behaviour")}>
-        <div className="space-y-3">
-          {s.options ? (
-            <>
-              <Row
-                label={t("Windows key lock")}
-                hint={t("Ignore the Win key while gaming")}
-              >
-                <Switch
-                  checked={s.options.winLock}
-                  onCheckedChange={(v) => pushOptions({ winLock: v })}
-                />
-              </Row>
-              <Row label={t("Swap WASD and arrows")}>
-                <Switch
-                  checked={s.options.wasdSwap}
-                  onCheckedChange={(v) => pushOptions({ wasdSwap: v })}
-                />
-              </Row>
-              <Row label={t("Backlight off")}>
-                <Switch
-                  checked={s.options.ledOff}
-                  onCheckedChange={(v) => pushOptions({ ledOff: v })}
-                />
-              </Row>
-            </>
-          ) : (
-            <p className="py-2 text-sm text-muted-foreground">
-              {t("This board's protocol family reports its switches in a layout sharkfin hasn't decoded, so they're hidden rather than shown wrong.")}
-            </p>
-          )}
-          <Row
-            label={t("Auto-detect host OS")}
-            hint={t("Board picks its Windows or macOS layer by itself")}
-          >
-            <Switch
-              checked={s.autoOs}
-              onCheckedChange={pushAutoOs}
-            />
-          </Row>
-          {s.options && (
-            <Row label={t("Layout mode")} hint={t("Switched on the keyboard itself")}>
-              <span className="text-sm text-muted-foreground">
-                {s.options.macMode ? "macOS" : "Windows"}
-              </span>
+      {!driveall && (
+        <Section title={t("Behaviour")}>
+          <div className="space-y-3">
+            {s.options ? (
+              <>
+                <Row
+                  label={t("Windows key lock")}
+                  hint={t("Ignore the Win key while gaming")}
+                >
+                  <Switch
+                    checked={s.options.winLock}
+                    onCheckedChange={(v) => pushOptions({ winLock: v })}
+                  />
+                </Row>
+                <Row label={t("Swap WASD and arrows")}>
+                  <Switch
+                    checked={s.options.wasdSwap}
+                    onCheckedChange={(v) => pushOptions({ wasdSwap: v })}
+                  />
+                </Row>
+                <Row label={t("Backlight off")}>
+                  <Switch
+                    checked={s.options.ledOff}
+                    onCheckedChange={(v) => pushOptions({ ledOff: v })}
+                  />
+                </Row>
+              </>
+            ) : (
+              <p className="py-2 text-sm text-muted-foreground">
+                {t("This board's protocol family reports its switches in a layout sharkfin hasn't decoded, so they're hidden rather than shown wrong.")}
+              </p>
+            )}
+            <Row
+              label={t("Auto-detect host OS")}
+              hint={t("Board picks its Windows or macOS layer by itself")}
+            >
+              <Switch
+                checked={s.autoOs}
+                onCheckedChange={pushAutoOs}
+              />
             </Row>
-          )}
-        </div>
-      </Section>
-
-      <Section title={t("Backup")}>
-        <div className="flex items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            {t("Keymaps for every profile and layer, lighting and settings, as one file. Per-key paint patterns live in the Paint tab, because the firmware can't report those back.")}
-          </p>
-          <div className="flex shrink-0 gap-2">
-            <Button size="sm" variant="ghost" disabled={transferring} onClick={doExport}>
-              {t("Export")}
-            </Button>
-            <Button size="sm" variant="ghost" disabled={transferring} onClick={doImport}>
-              {transferring ? t("Working…") : t("Import")}
-            </Button>
+            {s.options && (
+              <Row label={t("Layout mode")} hint={t("Switched on the keyboard itself")}>
+                <span className="text-sm text-muted-foreground">
+                  {s.options.macMode ? "macOS" : "Windows"}
+                </span>
+              </Row>
+            )}
           </div>
-        </div>
-      </Section>
+        </Section>
+      )}
 
-      <Section title={t("Factory reset")}>
-        <div className="flex items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            {device?.link === "receiver"
-              ? t("Connect the keyboard by cable to reset it.")
-              : t("Clears every onboard profile, keymap, macro and light setting.")}
-          </p>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="destructive" size="sm" disabled={device?.link === "receiver"}>
-                {t("Reset")}
+      {!driveall && (
+        <Section title={t("Backup")}>
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
+              {t("Keymaps for every profile and layer, lighting and settings, as one file. Per-key paint patterns live in the Paint tab, because the firmware can't report those back.")}
+            </p>
+            <div className="flex shrink-0 gap-2">
+              <Button size="sm" variant="ghost" disabled={transferring} onClick={doExport}>
+                {t("Export")}
               </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>{t("Factory reset this keyboard?")}</DialogTitle>
-                <DialogDescription>
-                  {t("Every profile, remapped key, macro and lighting setting stored on the board is erased. This cannot be undone from here.")}
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button variant="destructive" onClick={doReset}>
-                  {t("Erase and reset")}
+              <Button size="sm" variant="ghost" disabled={transferring} onClick={doImport}>
+                {transferring ? t("Working…") : t("Import")}
+              </Button>
+            </div>
+          </div>
+        </Section>
+      )}
+
+      {!driveall && (
+        <Section title={t("Factory reset")}>
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-muted-foreground">
+              {device?.link === "receiver"
+                ? t("Connect the keyboard by cable to reset it.")
+                : t("Clears every onboard profile, keymap, macro and light setting.")}
+            </p>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive" size="sm" disabled={device?.link === "receiver"}>
+                  {t("Reset")}
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </Section>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{t("Factory reset this keyboard?")}</DialogTitle>
+                  <DialogDescription>
+                    {t("Every profile, remapped key, macro and lighting setting stored on the board is erased. This cannot be undone from here.")}
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button variant="destructive" onClick={doReset}>
+                    {t("Erase and reset")}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </Section>
+      )}
 
       {wireless && (
         <Section title={t("Wireless sleep")}>

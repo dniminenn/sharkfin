@@ -160,7 +160,7 @@ export interface KeySwitch {
 }
 
 export interface SwitchSettings {
-  format: "gen2" | "yc500";
+  format: "gen2" | "yc500" | "driveall";
   unitMm: number;
   keys: KeySwitch[];
 }

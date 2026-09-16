@@ -165,7 +165,7 @@ export interface KeySwitch {
 }
 
 export interface SwitchSettings {
-  format: "gen2" | "yc500";
+  format: "gen2" | "yc500" | "driveall";
   unitMm: number;
   keys: KeySwitch[];
 }
@@ -221,6 +221,8 @@ const USAGE_PAGE = 0xffff;
 // Almost every board reports usage 2 on the vendor page; the Akko ACR75 v2
 // reports 1, and the vendor's own driver looks for both.
 const USAGES = [0x0001, 0x0002];
+const DRIVEALL_PAGES = [0xff68, 0xff67];
+const DRIVEALL_USAGE = 0x61;
 
 // Which vendor IDs to look for comes from the registry, not from a constant
 // here: most of these boards are ROYUAN's 0x3151, but a minority ship under
@@ -235,7 +237,11 @@ async function knownVendors(): Promise<number[]> {
 
 const isVendorCollection = (d: HIDDevice, vendors: number[]) =>
   vendors.includes(d.vendorId) &&
-  d.collections.some((c) => c.usagePage === USAGE_PAGE && USAGES.includes(c.usage ?? -1));
+  d.collections.some(
+    (c) =>
+      (c.usagePage === USAGE_PAGE && USAGES.includes(c.usage ?? -1)) ||
+      (DRIVEALL_PAGES.includes(c.usagePage) && (c.usage ?? -1) === DRIVEALL_USAGE),
+  );
 
 let ready: Promise<void> | null = null;
 
@@ -264,10 +270,14 @@ export async function grantedDevices(): Promise<HIDDevice[]> {
 /** Shows the browser's device picker. Must run from a user gesture. */
 export async function requestDevice(): Promise<boolean> {
   const vendors = await knownVendors();
+  const royuan = vendors.flatMap((vendorId) =>
+    USAGES.map((usage) => ({ vendorId, usagePage: USAGE_PAGE, usage })),
+  );
+  const driveall = vendors.flatMap((vendorId) =>
+    DRIVEALL_PAGES.map((usagePage) => ({ vendorId, usagePage, usage: DRIVEALL_USAGE })),
+  );
   const picked = await navigator.hid.requestDevice({
-    filters: vendors.flatMap((vendorId) =>
-      USAGES.map((usage) => ({ vendorId, usagePage: USAGE_PAGE, usage })),
-    ),
+    filters: [...royuan, ...driveall],
   });
   return picked.length > 0;
 }

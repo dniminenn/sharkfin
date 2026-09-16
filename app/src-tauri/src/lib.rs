@@ -4,8 +4,11 @@ mod commands;
 pub mod derive;
 pub mod dev;
 pub mod hid;
+pub mod ops;
 pub mod protocol;
 pub mod registry;
+pub mod session;
+pub mod wire;
 
 use commands::AppState;
 use tauri::Manager;

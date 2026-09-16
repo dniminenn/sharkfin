@@ -45670,5 +45670,40 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "id": 32837,
+    "name": "driveall_ak029",
+    "displayName": "AK029",
+    "company": "AJAZZ",
+    "vendor": "AJAZZ",
+    "vendorId": 3141,
+    "productId": 32837,
+    "internalName": "driveall_ak029",
+    "keyLayout": "Unknown",
+    "lightLayout": "Driveall19",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": true,
+    "family": "driveall",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.4,
+        "step": 0.01,
+        "default": 1.2
+      }
+    },
+    "switchReplaceable": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]
