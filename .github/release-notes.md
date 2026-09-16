@@ -1,5 +1,26 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.8.2
+
+**66 more keyboards.** The registry holds 1382 boards, 1143 of them
+writable without setup. New names include the Hator HE180 and HE165,
+Keydous NJ98EP in five European layouts, QwertyKeys NEO98 HEW, Epomaker
+Glyph, KiiBoom MMD FIT68 and Cybrix30, cherry MX8.2 TMR DE, WOMIER
+WD75-HE, DAGK K68, and the URX(R) Core 68HE Pro and 75HE. Several boards
+moved to the brand that sells them, so a keyboard may be listed under a
+different name than before.
+
+**Finding your board no longer downloads every picture.** Matching used to
+fetch the whole collection to score it. It now scores against a digest of
+the pictures and fetches only the ones worth offering. This is most
+noticeable in the browser on a slow connection.
+
+**The Switches tab no longer throws away what you are editing.** The app
+looks for the keyboard every few seconds, and the Switches and Device tabs
+read the board again each time it did, closing any open dialog and
+discarding changes that had not been sent. They now read again only when
+the board itself changes. Reported and diagnosed in issue #52.
+
 ## What changed in 0.8.1
 
 **ANSI boards no longer get an ISO picture.** The firmware on many boards
