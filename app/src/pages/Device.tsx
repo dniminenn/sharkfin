@@ -107,6 +107,10 @@ export default function DevicePage({
   device: ConnectedDevice | null;
 }) {
   const [s, setS] = useState<DeviceSettings | null>(null);
+  // The scan replaces this object every few seconds, and on a receiver link
+  // its battery percent moves with it. Reload on the board, not the object,
+  // or a drag in progress is overwritten by the read.
+  const board = device ? `${device.spec.id}:${device.path}` : null;
 
   const load = useCallback(() => {
     getSettings()
@@ -115,9 +119,9 @@ export default function DevicePage({
   }, []);
 
   useEffect(() => {
-    if (device) load();
+    if (board) load();
     else setS(null);
-  }, [device, load]);
+  }, [board, load]);
 
   // The display is a second chip with its own firmware. Asking it for a
   // version is the one screen command that means the same thing on both
@@ -125,7 +129,7 @@ export default function DevicePage({
   // echoes the previous reply and comes back null.
   const [screenVersion, setScreenVersion] = useState<number | null>(null);
   useEffect(() => {
-    if (!device) {
+    if (!board) {
       setScreenVersion(null);
       return;
     }
@@ -138,7 +142,7 @@ export default function DevicePage({
     return () => {
       live = false;
     };
-  }, [device]);
+  }, [board]);
 
   // The display wants exactly its own pixels, so the picture is scaled here
   // and handed over as plain RGB. Everything about the display's byte order

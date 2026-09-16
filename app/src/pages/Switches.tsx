@@ -370,9 +370,13 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
 
   const access = device?.switches ?? "none";
   const global = access === "global";
+  // The scan replaces this object every few seconds, and on a receiver link
+  // its battery percent moves with it. Reload on the board, not the object,
+  // or every edit in progress is thrown away.
+  const board = device ? `${device.spec.id}:${device.path}` : null;
 
   const load = useCallback(async () => {
-    if (!device || access === "none") {
+    if (!board || access === "none") {
       setSettings(null);
       return;
     }
@@ -393,10 +397,10 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
     } catch (e) {
       toast.error(t("Could not read switch settings: {e}", { e: String(e) }));
     }
-  }, [device, access, global]);
+  }, [board, access, global]);
 
   const loadLayers = useCallback(async () => {
-    if (!device || access === "none") {
+    if (!board || access === "none") {
       setLayers(null);
       return;
     }
@@ -407,7 +411,7 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
     } catch (e) {
       toast.error(t("Could not read the keymap sub-layers: {e}", { e: String(e) }));
     }
-  }, [device, access, profile]);
+  }, [board, access, profile]);
 
   useEffect(() => {
     load();
