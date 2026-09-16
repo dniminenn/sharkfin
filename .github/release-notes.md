@@ -21,6 +21,9 @@ read the board again each time it did, closing any open dialog and
 discarding changes that had not been sent. They now read again only when
 the board itself changes. Reported and diagnosed in issue #52.
 
+**The display clock can be set from the Device tab.** On a board with a
+screen, Set clock writes this computer's time. Cable only.
+
 ## What changed in 0.8.1
 
 **ANSI boards no longer get an ISO picture.** The firmware on many boards
