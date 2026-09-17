@@ -1,5 +1,21 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.8.3
+
+**A data bundle says when it was cut short.** If the keyboard stopped
+answering partway through collecting one, the app handed back a file that
+simply ended, with nothing in it to show it was incomplete. It now stops
+and says the board needs replugging.
+
+**The Contribute tab explains an empty list.** A keyboard can be plugged
+in and typing and still not appear there, because sharkfin only sees a
+board that exposes a settings interface it speaks. The page says so now
+instead of showing nothing.
+
+**Refusing an oversized picture says why.** A frame too large for the
+board's firmware to count now reports its size and the limit, rather than
+saying only that it was too big.
+
 ## What changed in 0.8.2
 
 **66 more keyboards.** The registry holds 1382 boards, 1143 of them
