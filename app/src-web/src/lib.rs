@@ -8,10 +8,16 @@
 
 #[path = "../../src-tauri/src/derive.rs"]
 mod derive;
-#[path = "../../src-tauri/src/protocol.rs"]
+#[path = "../../src-tauri/src/ops.rs"]
+mod ops;
+#[path = "../../src-tauri/src/protocol/mod.rs"]
 mod protocol;
 #[path = "../../src-tauri/src/registry.rs"]
 mod registry;
+#[path = "../../src-tauri/src/session.rs"]
+mod session;
+#[path = "../../src-tauri/src/wire.rs"]
+mod wire;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -22,8 +28,7 @@ use wasm_bindgen_futures::JsFuture;
 
 use protocol::hall;
 use protocol::{
-    cmd, family_cmds, receiver, Checksum, FamilyCmds, KbOptions, LedParam, Macro, SledParam,
-    SleepTimes, REPORT_LEN,
+    cmd, family_cmds, Checksum, KbOptions, LedParam, Macro, SledParam, SleepTimes, REPORT_LEN,
 };
 use registry::DeviceSpec;
 
@@ -75,40 +80,9 @@ extern "C" {
 
 // ---------------------------------------------------------------------------
 // Transport: WebHID feature reports with the same pacing as hid.rs
-
-#[derive(Debug)]
-enum HidErr {
-    /// USB-layer failure. On this firmware that is almost always a stalled
-    /// endpoint. Replug. Same path as the desktop stall.
-    Stall(String),
-    NoHandshake,
-    KeyboardOffline,
-    ReceiverBusy,
-    ShortRead(usize),
-    Protocol(String),
-}
-
-impl std::fmt::Display for HidErr {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            HidErr::Stall(m) => write!(f, "webhid: {m}"),
-            HidErr::NoHandshake => write!(f, "device did not answer the identify handshake"),
-            HidErr::KeyboardOffline => write!(
-                f,
-                "the receiver is paired, but the keyboard is asleep or switched off"
-            ),
-            HidErr::ReceiverBusy => write!(f, "the receiver did not accept a packet to relay"),
-            HidErr::ShortRead(n) => write!(f, "short feature report ({n} bytes)"),
-            HidErr::Protocol(m) => write!(f, "{m}"),
-        }
-    }
-}
-
-impl HidErr {
-    fn is_stall(&self) -> bool {
-        matches!(self, HidErr::Stall(_))
-    }
-}
+use ops::{check_macro_slot, key_write_packet, need, read_matrix};
+use session::{switch_access, OwnerRecord, SavedConfig, SwitchAccess};
+use wire::{LinkKind as Link, Wire, WireError as HidErr, WireError};
 
 fn js_err_text(e: JsValue) -> String {
     e.as_string()
@@ -120,23 +94,10 @@ fn js_err_text(e: JsValue) -> String {
         .unwrap_or_else(|| "unknown WebHID error".into())
 }
 
-/// Minimum gap between feature-report writes; same hard floor as the desktop
-/// transport (12 ms sustainable, measured on an X86).
-const MIN_WRITE_GAP_MS: f64 = 12.0;
-const SETTLE_MS: f64 = 10.0;
-
-/// Receiver bookkeeping, same numbers and reasoning as hid.rs.
-const RECEIVER_SEND_DEADLINE_MS: f64 = 500.0;
-const RECEIVER_READ_DEADLINE_MS: f64 = 1000.0;
-const RECEIVER_TICK_MS: f64 = 5.0;
-const RECEIVER_REST_MS: f64 = 10.0;
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
-enum Link {
-    Usb,
-    Receiver,
-}
+/// The write floor this backend paces to, from the one place it is set.
+/// The settle ladder and the receiver deadlines are `wire.rs`'s and are not
+/// restated here: a second copy is a second thing to forget to change.
+const MIN_WRITE_GAP_MS: f64 = wire::MIN_WRITE_GAP as f64;
 
 struct Transport {
     dev: JsHidDevice,
@@ -149,94 +110,21 @@ struct Transport {
 }
 
 impl Transport {
+    fn new(dev: JsHidDevice) -> Self {
+        Self {
+            dev,
+            last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
+            relay: std::cell::Cell::new(false),
+            selected: std::cell::Cell::new(false),
+        }
+    }
+
     async fn pace(&self) {
         let since = js_now() - self.last_write.get();
         if since < MIN_WRITE_GAP_MS {
             sleep_ms(MIN_WRITE_GAP_MS - since).await;
         }
         self.last_write.set(js_now());
-    }
-
-    fn link(&self) -> Link {
-        if self.relay.get() {
-            Link::Receiver
-        } else {
-            Link::Usb
-        }
-    }
-
-    async fn send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidErr> {
-        if self.relay.get() {
-            self.relay_send(buf).await
-        } else {
-            self.raw_send(buf).await
-        }
-    }
-
-    async fn read(&self) -> Result<[u8; REPORT_LEN], HidErr> {
-        if self.relay.get() {
-            self.relay_read().await
-        } else {
-            self.raw_read().await
-        }
-    }
-
-    /// The receiver's own status; `None` when the node is a keyboard on a
-    /// cable.
-    async fn receiver_status(&self) -> Result<Option<receiver::Status>, HidErr> {
-        self.raw_send(&receiver::status_packet()).await?;
-        sleep_ms(RECEIVER_REST_MS).await;
-        Ok(receiver::parse_status(&self.raw_read().await?))
-    }
-
-    async fn relay_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), HidErr> {
-        let deadline = js_now() + RECEIVER_SEND_DEADLINE_MS;
-        let mut ready = false;
-        loop {
-            match self.receiver_status().await? {
-                Some(s) if !s.keyboard_online => return Err(HidErr::KeyboardOffline),
-                Some(s) if s.can_send => {
-                    ready = true;
-                    break;
-                }
-                _ => {}
-            }
-            if js_now() >= deadline {
-                break;
-            }
-            sleep_ms(RECEIVER_TICK_MS).await;
-        }
-        if !ready {
-            self.selected.set(false);
-            return Err(HidErr::ReceiverBusy);
-        }
-        if !self.selected.get() {
-            self.raw_send(&receiver::select_keyboard_packet()).await?;
-            sleep_ms(RECEIVER_REST_MS).await;
-            self.selected.set(true);
-        }
-        self.raw_send(buf).await
-    }
-
-    async fn relay_read(&self) -> Result<[u8; REPORT_LEN], HidErr> {
-        let deadline = js_now() + RECEIVER_READ_DEADLINE_MS;
-        let mut ready = false;
-        loop {
-            if matches!(self.receiver_status().await?, Some(s) if s.reply_ready) {
-                ready = true;
-                break;
-            }
-            if js_now() >= deadline {
-                break;
-            }
-            sleep_ms(RECEIVER_TICK_MS).await;
-        }
-        if !ready {
-            return Err(HidErr::NoHandshake);
-        }
-        self.raw_send(&receiver::release_packet()).await?;
-        sleep_ms(RECEIVER_REST_MS).await;
-        self.raw_read().await
     }
 
     /// One feature report to whatever is on the other end of the node: the
@@ -274,91 +162,39 @@ impl Transport {
         }
         Ok(out)
     }
+}
 
-    async fn roundtrip(
-        &self,
-        opcode: u8,
-        payload: &[u8],
-        checksum: Checksum,
-    ) -> Result<[u8; REPORT_LEN], HidErr> {
-        let pkt = protocol::packet(opcode, payload, checksum);
-        self.send(&pkt).await?;
-        for attempt in 0..5u32 {
-            sleep_ms(SETTLE_MS * (attempt + 1) as f64).await;
-            let reply = self.read().await?;
-            if reply[0] == opcode {
-                return Ok(reply);
-            }
-        }
-        Err(HidErr::NoHandshake)
+impl wire::Node for Transport {
+    fn relay(&self) -> bool {
+        self.relay.get()
     }
 
-    /// Round-trip a packet the caller built. The screen announce sets fields
-    /// past the checksum byte, so it cannot be an opcode plus a payload.
-    async fn roundtrip_packet(&self, pkt: &[u8; REPORT_LEN]) -> Result<[u8; REPORT_LEN], HidErr> {
-        self.send(pkt).await?;
-        for attempt in 0..5u32 {
-            sleep_ms(SETTLE_MS * (attempt + 1) as f64).await;
-            let reply = self.read().await?;
-            if reply[0] == pkt[0] {
-                return Ok(reply);
-            }
-        }
-        Err(HidErr::NoHandshake)
+    fn set_relay(&self, on: bool) {
+        self.relay.set(on);
     }
 
-    /// For bulk reads whose replies are raw pages (no opcode echo).
-    async fn read_raw_page(
-        &self,
-        opcode: u8,
-        payload: &[u8],
-        checksum: Checksum,
-    ) -> Result<[u8; REPORT_LEN], HidErr> {
-        let pkt = protocol::packet(opcode, payload, checksum);
-        self.send(&pkt).await?;
-        sleep_ms(SETTLE_MS).await;
-        self.read().await
+    fn selected(&self) -> bool {
+        self.selected.get()
     }
 
-    async fn try_identify(&self) -> Option<u32> {
-        for _ in 0..3 {
-            if let Ok(reply) = self
-                .roundtrip(cmd::GET_USB_VERSION, &[], Checksum::Bit7)
-                .await
-            {
-                if let Some(id) = protocol::parse_device_id(&reply) {
-                    return Some(id);
-                }
-            }
-        }
-        None
+    fn set_selected(&self, on: bool) {
+        self.selected.set(on);
     }
 
-    /// 0x8F identify. A node that does not answer by cable is asked whether
-    /// it is a receiver, and identify is repeated through the relay when it
-    /// is one with a keyboard awake. Same shape as hid.rs.
-    async fn identify(&self) -> Result<u32, HidErr> {
-        if self.relay.get() {
-            return self.try_identify().await.ok_or(HidErr::NoHandshake);
-        }
-        if let Some(id) = self.try_identify().await {
-            return Ok(id);
-        }
-        let Some(status) = self.receiver_status().await? else {
-            return Err(HidErr::NoHandshake);
-        };
-        if !status.has_keyboard || !status.keyboard_online {
-            return Err(HidErr::KeyboardOffline);
-        }
-        self.relay.set(true);
-        self.selected.set(false);
-        match self.try_identify().await {
-            Some(id) => Ok(id),
-            None => {
-                self.relay.set(false);
-                Err(HidErr::NoHandshake)
-            }
-        }
+    fn now_ms(&self) -> f64 {
+        js_now()
+    }
+
+    async fn sleep_ms(&self, ms: u64) {
+        sleep_ms(ms as f64).await;
+    }
+
+    async fn raw_send(&self, buf: &[u8; REPORT_LEN]) -> Result<(), WireError> {
+        Transport::raw_send(self, buf).await
+    }
+
+    async fn raw_read(&self) -> Result<[u8; REPORT_LEN], WireError> {
+        Transport::raw_read(self).await
     }
 }
 
@@ -389,46 +225,6 @@ struct Open {
     revision: Option<u16>,
 }
 
-/// What the Switches page may do with this board; mirrors commands.rs.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
-#[serde(rename_all = "lowercase")]
-enum SwitchAccess {
-    None,
-    Read,
-    Write,
-    Global,
-}
-
-/// `owner_hall`: the owner's felt round trip stands in for firmware
-/// evidence on a board whose columns read.
-fn switch_access(
-    spec: &DeviceSpec,
-    revision: Option<u16>,
-    read_only: bool,
-    owner_hall: bool,
-) -> SwitchAccess {
-    if spec.hall_reads(revision) {
-        if (spec.hall_writes(revision) || owner_hall) && !read_only {
-            SwitchAccess::Write
-        } else {
-            SwitchAccess::Read
-        }
-    } else if spec.hall_global(revision) && !read_only {
-        SwitchAccess::Global
-    } else {
-        SwitchAccess::None
-    }
-}
-
-/// `0x80` as a u16, `None` when the family is unknown or the board does not
-/// answer. Zero counts as no answer.
-async fn read_revision(t: &Transport, spec: &DeviceSpec) -> Option<u16> {
-    let op = family_cmds(&spec.family)?.get_revision?;
-    let rev = t.roundtrip(op, &[], Checksum::Bit7).await.ok()?;
-    let v = (u16::from(rev[2]) << 8) | u16::from(rev[1]);
-    (v != 0).then_some(v)
-}
-
 /// The open board's revision and switch access, with no board an error.
 fn open_switches() -> Result<(Option<u16>, SwitchAccess), String> {
     STATE.with(|s| {
@@ -440,16 +236,6 @@ fn open_switches() -> Result<(Option<u16>, SwitchAccess), String> {
             open.revision,
             switch_access(&open.spec, open.revision, read_only, s.owner.switch_writes),
         ))
-    })
-}
-
-/// Whether the open board addresses profiles as `profile * 4 + sublayer`.
-fn scaled_profiles() -> bool {
-    STATE.with(|s| {
-        s.borrow()
-            .open
-            .as_ref()
-            .is_some_and(|o| o.spec.family == "yc500" && o.spec.magnetic)
     })
 }
 
@@ -470,6 +256,16 @@ fn vendor_usage(device: &JsHidDevice) -> u16 {
     0
 }
 
+/// Whether the open board addresses profiles as `profile * 4 + sublayer`.
+fn scaled_profiles() -> bool {
+    STATE.with(|s| {
+        s.borrow()
+            .open
+            .as_ref()
+            .is_some_and(|o| ops::scaled_profiles(&o.spec))
+    })
+}
+
 #[derive(Default)]
 struct AppState {
     open: Option<Open>,
@@ -486,17 +282,6 @@ struct AppState {
     last_flash: Option<(f64, f64)>,
     /// Last write claim: instant and the quiet that write required after itself.
     last_cmd: Option<(f64, f64)>,
-}
-
-/// Owner answers from the check. Mirrors commands.rs.
-#[derive(Clone, Copy, Debug, Default, serde::Deserialize)]
-#[serde(rename_all = "camelCase", default)]
-struct OwnerRecord {
-    allowed: bool,
-    magnetic: bool,
-    side_light: Option<bool>,
-    switch_writes: bool,
-    profiles: Option<u8>,
 }
 
 thread_local! {
@@ -550,10 +335,6 @@ fn get_open(require_writable: bool) -> Result<(Rc<Transport>, DeviceSpec), Strin
         }
         Ok((open.transport.clone(), open.spec.clone()))
     })
-}
-
-fn need(fc: Option<&'static FamilyCmds>) -> Result<&'static FamilyCmds, HidErr> {
-    fc.ok_or_else(|| HidErr::Protocol("this board's protocol family is unknown".into()))
 }
 
 /// Factory reset and screen frames wait for the cable; same reasoning as
@@ -680,12 +461,7 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
         device.product_id(),
     );
     let usage = vendor_usage(&device);
-    let transport = Transport {
-        dev: device,
-        last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
-        relay: std::cell::Cell::new(false),
-        selected: std::cell::Cell::new(false),
-    };
+    let transport = Transport::new(device);
     let id = match transport.identify().await {
         Ok(id) => id,
         Err(HidErr::KeyboardOffline) => {
@@ -699,15 +475,13 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
     };
     let spec = match registry::by_id(id) {
         Some(spec) if spec.family == "unknown" => {
-            // An entry from the vendor's older table knows the board but not
-            // its command set; the board says which.
-            match derive_from_board(&transport, id, vid, pid, &product).await {
+            match ops::derive_sweep(&transport, id, vid, pid, &product).await {
                 Some(derived) => Some(derive::settle_family(spec, &derived)),
                 None => Some(spec),
             }
         }
         Some(spec) => Some(spec),
-        None => derive_from_board(&transport, id, vid, pid, &product).await,
+        None => ops::derive_sweep(&transport, id, vid, pid, &product).await,
     };
     match spec {
         Some(spec) => {
@@ -721,7 +495,7 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
             } else {
                 None
             };
-            let revision = read_revision(&transport, &spec).await;
+            let revision = ops::read_revision(&transport, &spec).await;
             let read_only = !spec.writes_supported() || spec.unregistered;
             let info = ConnectedInfo {
                 path: "webhid".into(),
@@ -755,50 +529,6 @@ pub async fn connect(device: JsHidDevice) -> Result<JsValue, JsValue> {
             format!("device id {id} is not in the registry"),
         )),
     }
-}
-
-/// A registry entry for a board that has none, from the same read-only
-/// probes the data bundle collects (`derive.rs`); mirrors
-/// commands.rs::derive_from_board. `None` leaves the board an unknown row.
-async fn derive_from_board(
-    t: &Transport,
-    id: u32,
-    vid: u16,
-    pid: u16,
-    product: &str,
-) -> Option<DeviceSpec> {
-    let r89 = t.read_raw_page(0x89, &[0, 0], Checksum::Bit7).await.ok()?;
-    let r8a = t
-        .read_raw_page(0x8A, &[0, 0xFF, 0, 0], Checksum::Bit7)
-        .await
-        .ok()?;
-    let r91 = t.read_raw_page(0x91, &[], Checksum::Bit7).await.ok()?;
-    let r92 = t.read_raw_page(0x92, &[], Checksum::Bit7).await.ok()?;
-    let family = derive::detect_family(&r89, &r8a, &r91, &r92)?;
-    let mut keymap = Vec::with_capacity(512);
-    for page in 0..8u8 {
-        let reply = if family == "gen2" {
-            let payload = protocol::gen2::keymatrix_read_payload(0, page);
-            t.read_raw_page(0x8A, &payload, Checksum::Bit7).await.ok()?
-        } else {
-            t.read_raw_page(0x89, &[0, page], Checksum::Bit7)
-                .await
-                .ok()?
-        };
-        keymap.extend_from_slice(&reply);
-    }
-    let before = t.read_raw_page(0x97, &[], Checksum::Bit7).await.ok()?;
-    let oled = t.read_raw_page(0xAD, &[], Checksum::Bit7).await.ok()?;
-    let sweep = derive::Sweep {
-        r89: &r89,
-        r8a: &r8a,
-        r91: &r91,
-        r92: &r92,
-        oled: &oled,
-        before_oled: &before,
-        keymap: &keymap,
-    };
-    Some(derive::derive_spec(id, vid, pid, product, family, &sweep))
 }
 
 /// The owner has read what was detected about a board the registry does
@@ -884,11 +614,9 @@ pub async fn get_led_param() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
     read_quiet().await;
     let (t, spec) = get_open(false)?;
-    let reply = t
-        .roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)
+    let p = ops::read_led_param(&*t, led_wire(&spec))
         .await
         .map_err(fail)?;
-    let p = LedParam::from_reply_for(&reply, led_wire(&spec)).ok_or("bad LEDPARAM reply")?;
     to_js(&p)
 }
 
@@ -982,7 +710,7 @@ pub async fn get_profile() -> Result<u8, JsValue> {
         .await
         .map_err(fail)?;
     Ok(protocol::yc500_profile_from_slot(
-        spec.family == "yc500" && spec.magnetic,
+        ops::scaled_profiles(&spec),
         reply[1],
     ))
 }
@@ -1012,7 +740,7 @@ pub async fn set_profile(profile: u8) -> Result<(), JsValue> {
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    let profile = protocol::yc500_profile_slot(spec.family == "yc500" && spec.magnetic, profile, 0);
+    let profile = protocol::yc500_profile_slot(ops::scaled_profiles(&spec), profile, 0);
     let pkt = protocol::packet(fc.set_profile, &[profile], Checksum::Bit7);
     t.send(&pkt).await.map_err(fail)?;
     // The switch lands in flash and gets no ack, and anything on the wire
@@ -1035,62 +763,6 @@ pub async fn set_profile(profile: u8) -> Result<(), JsValue> {
     Ok(())
 }
 
-/// 512-byte matrix: 128 slots × 4 bytes, read as 8 raw pages. Mirrors
-/// commands.rs::read_matrix, including the gen2 payload shapes; `profile`
-/// is the wire value, sub-layer already folded in on yc500.
-async fn read_matrix(
-    t: &Transport,
-    fc: &'static FamilyCmds,
-    profile: u8,
-    sublayer: u8,
-    fn_layer: bool,
-) -> Result<Vec<u8>, HidErr> {
-    let mut matrix = Vec::with_capacity(512);
-    for page in 0..8u8 {
-        let (opcode, payload): (u8, Vec<u8>) = match (fc.name == "gen2", fn_layer) {
-            (true, false) => (
-                fc.get_keymatrix,
-                protocol::gen2::keymatrix_layer_read_payload(profile, page, sublayer).to_vec(),
-            ),
-            (true, true) => (
-                cmd::GET_FN,
-                protocol::gen2::fn_read_payload(profile, page).to_vec(),
-            ),
-            (false, false) => (fc.get_keymatrix, vec![profile, page]),
-            (false, true) => (cmd::GET_FN, vec![profile, page]),
-        };
-        let reply = t.read_raw_page(opcode, &payload, Checksum::Bit7).await?;
-        matrix.extend_from_slice(&reply);
-    }
-    Ok(matrix)
-}
-
-fn key_write_packet(
-    fc: &'static FamilyCmds,
-    profile: u8,
-    sublayer: u8,
-    slot: u8,
-    value: [u8; 4],
-    fn_layer: bool,
-) -> Result<[u8; REPORT_LEN], HidErr> {
-    if fc.name == "gen2" {
-        return Ok(if fn_layer {
-            protocol::gen2::set_fn_key_packet(profile, slot, value)
-        } else {
-            protocol::gen2::set_layer_key_packet(profile, slot, sublayer, value)
-        });
-    }
-    let opcode = if fn_layer {
-        fc.set_fn_one
-    } else {
-        fc.set_key_one
-    }
-    .ok_or_else(|| HidErr::Protocol("no single-slot key write for this family".into()))?;
-    let mut pkt = protocol::packet(opcode, &[profile, slot], Checksum::Bit7);
-    pkt[8..12].copy_from_slice(&value);
-    Ok(pkt)
-}
-
 #[wasm_bindgen]
 pub async fn read_keymap(profile: u8) -> Result<Vec<u8>, JsValue> {
     read_keymap_layer(profile, 0).await
@@ -1106,9 +778,8 @@ pub async fn read_keymap_layer(profile: u8, sublayer: u8) -> Result<Vec<u8>, JsV
     read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    let wire =
-        protocol::yc500_profile_slot(spec.family == "yc500" && spec.magnetic, profile, sublayer);
-    read_matrix(&t, fc, wire, sublayer, false)
+    let wire = protocol::yc500_profile_slot(ops::scaled_profiles(&spec), profile, sublayer);
+    read_matrix(&*t, fc, wire, sublayer, false)
         .await
         .map_err(fail)
         .map_err(JsValue::from)
@@ -1120,7 +791,7 @@ pub async fn read_fn_keymap(layer: u8) -> Result<Vec<u8>, JsValue> {
     read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    read_matrix(&t, fc, layer, 0, true)
+    read_matrix(&*t, fc, layer, 0, true)
         .await
         .map_err(fail)
         .map_err(JsValue::from)
@@ -1162,70 +833,11 @@ pub async fn set_key_layer(
     let wire = if fn_layer {
         profile
     } else {
-        protocol::yc500_profile_slot(spec.family == "yc500" && spec.magnetic, profile, sublayer)
+        protocol::yc500_profile_slot(ops::scaled_profiles(&spec), profile, sublayer)
     };
     let pkt = key_write_packet(fc, wire, sublayer, slot, value, fn_layer).map_err(fail)?;
     t.send(&pkt).await.map_err(fail)?;
     Ok(())
-}
-
-#[derive(serde::Serialize)]
-#[serde(rename_all = "camelCase")]
-struct DeviceSettings {
-    debounce: u8,
-    sleep: SleepTimes,
-    options: Option<KbOptions>,
-    revision: String,
-    auto_os: bool,
-    side_light: Option<SledParam>,
-}
-
-async fn read_settings(
-    t: &Transport,
-    fc: &'static FamilyCmds,
-    has_side_light: bool,
-    swapped: bool,
-) -> Result<DeviceSettings, HidErr> {
-    let deb = t.roundtrip(fc.get_debounce, &[], Checksum::Bit7).await?;
-    let slp = t.roundtrip(fc.get_sleeptime, &[], Checksum::Bit7).await?;
-    let opt = match fc.kboption {
-        Some((_, get)) => Some(t.roundtrip(get, &[0], Checksum::Bit7).await?),
-        None => None,
-    };
-    let revision = match fc.get_revision {
-        Some(op) => {
-            let rev = t.roundtrip(op, &[], Checksum::Bit7).await?;
-            format!("{}.{:02}", rev[2], rev[1])
-        }
-        None => "unknown".into(),
-    };
-    let auto = match fc.auto_os {
-        Some((_, get)) => t.roundtrip(get, &[], Checksum::Bit7).await.ok(),
-        None => None,
-    };
-    let sled = match (has_side_light, fc.sled) {
-        (true, Some((_, get))) => t
-            .roundtrip(get, &[], Checksum::Bit7)
-            .await
-            .ok()
-            .and_then(|r| SledParam::from_reply_on(&r, swapped)),
-        _ => None,
-    };
-    Ok(DeviceSettings {
-        debounce: deb[fc.debounce_at],
-        sleep: SleepTimes::from_reply_expecting(&slp, fc.get_sleeptime, fc.sleep_reply_at)
-            .ok_or_else(|| HidErr::Protocol("bad SLEEPTIME reply".into()))?,
-        options: match (opt, fc.kboption) {
-            (Some(o), Some((_, get))) => Some(
-                KbOptions::from_reply_expecting(&o, get)
-                    .ok_or_else(|| HidErr::Protocol("bad KBOPTION reply".into()))?,
-            ),
-            _ => None,
-        },
-        revision,
-        auto_os: auto.map(|r| r[1] == 1).unwrap_or(false),
-        side_light: sled,
-    })
 }
 
 #[wasm_bindgen]
@@ -1234,7 +846,7 @@ pub async fn get_settings() -> Result<JsValue, JsValue> {
     read_quiet().await;
     let (t, spec) = get_open(false)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    let s = read_settings(&t, fc, spec.features.side_light, led_wire(&spec).swapped)
+    let s = ops::read_settings(&*t, fc, spec.features.side_light, led_wire(&spec).swapped)
         .await
         .map_err(fail)?;
     to_js(&s)
@@ -1348,7 +960,10 @@ pub async fn set_clock(
     require_cable()?;
     gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
     let _busy = acquire().await;
-    let (t, _) = get_open(true)?;
+    let (t, spec) = get_open(true)?;
+    // Shared across both families, so no opcode is taken from the table, but
+    // resolving it still refuses a board whose family is unknown.
+    need(family_cmds(&spec.family)).map_err(fail)?;
     let pkt = protocol::clock_packet(year, month, day, hour, minute, second);
     t.send(&pkt).await.map_err(fail)?;
     Ok(())
@@ -1467,12 +1082,10 @@ pub async fn write_per_key(colors: Vec<u8>, activate: bool) -> Result<(), JsValu
     // Decide about the mode switch before the upload: asking afterwards
     // means talking to a board that is still writing flash.
     let needs_mode = activate
-        && match t.roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7).await {
-            Ok(r) => LedParam::from_reply_for(&r, led_wire(&spec))
-                .map(|p| p.mode != PER_KEY_MODE)
-                .unwrap_or(true),
-            Err(_) => true,
-        };
+        && ops::read_led_param(&*t, led_wire(&spec))
+            .await
+            .map(|p| p.mode != PER_KEY_MODE)
+            .unwrap_or(true);
     if spec.family == "gen2" {
         // Slot 0, matching the option nibble in the mode switch below.
         for pkt in protocol::gen2::userpic_packets(0, &colors) {
@@ -1508,22 +1121,12 @@ pub async fn write_per_key(colors: Vec<u8>, activate: bool) -> Result<(), JsValu
     Ok(())
 }
 
-fn check_macro_slot(slot: u8) -> Result<(), String> {
-    if slot >= protocol::MACRO_SLOTS {
-        return Err(format!(
-            "macro slot {slot} out of range (0..{})",
-            protocol::MACRO_SLOTS
-        ));
-    }
-    Ok(())
-}
-
 #[wasm_bindgen]
 pub async fn read_macro(slot: u8) -> Result<JsValue, JsValue> {
     check_macro_slot(slot)?;
     let _busy = acquire().await;
     read_quiet().await;
-    let (t, _) = get_open(false)?;
+    let (t, _spec) = get_open(false)?;
     let mut blob = [0u8; protocol::MACRO_BYTES];
     for page in 0..4u8 {
         let reply = t
@@ -1562,24 +1165,13 @@ pub async fn write_macro(slot: u8, data_json: String) -> Result<(), JsValue> {
 // ---------------------------------------------------------------------------
 // Magnetic switches, mirroring commands.rs one for one.
 
-fn hall_format(spec: &DeviceSpec) -> Result<hall::Format, JsValue> {
-    hall::Format::for_family(&spec.family)
-        .ok_or_else(|| JsValue::from("no switch column format for this family"))
-}
-
 #[wasm_bindgen]
 pub async fn get_switches() -> Result<JsValue, JsValue> {
     let _busy = acquire().await;
     read_quiet().await;
     let (t, spec) = get_open(false)?;
     let (revision, _) = open_switches()?;
-    if !spec.hall_reads(revision) {
-        return Err(JsValue::from(format!(
-            "{} has no magnetic switches sharkfin can read",
-            spec.label()
-        )));
-    }
-    let f = hall_format(&spec)?;
+    let f = ops::hall_format(&spec, revision)?;
     async fn column(t: &Transport, f: hall::Format, subop: u8) -> Result<Vec<u8>, JsValue> {
         let mut out = Vec::with_capacity(256);
         for page in 0..f.get_pages(subop) {
@@ -1618,22 +1210,14 @@ pub async fn get_switches() -> Result<JsValue, JsValue> {
 /// those; `None` is a write to every key, which no trial covers.
 fn require_hall_writes(spec: &DeviceSpec, slots: Option<&[u8]>) -> Result<hall::Format, JsValue> {
     let (revision, _) = open_switches()?;
-    let reads = spec.hall_reads(revision);
-    let (owner_hall, trial) = STATE.with(|s| {
+    let (owner, trial) = STATE.with(|s| {
         let s = s.borrow();
-        let trial = match (s.switch_trial, slots) {
-            (Some(t), Some(k)) => !k.is_empty() && k.iter().all(|&x| x == t),
-            _ => false,
-        };
-        (s.owner.switch_writes && reads, trial && reads)
+        (s.owner.switch_writes, s.switch_trial)
     });
-    if spec.hall_writes(revision) || owner_hall || trial {
-        hall_format(spec)
+    if session::hall_write_allowed(spec, revision, owner, trial, slots) {
+        Ok(ops::hall_format(spec, revision)?)
     } else {
-        Err(JsValue::from(format!(
-            "sharkfin has not read {}'s firmware for its switch settings, so it will not write them",
-            spec.label()
-        )))
+        Err(JsValue::from(session::hall_write_refusal(spec)))
     }
 }
 
@@ -1776,22 +1360,6 @@ pub async fn set_switches_global(key_json: String, all: bool) -> Result<(), JsVa
 // Config files. Identical JSON shape to the desktop's SavedConfig, so files
 // move between the two builds.
 
-#[derive(serde::Serialize, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct SavedConfig {
-    version: u8,
-    device_id: u32,
-    family: String,
-    board: String,
-    profiles: Vec<Vec<u8>>,
-    fn_layers: Vec<Vec<u8>>,
-    led: LedParam,
-    side_light: Option<SledParam>,
-    debounce: u8,
-    sleep: SleepTimes,
-    options: Option<KbOptions>,
-}
-
 /// Reads everything restorable off the board and returns it as pretty JSON;
 /// the JS side owns turning that into a download.
 #[wasm_bindgen]
@@ -1804,14 +1372,13 @@ pub async fn export_config() -> Result<JsValue, JsValue> {
     let n = spec.profiles.clamp(1, 8);
     let mut profiles = Vec::new();
     let mut fn_layers = Vec::new();
-    let scaled = spec.family == "yc500" && spec.magnetic;
+    let scaled = ops::scaled_profiles(&spec);
     for p in 0..n {
         let wire = protocol::yc500_profile_slot(scaled, p, 0);
-        profiles.push(read_matrix(&t, fc, wire, 0, false).await.map_err(fail)?);
-        fn_layers.push(read_matrix(&t, fc, p, 0, true).await.map_err(fail)?);
+        profiles.push(read_matrix(&*t, fc, wire, 0, false).await.map_err(fail)?);
+        fn_layers.push(read_matrix(&*t, fc, p, 0, true).await.map_err(fail)?);
     }
-    let led = t
-        .roundtrip(cmd::GET_LEDPARAM, &[], Checksum::Bit7)
+    let led = ops::read_led_param(&*t, led_wire(&spec))
         .await
         .map_err(fail)?;
     let deb = t
@@ -1841,7 +1408,7 @@ pub async fn export_config() -> Result<JsValue, JsValue> {
         board: spec.label(),
         profiles,
         fn_layers,
-        led: LedParam::from_reply_for(&led, led_wire(&spec)).ok_or("bad LEDPARAM reply")?,
+        led,
         side_light: sled,
         debounce: deb[fc.debounce_at],
         sleep: SleepTimes::from_reply_expecting(&slp, fc.get_sleeptime, fc.sleep_reply_at)
@@ -1888,9 +1455,11 @@ pub async fn import_config(raw: String) -> Result<JsValue, JsValue> {
             let wire = if fn_layer {
                 p as u8
             } else {
-                protocol::yc500_profile_slot(spec.family == "yc500" && spec.magnetic, p as u8, 0)
+                protocol::yc500_profile_slot(ops::scaled_profiles(&spec), p as u8, 0)
             };
-            let current = read_matrix(&t, fc, wire, 0, fn_layer).await.map_err(fail)?;
+            let current = read_matrix(&*t, fc, wire, 0, fn_layer)
+                .await
+                .map_err(fail)?;
             for slot in 0..128usize {
                 let want: [u8; 4] = target[slot * 4..slot * 4 + 4].try_into().unwrap();
                 if current[slot * 4..slot * 4 + 4] != want {
@@ -1943,68 +1512,6 @@ pub async fn import_config(raw: String) -> Result<JsValue, JsValue> {
 // ---------------------------------------------------------------------------
 // Contribution bundle: same probes and format as the desktop.
 
-const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
-    ("0x80 revision", 0x80, &[]),
-    ("0x83 report rate (gen2)", 0x83, &[]),
-    ("0x84 profile (gen2)", 0x84, &[]),
-    ("0x85 profile (yc500)", 0x85, &[]),
-    ("0x86 options/debounce", 0x86, &[0]),
-    ("0x87 backlight", 0x87, &[]),
-    ("0x88 edge light", 0x88, &[]),
-    ("0x89 keymap/options p0", 0x89, &[0, 0]),
-    ("0x89 keymap (yc500) p1", 0x89, &[0, 1]),
-    ("0x89 keymap (yc500) p2", 0x89, &[0, 2]),
-    ("0x89 keymap (yc500) p3", 0x89, &[0, 3]),
-    ("0x89 keymap (yc500) p4", 0x89, &[0, 4]),
-    ("0x89 keymap (yc500) p5", 0x89, &[0, 5]),
-    ("0x89 keymap (yc500) p6", 0x89, &[0, 6]),
-    ("0x89 keymap (yc500) p7", 0x89, &[0, 7]),
-    ("0x89 keymap (yc500) p8", 0x89, &[0, 8]),
-    ("0x8A keymap (gen2) p0", 0x8A, &[0, 0xFF, 0, 0]),
-    ("0x8A keymap (gen2) p1", 0x8A, &[0, 0xFF, 1, 0]),
-    ("0x8A keymap (gen2) p2", 0x8A, &[0, 0xFF, 2, 0]),
-    ("0x8A keymap (gen2) p3", 0x8A, &[0, 0xFF, 3, 0]),
-    ("0x8A keymap (gen2) p4", 0x8A, &[0, 0xFF, 4, 0]),
-    ("0x8A keymap (gen2) p5", 0x8A, &[0, 0xFF, 5, 0]),
-    ("0x8A keymap (gen2) p6", 0x8A, &[0, 0xFF, 6, 0]),
-    ("0x8A keymap (gen2) p7", 0x8A, &[0, 0xFF, 7, 0]),
-    ("0x8B macro s0 p0", 0x8B, &[0, 0]),
-    ("0x8C userpic p0", 0x8C, &[0, 0]),
-    ("0x8F identify", 0x8F, &[]),
-    ("0x90 fn layer p0", 0x90, &[0, 0]),
-    ("0x91 debounce/sleep", 0x91, &[]),
-    ("0x92 sleep (yc500)", 0x92, &[]),
-    ("0x97 auto-OS (yc500)", 0x97, &[]),
-    ("0xAD OLED version", 0xAD, &[]),
-];
-
-async fn probe_sweep(t: &Transport, out: &mut String) -> Result<(), JsValue> {
-    use std::fmt::Write;
-    let _ = writeln!(
-        out,
-        "\nread sweep, both families' GET opcodes; an unimplemented \
-         command echoes the previous reply:"
-    );
-    for (label, opcode, payload) in BUNDLE_PROBES {
-        match t.read_raw_page(*opcode, payload, Checksum::Bit7).await {
-            Ok(reply) => {
-                let hex: String = reply.iter().fold(String::new(), |mut s, b| {
-                    let _ = write!(s, "{b:02x} ");
-                    s
-                });
-                let _ = writeln!(out, "{label:<24} {}", hex.trim_end());
-            }
-            Err(e) => {
-                if e.is_stall() {
-                    return Err(fail(e).into());
-                }
-                let _ = writeln!(out, "{label:<24} error: {e}");
-            }
-        }
-    }
-    Ok(())
-}
-
 #[wasm_bindgen]
 pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
     use std::fmt::Write;
@@ -2044,7 +1551,12 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
         let owner = STATE.with(|s| s.borrow().led_swap);
         let _ = writeln!(out, "flags  : {}", registry::led_flags_note(&spec, owner));
     }
-    probe_sweep(&t, &mut out).await?;
+    if let Err(e) = ops::probe_sweep(&*t, &mut out).await {
+        if e.is_stall() {
+            return Err(fail(e).into());
+        }
+        let _ = writeln!(out, "sweep  : {e}");
+    }
     let _ = writeln!(out, "```");
     Ok(out.into())
 }
@@ -2069,12 +1581,7 @@ pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
     let vid = device.vendor_id();
     let pid = device.product_id();
     let usage = vendor_usage(&device);
-    let t = Transport {
-        dev: device,
-        last_write: std::cell::Cell::new(js_now() - MIN_WRITE_GAP_MS),
-        relay: std::cell::Cell::new(false),
-        selected: std::cell::Cell::new(false),
-    };
+    let t = Transport::new(device);
     let mut out = String::new();
     let _ = writeln!(out, "```");
     let _ = writeln!(out, "sharkfin {} data bundle (web)", registry::build_id());
@@ -2097,7 +1604,12 @@ pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
             let _ = writeln!(out, "identify: no answer");
         }
     }
-    probe_sweep(&t, &mut out).await?;
+    if let Err(e) = ops::probe_sweep(&t, &mut out).await {
+        if e.is_stall() {
+            return Err(fail(e).into());
+        }
+        let _ = writeln!(out, "sweep  : {e}");
+    }
     let _ = writeln!(out, "```");
     Ok(out.into())
 }

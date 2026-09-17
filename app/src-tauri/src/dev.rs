@@ -6,12 +6,12 @@ use crate::protocol::{cmd, Checksum, LedParam};
 use crate::registry;
 
 pub fn discover_all() -> Result<Vec<DiscoveredDevice>, HidError> {
-    let api = hidapi::HidApi::new()?;
+    let api = hidapi::HidApi::new().map_err(|e| HidError::Transport(e.to_string()))?;
     Ok(discover(&api))
 }
 
 pub fn identify_and_read(path: &str) -> Result<String, HidError> {
-    let api = hidapi::HidApi::new()?;
+    let api = hidapi::HidApi::new().map_err(|e| HidError::Transport(e.to_string()))?;
     let t = Transport::open(&api, path)?;
     let id = t.identify()?;
     let spec = registry::by_id(id);
