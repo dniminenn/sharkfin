@@ -378,7 +378,7 @@ export const setKeyLayer = (
   sublayer: number,
   slot: number,
   value: number[],
-): Promise<void> =>
+): Promise<boolean> =>
   withCore(() => core.set_key_layer(profile, sublayer, slot, new Uint8Array(value), false));
 export const getSettings = (): Promise<DeviceSettings> =>
   withCore(async () => JSON.parse((await core.get_settings()) as string));
@@ -431,7 +431,7 @@ export const setKey = (
   slot: number,
   value: [number, number, number, number],
   fnLayer: boolean,
-) => withCore(() => core.set_key(profile, slot, new Uint8Array(value), fnLayer));
+): Promise<boolean> => withCore(() => core.set_key(profile, slot, new Uint8Array(value), fnLayer));
 
 export type MacroEvent =
   | { kind: "key"; usage: number; pressed: boolean; delayMs: number }

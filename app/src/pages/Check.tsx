@@ -1300,14 +1300,15 @@ function RemapStep({
         from: choice.from,
         to: choice.to,
         written: false,
+        wholeLayer: false,
         readBack: null,
         pressed: null,
         kept: null,
         undoReadBack: null,
       };
       setRemap(r);
-      await setKey(r.profile, r.slot, [0, 0, r.to, 0], false);
-      r = { ...r, written: true };
+      const wholeLayer = await setKey(r.profile, r.slot, [0, 0, r.to, 0], false);
+      r = { ...r, written: true, wholeLayer };
       setRemap(r);
       try {
         r = { ...r, readBack: (await readSlot(r.profile, r.slot)) === r.to };

@@ -239,7 +239,7 @@ export const setSwitchesGlobal = (key: KeySwitch, all: boolean) =>
 export const readKeymapLayer = (profile: number, sublayer: number) =>
   invoke<number[]>("read_keymap_layer", { profile, sublayer });
 export const setKeyLayer = (profile: number, sublayer: number, slot: number, value: number[]) =>
-  invoke<void>("set_key_layer", { profile, sublayer, slot, value, fnLayer: false });
+  invoke<boolean>("set_key_layer", { profile, sublayer, slot, value, fnLayer: false });
 /** Version and commit of this build. */
 export const buildId = () => invoke<string>("build_id");
 export const getSettings = () => invoke<DeviceSettings>("get_settings");
@@ -289,7 +289,7 @@ export const setKey = (
   slot: number,
   value: [number, number, number, number],
   fnLayer: boolean,
-) => invoke<void>("set_key", { profile, slot, value, fnLayer });
+) => invoke<boolean>("set_key", { profile, slot, value, fnLayer });
 export type MacroEvent =
   | { kind: "key"; usage: number; pressed: boolean; delayMs: number }
   | { kind: "mouseButton"; button: number; pressed: boolean; delayMs: number }

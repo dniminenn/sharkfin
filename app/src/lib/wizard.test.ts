@@ -245,7 +245,7 @@ describe("pending writes", () => {
     expect(pendingWrite({ ...s, profiles: { count: 3, found: null, from: 0, verified: false, away: true, error: null } })).toBe(
       "the keyboard is on another profile",
     );
-    const remap = { profile: 0, slot: 1, from: 57, to: 41, written: true, readBack: true, pressed: true, kept: null, undoReadBack: null };
+    const remap = { profile: 0, slot: 1, from: 57, to: 41, written: true, wholeLayer: false, readBack: true, pressed: true, kept: null, undoReadBack: null };
     expect(pendingWrite({ ...s, remap })).toBe("the remap is neither kept nor undone");
     expect(pendingWrite({ ...s, remap: { ...remap, kept: "kept" } })).toBeNull();
     expect(pendingWrite({ ...s, remap: { ...remap, kept: "undo failed" } })).toBe("the undo did not go through");
@@ -392,6 +392,7 @@ describe("the report", () => {
         from: 57,
         to: 41,
         written: true,
+        wholeLayer: false,
         readBack: true,
         pressed: true,
         kept: "undone" as const,

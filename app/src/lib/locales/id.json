@@ -368,5 +368,6 @@
  "Type the legend on the key, like PgUp or F13, or press that key on another keyboard.": "Ketik legendanya di tombol, seperti PgUp atau F13, atau tekan tombol itu di keyboard lain.",
  "Rainbow where you picked a colour, or one colour where you asked for the rainbow?": "Pelangi padahal Anda memilih satu warna, atau satu warna padahal Anda meminta pelangi?",
  "Swap them": "Tukar keduanya",
- "Swapped for this board.": "Ditukar untuk keyboard ini."
+ "Swapped for this board.": "Ditukar untuk keyboard ini.",
+ "This keyboard rewrites its whole keymap for each change, so each one takes a few seconds.": "Keyboard ini menulis ulang seluruh peta tombol untuk setiap perubahan, jadi tiap perubahan memakan beberapa detik."
 }

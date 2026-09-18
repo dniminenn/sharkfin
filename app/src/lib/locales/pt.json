@@ -368,5 +368,6 @@
  "Type the legend on the key, like PgUp or F13, or press that key on another keyboard.": "Digite a legenda na tecla, como PgUp ou F13, ou pressione essa tecla em outro teclado.",
  "Rainbow where you picked a colour, or one colour where you asked for the rainbow?": "Arco-íris onde você escolheu uma cor, ou uma cor só onde pediu o arco-íris?",
  "Swap them": "Trocar os dois",
- "Swapped for this board.": "Trocado para este teclado."
+ "Swapped for this board.": "Trocado para este teclado.",
+ "This keyboard rewrites its whole keymap for each change, so each one takes a few seconds.": "Este teclado regrava todo o mapa de teclas a cada alteração, por isso cada uma leva alguns segundos."
 }

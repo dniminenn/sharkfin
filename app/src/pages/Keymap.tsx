@@ -5,6 +5,7 @@
 // the Picture menu.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { noteWholeLayer } from "@/lib/wholeLayer";
 import { ChevronDown, Pencil, RefreshCw, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
@@ -163,7 +164,7 @@ export default function KeymapPage({
     const slot = selected.matrixIndex!;
     setBusy(true);
     try {
-      await setKey(profile, slot, a.entry, layer === "fn");
+      if (await setKey(profile, slot, a.entry, layer === "fn")) noteWholeLayer();
       setEntries((prev) => {
         const next = new Map(prev);
         next.set(slot, [...a.entry]);

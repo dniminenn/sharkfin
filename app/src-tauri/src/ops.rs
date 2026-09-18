@@ -130,6 +130,56 @@ pub async fn write_slot_bulk<W: Wire>(
     write_layer_bulk(w, fc, profile, &matrix, fn_layer, pace).await
 }
 
+/// Whether a dropped single-slot write may switch this board to the
+/// whole-layer upload. The upload is evidenced on plain yc500 images only,
+/// its profile byte is not the scaled slot magnetic boards use, and it
+/// never carries slots 126 and 127.
+pub fn bulk_fallback_allowed(spec: &DeviceSpec, sublayer: u8, slot: u8) -> bool {
+    spec.family == "yc500" && !spec.magnetic && sublayer == 0 && slot < 126
+}
+
+/// One slot through the single-slot write, then read back. `Ok(true)` when
+/// the slot holds the value. yc500 firmware without the write drops the
+/// packet, so a miss is the signal to switch the board to the whole-layer
+/// upload; three looks with a growing gap so one slow answer does not. A
+/// reply led by the write opcode is the board handing back our own report,
+/// not a page. gen2 is not checked: its write is firmware evidenced and its
+/// bulk shape is another register.
+pub async fn write_slot_checked<W: Wire>(
+    w: &W,
+    fc: &'static FamilyCmds,
+    profile: u8,
+    sublayer: u8,
+    slot: u8,
+    value: [u8; 4],
+    fn_layer: bool,
+) -> Result<bool, WireError> {
+    let pkt = key_write_packet(fc, profile, sublayer, slot, value, fn_layer)?;
+    w.send(&pkt).await?;
+    if fc.name != "yc500" {
+        return Ok(true);
+    }
+    let opcode = if fn_layer {
+        cmd::GET_FN
+    } else {
+        fc.get_keymatrix
+    };
+    let at = usize::from(slot % 16) * 4;
+    for wait in [w.settle_ms(), 50, 150] {
+        w.sleep_ms(wait).await;
+        let page = w
+            .read_raw_page(opcode, &[profile, slot / 16], Checksum::Bit7)
+            .await?;
+        if page[0] == pkt[0] {
+            continue;
+        }
+        if page[at..at + 4] == value {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
 /// One 512-byte keymap layer, eight raw pages.
 pub async fn read_matrix<W: Wire>(
     w: &W,

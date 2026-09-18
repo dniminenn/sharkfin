@@ -187,7 +187,10 @@ Not every yc500 image has the single-slot writes. `594_v310` dispatches
 for `0x7f..0x92`; `0x13` and `0x15` fall to the default, which drops the
 packet. `459_v307`, `620_v304`, `668_v305` and `695_v308` have the same
 two tables. Boards with `bulkKeymap` in the registry write whole layers
-on `0x09`/`0x10` instead. **[FW]**
+on `0x09`/`0x10` instead. Any other plain yc500 board is switched to the
+upload for the session when a single-slot write does not read back after
+three looks; the switch is inferred from the miss, not evidenced per board.
+Magnetic boards, sub-layers and slots 126..127 are refused instead.
 
 On yc500, `0x8A` (the gen2 keymatrix GET) answers all `0xFF`, not an
 echo. **[HW]** 1379 reads only the profile byte from a fixed table at

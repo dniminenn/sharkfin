@@ -69,6 +69,8 @@ export interface RemapState {
   from: number;
   to: number;
   written: boolean;
+  /** The board dropped the single-key write and the whole layer went instead. */
+  wholeLayer: boolean;
   readBack: boolean | null;
   pressed: boolean | null;
   kept: "kept" | "undone" | "undo failed" | null;
@@ -426,7 +428,7 @@ export function checkReport(
   const remap =
     !r || !r.written
       ? "not tested"
-      : `slot ${r.slot} ${usageLabel(r.from)} to ${usageLabel(r.to)}, read back ${yesNo(r.readBack)}, pressed ${yesNo(r.pressed)}, ` +
+      : `slot ${r.slot} ${usageLabel(r.from)} to ${usageLabel(r.to)}, ${r.wholeLayer ? "whole layer, " : ""}read back ${yesNo(r.readBack)}, pressed ${yesNo(r.pressed)}, ` +
         (r.kept === null
           ? "undecided"
           : r.kept === "kept"

@@ -630,7 +630,9 @@ pub fn read_fn_keymap(state: tauri::State<AppState>, layer: u8) -> Result<Vec<u8
     })
 }
 
-/// One slot: [op, profile, slot, 0.., ck7, value×4].
+/// One slot: [op, profile, slot, 0.., ck7, value×4]. True when the whole
+/// layer was uploaded instead (`bulk_keymap`, or a yc500 board that dropped
+/// the single-slot write and is switched over for the rest of the session).
 #[tauri::command(async)]
 pub fn set_key(
     state: tauri::State<AppState>,
@@ -638,7 +640,7 @@ pub fn set_key(
     slot: u8,
     value: [u8; 4],
     fn_layer: bool,
-) -> Result<(), String> {
+) -> Result<bool, String> {
     set_key_layer(state, profile, 0, slot, value, fn_layer)
 }
 
@@ -651,7 +653,7 @@ pub fn set_key_layer(
     slot: u8,
     value: [u8; 4],
     fn_layer: bool,
-) -> Result<(), String> {
+) -> Result<bool, String> {
     if sublayer > 3 || (sublayer > 0 && fn_layer) {
         return Err("sub-layer out of range".into());
     }
@@ -677,33 +679,45 @@ pub fn set_key_layer(
     } else {
         crate::protocol::yc500_profile_slot(scaled_profiles(&state), profile, sublayer)
     };
-    if bulk {
-        // The whole layer goes to flash, so it is paced like any upload.
-        flash_cooldown(&state);
-        return with_writable(&state, |t, fc| {
-            block_on(ops::write_slot_bulk(
+    if !bulk {
+        key_gap(&state);
+        let landed = with_writable(&state, |t, fc| {
+            let landed = block_on(ops::write_slot_checked(
                 t,
                 need(fc)?,
                 wire_profile,
+                sublayer,
                 slot,
                 value,
                 fn_layer,
-                FLASH_PACE,
             ))?;
-            Ok(())
-        });
+            Ok(landed)
+        })?;
+        if landed {
+            return Ok(false);
+        }
+        // Dropped: this firmware has no single-slot write. Every later key
+        // write this session takes the upload, where the upload is safe.
+        let mut inner = state.inner.lock();
+        let open = inner.open.as_mut().ok_or("no device connected")?;
+        if !ops::bulk_fallback_allowed(&open.spec, sublayer, slot) {
+            return Err(format!("{} did not take the key write", open.spec.label()));
+        }
+        open.spec.bulk_keymap = true;
     }
-    key_gap(&state);
+    // The whole layer goes to flash, so it is paced like any upload.
+    flash_cooldown(&state);
     with_writable(&state, |t, fc| {
-        t.send(&key_write_packet(
+        block_on(ops::write_slot_bulk(
+            t,
             need(fc)?,
             wire_profile,
-            sublayer,
             slot,
             value,
             fn_layer,
-        )?)?;
-        Ok(())
+            FLASH_PACE,
+        ))?;
+        Ok(true)
     })
 }
 
@@ -1442,10 +1456,14 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
     if spec.bulk_keymap {
         flash_cooldown(&state);
     }
+    let mut bulk = spec.bulk_keymap;
     let out = with_writable(&state, |t, fc| {
         let fc = need(fc)?;
         let mut keys_written = 0usize;
         let mut layers_uploaded = 0usize;
+        // The first write of the import is read back; a drop switches the
+        // rest of it to whole layers.
+        let mut checked = false;
         for (fn_layer, layers) in [(false, &cfg.profiles), (true, &cfg.fn_layers)] {
             for (p, target) in layers.iter().enumerate() {
                 if target.len() != 512 {
@@ -1460,32 +1478,53 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
                     crate::protocol::yc500_profile_slot(scaled, p as u8, 0)
                 };
                 let current = block_on(ops::read_matrix(t, fc, wire, 0, fn_layer))?;
-                if spec.bulk_keymap {
-                    let differ = (0..128usize)
-                        .filter(|s| current[s * 4..s * 4 + 4] != target[s * 4..s * 4 + 4])
-                        .count();
-                    if differ == 0 {
-                        continue;
-                    }
-                    if layers_uploaded > 0 {
-                        std::thread::sleep(FLASH_COOLDOWN);
-                    }
-                    let whole: [u8; 512] = target.as_slice().try_into().unwrap();
-                    block_on(ops::write_layer_bulk(
-                        t, fc, wire, &whole, fn_layer, FLASH_PACE,
-                    ))?;
-                    keys_written += differ;
-                    layers_uploaded += 1;
+                let differ: Vec<usize> = (0..128usize)
+                    .filter(|s| current[s * 4..s * 4 + 4] != target[s * 4..s * 4 + 4])
+                    .collect();
+                if differ.is_empty() {
                     continue;
                 }
-                for slot in 0..128usize {
-                    let want: [u8; 4] = target[slot * 4..slot * 4 + 4].try_into().unwrap();
-                    if current[slot * 4..slot * 4 + 4] != want {
-                        t.send(&key_write_packet(fc, wire, 0, slot as u8, want, fn_layer)?)?;
+                let whole: [u8; 512] = target.as_slice().try_into().unwrap();
+                if !bulk {
+                    let mut i = 0;
+                    while i < differ.len() {
+                        let slot = differ[i];
+                        let want: [u8; 4] = whole[slot * 4..slot * 4 + 4].try_into().unwrap();
+                        if checked {
+                            t.send(&key_write_packet(fc, wire, 0, slot as u8, want, fn_layer)?)?;
+                        } else {
+                            checked = true;
+                            let landed = block_on(ops::write_slot_checked(
+                                t, fc, wire, 0, slot as u8, want, fn_layer,
+                            ))?;
+                            if !landed {
+                                if !ops::bulk_fallback_allowed(&spec, 0, slot as u8) {
+                                    return Err(HidError::Protocol(format!(
+                                        "{} did not take the key write",
+                                        spec.label()
+                                    )));
+                                }
+                                bulk = true;
+                                std::thread::sleep(FLASH_COOLDOWN);
+                                break;
+                            }
+                        }
                         keys_written += 1;
                         std::thread::sleep(KEY_GAP);
+                        i += 1;
+                    }
+                    if !bulk {
+                        continue;
                     }
                 }
+                if layers_uploaded > 0 {
+                    std::thread::sleep(FLASH_COOLDOWN);
+                }
+                block_on(ops::write_layer_bulk(
+                    t, fc, wire, &whole, fn_layer, FLASH_PACE,
+                ))?;
+                keys_written += differ.len();
+                layers_uploaded += 1;
             }
         }
         if let (Some(opts), Some((set, get))) = (cfg.options, fc.kboption) {
@@ -1520,6 +1559,12 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
             cfg.board
         ))
     });
+    if bulk && !spec.bulk_keymap {
+        let mut inner = state.inner.lock();
+        if let Some(o) = inner.open.as_mut() {
+            o.spec.bulk_keymap = true;
+        }
+    }
     // Spaced from the end of the batch, not from before it began.
     stamp_write(&state);
     out

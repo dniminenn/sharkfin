@@ -798,7 +798,12 @@ pub async fn read_fn_keymap(layer: u8) -> Result<Vec<u8>, JsValue> {
 }
 
 #[wasm_bindgen]
-pub async fn set_key(profile: u8, slot: u8, value: Vec<u8>, fn_layer: bool) -> Result<(), JsValue> {
+pub async fn set_key(
+    profile: u8,
+    slot: u8,
+    value: Vec<u8>,
+    fn_layer: bool,
+) -> Result<bool, JsValue> {
     set_key_layer(profile, 0, slot, value, fn_layer).await
 }
 
@@ -810,7 +815,7 @@ pub async fn set_key_layer(
     slot: u8,
     value: Vec<u8>,
     fn_layer: bool,
-) -> Result<(), JsValue> {
+) -> Result<bool, JsValue> {
     let value: [u8; 4] = value
         .as_slice()
         .try_into()
@@ -827,40 +832,58 @@ pub async fn set_key_layer(
         return Err("this board has no keymap sub-layers sharkfin can write".into());
     }
     let bulk = get_open(true)?.1.bulk_keymap;
-    if bulk {
-        // The whole layer goes to flash, so it is paced like any upload.
-        flash_cooldown().await;
-    } else {
+    let wire = |spec: &DeviceSpec| {
+        if fn_layer {
+            profile
+        } else {
+            protocol::yc500_profile_slot(ops::scaled_profiles(spec), profile, sublayer)
+        }
+    };
+    if !bulk {
         gap(|s| &mut s.last_cmd, KEY_GAP_MS).await;
+        let landed = {
+            let _busy = acquire().await;
+            let (t, spec) = get_open(true)?;
+            let fc = need(family_cmds(&spec.family)).map_err(fail)?;
+            ops::write_slot_checked(&*t, fc, wire(&spec), sublayer, slot, value, fn_layer)
+                .await
+                .map_err(fail)?
+        };
+        if landed {
+            return Ok(false);
+        }
+        // Dropped: this firmware has no single-slot write. Every later key
+        // write this session takes the upload, where the upload is safe.
+        STATE.with(|s| -> Result<(), JsValue> {
+            let mut s = s.borrow_mut();
+            let o = s.open.as_mut().ok_or("no device connected")?;
+            if !ops::bulk_fallback_allowed(&o.spec, sublayer, slot) {
+                return Err(format!("{} did not take the key write", o.spec.label()).into());
+            }
+            o.spec.bulk_keymap = true;
+            Ok(())
+        })?;
     }
+    // The whole layer goes to flash, so it is paced like any upload.
+    flash_cooldown().await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
-    let wire = if fn_layer {
-        profile
-    } else {
-        protocol::yc500_profile_slot(ops::scaled_profiles(&spec), profile, sublayer)
-    };
-    if bulk {
-        ops::write_slot_bulk(
-            &*t,
-            fc,
-            wire,
-            slot,
-            value,
-            fn_layer,
-            ops::FlashPace {
-                page_gap_ms: FLASH_PAGE_GAP_MS as u64,
-                settle_ms: FLASH_SETTLE_MS as u64,
-            },
-        )
-        .await
-        .map_err(fail)?;
-        return Ok(());
-    }
-    let pkt = key_write_packet(fc, wire, sublayer, slot, value, fn_layer).map_err(fail)?;
-    t.send(&pkt).await.map_err(fail)?;
-    Ok(())
+    ops::write_slot_bulk(
+        &*t,
+        fc,
+        wire(&spec),
+        slot,
+        value,
+        fn_layer,
+        ops::FlashPace {
+            page_gap_ms: FLASH_PAGE_GAP_MS as u64,
+            settle_ms: FLASH_SETTLE_MS as u64,
+        },
+    )
+    .await
+    .map_err(fail)?;
+    Ok(true)
 }
 
 #[wasm_bindgen]
@@ -1465,7 +1488,15 @@ pub async fn import_config(raw: String) -> Result<JsValue, JsValue> {
         .into());
     }
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
+    if spec.bulk_keymap {
+        flash_cooldown().await;
+    }
+    let mut bulk = spec.bulk_keymap;
     let mut keys_written = 0usize;
+    let mut layers_uploaded = 0usize;
+    // The first write of the import is read back; a drop switches the rest
+    // of it to whole layers.
+    let mut checked = false;
     for (fn_layer, layers) in [(false, &cfg.profiles), (true, &cfg.fn_layers)] {
         for (p, target) in layers.iter().enumerate() {
             if target.len() != 512 {
@@ -1483,17 +1514,73 @@ pub async fn import_config(raw: String) -> Result<JsValue, JsValue> {
             let current = read_matrix(&*t, fc, wire, 0, fn_layer)
                 .await
                 .map_err(fail)?;
-            for slot in 0..128usize {
-                let want: [u8; 4] = target[slot * 4..slot * 4 + 4].try_into().unwrap();
-                if current[slot * 4..slot * 4 + 4] != want {
-                    let pkt =
-                        key_write_packet(fc, wire, 0, slot as u8, want, fn_layer).map_err(fail)?;
-                    t.send(&pkt).await.map_err(fail)?;
+            let differ: Vec<usize> = (0..128usize)
+                .filter(|s| current[s * 4..s * 4 + 4] != target[s * 4..s * 4 + 4])
+                .collect();
+            if differ.is_empty() {
+                continue;
+            }
+            let whole: [u8; 512] = target.as_slice().try_into().unwrap();
+            if !bulk {
+                let mut i = 0;
+                while i < differ.len() {
+                    let slot = differ[i];
+                    let want: [u8; 4] = whole[slot * 4..slot * 4 + 4].try_into().unwrap();
+                    if checked {
+                        let pkt = key_write_packet(fc, wire, 0, slot as u8, want, fn_layer)
+                            .map_err(fail)?;
+                        t.send(&pkt).await.map_err(fail)?;
+                    } else {
+                        checked = true;
+                        let landed =
+                            ops::write_slot_checked(&*t, fc, wire, 0, slot as u8, want, fn_layer)
+                                .await
+                                .map_err(fail)?;
+                        if !landed {
+                            if !ops::bulk_fallback_allowed(&spec, 0, slot as u8) {
+                                return Err(
+                                    format!("{} did not take the key write", spec.label()).into()
+                                );
+                            }
+                            bulk = true;
+                            sleep_ms(FLASH_COOLDOWN_MS).await;
+                            break;
+                        }
+                    }
                     keys_written += 1;
                     sleep_ms(KEY_GAP_MS).await;
+                    i += 1;
+                }
+                if !bulk {
+                    continue;
                 }
             }
+            if layers_uploaded > 0 {
+                sleep_ms(FLASH_COOLDOWN_MS).await;
+            }
+            ops::write_layer_bulk(
+                &*t,
+                fc,
+                wire,
+                &whole,
+                fn_layer,
+                ops::FlashPace {
+                    page_gap_ms: FLASH_PAGE_GAP_MS as u64,
+                    settle_ms: FLASH_SETTLE_MS as u64,
+                },
+            )
+            .await
+            .map_err(fail)?;
+            keys_written += differ.len();
+            layers_uploaded += 1;
         }
+    }
+    if bulk && !spec.bulk_keymap {
+        STATE.with(|s| {
+            if let Some(o) = s.borrow_mut().open.as_mut() {
+                o.spec.bulk_keymap = true;
+            }
+        });
     }
     if let (Some(opts), Some((set, get))) = (cfg.options, fc.kboption) {
         let cur = t.roundtrip(get, &[0], Checksum::Bit7).await.map_err(fail)?;

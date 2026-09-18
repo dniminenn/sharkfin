@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { noteWholeLayer } from "@/lib/wholeLayer";
 import { Circle, MousePointer2, Send, Square, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -201,7 +202,7 @@ export default function MacrosPage({ device }: { device: ConnectedDevice | null 
     setBusy(true);
     try {
       const value: [number, number, number, number] = [9, mode, slot, 0];
-      await setKey(profile, matrixIndex, value, layer === "fn");
+      if (await setKey(profile, matrixIndex, value, layer === "fn")) noteWholeLayer();
       setEntries((prev) => {
         const next = new Map(prev);
         next.set(matrixIndex, value);
