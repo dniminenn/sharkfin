@@ -175,10 +175,19 @@ indices 0..7.
 | Fn read `0x90` | `[profile, page]`, same |
 | write slot `0x13` | `[profile, slot]`, value at bytes 8..12 |
 | Fn write `0x15` | `[profile, slot]`, value at bytes 8..12 |
-| bulk `0x09` **[JS]** | `[profile, 0xF8, 1, page]` + 56 bytes, 9 pages |
+| bulk `0x09` **[FW]** | `[profile, 0xF8, 1, page]` + 56 bytes at 8, 9 pages, commit on page 8 |
+| Fn bulk `0x10` **[FW]** | same shape |
 
-The vendor bulk loop sends 9 × 56 = 504 of the 512 bytes; slots 126..127
-never transmit.
+The bulk loop sends 9 × 56 = 504 of the 512 bytes; slots 126..127 never
+transmit. `594_v310` stores each page at `page × 56` and sets the commit
+flag on page 8 (handlers `0x19c0a`, `0x19a74`). **[FW]**
+
+Not every yc500 image has the single-slot writes. `594_v310` dispatches
+(`0x19dbc`) through a 19-entry table for `0x00..0x12` and a 20-entry table
+for `0x7f..0x92`; `0x13` and `0x15` fall to the default, which drops the
+packet. `459_v307`, `620_v304`, `668_v305` and `695_v308` have the same
+two tables. Boards with `bulkKeymap` in the registry write whole layers
+on `0x09`/`0x10` instead. **[FW]**
 
 On yc500, `0x8A` (the gen2 keymatrix GET) answers all `0xFF`, not an
 echo. **[HW]** 1379 reads only the profile byte from a fixed table at

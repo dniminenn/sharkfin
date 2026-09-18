@@ -8228,5 +8228,61 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_override": true,
+    "_why": "Reported in issue #57. The vendor record has the family unknown and no picture, and its firmware has no single-slot key write, so a plain yc500 entry would leave every remap silently dropped, as the owner's Setup run showed.",
+    "_evidence": "Read sweep from the owner's board (0.8.3). identify 0x8F returns 0x0252 = 594. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0, byte for byte the default table in the board's own firmware v310 at 0x1f5cc; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers four u16 (120, 120, 1680, 1680) at bytes 1..8 and auto-OS 0x97 answers. That fixes the family as yc500. Setup wrote 0x13 slot 3 Caps to Esc: not read back, not felt. In the v310 image the dispatcher at 0x19dbc verifies the checksum, then jumps through a 19-entry table for opcodes 0x00..0x12 and a 20-entry table for 0x7f..0x92; 0x13 and 0x15 fall to the default at 0x19f24, which drops the packet. 0x09 (handler 0x19c0a) and 0x10 (0x19a74) take [profile, 0xF8, 0x01, page] with 56 bytes at byte 8, store page * 56 and commit on page 8, the shape the vendor app sends. bulkKeymap routes key writes through them.",
+    "_unknown": "Common82_M1_V5_TMR matched the keymap 84 of 84 in Setup and the owner's photo shows the same 75% with a knob and a Home, PgUp, PgDn, End column. Setup found 4 profiles and switched them. Debounce 0x91 answers 1 at byte 2. The owner saw red on the edge light, so sideLight is on; the layout token copies the other yc500 edge-light boards and nothing reads it. The B in the name is the multi-mode line, so both sleep timers are on. 0xAD echoes, no display. Its white sibling 695 and the other yc300_ records were not swept and keep family unknown.",
+    "id": 594,
+    "keyLayout": "Common82_M1_V5_TMR",
+    "sideLightLayout": "xt",
+    "family": "yc500",
+    "bulkKeymap": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_override": true,
+    "_why": "Same firmware line as 594 (issue #57): a yc300_ record whose image drops the single-slot key writes. Flagged so a remap works the day an owner's Setup run settles the family; the flag does nothing before that.",
+    "_evidence": "Own published firmware 459_v307: the dispatcher jumps through a 19-entry table for 0x00..0x12 and a 20-entry table for 0x7f..0x92, byte for byte the 594_v310 structure, so 0x13 and 0x15 fall to the default that drops the packet and 0x09/0x10 take the 9-page upload.",
+    "_unknown": "No sweep from a board, so the family stays unknown and nothing else is claimed.",
+    "id": 459,
+    "bulkKeymap": true
+  },
+  {
+    "_override": true,
+    "_why": "Same firmware line as 594 (issue #57): a yc300_ record whose image drops the single-slot key writes. Flagged so a remap works the day an owner's Setup run settles the family; the flag does nothing before that.",
+    "_evidence": "Own published firmware 620_v304: the dispatcher jumps through a 19-entry table for 0x00..0x12 and a 20-entry table for 0x7f..0x92, byte for byte the 594_v310 structure, so 0x13 and 0x15 fall to the default that drops the packet and 0x09/0x10 take the 9-page upload.",
+    "_unknown": "No sweep from a board, so the family stays unknown and nothing else is claimed.",
+    "id": 620,
+    "bulkKeymap": true
+  },
+  {
+    "_override": true,
+    "_why": "Same firmware line as 594 (issue #57): a yc300_ record whose image drops the single-slot key writes. Flagged so a remap works the day an owner's Setup run settles the family; the flag does nothing before that.",
+    "_evidence": "Own published firmware 668_v305: the dispatcher jumps through a 19-entry table for 0x00..0x12 and a 20-entry table for 0x7f..0x92, byte for byte the 594_v310 structure, so 0x13 and 0x15 fall to the default that drops the packet and 0x09/0x10 take the 9-page upload.",
+    "_unknown": "No sweep from a board, so the family stays unknown and nothing else is claimed.",
+    "id": 668,
+    "bulkKeymap": true
+  },
+  {
+    "_override": true,
+    "_why": "Same firmware line as 594 (issue #57): a yc300_ record whose image drops the single-slot key writes. Flagged so a remap works the day an owner's Setup run settles the family; the flag does nothing before that.",
+    "_evidence": "Own published firmware 695_v308: the dispatcher jumps through a 19-entry table for 0x00..0x12 and a 20-entry table for 0x7f..0x92, byte for byte the 594_v310 structure, so 0x13 and 0x15 fall to the default that drops the packet and 0x09/0x10 take the 9-page upload.",
+    "_unknown": "No sweep from a board, so the family stays unknown and nothing else is claimed.",
+    "id": 695,
+    "bulkKeymap": true
   }
 ]

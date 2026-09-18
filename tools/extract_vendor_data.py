@@ -666,7 +666,7 @@ PLACEHOLDER_IDS = {9999}
 KNOWN_DEVICE_FIELDS = {
     "id", "name", "displayName", "company", "vendor", "vendorId", "productId",
     "internalName", "keyLayout", "lightLayout", "sideLightLayout", "profiles",
-    "magnetic", "family", "features", "screen",
+    "magnetic", "family", "bulkKeymap", "features", "screen",
 }
 
 

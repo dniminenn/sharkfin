@@ -158,6 +158,7 @@ pub fn derive_spec(
         profiles: 1,
         magnetic: false,
         family: family.into(),
+        bulk_keymap: false,
         screen: None,
         travel: None,
         switch_replaceable: false,

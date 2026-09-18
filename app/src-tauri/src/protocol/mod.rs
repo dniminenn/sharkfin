@@ -165,12 +165,22 @@ pub fn yc500_profile_from_slot(magnetic: bool, slot: u8) -> u8 {
 }
 
 /// yc500 bulk keymap: `[0x09, profile, 0xF8, 1, page, 0, 0, ck7]` plus 56
-/// bytes, 9 pages. Unused; the UI writes one slot.
-pub fn yc500_bulk_keymatrix_packets(profile: u8, matrix: &[u8; 512]) -> Vec<[u8; REPORT_LEN]> {
+/// bytes, 9 pages; the Fn layer is the same shape on `0x10`. The board
+/// commits on page 8. Slots 126 and 127 never transmit. Used for boards
+/// whose firmware has no single-slot write (`DeviceSpec::bulk_keymap`).
+pub fn yc500_bulk_layer_packets(
+    profile: u8,
+    matrix: &[u8; 512],
+    fn_layer: bool,
+) -> Vec<[u8; REPORT_LEN]> {
     (0..9u8)
         .map(|page| {
             let mut buf = [0u8; REPORT_LEN];
-            buf[0] = cmd::SET_KEYMATRIX;
+            buf[0] = if fn_layer {
+                cmd::SET_FN
+            } else {
+                cmd::SET_KEYMATRIX
+            };
             buf[1] = profile;
             buf[2] = 0xF8;
             buf[3] = 1;

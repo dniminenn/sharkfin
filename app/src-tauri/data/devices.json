@@ -268,6 +268,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
+    "bulkKeymap": true,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -512,24 +513,25 @@
     "vendorId": 12625,
     "productId": 16387,
     "internalName": "yc300_pc75_s_plus",
-    "keyLayout": "Unknown",
+    "keyLayout": "Common82_M1_V5_TMR",
     "lightLayout": "",
-    "sideLightLayout": "",
+    "sideLightLayout": "xt",
     "profiles": 4,
     "magnetic": false,
-    "family": "unknown",
+    "family": "yc500",
+    "bulkKeymap": true,
     "features": {
       "knob": [
         "AudioVolumeDown",
         "AudioVolumeMute",
         "AudioVolumeUp"
       ],
-      "debounce": false,
-      "sleep24": false,
-      "sleepBT": false,
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
       "magneticSwitches": false,
       "screen": false,
-      "sideLight": false
+      "sideLight": true
     },
     "screen": null
   },
@@ -599,6 +601,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
+    "bulkKeymap": true,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -795,6 +798,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
+    "bulkKeymap": true,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -963,6 +967,7 @@
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
+    "bulkKeymap": true,
     "features": {
       "knob": [
         "AudioVolumeDown",

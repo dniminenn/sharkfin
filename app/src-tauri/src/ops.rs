@@ -73,6 +73,63 @@ pub fn key_write_packet(
     Ok(pkt)
 }
 
+/// How a flash upload is spaced: between pages, and after the last one.
+/// The backends own the cooldown before it.
+#[derive(Clone, Copy)]
+pub struct FlashPace {
+    pub page_gap_ms: u64,
+    pub settle_ms: u64,
+}
+
+/// One whole layer through the yc500 bulk upload, for boards whose firmware
+/// drops the single-slot write (`DeviceSpec::bulk_keymap`). Lands in flash
+/// on page 8.
+pub async fn write_layer_bulk<W: Wire>(
+    w: &W,
+    fc: &'static FamilyCmds,
+    profile: u8,
+    matrix: &[u8; 512],
+    fn_layer: bool,
+    pace: FlashPace,
+) -> Result<(), WireError> {
+    if fc.name != "yc500" {
+        return Err(WireError::Protocol(
+            "bulk keymap writes are a yc500 path".into(),
+        ));
+    }
+    for pkt in crate::protocol::yc500_bulk_layer_packets(profile, matrix, fn_layer) {
+        w.send(&pkt).await?;
+        w.sleep_ms(pace.page_gap_ms).await;
+    }
+    w.sleep_ms(pace.settle_ms).await;
+    Ok(())
+}
+
+/// Read the layer, change one slot, write it back whole. Slots 126 and 127
+/// are past what the upload carries.
+pub async fn write_slot_bulk<W: Wire>(
+    w: &W,
+    fc: &'static FamilyCmds,
+    profile: u8,
+    slot: u8,
+    value: [u8; 4],
+    fn_layer: bool,
+    pace: FlashPace,
+) -> Result<(), WireError> {
+    if slot >= 126 {
+        return Err(WireError::Protocol(format!(
+            "slot {slot} is past what this board's keymap upload carries"
+        )));
+    }
+    let mut matrix: [u8; 512] = read_matrix(w, fc, profile, 0, fn_layer)
+        .await?
+        .try_into()
+        .map_err(|_| WireError::Protocol("keymap read came back short".into()))?;
+    let at = usize::from(slot) * 4;
+    matrix[at..at + 4].copy_from_slice(&value);
+    write_layer_bulk(w, fc, profile, &matrix, fn_layer, pace).await
+}
+
 /// One 512-byte keymap layer, eight raw pages.
 pub async fn read_matrix<W: Wire>(
     w: &W,

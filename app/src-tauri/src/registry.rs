@@ -48,6 +48,12 @@ pub struct DeviceSpec {
     pub magnetic: bool,
     #[serde(default = "family_unknown")]
     pub family: String,
+    /// This board's firmware has no single-slot key write (`0x13`, `0x15`):
+    /// the dispatcher drops them. Key writes go through the whole-layer
+    /// `0x09`/`0x10` upload instead, which lands in flash. yc500 only; on a
+    /// board whose family is still unknown it waits for the family to settle.
+    #[serde(default)]
+    pub bulk_keymap: bool,
     /// Display size and pixel format. 128x128, 160x80, 240x135 and 320x172
     /// all ship; nothing may assume a default.
     #[serde(default)]
@@ -711,6 +717,18 @@ mod tests {
             id.starts_with(env!("CARGO_PKG_VERSION")),
             "build id {id} does not start with the crate version"
         );
+    }
+
+    #[test]
+    fn bulk_keymap_boards_are_plain_yc500() {
+        for d in all().iter().filter(|d| d.bulk_keymap) {
+            assert_ne!(
+                d.family, "gen2",
+                "device {} bulk keymap on a gen2 board",
+                d.id
+            );
+            assert!(!d.magnetic, "device {} bulk keymap with sub-layers", d.id);
+        }
     }
 
     #[test]

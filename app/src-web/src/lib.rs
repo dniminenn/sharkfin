@@ -826,7 +826,13 @@ pub async fn set_key_layer(
     {
         return Err("this board has no keymap sub-layers sharkfin can write".into());
     }
-    gap(|s| &mut s.last_cmd, KEY_GAP_MS).await;
+    let bulk = get_open(true)?.1.bulk_keymap;
+    if bulk {
+        // The whole layer goes to flash, so it is paced like any upload.
+        flash_cooldown().await;
+    } else {
+        gap(|s| &mut s.last_cmd, KEY_GAP_MS).await;
+    }
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let fc = need(family_cmds(&spec.family)).map_err(fail)?;
@@ -835,6 +841,23 @@ pub async fn set_key_layer(
     } else {
         protocol::yc500_profile_slot(ops::scaled_profiles(&spec), profile, sublayer)
     };
+    if bulk {
+        ops::write_slot_bulk(
+            &*t,
+            fc,
+            wire,
+            slot,
+            value,
+            fn_layer,
+            ops::FlashPace {
+                page_gap_ms: FLASH_PAGE_GAP_MS as u64,
+                settle_ms: FLASH_SETTLE_MS as u64,
+            },
+        )
+        .await
+        .map_err(fail)?;
+        return Ok(());
+    }
     let pkt = key_write_packet(fc, wire, sublayer, slot, value, fn_layer).map_err(fail)?;
     t.send(&pkt).await.map_err(fail)?;
     Ok(())

@@ -13,9 +13,9 @@ blank is a plain grid of key slots. All three work the same.
 | | count |
 |---|---:|
 | total | 1382 |
-| writable | 1143 |
+| writable | 1144 |
 | drawn | 353 |
-| drawn after confirmation | 818 |
+| drawn after confirmation | 819 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -207,7 +207,7 @@ blank is a plain grid of key slots. All three work the same.
 | akko MU01 | 1588 | 3151:4015 | yc500 | yes | auto |
 | akko MU02 | 1991 | 3151:4015 | unknown |  |  |
 | akko PC75B Plus | 413 | 0461:4003 | unknown |  |  |
-| akko PC75B Plus+ | 594 | 3151:4003 | unknown |  |  |
+| akko PC75B Plus+ | 594 | 3151:4003 | yc500 | yes | auto |
 | akko PC75B Plus+ | 695 | 3151:4003 | unknown |  |  |
 | akko PC75S+ | 668 | 0461:4003 | unknown |  |  |
 | akko PC98B Plus+ | 679 | 3151:4003 | unknown |  |  |

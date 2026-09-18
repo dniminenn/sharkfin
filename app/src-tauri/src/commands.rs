@@ -94,6 +94,12 @@ const FLASH_PAGE_GAP: Duration = Duration::from_millis(100);
 /// stalled an X86. Hold the device lock so poll stays off the wire.
 const FLASH_SETTLE: Duration = Duration::from_secs(2);
 
+/// The two above, for uploads that run inside `ops`.
+const FLASH_PACE: ops::FlashPace = ops::FlashPace {
+    page_gap_ms: FLASH_PAGE_GAP.as_millis() as u64,
+    settle_ms: FLASH_SETTLE.as_millis() as u64,
+};
+
 /// Single-slot key writes are flash. X86: nine at 150 ms stalled. One per
 /// click is fine; a loop is not.
 const KEY_GAP: Duration = Duration::from_millis(400);
@@ -662,12 +668,32 @@ pub fn set_key_layer(
             ));
         }
     }
-    key_gap(&state);
+    let bulk = {
+        let inner = state.inner.lock();
+        inner.open.as_ref().is_some_and(|o| o.spec.bulk_keymap)
+    };
     let wire_profile = if fn_layer {
         profile
     } else {
         crate::protocol::yc500_profile_slot(scaled_profiles(&state), profile, sublayer)
     };
+    if bulk {
+        // The whole layer goes to flash, so it is paced like any upload.
+        flash_cooldown(&state);
+        return with_writable(&state, |t, fc| {
+            block_on(ops::write_slot_bulk(
+                t,
+                need(fc)?,
+                wire_profile,
+                slot,
+                value,
+                fn_layer,
+                FLASH_PACE,
+            ))?;
+            Ok(())
+        });
+    }
+    key_gap(&state);
     with_writable(&state, |t, fc| {
         t.send(&key_write_packet(
             need(fc)?,
@@ -1413,9 +1439,13 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
         ));
     }
     let scaled = ops::scaled_profiles(&spec);
+    if spec.bulk_keymap {
+        flash_cooldown(&state);
+    }
     let out = with_writable(&state, |t, fc| {
         let fc = need(fc)?;
         let mut keys_written = 0usize;
+        let mut layers_uploaded = 0usize;
         for (fn_layer, layers) in [(false, &cfg.profiles), (true, &cfg.fn_layers)] {
             for (p, target) in layers.iter().enumerate() {
                 if target.len() != 512 {
@@ -1430,6 +1460,24 @@ pub fn import_config(state: tauri::State<AppState>, path: String) -> Result<Stri
                     crate::protocol::yc500_profile_slot(scaled, p as u8, 0)
                 };
                 let current = block_on(ops::read_matrix(t, fc, wire, 0, fn_layer))?;
+                if spec.bulk_keymap {
+                    let differ = (0..128usize)
+                        .filter(|s| current[s * 4..s * 4 + 4] != target[s * 4..s * 4 + 4])
+                        .count();
+                    if differ == 0 {
+                        continue;
+                    }
+                    if layers_uploaded > 0 {
+                        std::thread::sleep(FLASH_COOLDOWN);
+                    }
+                    let whole: [u8; 512] = target.as_slice().try_into().unwrap();
+                    block_on(ops::write_layer_bulk(
+                        t, fc, wire, &whole, fn_layer, FLASH_PACE,
+                    ))?;
+                    keys_written += differ;
+                    layers_uploaded += 1;
+                    continue;
+                }
                 for slot in 0..128usize {
                     let want: [u8; 4] = target[slot * 4..slot * 4 + 4].try_into().unwrap();
                     if current[slot * 4..slot * 4 + 4] != want {

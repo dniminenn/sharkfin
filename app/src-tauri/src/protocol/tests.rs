@@ -380,14 +380,16 @@ fn gen2_keymap_packets_match_the_vendor_shapes() {
     assert_eq!(pages[9][16], 0, "tail padded with zeros");
 
     // yc500 bulk: 0xF8 marker, page at byte 4, 9 pages of 56
-    let y = yc500_bulk_keymatrix_packets(2, &matrix);
+    let y = yc500_bulk_layer_packets(2, &matrix, false);
     assert_eq!(y.len(), 9);
     assert_eq!(&y[0][..5], &[0x09, 2, 0xF8, 1, 0]);
     assert_eq!(&y[8][..5], &[0x09, 2, 0xF8, 1, 8]);
-    // 9 * 56 = 504 < 512: the last 8 matrix bytes do not fit -- the
-    // vendor's own loop truncates identically, worth knowing before
-    // anyone verifies this path
+    // 9 * 56 = 504 < 512: the last 8 matrix bytes do not fit. 594_v310
+    // stores page * 56 and commits on page 8, so the firmware truncates
+    // the same way.
     assert_eq!(&y[8][8..8 + 56], &[0xAB; 56]);
+    let f = yc500_bulk_layer_packets(2, &matrix, true);
+    assert_eq!(&f[0][..5], &[0x10, 2, 0xF8, 1, 0]);
 }
 
 #[test]
