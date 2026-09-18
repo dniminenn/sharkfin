@@ -1,5 +1,16 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.8.4
+
+**Remapping works on the Akko PC75B Plus+.** Its firmware ignores the
+command sharkfin used to change one key, so a remap was accepted and then
+dropped. The app now rewrites the whole keymap on this board, the way the
+vendor's own software does. Its siblings on the same firmware are marked
+to do the same once Setup has confirmed their command set.
+
+**Akko PC75B Plus+ is in the registry** with its picture, four profiles,
+debounce, sleep timers and edge light, from an owner's report.
+
 ## What changed in 0.8.3
 
 **A data bundle says when it was cut short.** If the keyboard stopped
