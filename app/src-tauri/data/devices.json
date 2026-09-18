@@ -2356,6 +2356,37 @@
     }
   },
   {
+    "id": 1033,
+    "name": "akko_5075b_plus_s_mac",
+    "displayName": "5075B Plus-S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1452,
+    "productId": 591,
+    "internalName": "akko_5075b_plus_s_mac",
+    "keyLayout": "Local82_Akko_5075B_Plus_S",
+    "lightLayout": "",
+    "sideLightLayout": "xt",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "bulkKeymap": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    },
+    "screen": null
+  },
+  {
     "id": 1041,
     "name": "yc500_kiiboom68_soc",
     "displayName": "MMD FIT68",

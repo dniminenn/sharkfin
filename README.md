@@ -18,7 +18,7 @@
 
 ![keymap editor](docs/keys-abyss.png)
 
-Remap keys, set the RGB, record macros and change device settings on 1382
+Remap keys, set the RGB, record macros and change device settings on 1383
 keyboards built on ROYUAN hardware: Attack Shark, Hator, ikbc, NOPPOO,
 Epomaker, Akko, MEETION, rongyuan and more.
 
@@ -51,9 +51,9 @@ By brand, with what each board has:
 
 **Beta, so back up first.**
 
-1144 of 1382 accept changes, 234 more once the board itself has said which
-command set it speaks, 4 are read-only. 353 are drawn out of the box
-and 818 more after a one-time check against your board; the rest show a
+1145 of 1383 accept changes, 234 more once the board itself has said which
+command set it speaks, 4 are read-only. 354 are drawn out of the box
+and 819 more after a one-time check against your board; the rest show a
 slot grid.
 
 The check exists because two boards can share one picture and still
@@ -144,7 +144,7 @@ install it; replug the keyboard after installing. For the AppImage or the
 browser, one line, then replug:
 
 ```sh
-echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|0db0|145f|14a5|2ea8|3121|3299|331a|374a|379a|38a9|38ee|391d|3984|39a8|39ab|54ab", MODE="0660", TAG+="uaccess"' \
+echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|05ac|0db0|145f|14a5|2ea8|3121|3299|331a|374a|379a|38a9|38ee|391d|3984|39a8|39ab|54ab", MODE="0660", TAG+="uaccess"' \
   | sudo tee /etc/udev/rules.d/70-sharkfin.rules >/dev/null \
   && sudo udevadm control --reload-rules && sudo udevadm trigger
 ```

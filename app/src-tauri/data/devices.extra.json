@@ -8284,5 +8284,39 @@
     "_unknown": "No sweep from a board, so the family stays unknown and nothing else is claimed.",
     "id": 695,
     "bulkKeymap": true
+  },
+  {
+    "_why": "Reported in issue #58. Not in gearhub, Akko's own tables or the OTA channel. The owner ran it in Mac mode, where the board enumerates as Apple 05ac:024f, so that vendor id is what sharkfin has to match; the registry carried no Apple id before this board.",
+    "_evidence": "Read sweep from the owner's board (0.8.4, Windows). identify 0x8F returns 0x0409 = 1033. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, Fn, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers four u16 (120, 120, 780, 480) at bytes 1..8 and auto-OS 0x97 answers. That fixes the family as yc500. Revision 0x80 answers 3.03, the yc300 line. Setup wrote 0x13 slot 53 R-Alt to R-Ctrl: not read back, not felt, the same drop as 594 (issue #57), whose image and four siblings' show the dispatcher has no 0x13; no image is published for 1033 or its registered sibling 1528. bulkKeymap routes key writes through the 9-page upload those images implement.",
+    "_unknown": "Local82_Akko_5075B_Plus_S is keyboard_82_pc75b_piuss baked against the owner's keymap, 84 of 85: the knob press is [10,15] on the board where the picture says [10,14]. Setup confirmed 5 of 6 keys; the miss is Alt sending L-Win, which is Mac mode. No photo. Four profiles found and switched. Debounce 0x91 answers 1 at byte 2. The owner saw neither the rainbow nor red on the edge light, unexplained; the siblings 1528 and 2567 declare an edge light, so it stays on. The B line is multi-mode, so both sleep timers are on. Windows-mode ids not observed; the siblings are 3151:4003.",
+    "id": 1033,
+    "name": "akko_5075b_plus_s_mac",
+    "displayName": "5075B Plus-S",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1452,
+    "productId": 591,
+    "internalName": "akko_5075b_plus_s_mac",
+    "keyLayout": "Local82_Akko_5075B_Plus_S",
+    "lightLayout": "",
+    "sideLightLayout": "xt",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "bulkKeymap": true,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    },
+    "screen": null
   }
 ]

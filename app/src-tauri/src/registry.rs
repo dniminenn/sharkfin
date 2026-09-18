@@ -684,6 +684,10 @@ mod tests {
                 "Local82_VGN_Neon75_Extreme",
                 include_str!("../../src/lib/layouts/vendor/Local82_VGN_Neon75_Extreme.json"),
             ),
+            (
+                "Local82_Akko_5075B_Plus_S",
+                include_str!("../../src/lib/layouts/vendor/Local82_Akko_5075B_Plus_S.json"),
+            ),
         ];
         for (name, text) in LOCAL {
             let v: serde_json::Value = serde_json::from_str(text).expect("parses");
