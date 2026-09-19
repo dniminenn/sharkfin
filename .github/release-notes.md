@@ -1,5 +1,20 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.8.5
+
+**A key change that the keyboard drops is retried the long way.** Some
+firmware ignores the command that changes one key. The app now reads the
+key back after writing it and, if the change did not land, rewrites the
+whole keymap instead, the way the vendor's software does. It says so once,
+and Setup's report notes it. Each change then takes a few seconds.
+
+**Keyboards in Mac mode are found.** A board switched to Mac mode presents
+itself as an Apple device. That id is now on the list the app and the
+Linux permission rule match, so the board shows up either way.
+
+**Akko 5075B Plus-S is in the registry** from an owner's report, with its
+picture, four profiles and edge light.
+
 ## What changed in 0.8.4
 
 **Remapping works on the Akko PC75B Plus+.** Its firmware ignores the
