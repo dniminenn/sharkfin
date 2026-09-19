@@ -100,17 +100,30 @@ impl WindowsFeatureDevice {
 
         let mut wide: Vec<u16> = std::ffi::OsStr::new(path).encode_wide().collect();
         wide.push(0);
-        let handle = unsafe {
+        let mut handle = unsafe {
             CreateFileW(
                 wide.as_ptr(),
                 GENERIC_READ | GENERIC_WRITE,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 std::ptr::null_mut(),
                 OPEN_EXISTING,
-                0,
+                FILE_FLAG_OVERLAPPED,
                 std::ptr::null_mut(),
             )
         };
+        if handle == INVALID_HANDLE_VALUE {
+            handle = unsafe {
+                CreateFileW(
+                    wide.as_ptr(),
+                    0,
+                    FILE_SHARE_READ | FILE_SHARE_WRITE,
+                    std::ptr::null_mut(),
+                    OPEN_EXISTING,
+                    FILE_FLAG_OVERLAPPED,
+                    std::ptr::null_mut(),
+                )
+            };
+        }
         if handle == INVALID_HANDLE_VALUE {
             return Err(WireError::Transport(format!(
                 "CreateFileW failed: {}",
@@ -163,6 +176,8 @@ const FILE_SHARE_WRITE: u32 = 0x00000002;
 const GENERIC_READ: u32 = 0x80000000;
 #[cfg(windows)]
 const GENERIC_WRITE: u32 = 0x40000000;
+#[cfg(windows)]
+const FILE_FLAG_OVERLAPPED: u32 = 0x40000000;
 #[cfg(windows)]
 const OPEN_EXISTING: u32 = 3;
 #[cfg(windows)]
