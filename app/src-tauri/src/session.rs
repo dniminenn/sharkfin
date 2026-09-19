@@ -68,7 +68,8 @@ pub struct DeviceSettings {
     pub sleep: SleepTimes,
     /// Absent on families whose option bitfield is not decoded.
     pub options: Option<KbOptions>,
-    /// Firmware revision as reported by 0x80, e.g. 0x0102 -> "1.02".
+    /// Firmware revision, e.g. 0x0102 -> "1.02". From 0x80, or on gen2 the
+    /// identify reply.
     pub revision: String,
     /// Board auto-detects the host OS and switches its Win/Mac layer.
     pub auto_os: bool,

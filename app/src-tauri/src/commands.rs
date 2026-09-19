@@ -139,7 +139,8 @@ pub struct ConnectedDevice {
     /// Families whose opcodes aren't established never accept writes.
     pub read_only: bool,
     pub switches: SwitchAccess,
-    /// Firmware revision from `0x80`, e.g. 0x0200 for 2.00.
+    /// Firmware revision, e.g. 0x0200 for 2.00. From `0x80`, or on gen2 the
+    /// identify reply.
     pub revision: Option<u16>,
     /// Cable, or the 2.4 GHz receiver's relay. Factory reset needs the cable.
     pub link: Link,

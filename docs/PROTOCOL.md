@@ -138,7 +138,7 @@ live register.
 | command | yc500 | gen2 | payload |
 |---|---|---|---|
 | identify | `0x8F` | same opcode | same |
-| revision | `0x80` | same opcode | same |
+| revision | `0x80` | zeros over the cable; identify bytes 7..9 instead | see Other |
 | LEDPARAM set/get | `0x07`/`0x87` | same opcode | same |
 | SLEDPARAM set/get | `0x08`/`0x88` | same opcode | same |
 | USERPIC set/get | `0x0C`/`0x8C` | same opcode | **different header** |
@@ -418,7 +418,7 @@ Bit `128` locks the keyboard. The vendor's setter writes Mac mode at bit
 
 | | |
 |---|---|
-| Firmware revision | `GET 0x80` → `(reply[2]<<8) \| reply[1]`, rendered as hex **[HW]** |
+| Firmware revision | `GET 0x80` → `(reply[2]<<8) \| reply[1]`, rendered as hex **[HW]**. gen2 answers zeros over the cable on every board reported; the vendor's gen2 driver calls `0x80` the RF version and reads the keyboard's version from the identify reply, `(reply[8]<<8) \| reply[7]` **[JS]** **[HW]** |
 | Factory reset | yc500 `0x02`, needs ~4 s **[HW]**. gen2 `0x01` **[FW]** (`2268_v309`). Bare opcode. |
 | Auto-OS | `SET 0x17 [0\|1]`, `GET 0x97` → `reply[1] == 1` |
 | Report rate | gen2 GET `0x83` **[HW]**. SET `0x03` **[FW]**. yc500 vendor setter is a stub returning false **[JS]** |

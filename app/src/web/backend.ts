@@ -101,7 +101,7 @@ export interface ConnectedDevice {
   /** What the Switches page may do: read the columns, write them, or write
    * the one board-wide record of a yc500 board below firmware 2.00. */
   switches: SwitchAccess;
-  /** Firmware revision from 0x80, e.g. 0x0200 for 2.00; null when unanswered. */
+  /** Firmware revision, e.g. 0x0200 for 2.00; null when unanswered. */
   revision: number | null;
   /** Cable, or the 2.4 GHz receiver's relay. Factory reset and display pictures need the cable. */
   link: "usb" | "receiver";

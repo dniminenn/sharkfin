@@ -205,13 +205,44 @@ pub async fn read_matrix<W: Wire>(
     Ok(matrix)
 }
 
-/// `0x80` as a u16, `None` when the family is unknown or the board does not
-/// answer. Zero counts as no answer.
+/// The firmware revision word, `None` when the family is unknown or the
+/// board does not answer.
 pub async fn read_revision<W: Wire>(w: &W, spec: &DeviceSpec) -> Option<u16> {
-    let op = family_cmds(&spec.family)?.get_revision?;
+    read_revision_for(w, family_cmds(&spec.family)?).await
+}
+
+/// `0x80` bytes 1..3. gen2 answers that with zeros over the cable (the
+/// vendor's gen2 driver calls it the RF version) and carries the keyboard's
+/// version in the identify reply at bytes 7..9, so that is read next.
+pub async fn read_revision_for<W: Wire>(w: &W, fc: &FamilyCmds) -> Option<u16> {
+    let op = fc.get_revision?;
     let rev = w.roundtrip(op, &[], Checksum::Bit7).await.ok()?;
-    let v = (u16::from(rev[2]) << 8) | u16::from(rev[1]);
+    if let Some(v) = revision_word(&rev, 1) {
+        return Some(v);
+    }
+    if fc.name != "gen2" {
+        return None;
+    }
+    let ident = w
+        .roundtrip(cmd::GET_USB_VERSION, &[], Checksum::Bit7)
+        .await
+        .ok()?;
+    revision_word(&ident, 7)
+}
+
+/// `(reply[at + 1] << 8) | reply[at]`. Zero counts as no answer.
+pub fn revision_word(reply: &[u8], at: usize) -> Option<u16> {
+    let v = (u16::from(*reply.get(at + 1)?) << 8) | u16::from(*reply.get(at)?);
     (v != 0).then_some(v)
+}
+
+/// Each nibble is a decimal digit: 0x0814 is "8.14", the digits the vendor's
+/// package names carry.
+pub fn format_revision(v: Option<u16>) -> String {
+    match v {
+        Some(v) => format!("{:x}.{:02x}", v >> 8, v & 0xFF),
+        None => "unknown".into(),
+    }
 }
 
 /// The sweep a board answers when it is not in the registry: enough for
@@ -284,13 +315,7 @@ pub async fn read_settings<W: Wire>(
         Some((_, get)) => Some(w.roundtrip(get, &[0], Checksum::Bit7).await?),
         None => None,
     };
-    let revision = match fc.get_revision {
-        Some(op) => {
-            let rev = w.roundtrip(op, &[], Checksum::Bit7).await?;
-            format!("{}.{:02}", rev[2], rev[1])
-        }
-        None => "unknown".into(),
-    };
+    let revision = format_revision(read_revision_for(w, fc).await);
     let auto = match fc.auto_os {
         Some((_, get)) => w.roundtrip(get, &[], Checksum::Bit7).await.ok(),
         None => None,
@@ -393,4 +418,21 @@ pub async fn probe_sweep<W: Wire>(w: &W, out: &mut String) -> Result<(), WireErr
         }
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// X87 Ultra (3438) bundle: `0x80` answers zeros, identify carries v814.
+    #[test]
+    fn gen2_revision_sits_in_the_identify_reply() {
+        let r80 = [0x80, 0, 0, 0, 0, 0, 0, 0x7f];
+        let ident = [0x8f, 0x6e, 0x0d, 0, 0, 0, 0, 0x14, 0x08, 0];
+        assert_eq!(revision_word(&r80, 1), None);
+        assert_eq!(revision_word(&ident, 7), Some(0x0814));
+        assert_eq!(format_revision(Some(0x0814)), "8.14");
+        assert_eq!(format_revision(Some(0x0102)), "1.02");
+        assert_eq!(format_revision(None), "unknown");
+    }
 }
