@@ -90,10 +90,11 @@ jobs:
   # The browser build is the same protocol core over WebHID. It ships as a
   # release asset so the site can pin a version instead of tracking master;
   # the pin lives in the getsharkfin repo. Needs `build` only because
-  # tauri-action is what creates the draft release this uploads into.
+  # Uploads into the draft, so it only needs that to exist and runs
+  # alongside the desktop builds.
   web:
     name: Browser build
-    needs: build
+    needs: prepare
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
