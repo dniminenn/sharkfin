@@ -7,6 +7,7 @@
 
 import init, * as core from "../../src-web/pkg/sharkfin_web";
 import { takePicked } from "./file-store";
+import { isAkko5075bPlusSMacTlc, webHidRequestFilters } from "./akko-1033";
 
 export const BUILD: "app" | "browser" = "browser";
 
@@ -234,8 +235,9 @@ async function knownVendors(): Promise<number[]> {
 }
 
 const isVendorCollection = (d: HIDDevice, vendors: number[]) =>
-  vendors.includes(d.vendorId) &&
-  d.collections.some((c) => c.usagePage === USAGE_PAGE && USAGES.includes(c.usage ?? -1));
+  (vendors.includes(d.vendorId) &&
+    d.collections.some((c) => c.usagePage === USAGE_PAGE && USAGES.includes(c.usage ?? -1))) ||
+  isAkko5075bPlusSMacTlc(d);
 
 let ready: Promise<void> | null = null;
 
@@ -265,9 +267,7 @@ export async function grantedDevices(): Promise<HIDDevice[]> {
 export async function requestDevice(): Promise<boolean> {
   const vendors = await knownVendors();
   const picked = await navigator.hid.requestDevice({
-    filters: vendors.flatMap((vendorId) =>
-      USAGES.map((usage) => ({ vendorId, usagePage: USAGE_PAGE, usage })),
-    ),
+    filters: webHidRequestFilters(vendors),
   });
   return picked.length > 0;
 }

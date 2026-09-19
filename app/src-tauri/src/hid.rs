@@ -30,8 +30,9 @@ pub struct DiscoveredDevice {
 pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
     api.device_list()
         .filter(|d| {
-            is_royuan_collection(d.usage_page(), d.usage())
-                && crate::registry::vendor_ids().contains(&d.vendor_id())
+            (is_royuan_collection(d.usage_page(), d.usage())
+                && crate::registry::vendor_ids().contains(&d.vendor_id()))
+                || is_akko_keyboard_tlc(d.vendor_id(), d.product_id(), d.usage_page(), d.usage())
         })
         .map(|d| DiscoveredDevice {
             path: d.path().to_string_lossy().into_owned(),
@@ -48,12 +49,16 @@ fn is_royuan_collection(usage_page: u16, usage: u16) -> bool {
     usage_page == USAGE_PAGE && USAGES.contains(&usage)
 }
 
+fn is_akko_keyboard_tlc(vendor_id: u16, product_id: u16, usage_page: u16, usage: u16) -> bool {
+    vendor_id == 0x05AC && product_id == 0x024F && usage_page == 0x01 && usage == 0x06
+}
+
 /// Minimum gap between feature-report writes. Faster stalls the endpoint
 /// until re-enum. 12 ms per report is the sustainable rate on an X86.
 const MIN_WRITE_GAP: Duration = Duration::from_millis(crate::wire::MIN_WRITE_GAP);
 
 pub struct Transport {
-    dev: HidDevice,
+    dev: Device,
     last_write: Mutex<Option<Instant>>,
     /// Set once identify has succeeded through the receiver's relay. Every
     /// send and read then goes through the select/release handshake.
@@ -63,6 +68,134 @@ pub struct Transport {
     selected: AtomicBool,
     /// Base for the millisecond clock the receiver deadlines run on.
     started: Instant,
+}
+
+enum Device {
+    HidApi(HidDevice),
+    #[cfg(windows)]
+    Windows(WindowsFeatureDevice),
+}
+
+#[cfg(windows)]
+struct WindowsFeatureDevice {
+    handle: *mut std::ffi::c_void,
+}
+
+#[cfg(windows)]
+unsafe impl Send for WindowsFeatureDevice {}
+
+#[cfg(windows)]
+impl Drop for WindowsFeatureDevice {
+    fn drop(&mut self) {
+        unsafe {
+            CloseHandle(self.handle);
+        }
+    }
+}
+
+#[cfg(windows)]
+impl WindowsFeatureDevice {
+    fn open(path: &str) -> Result<Self, WireError> {
+        use std::os::windows::ffi::OsStrExt;
+
+        let mut wide: Vec<u16> = std::ffi::OsStr::new(path).encode_wide().collect();
+        wide.push(0);
+        let handle = unsafe {
+            CreateFileW(
+                wide.as_ptr(),
+                GENERIC_READ | GENERIC_WRITE,
+                FILE_SHARE_READ | FILE_SHARE_WRITE,
+                std::ptr::null_mut(),
+                OPEN_EXISTING,
+                0,
+                std::ptr::null_mut(),
+            )
+        };
+        if handle == INVALID_HANDLE_VALUE {
+            return Err(WireError::Transport(format!(
+                "CreateFileW failed: {}",
+                std::io::Error::last_os_error()
+            )));
+        }
+        Ok(Self { handle })
+    }
+
+    fn send_feature(&self, report: &[u8; REPORT_LEN + 1]) -> Result<(), WireError> {
+        let ok = unsafe {
+            HidD_SetFeature(
+                self.handle,
+                report.as_ptr() as *mut std::ffi::c_void,
+                report.len() as u32,
+            )
+        };
+        if ok == 0 {
+            return Err(WireError::Transport(format!(
+                "HidD_SetFeature failed: {}",
+                std::io::Error::last_os_error()
+            )));
+        }
+        Ok(())
+    }
+
+    fn get_feature(&self, report: &mut [u8; REPORT_LEN + 1]) -> Result<usize, WireError> {
+        let ok = unsafe {
+            HidD_GetFeature(
+                self.handle,
+                report.as_mut_ptr() as *mut std::ffi::c_void,
+                report.len() as u32,
+            )
+        };
+        if ok == 0 {
+            return Err(WireError::Transport(format!(
+                "HidD_GetFeature failed: {}",
+                std::io::Error::last_os_error()
+            )));
+        }
+        Ok(report.len())
+    }
+}
+
+#[cfg(windows)]
+const FILE_SHARE_READ: u32 = 0x00000001;
+#[cfg(windows)]
+const FILE_SHARE_WRITE: u32 = 0x00000002;
+#[cfg(windows)]
+const GENERIC_READ: u32 = 0x80000000;
+#[cfg(windows)]
+const GENERIC_WRITE: u32 = 0x40000000;
+#[cfg(windows)]
+const OPEN_EXISTING: u32 = 3;
+#[cfg(windows)]
+const INVALID_HANDLE_VALUE: *mut std::ffi::c_void = -1isize as *mut std::ffi::c_void;
+
+#[cfg(windows)]
+#[link(name = "kernel32")]
+extern "system" {
+    fn CreateFileW(
+        file_name: *const u16,
+        desired_access: u32,
+        share_mode: u32,
+        security_attributes: *mut std::ffi::c_void,
+        creation_disposition: u32,
+        flags_and_attributes: u32,
+        template_file: *mut std::ffi::c_void,
+    ) -> *mut std::ffi::c_void;
+    fn CloseHandle(handle: *mut std::ffi::c_void) -> i32;
+}
+
+#[cfg(windows)]
+#[link(name = "hid")]
+extern "system" {
+    fn HidD_SetFeature(
+        hid_device_object: *mut std::ffi::c_void,
+        report_buffer: *mut std::ffi::c_void,
+        report_buffer_length: u32,
+    ) -> u8;
+    fn HidD_GetFeature(
+        hid_device_object: *mut std::ffi::c_void,
+        report_buffer: *mut std::ffi::c_void,
+        report_buffer_length: u32,
+    ) -> u8;
 }
 
 /// Rolling record of what reached the wire, opcode and direction only.
@@ -98,10 +231,25 @@ pub fn wire_trace() -> String {
 
 impl Transport {
     pub fn open(api: &HidApi, path: &str) -> Result<Self, HidError> {
+        #[cfg(windows)]
+        let is_keyboard_tlc = api.device_list().any(|d| {
+            d.path().to_string_lossy() == path
+                && is_akko_keyboard_tlc(d.vendor_id(), d.product_id(), d.usage_page(), d.usage())
+        });
+        #[cfg(windows)]
+        if is_keyboard_tlc {
+            return Ok(Self {
+                dev: Device::Windows(WindowsFeatureDevice::open(path)?),
+                last_write: Mutex::new(None),
+                relay: AtomicBool::new(false),
+                selected: AtomicBool::new(false),
+                started: Instant::now(),
+            });
+        }
         let cpath = std::ffi::CString::new(path).expect("hid path with NUL");
         let dev = api.open_path(&cpath).map_err(api_err)?;
         Ok(Self {
-            dev,
+            dev: Device::HidApi(dev),
             last_write: Mutex::new(None),
             relay: AtomicBool::new(false),
             selected: AtomicBool::new(false),
@@ -127,14 +275,21 @@ impl Transport {
         self.pace();
         let mut wire = [0u8; REPORT_LEN + 1];
         wire[1..].copy_from_slice(buf);
-        self.dev.send_feature_report(&wire).map_err(api_err)?;
-        Ok(())
+        match &self.dev {
+            Device::HidApi(dev) => dev.send_feature_report(&wire).map_err(api_err),
+            #[cfg(windows)]
+            Device::Windows(dev) => dev.send_feature(&wire),
+        }
     }
 
     fn raw_read_blocking(&self) -> Result<[u8; REPORT_LEN], WireError> {
         trace_wire('R', 0);
         let mut wire = [0u8; REPORT_LEN + 1];
-        let n = self.dev.get_feature_report(&mut wire).map_err(api_err)?;
+        let n = match &self.dev {
+            Device::HidApi(dev) => dev.get_feature_report(&mut wire).map_err(api_err)?,
+            #[cfg(windows)]
+            Device::Windows(dev) => dev.get_feature(&mut wire)?,
+        };
         if n < 8 {
             return Err(WireError::ShortRead(n));
         }
@@ -267,5 +422,12 @@ mod tests {
         assert!(!is_stall_message(
             "HidD_SetFeature: (0x00000001) Incorrect function."
         ));
+    }
+
+    #[test]
+    fn only_the_exact_akko_keyboard_tlc_is_special_cased() {
+        assert!(is_akko_keyboard_tlc(0x05AC, 0x024F, 0x01, 0x06));
+        assert!(!is_akko_keyboard_tlc(0x05AC, 0x024F, 0xFF00, 0x0001));
+        assert!(!is_akko_keyboard_tlc(0x05AC, 0x0250, 0x01, 0x06));
     }
 }
