@@ -1,5 +1,19 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.8.6
+
+**The firmware version reads right on newer boards.** Many boards answered
+the old version request with zeros and showed as 0.00. The app now reads
+the version where those boards keep it.
+
+**The data bundle asks one more question.** The read sweep now includes the
+second version request the vendor's software sends on connect, so a report
+says a little more about boards with a display.
+
+**Akko 5075B Plus-S in Mac mode connects.** In Mac mode the board keeps its
+settings on the keyboard's own interface. The app and the browser build now
+look there for it. Its picture has the bottom row in the right order.
+
 ## What changed in 0.8.5
 
 **A key change that the keyboard drops is retried the long way.** Some
