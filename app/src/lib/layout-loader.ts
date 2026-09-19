@@ -115,7 +115,9 @@ function clearStore(key: string) {
   }
 }
 
-const confirmedKey = (id: number) => `sharkfin.layout-confirmed.${id}`;
+// A changed shipped layout must not inherit an older confirmed sibling.
+const confirmedKey = (id: number, layoutName?: string) =>
+  `sharkfin.layout-confirmed.${id}.${layoutName ?? "default"}`;
 const rejectedKey = (id: number) => `sharkfin.layout-rejected.${id}`;
 const customKey = (id: number) => `sharkfin.layout-custom.${id}`;
 
@@ -244,7 +246,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
         // picture they drew, or one they picked from the collection. It is
         // matched against the live keymap again rather than trusted, so a
         // board whose keymap changed underneath falls back to the file.
-        const stored = id === undefined ? null : readStore(confirmedKey(id));
+        const stored = id === undefined ? null : readStore(confirmedKey(id, name));
         if (stored && stored !== "1" && stored !== name) {
           const matrices = await readMatrices();
           if (!live) return;
@@ -293,7 +295,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
             // Only a confirmation of THIS picture counts. Treating any
             // stored answer as a yes would adopt an unreviewed assignment
             // on a board whose file changed under it.
-            const stored = readStore(confirmedKey(id));
+            const stored = readStore(confirmedKey(id, name));
             const at = Math.max(
               0,
               offers.findIndex((o) => o.layoutName === stored),
@@ -325,7 +327,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       if (!live || !matrices.length) return;
 
       // A picture confirmed earlier is re-matched and used silently.
-      const stored = readStore(confirmedKey(id));
+      const stored = readStore(confirmedKey(id, name));
       if (stored) {
         let geometry: BoardLayout | null = null;
         if (stored === "kle") {
@@ -419,7 +421,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
   const confirm = useCallback(() => {
     setInference((inf) => {
       if (id !== undefined && inf) {
-        writeStore(confirmedKey(id), inf.layoutName || "1");
+        writeStore(confirmedKey(id, name), inf.layoutName || "1");
         if (inf.layoutName === "kle")
           writeStore(
             customKey(id),
@@ -432,7 +434,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
       return inf;
     });
     setPending(false);
-  }, [id]);
+  }, [id, name]);
 
   const reject = useCallback(() => {
     const next = indexRef.current + 1;
@@ -457,14 +459,14 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
 
   const sweep = useCallback(() => {
     if (id !== undefined) {
-      clearStore(confirmedKey(id));
+      clearStore(confirmedKey(id, name));
       clearStore(rejectedKey(id));
       clearStore(customKey(id));
     }
     matricesRef.current = [];
     forcedRef.current = true;
     setAttempt((n) => n + 1);
-  }, [id]);
+  }, [id, name]);
 
   const previewCustom = useCallback(
     async (geometry: BoardLayout) => {
