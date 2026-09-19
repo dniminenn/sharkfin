@@ -358,6 +358,7 @@ const BUNDLE_PROBES: &[(&str, u8, &[u8])] = &[
     ("0x92 sleep (yc500)", 0x92, &[]),
     ("0x97 auto-OS (yc500)", 0x97, &[]),
     ("0xAD OLED version", 0xAD, &[]),
+    ("0xAE MLED version", 0xAE, &[]),
 ];
 
 /// The read sweep a bundle carries: both families' GET opcodes, so a board

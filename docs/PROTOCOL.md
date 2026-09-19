@@ -685,7 +685,12 @@ GET.
 
 `0xAD` is a GET of the display's own firmware version. It means the same
 in both families. A board that answers has a display; one that echoes
-does not. It is not an erase and not boot entry.
+does not. It is not an erase and not boot entry. gen2 boards without a
+display answer it with a zero word instead of echoing **[HW]**.
+
+`0xAE` is the same GET for a second chip the vendor's package names call
+`mledv`. The gen2 driver reads it on every connect, `(reply[2]<<8) |
+reply[1]`, zero for none **[JS]**. sharkfin reads it in the sweep only.
 
 ## Screens
 

@@ -35,6 +35,10 @@ pub const GET_REVISION: u8 = 0x80; // (reply[2] << 8) | reply[1]
 /// answers has a display; an echo means none.
 pub const GET_OLED_VERSION: u8 = 0xAD;
 
+/// Second-chip version the vendor's gen2 driver reads on every connect,
+/// `(reply[2] << 8) | reply[1]`, zero for none. Read in the sweep only.
+pub const GET_MLED_VERSION: u8 = 0xAE;
+
 /// Flash-chip erase, about 55 s. A write sitting in the read range.
 /// yc500 maps it to the same flag as 0x2C. Never send while sweeping,
 /// never on an unknown family.
