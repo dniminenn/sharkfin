@@ -26,7 +26,7 @@ v113_oledv106` (Hator HTK4100UA, yc3123). Bootloader: first 20 KB of the
 
 | | |
 |---|---|
-| Collection | usage page `0xFFFF`, usage `2`; the Akko ACR75 v2 (device 606) reports usage `1` on the same page **[HW]**, and the vendor's own driver filters for both **[JS]** |
+| Collection | usage page `0xFFFF`, usage `2`; the Akko ACR75 v2 (device 606) reports usage `1` on the same page **[HW]**, and the vendor's own driver filters for both **[JS]**. The Akko 5075B Plus-S in Mac mode (device 1033, `05ac:024f`) has no vendor collection and answers on its keyboard collection, usage page `0x01` usage `6` **[HW]** (issue #58); the vendor's driver carries the same exception **[JS]**. Feature reports on a keyboard collection pass Chromium's protected-report rule; input and output reports would not. |
 | Reports | 64 bytes, feature, report ID 0, both directions |
 | Link | wired USB, or the 2.4 GHz receiver through the relay below. Not every receiver relays: the Typhoon Ultimate TKL's (device 2045) does not **[HW]**. Bluetooth does not expose the collection **[HW]** |
 

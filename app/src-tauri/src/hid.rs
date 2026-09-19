@@ -30,8 +30,14 @@ pub struct DiscoveredDevice {
 pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
     api.device_list()
         .filter(|d| {
-            is_royuan_collection(d.usage_page(), d.usage())
-                && crate::registry::vendor_ids().contains(&d.vendor_id())
+            (is_royuan_collection(d.usage_page(), d.usage())
+                && crate::registry::vendor_ids().contains(&d.vendor_id()))
+                || is_keyboard_collection_board(
+                    d.vendor_id(),
+                    d.product_id(),
+                    d.usage_page(),
+                    d.usage(),
+                )
         })
         .map(|d| DiscoveredDevice {
             path: d.path().to_string_lossy().into_owned(),
@@ -46,6 +52,21 @@ pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
 
 fn is_royuan_collection(usage_page: u16, usage: u16) -> bool {
     usage_page == USAGE_PAGE && USAGES.contains(&usage)
+}
+
+/// Boards that answer on their keyboard collection instead of a vendor
+/// page. The Akko 5075B Plus-S in Mac mode enumerates as Apple 05ac:024f
+/// with no vendor collection; the vendor's driver carries the same
+/// exception, and issue #58 is the round trip. hidapi opens such a
+/// collection with zero access and feature reports still go through. A real
+/// Apple Aluminium Keyboard shares the id and will appear as a stranger.
+fn is_keyboard_collection_board(
+    vendor_id: u16,
+    product_id: u16,
+    usage_page: u16,
+    usage: u16,
+) -> bool {
+    (vendor_id, product_id, usage_page, usage) == (0x05AC, 0x024F, 0x01, 0x06)
 }
 
 /// Minimum gap between feature-report writes. Faster stalls the endpoint
@@ -253,6 +274,13 @@ impl Transport {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn only_the_listed_keyboard_collection_is_a_board() {
+        assert!(is_keyboard_collection_board(0x05AC, 0x024F, 0x01, 0x06));
+        assert!(!is_keyboard_collection_board(0x05AC, 0x024F, 0xFF00, 0x01));
+        assert!(!is_keyboard_collection_board(0x05AC, 0x0250, 0x01, 0x06));
+    }
 
     /// Only a stalled endpoint drops the handle and asks for a replug.
     /// Reporting every hidapi failure as one leaves a working board

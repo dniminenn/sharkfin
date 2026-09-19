@@ -7,6 +7,7 @@
 
 import init, * as core from "../../src-web/pkg/sharkfin_web";
 import { takePicked } from "./file-store";
+import { isSettingsCollection, requestFilters } from "./collections";
 
 export const BUILD: "app" | "browser" = "browser";
 
@@ -217,11 +218,6 @@ export interface DeviceSettings {
   sideLight: SledParam | null;
 }
 
-const USAGE_PAGE = 0xffff;
-// Almost every board reports usage 2 on the vendor page; the Akko ACR75 v2
-// reports 1, and the vendor's own driver looks for both.
-const USAGES = [0x0001, 0x0002];
-
 // Which vendor IDs to look for comes from the registry, not from a constant
 // here: most of these boards are ROYUAN's 0x3151, but a minority ship under
 // the brand's own ID and would otherwise never appear in the picker.
@@ -232,10 +228,6 @@ async function knownVendors(): Promise<number[]> {
   if (!vendorIds) vendorIds = Array.from(core.vendor_ids());
   return vendorIds;
 }
-
-const isVendorCollection = (d: HIDDevice, vendors: number[]) =>
-  vendors.includes(d.vendorId) &&
-  d.collections.some((c) => c.usagePage === USAGE_PAGE && USAGES.includes(c.usage ?? -1));
 
 let ready: Promise<void> | null = null;
 
@@ -258,16 +250,14 @@ export async function grantedDevices(): Promise<HIDDevice[]> {
   if (!hidAvailable()) return [];
   const vendors = await knownVendors();
   const all = await navigator.hid.getDevices();
-  return all.filter((d) => isVendorCollection(d, vendors));
+  return all.filter((d) => isSettingsCollection(d, vendors));
 }
 
 /** Shows the browser's device picker. Must run from a user gesture. */
 export async function requestDevice(): Promise<boolean> {
   const vendors = await knownVendors();
   const picked = await navigator.hid.requestDevice({
-    filters: vendors.flatMap((vendorId) =>
-      USAGES.map((usage) => ({ vendorId, usagePage: USAGE_PAGE, usage })),
-    ),
+    filters: requestFilters(vendors),
   });
   return picked.length > 0;
 }
