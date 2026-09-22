@@ -30,7 +30,7 @@ jobs:
             exit 0
           fi
           gh release create "$TAG" --repo "${{ github.repository }}" \
-            --draft --prerelease \
+            --draft \
             --title "sharkfin $TAG" \
             --notes-file .github/release-notes.md
 
@@ -84,7 +84,7 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: "sharkfin ${{ github.ref_name }}"
           releaseDraft: true
-          prerelease: true
+          prerelease: false
           args: ${{ matrix.args }}
 
   # The browser build is the same protocol core over WebHID. It ships as a
@@ -153,7 +153,7 @@ jobs:
         run: |
           gh release edit "${{ github.ref_name }}" \
             --repo "${{ github.repository }}" \
-            --draft=false --prerelease
+            --draft=false
 
   # Both AUR packages fetch from the published release: the source package the
   # tag tarball, the -bin package the .deb. So neither can be built before
