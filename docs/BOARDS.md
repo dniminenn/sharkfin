@@ -13,9 +13,9 @@ blank is a plain grid of key slots. All three work the same.
 | | count |
 |---|---:|
 | total | 1383 |
-| writable | 1145 |
+| writable | 1146 |
 | drawn | 354 |
-| drawn after confirmation | 819 |
+| drawn after confirmation | 820 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -683,7 +683,7 @@ blank is a plain grid of key slots. All three work the same.
 | KiiBoom64 | 1350 | 3151:4015 | yc500 | yes | yes |
 | KiiBoom81 | 954 | 3151:4015 | yc500 | yes | yes |
 | kiiboom81 | 2049 | 3151:4015 | yc500 | yes | yes |
-| KiiBoom81 V3 | 1768 | 3151:4015 | unknown |  |  |
+| KiiBoom81 V3 | 1768 | 3151:4015 | yc500 | yes | auto |
 | KiiBoom980 | 1315 | 3151:4015 | unknown |  |  |
 | kiiboom980 | 2029 | 3151:4015 | yc500 | yes | yes |
 | KiiP Y87 | 1192 | 3151:4015 | yc500 | yes | auto |

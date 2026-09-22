@@ -5265,24 +5265,24 @@
     "vendorId": 12625,
     "productId": 16405,
     "internalName": "yc3121_kiiboom81v3_soc",
-    "keyLayout": "Unknown",
+    "keyLayout": "Common81_DK82US",
     "lightLayout": "",
-    "sideLightLayout": "",
-    "profiles": 3,
+    "sideLightLayout": "xt",
+    "profiles": 4,
     "magnetic": false,
-    "family": "unknown",
+    "family": "yc500",
     "features": {
       "knob": [
         "AudioVolumeDown",
         "AudioVolumeMute",
         "AudioVolumeUp"
       ],
-      "debounce": false,
-      "sleep24": false,
-      "sleepBT": false,
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
       "magneticSwitches": false,
       "screen": false,
-      "sideLight": false
+      "sideLight": true
     },
     "screen": null
   },

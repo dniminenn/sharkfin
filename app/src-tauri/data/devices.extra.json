@@ -8318,5 +8318,29 @@
       "sideLight": true
     },
     "screen": null
+  },
+  {
+    "_override": true,
+    "_why": "Reported in issue #62. The vendor record has the family unknown and no picture.",
+    "_evidence": "Read sweep from the owner's board (0.8.6, browser). identify 0x8F returns 0x06e8 = 1768. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers four u16 (120, 120, 1680, 1680) at bytes 1..8 and auto-OS 0x97 answers. That fixes the family as yc500. Revision 0x80 answers 5.01. Setup wrote 0x13 slot 3 Caps to Esc: read back and felt, then undone, so the single-slot key write works and bulkKeymap is not needed. Common81_DK82US matched the keymap 84 of 84 and Setup confirmed 6 of 6 keys. Four profiles found and switched. Debounce 0x91 answers 10 at byte 2. Edge light 0x88 answers and the owner saw it, so sideLight is on; the layout token copies the Phantom81 V4 (3455). Both sleep timers answer, so both are on. 0xAD echoes, no display. The owner saw 8 paint the rainbow, the default.",
+    "_unknown": "No photo. Published firmware 1768_v104 exists but led_flags.py reads no renderer out of it. Knob keeps the vendor's three actions; nothing tested them.",
+    "id": 1768,
+    "keyLayout": "Common81_DK82US",
+    "sideLightLayout": "xt",
+    "profiles": 4,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
   }
 ]

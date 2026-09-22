@@ -51,9 +51,9 @@ By brand, with what each board has:
 
 **Beta, so back up first.**
 
-1145 of 1383 accept changes, 234 more once the board itself has said which
+1146 of 1383 accept changes, 233 more once the board itself has said which
 command set it speaks, 4 are read-only. 354 are drawn out of the box
-and 819 more after a one-time check against your board; the rest show a
+and 820 more after a one-time check against your board; the rest show a
 slot grid.
 
 The check exists because two boards can share one picture and still
