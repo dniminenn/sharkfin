@@ -1,5 +1,13 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.9.1
+
+**Pictures go to the slot you choose.** Boards whose display holds more
+than one picture, five on the Gamakay TK75 TMR, used to get every upload
+in the first slot while the display could be showing another. The Device
+tab now asks which slot, says which one it wrote, and the data bundle
+records whether the display accepted the picture.
+
 ## What changed in 0.9.0
 
 **Pick which switch is fitted.** Some boards take more than one switch
