@@ -1,5 +1,32 @@
 [
   {
+    "id": 69,
+    "name": "akko_3098b",
+    "displayName": "3098B",
+    "company": "Akko",
+    "vendor": "Akko",
+    "vendorId": 12625,
+    "productId": 16386,
+    "internalName": "akko_3098b",
+    "keyLayout": "Local98_Akko_3098B",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "bulkKeymap": true,
+    "ledFlagsSwapped": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 243,
     "name": "yzw_yz84_dm",
     "displayName": "YZ84",

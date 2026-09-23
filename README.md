@@ -18,7 +18,7 @@
 
 ![keymap editor](docs/keys-abyss.png)
 
-Remap keys, set the RGB, record macros and change device settings on 1383
+Remap keys, set the RGB, record macros and change device settings on 1384
 keyboards built on ROYUAN hardware: Attack Shark, Hator, ikbc, NOPPOO,
 Epomaker, Akko, MEETION, rongyuan and more.
 
@@ -51,8 +51,8 @@ By brand, with what each board has:
 
 **Beta, so back up first.**
 
-1146 of 1383 accept changes, 233 more once the board itself has said which
-command set it speaks, 4 are read-only. 354 are drawn out of the box
+1147 of 1384 accept changes, 233 more once the board itself has said which
+command set it speaks, 4 are read-only. 355 are drawn out of the box
 and 820 more after a one-time check against your board; the rest show a
 slot grid.
 
@@ -152,6 +152,11 @@ echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|05ac|0db0|145f|14a5|
 
 A rule from VIA, Vial or a vendor package may already cover it. The app
 shows this command when it finds a keyboard it cannot open.
+
+On macOS, a board that keeps its settings on its keyboard interface, such
+as the Akko 3098B, needs Input Monitoring permission for sharkfin or for
+the browser. The app asks for it and can open the settings pane; enable
+it, then quit and reopen sharkfin.
 
 ## If the keyboard stops responding
 

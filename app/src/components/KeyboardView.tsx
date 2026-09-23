@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -21,6 +22,20 @@ function pressKey(knobKeys: LayoutKey[]): LayoutKey | undefined {
 
 const ACCENT = new Set(["Escape", "Enter"]);
 const MOD_USAGES = new Set([42, 43, 57, 74, 75, 76, 78, 79, 80, 81, 82]);
+
+const KEYPAD_LEGENDS: Record<string, string> = {
+  NumLock: "Num",
+  NumpadDivide: "/",
+  NumpadMultiply: "*",
+  NumpadSubtract: "-",
+  NumpadAdd: "+",
+  NumpadEnter: "Enter",
+  NumpadDecimal: ".",
+};
+
+// Only the cap is abbreviated; descriptions retain the keypad identity.
+const capLegend = (label: string) =>
+  KEYPAD_LEGENDS[label] ?? label.replace(/^Numpad([0-9])$/, "$1");
 
 function role(k: LayoutKey): "accent" | "mod" | "base" {
   if (ACCENT.has(k.code)) return "accent";
@@ -181,15 +196,17 @@ export default function KeyboardView({
             const dead = k.matrixIndex === null;
             const entry = dead ? undefined : entries.get(k.matrixIndex!);
             const isMod = !dead && modified.has(k.matrixIndex!);
+            const label = labelFor(k, entry);
             return (
               <button
                 key={`${k.code}-${k.matrixIndex ?? `dead-${i}`}`}
                 disabled={dead}
                 onClick={() => onSelect(k)}
+                aria-label={describe(label)}
                 title={
                   dead
                     ? `${k.text ?? k.code}: not matched to this board`
-                    : `${k.text ?? k.code}: ${describe(labelFor(k, entry))}`
+                    : `${k.text ?? k.code}: ${describe(label)}`
                 }
                 data-selected={!dead && selected === k.matrixIndex}
                 data-flash={!dead && flash === k.matrixIndex}
@@ -202,7 +219,7 @@ export default function KeyboardView({
                   height: pct(k.h, layout.canvas.height),
                 }}
               >
-                {labelFor(k, entry)}
+                {capLegend(label)}
                 {isMod && (
                   <span className="absolute right-[8%] top-[8%] h-[0.45em] w-[0.45em] rounded-full bg-(--ring)" />
                 )}
@@ -225,7 +242,7 @@ export default function KeyboardView({
                   <input
                     autoFocus
                     value={editor.value}
-                    placeholder={editor.placeholder}
+                    placeholder={capLegend(editor.placeholder)}
                     onChange={(e) => editor.onChange(e.target.value)}
                     onKeyDown={editor.onKeyDown}
                     spellCheck={false}

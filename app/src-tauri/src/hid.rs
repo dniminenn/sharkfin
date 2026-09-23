@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! hidapi transport to the vendor collection, cable or 2.4 GHz relay.
 
@@ -6,7 +7,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
-use hidapi::{HidApi, HidDevice};
+use hidapi::{BusType, HidApi, HidDevice};
 use parking_lot::Mutex;
 
 use crate::protocol::{REPORT_LEN, USAGES, USAGE_PAGE};
@@ -37,6 +38,8 @@ pub fn discover(api: &HidApi) -> Vec<DiscoveredDevice> {
                     d.product_id(),
                     d.usage_page(),
                     d.usage(),
+                    d.interface_number(),
+                    d.bus_type(),
                 )
         })
         .map(|d| DiscoveredDevice {
@@ -60,13 +63,69 @@ fn is_royuan_collection(usage_page: u16, usage: u16) -> bool {
 /// exception, and issue #58 is the round trip. hidapi opens such a
 /// collection with zero access and feature reports still go through. A real
 /// Apple Aluminium Keyboard shares the id and will appear as a stranger.
+/// Karabiner uses the same id on a virtual bus; only USB devices qualify.
+/// The 3098B uses interface 0 at 3151:4002; interface 1 has keyboard and
+/// vendor input collections but no settings report.
 fn is_keyboard_collection_board(
     vendor_id: u16,
     product_id: u16,
     usage_page: u16,
     usage: u16,
+    interface: i32,
+    bus_type: BusType,
 ) -> bool {
-    (vendor_id, product_id, usage_page, usage) == (0x05AC, 0x024F, 0x01, 0x06)
+    matches!(bus_type, BusType::Usb)
+        && ((vendor_id, product_id, usage_page, usage) == (0x05AC, 0x024F, 0x01, 0x06)
+            || (vendor_id, product_id, usage_page, usage, interface)
+                == (0x3151, 0x4002, 0x01, 0x06, 0))
+}
+
+/// Report ID 0 must carry 64 feature bytes. HID global Push/Pop preserves
+/// the report shape; input and output items do not contribute to its size.
+fn has_settings_report(mut descriptor: &[u8]) -> bool {
+    let (mut size, mut count, mut id) = (0u32, 0u32, 0u32);
+    let mut stack = Vec::new();
+    let mut bits = 0u64;
+    while let Some((&tag, rest)) = descriptor.split_first() {
+        if tag == 0xfe {
+            let Some((&len, rest)) = rest.split_first() else {
+                return false;
+            };
+            let Some(rest) = rest.get(1 + usize::from(len)..) else {
+                return false;
+            };
+            descriptor = rest;
+            continue;
+        }
+        let len = [0, 1, 2, 4][usize::from(tag & 3)];
+        let Some(data) = rest.get(..len) else {
+            return false;
+        };
+        let mut value = [0u8; 4];
+        value[..len].copy_from_slice(data);
+        let value = u32::from_le_bytes(value);
+        descriptor = &rest[len..];
+        match tag & 0xfc {
+            0x74 => size = value,
+            0x94 => count = value,
+            0x84 => id = value,
+            0xa4 => stack.push((size, count, id)),
+            0xb4 => {
+                let Some(saved) = stack.pop() else {
+                    return false;
+                };
+                (size, count, id) = saved;
+            }
+            0xb0 if id == 0 => {
+                let Some(total) = bits.checked_add(u64::from(size) * u64::from(count)) else {
+                    return false;
+                };
+                bits = total;
+            }
+            _ => {}
+        }
+    }
+    bits == (REPORT_LEN * 8) as u64 && stack.is_empty()
 }
 
 /// Minimum gap between feature-report writes. Faster stalls the endpoint
@@ -120,7 +179,26 @@ pub fn wire_trace() -> String {
 impl Transport {
     pub fn open(api: &HidApi, path: &str) -> Result<Self, HidError> {
         let cpath = std::ffi::CString::new(path).expect("hid path with NUL");
+        // Keyboard-collection settings must not seize ordinary key input.
+        #[cfg(target_os = "macos")]
+        api.set_open_exclusive(false);
         let dev = api.open_path(&cpath).map_err(api_err)?;
+        // This USB id is shared by boards with different interface layouts.
+        // Keep their vendor interfaces, but reject the 3098B's input-only one
+        // before sending any commands to it.
+        if api.device_list().any(|d| {
+            d.path() == cpath.as_c_str() && (d.vendor_id(), d.product_id()) == (0x3151, 0x4002)
+        }) {
+            let mut descriptor = [0u8; 4096];
+            let n = dev
+                .get_report_descriptor(&mut descriptor)
+                .map_err(api_err)?;
+            if !has_settings_report(&descriptor[..n]) {
+                return Err(WireError::Transport(
+                    "interface has no 64-byte settings report".into(),
+                ));
+            }
+        }
         Ok(Self {
             dev,
             last_write: Mutex::new(None),
@@ -277,9 +355,94 @@ mod tests {
 
     #[test]
     fn only_the_listed_keyboard_collection_is_a_board() {
-        assert!(is_keyboard_collection_board(0x05AC, 0x024F, 0x01, 0x06));
-        assert!(!is_keyboard_collection_board(0x05AC, 0x024F, 0xFF00, 0x01));
-        assert!(!is_keyboard_collection_board(0x05AC, 0x0250, 0x01, 0x06));
+        assert!(is_keyboard_collection_board(
+            0x05AC,
+            0x024F,
+            0x01,
+            0x06,
+            0,
+            BusType::Usb
+        ));
+        assert!(!is_keyboard_collection_board(
+            0x05AC,
+            0x024F,
+            0xFF00,
+            0x01,
+            0,
+            BusType::Usb
+        ));
+        assert!(!is_keyboard_collection_board(
+            0x05AC,
+            0x0250,
+            0x01,
+            0x06,
+            0,
+            BusType::Usb
+        ));
+        assert!(is_keyboard_collection_board(
+            0x3151,
+            0x4002,
+            0x01,
+            0x06,
+            0,
+            BusType::Usb
+        ));
+        assert!(!is_keyboard_collection_board(
+            0x3151,
+            0x4002,
+            0x01,
+            0x06,
+            1,
+            BusType::Usb
+        ));
+        assert!(!is_keyboard_collection_board(
+            0x3151,
+            0x4003,
+            0x01,
+            0x06,
+            0,
+            BusType::Usb
+        ));
+    }
+
+    #[test]
+    fn karabiner_virtual_keyboard_is_not_a_usb_settings_interface() {
+        // Live enumeration: Karabiner shares 05ac:024f with the Akko Mac-mode ID.
+        assert!(!is_keyboard_collection_board(
+            0x05AC,
+            0x024F,
+            0x01,
+            0x06,
+            -1,
+            BusType::Unknown,
+        ));
+        assert!(is_keyboard_collection_board(
+            0x05AC,
+            0x024F,
+            0x01,
+            0x06,
+            0,
+            BusType::Usb,
+        ));
+    }
+
+    #[test]
+    fn akko_3098b_reports_select_the_settings_interface() {
+        let decode = |s: &str| {
+            (0..s.len())
+                .step_by(2)
+                .map(|i| u8::from_str_radix(&s[i..i + 2], 16).unwrap())
+                .collect::<Vec<_>>()
+        };
+        // 3098b.pcapng frames 24 and 30, also read from the attached board.
+        let keyboard = decode("05010906a101050719e029e715002501750195088102950175088101950575010508190129059102950175039101050719002aff0095057508150026ff00810005ff0903750895018102050c09001580257f95407508b102c0");
+        let input = decode("050c0901a101850319002a3c031500263c03950175108100c005010980a101850205011981298315002501950375018102950175058101c005010906a101850105071500250119002977957875018102c005010902a10185060901a1000509190129031500250195057501810295017503810105010930093109381581257f750895038106c0c006ffff0901a10185050901150026ff00750895038102c0");
+        assert!(has_settings_report(&keyboard));
+        assert!(!has_settings_report(&input));
+        assert!(!has_settings_report(&decode("850575089540b102")));
+        assert!(!has_settings_report(&decode("75089503b102")));
+        assert!(has_settings_report(&decode("75089540a4850595038102b4b102")));
+        assert!(!has_settings_report(&decode("75089540b10275")));
     }
 
     /// Only a stalled endpoint drops the handle and asks for a replug.

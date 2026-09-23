@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -31,6 +32,7 @@ import {
   scan,
   type ConnectedDevice,
   type DiscoveredUnknown,
+  type InputMonitoringStatus,
 } from "@/lib/backend";
 import ColorwayPicker from "@/components/ColorwayPicker";
 import SharkfinLogo from "@/components/SharkfinLogo";
@@ -79,6 +81,7 @@ export default function App() {
   const [device, setDevice] = useState<ConnectedDevice | null>(null);
   const [unknown, setUnknown] = useState<DiscoveredUnknown | null>(null);
   const [openFailed, setOpenFailed] = useState(false);
+  const [inputMonitoring, setInputMonitoring] = useState<InputMonitoringStatus | null>(null);
   const [stalled, setStalled] = useState(false);
   const [asleep, setAsleep] = useState(false);
   const [scanning, setScanning] = useState(true);
@@ -134,6 +137,7 @@ export default function App() {
       setDevice(r.connected);
       setUnknown(r.unknown[0] ?? null);
       setOpenFailed(r.openFailed);
+      setInputMonitoring(r.inputMonitoring);
       setStalled(r.stalled);
       setAsleep(r.keyboardOffline);
     } catch {
@@ -149,7 +153,11 @@ export default function App() {
   useEffect(() => {
     doScan();
     const t = setInterval(doScan, 3000);
-    return () => clearInterval(t);
+    window.addEventListener("focus", doScan);
+    return () => {
+      clearInterval(t);
+      window.removeEventListener("focus", doScan);
+    };
   }, [doScan]);
 
   return (
@@ -309,7 +317,7 @@ export default function App() {
           )}
         </div>
       </main>
-      {!device && openFailed && <PermissionNotice />}
+      {!device && openFailed && <PermissionNotice inputMonitoring={inputMonitoring} onRefresh={doScan} />}
       <Toaster position="bottom-right" />
     </div>
   );
