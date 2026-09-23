@@ -21,6 +21,12 @@ export interface DeviceFeatures {
   sideLight: boolean;
 }
 
+/** One switch model a board takes: the wire code and the vendor's name. */
+export interface SwitchType {
+  code: number;
+  name: string;
+}
+
 export interface TravelRange {
   min?: number | null;
   max?: number | null;
@@ -63,6 +69,9 @@ export interface DeviceSpec {
   } | null;
   /** The vendor lets the owner declare a different switch model. */
   switchReplaceable?: boolean;
+  /** The switch models the vendor's UI offers for this board, in its order.
+   * Empty on most boards; a dual-mode board lists mechanical. */
+  switchTypes?: SwitchType[];
   /** An owner's read sweep from this board is on file. */
   confirmed?: { issue: number; version: string } | null;
   /** Built from the board's own answers because the registry has no entry
@@ -163,6 +172,8 @@ export interface KeySwitch {
   mtTimeMs: number;
   /** Snap: the partner's slot, 255 for none. */
   snapPartner: number;
+  /** The switch model code; 0 where the board lists none. */
+  switchType: number;
 }
 
 export interface SwitchSettings {
@@ -353,8 +364,8 @@ export const setSwitchKey = (key: KeySwitch): Promise<void> =>
   withCore(() => core.set_switch_key(JSON.stringify(key)));
 export const setSwitchKeys = (keys: KeySwitch[]): Promise<void> =>
   withCore(() => core.set_switch_keys(JSON.stringify(keys)));
-export const setSwitchesAll = (key: KeySwitch, modes: number[]): Promise<void> =>
-  withCore(() => core.set_switches_all(JSON.stringify(key), new Uint8Array(modes)));
+export const setSwitchesAll = (key: KeySwitch, modes: number[], switchType?: number): Promise<void> =>
+  withCore(() => core.set_switches_all(JSON.stringify(key), new Uint8Array(modes), switchType));
 export const getSwitchPreset = (): Promise<number | null> =>
   withCore(async () => (await core.get_switch_preset()) ?? null);
 export const setSwitchPreset = (preset: number): Promise<void> =>

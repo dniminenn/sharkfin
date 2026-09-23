@@ -666,7 +666,7 @@ PLACEHOLDER_IDS = {9999}
 KNOWN_DEVICE_FIELDS = {
     "id", "name", "displayName", "company", "vendor", "vendorId", "productId",
     "internalName", "keyLayout", "lightLayout", "sideLightLayout", "profiles",
-    "magnetic", "family", "bulkKeymap", "features", "screen",
+    "magnetic", "family", "bulkKeymap", "features", "screen", "switchTypes",
 }
 
 
@@ -721,6 +721,66 @@ def travel_spec(other):
             "default": num(rng.get("default")),
         }
     return out or None
+
+
+SWITCH_ENUM_RE = re.compile(r'\w{1,2}\[\(?\w{1,2}\.([^\s=\[\]()"]+)\s*=\s*(\d+)\)?\]\s*=\s*"')
+
+
+def extract_switch_enum(bundle):
+    """Switch model name -> the byte the driver writes as magnetic sub-op
+    252. One numeric enum in the bundle, told from the others by holding
+    the mechanical entry; every `e[e.Name = n] = "Name"` within reach of
+    it belongs to the same object.
+    """
+    hits = list(SWITCH_ENUM_RE.finditer(bundle))
+    anchor = next((i for i, m in enumerate(hits) if m.group(1) == "机械轴"), None)
+    if anchor is None:
+        return {}
+    lo = anchor
+    while lo > 0 and hits[lo].start() - hits[lo - 1].end() < 40:
+        lo -= 1
+    hi = anchor
+    while hi + 1 < len(hits) and hits[hi + 1].start() - hits[hi].end() < 40:
+        hi += 1
+    return {m.group(1): int(m.group(2)) for m in hits[lo : hi + 1]}
+
+
+SWITCH_NAME_RE = re.compile(r'(?:"([^"]+)"|([^\s,{}:"]+)):"([^"]*)"')
+
+
+def extract_switch_names(dists):
+    """The driver's English for each switch model, out of its English
+    locale chunk. Empty when no build carries one; the Chinese name is
+    used then.
+    """
+    for dist in dists or ():
+        for f in sorted(dist.glob("*.js")):
+            text = f.read_text(encoding="utf-8", errors="replace")
+            if '语言:"Switch Language"' not in text or "机械轴" not in text:
+                continue
+            return {(q or bare): en for q, bare, en in SWITCH_NAME_RE.findall(text)}
+    return {}
+
+
+def switch_types_for(other, enum, names):
+    """The switch models the vendor's UI offers for this board, in its
+    order, each as the wire byte and an English name. A model the enum
+    does not know is dropped: the driver would write nothing for it
+    either.
+    """
+    raw = other.get("supportedSwitchTypes") if isinstance(other, dict) else None
+    if not isinstance(raw, list):
+        return []
+    shown = other.get("specialSwitchDisplayName")
+    if not isinstance(shown, dict):
+        shown = {}
+    out = []
+    for name in raw:
+        if not isinstance(name, str) or name not in enum:
+            continue
+        label = shown.get(name, name)
+        out.append({"code": enum[name], "name": names.get(label) or names.get(name) or label})
+    return out
 
 
 def load_extras(path):
@@ -809,6 +869,9 @@ def main():
     if args.dist_js:
         loaders = load_loader_maps(args.dist_js)
         bases = find_base_chunks(args.dist_js)
+    switch_enum = extract_switch_enum(bundle)
+    switch_names = extract_switch_names(args.dist_js or ())
+    listed = set()
 
     seen, devices, collisions = {}, [], []
     for d in keyboards:
@@ -831,6 +894,9 @@ def main():
             knob = [k for k in knob if isinstance(k, str)]
         screen = screen_spec(other.get("screen"))
         travel = travel_spec(other) if magnetic else None
+        switch_types = switch_types_for(other, switch_enum, switch_names) if magnetic else []
+        if switch_types:
+            listed.add(did)
         company = as_str(d.get("company"))
         devices.append(
             {
@@ -854,6 +920,7 @@ def main():
                 "screen": screen,
                 "travel": travel,
                 "switchReplaceable": bool(magnetic and other.get("isSwitchReplaceable")),
+                "switchTypes": switch_types,
                 "features": {
                     "knob": knob if isinstance(knob, list) else [],
                     "debounce": "deBounce" in other,
@@ -931,6 +998,10 @@ def main():
     print(f"devices: {len(devices)} keyboards written to {args.devices_out}")
     print(f"  raw keyboard entries: {len(keyboards)}, id collisions dropped: {sorted(set(collisions))}")
     print(f"  family (from loader-map deps in dist chunks): {fam_counts}")
+    print(
+        f"  switch models: enum of {len(switch_enum)}, English names "
+        f"{'found' if switch_names else 'missing'}, boards with a list: {len(listed)}"
+    )
     if not args.dist_js:
         print("  NOTE: no --dist-js given; every family is 'unknown'")
 

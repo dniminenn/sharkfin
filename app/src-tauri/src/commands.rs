@@ -1095,9 +1095,21 @@ fn hall_format(state: &tauri::State<AppState>) -> Result<hall::Format, String> {
     ops::hall_format(&open.spec, open.revision)
 }
 
+/// Whether the open board's registry entry lists switch models, and if
+/// `code` is one of them. Without a list the column is neither read nor
+/// written.
+fn switch_type_listed(state: &tauri::State<AppState>, code: Option<u8>) -> bool {
+    let inner = state.inner.lock();
+    inner.open.as_ref().is_some_and(|o| match code {
+        Some(c) => o.spec.lists_switch_type(c),
+        None => !o.spec.switch_types.is_empty(),
+    })
+}
+
 #[tauri::command(async)]
 pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSettings, String> {
     let f = hall_format(&state)?;
+    let cols = hall::read_columns(switch_type_listed(&state, None));
     with_open(&state, |t, _| {
         let column = |subop: u8| -> Result<Vec<u8>, HidError> {
             let mut out = Vec::with_capacity(256);
@@ -1111,7 +1123,7 @@ pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSetting
             Ok(out)
         };
         let mut columns = Vec::new();
-        for &subop in hall::READ_COLUMNS.iter() {
+        for &subop in cols.iter() {
             columns.push((subop, f.decode(subop, &column(subop)?)));
         }
         // Sub-op 10: four blocks of one byte a slot, two pages a block.
@@ -1177,10 +1189,14 @@ pub fn set_switch_keys(
     {
         return Err("snap partner out of range".into());
     }
+    let with_type: Vec<bool> = keys
+        .iter()
+        .map(|k| switch_type_listed(&state, Some(k.switch_type)))
+        .collect();
     flash_cooldown(&state);
     let out = with_writable(&state, |t, _| {
-        for key in &keys {
-            let cols = hall::columns_for(key.kind);
+        for (key, &with_type) in keys.iter().zip(&with_type) {
+            let cols = hall::columns_for(key.kind, with_type);
             let n = cols.len();
             for (i, &subop) in cols.iter().enumerate() {
                 let last = i + 1 == n;
@@ -1203,21 +1219,32 @@ pub fn set_switch_keys(
 
 /// The same plain settings on every key. Six columns in bulk pages, the
 /// final page of the final column flagged. Keys carrying an advanced kind
-/// keep it: the mode column is written per slot from what was read.
+/// keep it: the mode column is written per slot from what was read. A
+/// switch model, when given, goes on every key as a seventh column.
 #[tauri::command(async)]
 pub fn set_switches_all(
     state: tauri::State<AppState>,
     key: hall::KeySwitch,
     modes: Vec<u8>,
+    switch_type: Option<u8>,
 ) -> Result<(), String> {
     let f = require_hall_writes(&state, None)?;
+    if switch_type.is_some_and(|c| !switch_type_listed(&state, Some(c))) {
+        return Err("switch model not offered for this board".into());
+    }
+    let mut cols = hall::WRITE_COLUMNS.to_vec();
+    if switch_type.is_some() {
+        cols.push(hall::SWITCH_TYPE);
+    }
     flash_cooldown(&state);
     let out = with_writable(&state, |t, _| {
-        let n = hall::WRITE_COLUMNS.len();
-        for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
+        let n = cols.len();
+        for (i, &subop) in cols.iter().enumerate() {
             let values: Vec<u16> = (0..f.slots())
                 .map(|s| {
-                    if subop == hall::MODE {
+                    if subop == hall::SWITCH_TYPE {
+                        u16::from(switch_type.unwrap_or(0))
+                    } else if subop == hall::MODE {
                         let kind = modes.get(s).copied().unwrap_or(0) & 0x7F;
                         let rt = if key.rapid_trigger {
                             hall::MODE_RAPID_TRIGGER

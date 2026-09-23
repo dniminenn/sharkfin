@@ -1230,7 +1230,7 @@ pub async fn get_switches() -> Result<JsValue, JsValue> {
         Ok(out)
     }
     let mut columns = Vec::new();
-    for &subop in hall::READ_COLUMNS.iter() {
+    for &subop in hall::read_columns(!spec.switch_types.is_empty()).iter() {
         columns.push((subop, f.decode(subop, &column(&t, f, subop).await?)));
     }
     let mut dks_all = Vec::with_capacity(4 * f.slots());
@@ -1291,7 +1291,7 @@ pub async fn set_switch_keys(keys_json: String) -> Result<(), JsValue> {
         return Err("snap partner out of range".into());
     }
     for key in &keys {
-        let cols = hall::columns_for(key.kind);
+        let cols = hall::columns_for(key.kind, spec.lists_switch_type(key.switch_type));
         let n = cols.len();
         for (i, &subop) in cols.iter().enumerate() {
             let last = i + 1 == n;
@@ -1309,17 +1309,30 @@ pub async fn set_switch_keys(keys_json: String) -> Result<(), JsValue> {
 }
 
 #[wasm_bindgen]
-pub async fn set_switches_all(key_json: String, modes: Vec<u8>) -> Result<(), JsValue> {
+pub async fn set_switches_all(
+    key_json: String,
+    modes: Vec<u8>,
+    switch_type: Option<u8>,
+) -> Result<(), JsValue> {
     let key: hall::KeySwitch = serde_json::from_str(&key_json).map_err(|e| e.to_string())?;
     flash_cooldown().await;
     let _busy = acquire().await;
     let (t, spec) = get_open(true)?;
     let f = require_hall_writes(&spec, None)?;
-    let n = hall::WRITE_COLUMNS.len();
-    for (i, &subop) in hall::WRITE_COLUMNS.iter().enumerate() {
+    if switch_type.is_some_and(|c| !spec.lists_switch_type(c)) {
+        return Err("switch model not offered for this board".into());
+    }
+    let mut cols = hall::WRITE_COLUMNS.to_vec();
+    if switch_type.is_some() {
+        cols.push(hall::SWITCH_TYPE);
+    }
+    let n = cols.len();
+    for (i, &subop) in cols.iter().enumerate() {
         let values: Vec<u16> = (0..f.slots())
             .map(|s| {
-                if subop == hall::MODE {
+                if subop == hall::SWITCH_TYPE {
+                    u16::from(switch_type.unwrap_or(0))
+                } else if subop == hall::MODE {
                     let kind = modes.get(s).copied().unwrap_or(0) & 0x7F;
                     let rt = if key.rapid_trigger {
                         hall::MODE_RAPID_TRIGGER

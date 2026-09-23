@@ -186,6 +186,7 @@ describe("the switch test", () => {
     dksActions: [0, 0, 0, 0],
     mtTimeMs: 300,
     snapPartner: 255,
+    switchType: 0,
   });
 
   it("feels Space when it is a plain key, else the first named plain key", () => {

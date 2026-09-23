@@ -18,6 +18,11 @@ pub const MODE: u8 = 7;
 pub const DKS_ACTIONS: u8 = 8;
 pub const SNAP_PARTNER: u8 = 9;
 pub const DKS_ACTIONS_ALL: u8 = 10;
+/// The switch model fitted, the vendor driver's enum (0 Outemu, 7
+/// mechanical, 56 and 57 the TK75 TMR's magnetic pair). A byte column;
+/// which codes a board takes is `DeviceSpec::switch_types`. The images
+/// read apply 0..5 and treat the rest as 0.
+pub const SWITCH_TYPE: u8 = 252;
 
 /// Bit 7 of the mode byte: rapid trigger on. Bits 0..6 pick the key's
 /// kind.
@@ -242,6 +247,9 @@ pub struct KeySwitch {
     /// Snap: the partner's slot, 255 for none.
     #[serde(default = "no_partner")]
     pub snap_partner: u8,
+    /// Sub-op 252, the switch model code; 0 where the board lists none.
+    #[serde(default)]
+    pub switch_type: u8,
 }
 
 fn no_partner() -> u8 {
@@ -270,6 +278,7 @@ impl KeySwitch {
             DKS_START => f.to_wire(subop, self.dks_start),
             MT_TIME => (self.mt_time_ms / 10).min(255),
             SNAP_PARTNER => u16::from(self.snap_partner),
+            SWITCH_TYPE => u16::from(self.switch_type),
             _ => 0,
         }
     }
@@ -322,18 +331,32 @@ pub fn yc500_default(slot: u8) -> KeySwitch {
         dks_actions: [0; 4],
         mt_time_ms: 300,
         snap_partner: 0xFF,
+        switch_type: 0,
     }
 }
 
 /// The columns one key's write touches: the plain six, then what its
-/// kind needs.
-pub fn columns_for(kind: u8) -> Vec<u8> {
+/// kind needs, then the switch model when the board takes one.
+pub fn columns_for(kind: u8, switch_type: bool) -> Vec<u8> {
     let mut cols = WRITE_COLUMNS.to_vec();
     match kind {
         KIND_DKS => cols.extend([DKS_START, DKS_ACTIONS]),
         KIND_MOD_TAP => cols.push(MT_TIME),
         KIND_SNAP => cols.push(SNAP_PARTNER),
         _ => {}
+    }
+    if switch_type {
+        cols.push(SWITCH_TYPE);
+    }
+    cols
+}
+
+/// The columns a read fetches: the nine every board has, and the switch
+/// model where the registry lists models for the board.
+pub fn read_columns(switch_type: bool) -> Vec<u8> {
+    let mut cols = READ_COLUMNS.to_vec();
+    if switch_type {
+        cols.push(SWITCH_TYPE);
     }
     cols
 }
@@ -396,6 +419,7 @@ pub fn assemble(f: Format, columns: &[(u8, Vec<u16>)], dks_all: &[u8]) -> Switch
                 dks_actions: actions,
                 mt_time_ms: col(MT_TIME, s) * 10,
                 snap_partner: col(SNAP_PARTNER, s) as u8,
+                switch_type: col(SWITCH_TYPE, s) as u8,
             }
         })
         .collect();
@@ -424,6 +448,7 @@ mod tests {
             dks_actions: [0; 4],
             mt_time_ms: 300,
             snap_partner: 0xFF,
+            switch_type: 7,
         }
     }
 
@@ -490,6 +515,12 @@ mod tests {
         assert_eq!(k.wire(g, DKS_START), 70);
         assert_eq!(k.wire(g, MT_TIME), 30);
         assert_eq!(k.wire(g, SNAP_PARTNER), 0xFF);
+        assert_eq!(k.wire(g, SWITCH_TYPE), 7);
+        let p = g.set_one(SWITCH_TYPE, 3, true, 57).unwrap();
+        assert_eq!(
+            (&p[..5], p[8], p[9]),
+            (&[SET, SWITCH_TYPE, 0, 3, 1][..], 57, 0)
+        );
         assert_eq!(g.decode(TRAVEL, &[0u8; 256]).len(), 128);
     }
 
@@ -525,16 +556,24 @@ mod tests {
         assert_eq!(p[16], 30);
         assert_eq!(p[25], 33);
         assert_eq!(global_packet(&k, true)[5..7], [1, 0]);
-        assert_eq!(columns_for(KIND_DKS).len(), 8);
-        assert_eq!(columns_for(KIND_NORMAL).len(), 6);
+        assert_eq!(columns_for(KIND_DKS, false).len(), 8);
+        assert_eq!(columns_for(KIND_NORMAL, false).len(), 6);
+        assert_eq!(columns_for(KIND_NORMAL, true).last(), Some(&SWITCH_TYPE));
+        assert_eq!(read_columns(false).len(), 9);
+        assert_eq!(read_columns(true).last(), Some(&SWITCH_TYPE));
     }
 
     #[test]
     fn assemble_reads_dks_blocks_by_format() {
         let mut dks = vec![0u8; 512];
         dks[128 * 2 + 5] = 0x55;
-        let s = assemble(Format::Gen2, &[(MODE, vec![0x82; 128])], &dks);
+        let s = assemble(
+            Format::Gen2,
+            &[(MODE, vec![0x82; 128]), (SWITCH_TYPE, vec![7; 128])],
+            &dks,
+        );
         assert_eq!(s.keys[5].dks_actions, [0, 0, 0x55, 0]);
+        assert_eq!(s.keys[5].switch_type, 7);
         assert_eq!(s.keys[5].kind, KIND_DKS);
         assert!(s.keys[5].rapid_trigger);
         let mut dks = vec![0u8; 504];

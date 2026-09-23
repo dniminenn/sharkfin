@@ -539,7 +539,7 @@ Settings are columns, one per sub-op, indexed like the keymap.
 | 9 | snap partner slot | u8 | `0xd97` |
 | 10 | every key's dynamic keystroke actions, read only, 8 pages | 4 x 128 u8 | 4 x 126 u8, two pages a block |
 | 251 | top dead zone, 3708 only | u8 | absent |
-| 252 | switch type, values 0..5, anything else stored as 0 | u8 | absent |
+| 252 | switch model, the driver's enum (0 Outemu, 7 mechanical, 56 and 57 the TK75 TMR's magnetic pair); the images read apply 0..5 and treat the rest as 0 | u8 | absent |
 | 254 | live press travel, read only | u16 | absent |
 
 | kind | meaning |

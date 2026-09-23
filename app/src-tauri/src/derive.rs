@@ -162,6 +162,7 @@ pub fn derive_spec(
         screen: None,
         travel: None,
         switch_replaceable: false,
+        switch_types: Vec::new(),
         features: DeviceFeatures {
             knob: knob(sweep.keymap),
             debounce: false,

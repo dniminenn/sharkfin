@@ -64,6 +64,10 @@ pub struct DeviceSpec {
     pub travel: Option<TravelSpec>,
     #[serde(default)]
     pub switch_replaceable: bool,
+    /// The switch models the vendor's UI offers for this board, in its
+    /// order. Empty on most boards; a dual-mode board lists mechanical.
+    #[serde(default)]
+    pub switch_types: Vec<SwitchType>,
     pub features: DeviceFeatures,
     /// Built from the board's own answers (`derive.rs`). Never true for a
     /// shipped entry. The app asks before the first write.
@@ -136,6 +140,15 @@ pub struct LightLayoutSpec {
     pub rgb: bool,
     pub brightness_max: u8,
     pub effects: Vec<LightEffectSpec>,
+}
+
+/// One switch model: the byte magnetic sub-op 252 takes and the vendor's
+/// English for it.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SwitchType {
+    pub code: u8,
+    pub name: String,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
@@ -229,6 +242,13 @@ impl DeviceSpec {
                 "yc500" => self.internal_name.starts_with("yc3121_"),
                 _ => false,
             }
+    }
+
+    /// Whether `code` is a switch model the vendor offers for this board.
+    /// The column is written only with a listed code: an unlisted one is
+    /// what the firmware reports before any is set, and goes back as is.
+    pub fn lists_switch_type(&self, code: u8) -> bool {
+        self.switch_types.iter().any(|t| t.code == code)
     }
 
     /// A yc500 magnetic board below 2.00 keeps one board-wide record

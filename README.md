@@ -65,8 +65,9 @@ board sharing it agrees.
 
 Boards with magnetic switches get a Switches page: actuation and release
 point, rapid trigger and its sensitivities, dead zone, per key or for the
-whole board, and the per-key kinds: dynamic keystroke, mod-tap, toggle and
-snap, with the keys they act on. Written only on boards whose own firmware
+whole board, the per-key kinds: dynamic keystroke, mod-tap, toggle and
+snap, with the keys they act on, and on boards that take more than one
+switch model, which one is fitted. Written only on boards whose own firmware
 has been read for it, which is the ry5088 lineage and the yc3121 magnetic
 lineage from firmware 2.00 today, and shown read-only elsewhere. Older
 yc3121 magnetic firmware takes settings but cannot report them; the page

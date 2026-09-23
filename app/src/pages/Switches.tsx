@@ -40,6 +40,7 @@ import {
   type ConnectedDevice,
   type KeySwitch,
   type SwitchSettings,
+  type SwitchType,
   type TravelRange,
 } from "@/lib/backend";
 
@@ -100,6 +101,7 @@ export const yc500Default = (slot: number): KeySwitch => ({
   dksActions: [0, 0, 0, 0],
   mtTimeMs: 300,
   snapPartner: NO_PARTNER,
+  switchType: 0,
 });
 
 const range = (
@@ -191,6 +193,48 @@ function KeySelect({
               </SelectItem>
             ))}
           </SelectGroup>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
+/** The switch model fitted, from the list the vendor offers for the board.
+ *  A code the list lacks is what the firmware reports before any is set;
+ *  it stays selectable as itself and is written back unchanged. */
+function ModelSelect({
+  value,
+  types,
+  onChange,
+  disabled,
+  keep,
+}: {
+  value: number | null;
+  types: SwitchType[];
+  onChange: (code: number | null) => void;
+  disabled?: boolean;
+  /** Offer leaving each key as it is; `null` selects it. */
+  keep?: boolean;
+}) {
+  const listed = value !== null && types.some((t) => t.code === value);
+  return (
+    <Select
+      value={value === null ? "keep" : String(value)}
+      onValueChange={(v) => onChange(v === "keep" ? null : Number(v))}
+      disabled={disabled}
+    >
+      <SelectTrigger className="w-48">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {keep && <SelectItem value="keep">{t("as each key is")}</SelectItem>}
+        {value !== null && !listed && (
+          <SelectItem value={String(value)}>{t("Unknown model {n}", { n: value })}</SelectItem>
+        )}
+        {types.map((s) => (
+          <SelectItem key={s.code} value={String(s.code)}>
+            {s.name}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>
@@ -364,6 +408,7 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
   const [layers, setLayers] = useState<number[][] | null>(null);
   const [selected, setSelected] = useState<LayoutKey | null>(null);
   const [draftAll, setDraftAll] = useState<KeySwitch | null>(null);
+  const [allModel, setAllModel] = useState<number | null>(null);
   const [draftKey, setDraftKey] = useState<KeySwitch | null>(null);
   const [draftEntries, setDraftEntries] = useState<number[][]>([]);
   const [busy, setBusy] = useState(false);
@@ -417,6 +462,7 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
     load();
     setSelected(null);
     setDraftKey(null);
+    setAllModel(null);
   }, [load]);
 
   useEffect(() => {
@@ -456,6 +502,7 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
   }
 
   const writable = canWriteSwitches(device);
+  const models = device.spec.switchTypes ?? [];
   const unit = settings.unitMm;
   const ranges = rangesFor(device, unit);
   const bySlot = new Map(settings.keys.map((k) => [k.slot, k]));
@@ -496,6 +543,7 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
         await setSwitchesAll(
           draftAll,
           settings.keys.map((k) => k.kind),
+          allModel ?? undefined,
         );
         await load();
       }
@@ -656,6 +704,12 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
         {draftAll && (
           <Section title={t("All keys")} hint={t("Written to every key at once. Keys with a kind keep it.")}>
             <div className="space-y-4">
+              {models.length > 0 && (
+                <div className="flex items-center justify-between text-sm">
+                  <Label>{t("Switch")}</Label>
+                  <ModelSelect value={allModel} types={models} onChange={setAllModel} disabled={!writable} keep />
+                </div>
+              )}
               <PlainRows value={draftAll} ranges={ranges} unit={unit} onChange={setDraftAll} />
               <Button size="sm" onClick={applyAll} disabled={!writable || busy}>
                 {busy ? t("Writing. Leave the keyboard plugged in.") : t("Apply to all keys")}
@@ -666,6 +720,20 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
         {draftKey && selected && (
           <Section title={<span className="font-mono">{selected.text ?? selected.code}</span>}>
             <div className="space-y-4">
+              {models.length > 0 && (
+                <div className="flex items-center justify-between text-sm">
+                  <div>
+                    <Label>{t("Switch")}</Label>
+                    <p className="text-xs text-muted-foreground">{t("What is fitted in this socket.")}</p>
+                  </div>
+                  <ModelSelect
+                    value={draftKey.switchType}
+                    types={models}
+                    onChange={(c) => setDraftKey({ ...draftKey, switchType: c ?? draftKey.switchType })}
+                    disabled={!writable}
+                  />
+                </div>
+              )}
               <div className="flex items-center justify-between text-sm">
                 <Label>{t("Kind")}</Label>
                 <Select
