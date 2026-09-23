@@ -1,5 +1,14 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.9.0
+
+**Pick which switch is fitted.** Some boards take more than one switch
+model, and a few take mechanical switches in the same sockets as magnetic
+ones. The board has to be told what is in each socket, or the key does not
+read right. The Switches tab now offers the models a board takes, per key
+or for every key at once, on the 446 boards that list any. The Gamakay
+TK75 TMR from issue #63 is one, with mechanical among its choices.
+
 ## What changed in 0.8.6
 
 **The firmware version reads right on newer boards.** Many boards answered
