@@ -3,6 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PageHeader, Section } from "@/components/Page";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -149,6 +156,11 @@ export default function DevicePage({
   // and handed over as plain RGB. Everything about the display's byte order
   // lives in the backend, where the pacing is.
   const [drawing, setDrawing] = useState(false);
+  // Which of the display's picture slots the next upload goes to. The
+  // keyboard picks which slot it shows from its own keys, so a picture
+  // sent to the wrong one looks like nothing happened.
+  const [slot, setSlot] = useState(0);
+  const slots = Math.max(1, device?.spec.screen?.layers ?? 1);
   const drawImage = async (file: File) => {
     const screen = device?.spec.screen;
     if (!screen) return;
@@ -172,8 +184,12 @@ export default function DevicePage({
         rgb[j++] = data[i + 1];
         rgb[j++] = data[i + 2];
       }
-      await writeScreenImage(rgb);
-      toast.success(t("Picture sent to the display."));
+      await writeScreenImage(rgb, slot);
+      toast.success(
+        slots > 1
+          ? t("Picture sent to slot {n} of {m}.", { n: slot + 1, m: slots })
+          : t("Picture sent to the display."),
+      );
     } catch (e) {
       toast.error(t("Could not draw the picture: {e}", { e: String(e) }));
     } finally {
@@ -354,6 +370,23 @@ export default function DevicePage({
             </div>
             {canDraw(device.spec) && (
               <div className="space-y-2 pt-2">
+                {slots > 1 && (
+                  <div className="flex items-center justify-between text-sm">
+                    <Label>{t("Slot")}</Label>
+                    <Select value={String(slot)} onValueChange={(v) => setSlot(Number(v))} disabled={drawing}>
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: slots }, (_, i) => (
+                          <SelectItem key={i} value={String(i)}>
+                            {t("{n} of {m}", { n: i + 1, m: slots })}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 <input
                   type="file"
                   accept="image/*"
@@ -371,7 +404,9 @@ export default function DevicePage({
                     ? t("Connect the keyboard by cable to send a picture.")
                     : drawing
                       ? t("Writing. Leave the keyboard plugged in.")
-                      : t("The picture is scaled to fit and replaces what is on the display.")}
+                      : slots > 1
+                        ? t("The picture is scaled to fit and goes to the chosen slot. The keyboard switches between slots from its own keys.")
+                        : t("The picture is scaled to fit and replaces what is on the display.")}
                 </p>
               </div>
             )}

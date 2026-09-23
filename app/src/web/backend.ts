@@ -419,9 +419,9 @@ export const setClock = (d: Date): Promise<void> =>
       d.getSeconds(),
     ),
   );
-/** Draw one still frame. `rgb` is w*h*3 bytes in row order. */
-export const writeScreenImage = (rgb: number[]): Promise<void> =>
-  withCore(() => core.write_screen_image(new Uint8Array(rgb)));
+/** Draw one still frame into a display slot, 0-based. `rgb` is w*h*3 bytes in row order. */
+export const writeScreenImage = (rgb: number[], slot: number): Promise<void> =>
+  withCore(() => core.write_screen_image(new Uint8Array(rgb), slot));
 export const setProfile = (profile: number) => withCore(() => core.set_profile(profile));
 export const readKeymap = (profile: number): Promise<number[]> =>
   withCore(async () => Array.from(await core.read_keymap(profile)));

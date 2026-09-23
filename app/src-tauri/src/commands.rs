@@ -38,6 +38,9 @@ struct Inner {
     /// Slot the check may write switch columns to during its felt test.
     /// Nothing else opens. Cleared with the handle.
     switch_trial: Option<u8>,
+    /// The last picture upload, for the bundle. Keyed by device id, so it
+    /// outlives the handle and never describes another board.
+    screen_write: Option<ops::ScreenOutcome>,
 }
 
 struct OpenDevice {
@@ -125,6 +128,7 @@ impl Default for AppState {
                 led_swap: None,
                 owner: OwnerRecord::default(),
                 switch_trial: None,
+                screen_write: None,
             }),
         }
     }
@@ -986,23 +990,33 @@ const SCREEN_PAGE_GAP: Duration = Duration::from_millis(5);
 const SCREEN_READY_TRIES: u32 = 10;
 const SCREEN_READY_GAP: Duration = Duration::from_millis(100);
 
-/// One still frame. `rgb` is `w * h * 3` row-major; column order and pixel
-/// format are applied here. Flash, so the cooldown applies. Poll the announce
-/// until ready; abandon the pages if it never is, so a half-written frame
-/// does not go out.
+/// One still frame into one of the display's slots. `rgb` is `w * h * 3`
+/// row-major; column order and pixel format are applied here. Flash, so
+/// the cooldown applies. Poll the announce until ready; abandon the pages
+/// if it never is, so a half-written frame does not go out. The outcome
+/// is kept for the bundle.
 #[tauri::command(async)]
-pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result<(), String> {
+pub fn write_screen_image(
+    state: tauri::State<AppState>,
+    rgb: Vec<u8>,
+    slot: u8,
+) -> Result<(), String> {
     require_cable(&state)?;
-    let (screen, rules) = {
+    let (device, screen, rules) = {
         let inner = state.inner.lock();
         let spec = &inner.open.as_ref().ok_or("no keyboard connected")?.spec;
         (
+            spec.id,
             spec.screen
                 .clone()
                 .ok_or("this board has no display sharkfin knows the size of")?,
             spec.screen_draw(),
         )
     };
+    let slots = ops::screen_slots(&screen);
+    if slot >= slots {
+        return Err(format!("this display has {slots} picture slots"));
+    }
     // Only boards whose own firmware parses the frame: the announce handler
     // stores the geometry and the page handler checks every page against it.
     // Most gen2 boards do not do that. Their handler builds a short message,
@@ -1052,10 +1066,24 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
     }
 
     flash_cooldown(&state);
+    let mut outcome = ops::ScreenOutcome {
+        device,
+        slot,
+        slots,
+        accepted: false,
+        pages: 0,
+    };
     let out = with_writable(&state, |t, _| {
         let bbox = (0, 0, screen.w, screen.h);
-        let pkt =
-            crate::protocol::screen_announce_packet(announce, 0, 1, 0, data.len() as u32, bbox, 0);
+        let pkt = crate::protocol::screen_announce_packet(
+            announce,
+            slot,
+            1,
+            0,
+            data.len() as u32,
+            bbox,
+            0,
+        );
         let mut ready = false;
         for _ in 0..SCREEN_READY_TRIES {
             // The announce is a write dressed as a read: it answers, but
@@ -1077,13 +1105,16 @@ pub fn write_screen_image(state: tauri::State<AppState>, rgb: Vec<u8>) -> Result
                 "the display did not accept the picture".into(),
             ));
         }
-        for page in crate::protocol::screen_page_packets(page_op, 0, 1, 0, &data) {
+        outcome.accepted = true;
+        for page in crate::protocol::screen_page_packets(page_op, slot, 1, 0, &data) {
             t.send(&page)?;
+            outcome.pages += 1;
             std::thread::sleep(SCREEN_PAGE_GAP);
         }
         std::thread::sleep(FLASH_SETTLE);
         Ok(())
     });
+    state.inner.lock().screen_write = Some(outcome);
     // Spaced from the end of the batch, not from before it began.
     stamp_write(&state);
     out
@@ -1611,12 +1642,16 @@ pub fn contribution_bundle(
     use std::fmt::Write;
     let open = {
         let inner = state.inner.lock();
-        inner
-            .open
-            .as_ref()
-            .map(|o| (o.spec.clone(), o.usage, inner.led_swap))
+        inner.open.as_ref().map(|o| {
+            (
+                o.spec.clone(),
+                o.usage,
+                inner.led_swap,
+                inner.screen_write.clone(),
+            )
+        })
     };
-    let Some((spec, usage, led_swap)) = open else {
+    let Some((spec, usage, led_swap, screen_write)) = open else {
         return unregistered_bundle(&state, path.ok_or("no device connected")?);
     };
     with_open(&state, |t, _| {
@@ -1654,6 +1689,9 @@ pub fn contribution_bundle(
                 "flags  : {}",
                 registry::led_flags_note(&spec, led_swap)
             );
+        }
+        if let Some(o) = screen_write.filter(|o| o.device == spec.id) {
+            let _ = writeln!(out, "screen : {}", o.note());
         }
         // A stall has to surface: swallowing it hands the owner a bundle that
         // simply stops, with no marker that it was cut short, and leaves the

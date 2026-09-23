@@ -803,6 +803,10 @@ the announce handler at `0x101460C`, type 4 the page handler at
 `[6]` page length, data at `[8]`, 56 bytes, streamed through ten
 4096-byte banks.
 
+For a still picture the vendor's uploader puts the slot the user chose
+in `[1]`, zero-based over the record's `layer` count, with `[2]` set to
+1; the keyboard's own keys pick which slot is shown. **[JS]**
+
 The keyboard copies only twelve bytes for the announce, so the chip never
 sees `[16]`,`[17]` and the length is a u16. The box is read from its low
 bytes and turned into a size by subtraction, so a panel over 255 px in

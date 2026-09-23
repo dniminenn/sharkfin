@@ -11,7 +11,7 @@ use crate::protocol::{
     cmd, family_cmds, gen2, hall, Checksum, FamilyCmds, KbOptions, LedParam, SledParam, SleepTimes,
     REPORT_LEN,
 };
-use crate::registry::DeviceSpec;
+use crate::registry::{DeviceSpec, ScreenSpec};
 use crate::session::DeviceSettings;
 use crate::wire::{Wire, WireError};
 
@@ -29,6 +29,43 @@ pub fn check_macro_slot(slot: u8) -> Result<(), String> {
         ));
     }
     Ok(())
+}
+
+/// The picture slots a display has: the vendor record's `layer` count,
+/// at least one.
+pub fn screen_slots(screen: &ScreenSpec) -> u8 {
+    screen.layers.max(1)
+}
+
+/// What the last picture upload did. The bundle cannot say whether a
+/// picture showed, but it can say whether the display took it, which is
+/// the question a report from an unconfirmed lineage has to answer.
+#[derive(Clone, Debug)]
+pub struct ScreenOutcome {
+    pub device: u32,
+    pub slot: u8,
+    pub slots: u8,
+    pub accepted: bool,
+    pub pages: usize,
+}
+
+impl ScreenOutcome {
+    pub fn note(&self) -> String {
+        if self.accepted {
+            format!(
+                "slot {} of {} accepted, {} pages sent",
+                self.slot + 1,
+                self.slots,
+                self.pages
+            )
+        } else {
+            format!(
+                "slot {} of {}: the display did not answer the announce",
+                self.slot + 1,
+                self.slots
+            )
+        }
+    }
 }
 
 /// Whether the board addresses profiles as `profile * 4 + sublayer`.

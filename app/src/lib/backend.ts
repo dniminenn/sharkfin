@@ -286,9 +286,9 @@ export const setClock = (d: Date) =>
     minute: d.getMinutes(),
     second: d.getSeconds(),
   });
-/** Draw one still frame. `rgb` is w*h*3 bytes in row order. */
-export const writeScreenImage = (rgb: number[]) =>
-  invoke<void>("write_screen_image", { rgb });
+/** Draw one still frame into a display slot, 0-based. `rgb` is w*h*3 bytes in row order. */
+export const writeScreenImage = (rgb: number[], slot: number) =>
+  invoke<void>("write_screen_image", { rgb, slot });
 export const setProfile = (profile: number) =>
   invoke<void>("set_profile", { profile });
 export const readKeymap = (profile: number) =>

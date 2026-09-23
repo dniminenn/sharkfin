@@ -279,6 +279,8 @@ struct AppState {
     owner: OwnerRecord,
     /// Slot the check may write switch columns to. Mirrors commands.rs.
     switch_trial: Option<u8>,
+    /// The last picture upload, for the bundle. Keyed by device id.
+    screen_write: Option<ops::ScreenOutcome>,
     last_flash: Option<(f64, f64)>,
     /// Last write claim: instant and the quiet that write required after itself.
     last_cmd: Option<(f64, f64)>,
@@ -1032,17 +1034,22 @@ const SCREEN_READY_GAP_MS: f64 = 100.0;
 /// the column order and pixel format the display wants are applied here.
 /// Lands in flash, so it takes the flash cooldown.
 #[wasm_bindgen]
-pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
+pub async fn write_screen_image(rgb: Vec<u8>, slot: u8) -> Result<(), JsValue> {
     require_cable()?;
-    let (screen, rules) = {
+    let (device, screen, rules) = {
         let (_, spec) = get_open(false)?;
         (
+            spec.id,
             spec.screen.clone().ok_or_else(|| {
                 JsValue::from_str("this board has no display sharkfin knows the size of")
             })?,
             spec.screen_draw(),
         )
     };
+    let slots = ops::screen_slots(&screen);
+    if slot >= slots {
+        return Err(format!("this display has {slots} picture slots").into());
+    }
     // Only boards whose own firmware parses the frame; see the note in
     // commands.rs. Most gen2 boards forward the request to a display chip
     // whose own expectations are not established.
@@ -1079,13 +1086,20 @@ pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
     let (t, _) = get_open(true)?;
     let pkt = protocol::screen_announce_packet(
         announce,
-        0,
+        slot,
         1,
         0,
         data.len() as u32,
         (0, 0, screen.w, screen.h),
         0,
     );
+    let mut outcome = ops::ScreenOutcome {
+        device,
+        slot,
+        slots,
+        accepted: false,
+        pages: 0,
+    };
     let mut ready = false;
     for _ in 0..SCREEN_READY_TRIES {
         // Not ready looks like a different answer or none at all; anything
@@ -1102,12 +1116,21 @@ pub async fn write_screen_image(rgb: Vec<u8>) -> Result<(), JsValue> {
         sleep_ms(SCREEN_READY_GAP_MS).await;
     }
     if !ready {
+        STATE.with(|s| s.borrow_mut().screen_write = Some(outcome));
         return Err(JsValue::from_str("the display did not accept the picture"));
     }
-    for page in protocol::screen_page_packets(page_op, 0, 1, 0, &data) {
-        t.send(&page).await.map_err(fail)?;
+    outcome.accepted = true;
+    let mut sent = Ok(());
+    for page in protocol::screen_page_packets(page_op, slot, 1, 0, &data) {
+        if let Err(e) = t.send(&page).await {
+            sent = Err(fail(e));
+            break;
+        }
+        outcome.pages += 1;
         sleep_ms(SCREEN_PAGE_GAP_MS).await;
     }
+    STATE.with(|s| s.borrow_mut().screen_write = Some(outcome));
+    sent?;
     sleep_ms(FLASH_SETTLE_MS).await;
     Ok(())
 }
@@ -1673,6 +1696,10 @@ pub async fn contribution_bundle() -> Result<JsValue, JsValue> {
         );
         let owner = STATE.with(|s| s.borrow().led_swap);
         let _ = writeln!(out, "flags  : {}", registry::led_flags_note(&spec, owner));
+    }
+    let screen_write = STATE.with(|s| s.borrow().screen_write.clone());
+    if let Some(o) = screen_write.filter(|o| o.device == spec.id) {
+        let _ = writeln!(out, "screen : {}", o.note());
     }
     if let Err(e) = ops::probe_sweep(&*t, &mut out).await {
         if e.is_stall() {
