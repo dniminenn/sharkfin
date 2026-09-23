@@ -8,6 +8,11 @@ in the first slot while the display could be showing another. The Device
 tab now asks which slot, says which one it wrote, and the data bundle
 records whether the display accepted the picture.
 
+**Akko 3098B is in the registry**, from an owner's report with the picture
+built in. Its settings live on the keyboard interface, which on macOS needs
+Input Monitoring permission: the app now asks for it and can open the
+settings pane. Contributed by Shiroki Satsuki.
+
 ## What changed in 0.9.0
 
 **Pick which switch is fitted.** Some boards take more than one switch
