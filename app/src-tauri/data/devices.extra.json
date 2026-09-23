@@ -1,5 +1,35 @@
 [
   {
+    "_why": "Akko 3098B device 69 was absent from the registry. It is not the 3098B Plus (1280/1281). Settings use the keyboard collection on USB interface 0; the vendor input collection on interface 1 has no feature reports.",
+    "_evidence": "2026-09-23 owner report and USB hardware round-trips, firmware 2.11. Identify 0x8F gives 69; 0x89 returns a yc500 keymap and 0x8A all FF. The owner confirmed 98/98 keys and supplied a reference image for the geometry; unmodified profile 2 supplies the fixed slots in Local98_Akko_3098B. Four profiles were switched and read back in setup. Base/Fn single-slot writes 0x13/0x15 leave slot 101 unchanged; whole-layer uploads 0x09/0x10 change it to F24 and read back, then restore the original full layer. All four base and four Fn layers matched the backup after testing. LED 0x07 changes stored RGB and 0x87 reads it back; restored state matches after settling. The owner confirms nibble 7 is rainbow, 8 is fixed colour.",
+    "_unknown": "No edge lighting, magnetic switches, display or knob. Debounce and sleep replies carry zero defaults, so these features stay disabled. Full lighting-effect catalogue, macros and per-key painting have not been tested on this board.",
+    "id": 69,
+    "name": "akko_3098b",
+    "displayName": "3098B",
+    "company": "Akko",
+    "vendor": "Akko",
+    "vendorId": 12625,
+    "productId": 16386,
+    "internalName": "akko_3098b",
+    "keyLayout": "Local98_Akko_3098B",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "bulkKeymap": true,
+    "ledFlagsSwapped": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
     "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-09-11 under ~/vendor-builds/akko-20260911. Family from MonsGeek's factory switch in that same day's app.monsgeek.com build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main Ee, we, ut, ml, Wc, Zm, ny, ay, _e, O, MT, R, ET onto S; sides xe, te, ry onto $. No hardware report yet.",
     "id": 338,

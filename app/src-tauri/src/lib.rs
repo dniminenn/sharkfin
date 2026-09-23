@@ -1,10 +1,12 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 mod commands;
 pub mod derive;
 pub mod dev;
 pub mod hid;
 pub mod ops;
+mod permissions;
 pub mod protocol;
 pub mod registry;
 pub mod session;
@@ -35,6 +37,9 @@ pub fn run() {
         .manage(AppState::default())
         .invoke_handler(tauri::generate_handler![
             commands::scan,
+            permissions::request_input_monitoring,
+            permissions::open_input_monitoring_settings,
+            permissions::reveal_current_app,
             commands::allow_unregistered,
             commands::apply_owner_record,
             commands::set_switch_trial,

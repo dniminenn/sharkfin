@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 // The browser build's stand-in for src/lib/backend.ts: same names, same
 // types, same behaviour, but the commands run in the wasm core over WebHID
@@ -126,12 +127,15 @@ export interface DiscoveredUnknown {
   deviceId: number | null;
 }
 
+export type InputMonitoringStatus = "unknown" | "denied" | "granted";
+
 export interface ScanResult {
   connected: ConnectedDevice | null;
   unknown: DiscoveredUnknown[];
   /** A keyboard is there but its node can't be opened; on Linux that is
    * almost always a missing udev rule. */
   openFailed: boolean;
+  inputMonitoring: InputMonitoringStatus | null;
   /** Firmware stalled; nothing is retried until the board is replugged. */
   stalled: boolean;
   /** A receiver is paired but its keyboard is asleep or off. A key press
@@ -256,6 +260,15 @@ export function hidAvailable(): boolean {
   return "hid" in navigator && window.isSecureContext;
 }
 
+export async function requestInputMonitoring(): Promise<void> {
+  throw new Error("Enable Input Monitoring for your browser in System Settings.");
+}
+
+export const openInputMonitoringSettings = requestInputMonitoring;
+export async function revealCurrentApp(): Promise<void> {
+  throw new Error("Add your browser to Input Monitoring in System Settings.");
+}
+
 /** Devices this origin already holds permission for. */
 export async function grantedDevices(): Promise<HIDDevice[]> {
   if (!hidAvailable()) return [];
@@ -278,6 +291,7 @@ export const scan = async (): Promise<ScanResult> => {
     connected: null,
     unknown: [],
     openFailed: false,
+    inputMonitoring: null,
     stalled: false,
     keyboardOffline: false,
   };

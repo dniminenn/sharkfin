@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Shown when a keyboard is present but its device node cannot be opened.
 // On Linux that is almost always a missing udev rule, and without saying so
@@ -8,8 +9,14 @@ import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { t } from "@/lib/i18n";
+import {
+  requestInputMonitoring,
+  openInputMonitoringSettings,
+  revealCurrentApp,
+  type InputMonitoringStatus,
+} from "@/lib/backend";
 
-// Most of these boards are ROYUAN's 3151, but 277 of the 1383 in the registry
+// Most of these boards are ROYUAN's 3151, but 277 of the 1384 in the registry
 // ship under a different vendor ID, so matching 3151 alone locks their owners
 // out. Keep in step with `packaging/70-sharkfin.rules`.
 const UDEV_RULE =
@@ -29,9 +36,25 @@ const UDEV_ONELINER = [
 const isLinux = () =>
   navigator.userAgent.includes("Linux") && !navigator.userAgent.includes("Android");
 
-/** Linux keeps hidraw root-only unless a rule grants the logged-in user access. */
-export default function PermissionNotice() {
+export default function PermissionNotice({ inputMonitoring, onRefresh }: {
+  inputMonitoring: InputMonitoringStatus | null;
+  onRefresh: () => Promise<void>;
+}) {
   const [copied, setCopied] = useState(false);
+  const [requesting, setRequesting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const runAction = async (action: () => Promise<void>) => {
+    setRequesting(true);
+    setError(null);
+    try {
+      await action();
+      await onRefresh();
+    } catch (e) {
+      setError(String(e));
+    } finally {
+      setRequesting(false);
+    }
+  };
   const copy = () => {
     navigator.clipboard.writeText(UDEV_ONELINER).then(() => {
       setCopied(true);
@@ -41,9 +64,32 @@ export default function PermissionNotice() {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
       <div className="pointer-events-auto rounded-xl bg-card px-4 py-3 shadow-lg ring-1 ring-foreground/10">
-        <div className="max-w-xl space-y-2 text-sm">
+        <div className="flex max-w-xl flex-col gap-2 text-sm">
           <p className="font-medium">{t("The keyboard is there, but sharkfin can't open it.")}</p>
-          {isLinux() ? (
+          {inputMonitoring === "unknown" || inputMonitoring === "denied" ? (
+            <>
+              <p className="text-muted-foreground">
+                {t("macOS needs Input Monitoring permission to connect to this keyboard. Enable sharkfin in System Settings → Privacy & Security → Input Monitoring, then quit and reopen sharkfin.")}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {inputMonitoring === "unknown" && (
+                  <Button size="sm" disabled={requesting} onClick={() => runAction(requestInputMonitoring)}>
+                    {t("Request input access")}
+                  </Button>
+                )}
+                <Button size="sm" variant={inputMonitoring === "denied" ? "default" : "outline"} disabled={requesting} onClick={() => runAction(openInputMonitoringSettings)}>
+                  {t("Open Input Monitoring")}
+                </Button>
+                <Button size="sm" variant="outline" disabled={requesting} onClick={() => runAction(revealCurrentApp)}>
+                  {t("Show sharkfin in Finder")}
+                </Button>
+              </div>
+              <p className="text-muted-foreground">
+                {t("If sharkfin is missing from the list, use the + button in Input Monitoring to add the app shown in Finder.")}
+              </p>
+              {error && <p role="alert" className="text-destructive">{error}</p>}
+            </>
+          ) : isLinux() ? (
             <>
               <p className="text-muted-foreground">
                 {t("On Linux the keyboard's device node belongs to root until a udev rule hands it to you. Paste this into a terminal, then unplug the keyboard and plug it back in:")}
@@ -69,9 +115,16 @@ export default function PermissionNotice() {
               </div>
             </>
           ) : (
-            <p className="text-muted-foreground">
-              {t("Something else is holding the keyboard open. Close any other keyboard software, including a second copy of sharkfin, then unplug it and plug it back in.")}
-            </p>
+            <>
+              {inputMonitoring === "granted" && (
+                <p className="text-muted-foreground">
+                  {t("Input Monitoring is enabled. If you just enabled it, quit and reopen sharkfin.")}
+                </p>
+              )}
+              <p className="text-muted-foreground">
+                {t("Another app may be holding the keyboard open. Close other keyboard software, then unplug the keyboard and plug it back in.")}
+              </p>
+            </>
           )}
         </div>
       </div>

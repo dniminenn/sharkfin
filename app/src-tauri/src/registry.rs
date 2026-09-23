@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 //! Handshake device ID -> board spec, shipped as data.
 use std::sync::OnceLock;
@@ -78,7 +79,8 @@ pub struct DeviceSpec {
     pub light: Option<LightLayoutSpec>,
     /// This board reads the LEDPARAM flags nibble the other way round: 8 is
     /// a fixed colour and 7 is the rainbow, and the seven preset colours
-    /// differ. Not a field of the record: read out of each board's own
+    /// differ. An explicit true in a hand-added record is hardware evidence.
+    /// Otherwise read out of each board's own
     /// firmware into `data/led-flags.json` by `tools/led_flags.py`, else
     /// out of the vendor driver's class for the board into
     /// `data/led-flags.vendor.json` by `tools/vendor_led_flags.py`, and
@@ -86,9 +88,9 @@ pub struct DeviceSpec {
     /// page, which overrides this for the open board
     /// (`set_led_flags_swapped`). Most boards keep 7 fixed, 8 rainbow
     /// (docs/PROTOCOL.md).
-    #[serde(default, skip_deserializing)]
+    #[serde(default)]
     pub led_flags_swapped: bool,
-    /// "firmware", "vendor driver", or empty for the default.
+    /// "hardware", "firmware", "vendor driver", or empty for the default.
     #[serde(default, skip_deserializing)]
     pub led_flags_source: &'static str,
 }
@@ -395,10 +397,14 @@ pub fn all() -> Vec<DeviceSpec> {
     for d in &mut devices {
         d.light = lights.get(&d.light_layout).cloned();
         let id = d.id.to_string();
-        let (swapped, source) = match (firmware.get(&id), vendor.get(&id)) {
-            (Some(r), _) => (r.rainbow == FLAGS_SWAPPED_RAINBOW, "firmware"),
-            (None, Some(r)) => (r.rainbow == FLAGS_SWAPPED_RAINBOW, "vendor driver"),
-            (None, None) => (false, ""),
+        let (swapped, source) = if d.led_flags_swapped {
+            (true, "hardware")
+        } else {
+            match (firmware.get(&id), vendor.get(&id)) {
+                (Some(r), _) => (r.rainbow == FLAGS_SWAPPED_RAINBOW, "firmware"),
+                (None, Some(r)) => (r.rainbow == FLAGS_SWAPPED_RAINBOW, "vendor driver"),
+                (None, None) => (false, ""),
+            }
         };
         d.led_flags_swapped = swapped;
         d.led_flags_source = source;
@@ -430,6 +436,55 @@ pub fn vendor_ids() -> &'static [u16] {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn akko_3098b_matches_the_hardware_report() {
+        let d = by_id(69).expect("3098B present");
+        assert_eq!(d.label(), "Akko 3098B");
+        assert_eq!((d.vendor_id, d.product_id), (0x3151, 0x4002));
+        assert_eq!(d.family, "yc500");
+        assert_eq!(d.profiles, 4);
+        assert!(d.bulk_keymap);
+        assert!(!d.unregistered);
+        assert_eq!(d.key_layout, "Local98_Akko_3098B");
+        assert!(d.led_wire().swapped);
+        assert_eq!(d.led_flags_source, "hardware");
+        let mut led = crate::protocol::LedParam::from_reply_for(
+            &[0x87, 10, 3, 4, 7, 255, 0, 0],
+            d.led_wire(),
+        )
+        .unwrap();
+        assert!(led.dazzle, "the owner's red test produced a rainbow");
+        assert_eq!(led.to_packet_for(d.led_wire())[4] & 15, 7);
+        led.dazzle = false;
+        assert_eq!(led.to_packet_for(d.led_wire())[4] & 15, 8);
+        assert!(!d.magnetic && !d.features.side_light && !d.features.screen);
+        assert!(!d.features.debounce && !d.features.sleep24 && !d.features.sleep_bt);
+    }
+
+    #[test]
+    fn akko_3098b_layout_has_fixed_slots() {
+        let layout: serde_json::Value = serde_json::from_str(include_str!(
+            "../../src/lib/layouts/vendor/Local98_Akko_3098B.json"
+        ))
+        .unwrap();
+        let keys = layout["keys"].as_array().unwrap();
+        assert_eq!(keys.len(), 98);
+        let slots: std::collections::HashSet<_> = keys
+            .iter()
+            .map(|k| k["matrixIndex"].as_u64().unwrap())
+            .collect();
+        assert_eq!(slots.len(), 98);
+        for (code, slot) in [
+            ("Escape", 0),
+            ("ControlLeft", 5),
+            ("NumLock", 85),
+            ("NumpadDecimal", 101),
+        ] {
+            let key = keys.iter().find(|k| k["code"] == code).unwrap();
+            assert_eq!(key["matrixIndex"], slot);
+        }
+    }
 
     #[test]
     fn devices_json_parses() {
@@ -529,8 +584,8 @@ mod tests {
         assert_eq!(firmware, 33, "boards the scan read as 7 = rainbow");
         let swapped = all().iter().filter(|d| d.led_flags_swapped).count();
         assert_eq!(
-            swapped, 139,
-            "with the driver's verdict where there is no firmware"
+            swapped, 140,
+            "with hardware reports and the driver's verdict where there is no firmware"
         );
     }
 
@@ -676,6 +731,10 @@ mod tests {
     #[test]
     fn local_layouts_stay_local() {
         static LOCAL: &[(&str, &str)] = &[
+            (
+                "Local98_Akko_3098B",
+                include_str!("../../src/lib/layouts/vendor/Local98_Akko_3098B.json"),
+            ),
             (
                 "Local68_Chronos68",
                 include_str!("../../src/lib/layouts/vendor/Local68_Chronos68.json"),

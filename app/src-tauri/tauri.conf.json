@@ -44,6 +44,10 @@
       "../../LICENSE": "LICENSE",
       "../../THIRD-PARTY-NOTICES.md": "THIRD-PARTY-NOTICES.md"
     },
+    "macOS": {
+      "minimumSystemVersion": "10.15",
+      "signingIdentity": "-"
+    },
     "linux": {
       "deb": {
         "files": {

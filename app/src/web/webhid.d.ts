@@ -1,10 +1,16 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 // WebHID surface the web build uses; TypeScript's DOM lib does not ship it.
 
 interface HIDCollectionInfo {
   usagePage: number;
   usage: number;
+  children: HIDCollectionInfo[];
+  featureReports: {
+    reportId: number;
+    items: { reportSize: number; reportCount: number }[];
+  }[];
 }
 
 interface HIDDevice {

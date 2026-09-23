@@ -28,6 +28,7 @@ v113_oledv106` (Hator HTK4100UA, yc3123). Bootloader: first 20 KB of the
 |---|---|
 | Collection | usage page `0xFFFF`, usage `2`; the Akko ACR75 v2 (device 606) reports usage `1` on the same page **[HW]**, and the vendor's own driver filters for both **[JS]**. The Akko 5075B Plus-S in Mac mode (device 1033, `05ac:024f`) has no vendor collection and answers on its keyboard collection, usage page `0x01` usage `6` **[HW]** (issue #58); the vendor's driver carries the same exception **[JS]**. Feature reports on a keyboard collection pass Chromium's protected-report rule; input and output reports would not. |
 | Reports | 64 bytes, feature, report ID 0, both directions |
+| Akko 3098B | Device 69, `3151:4002`: settings on interface 0, keyboard collection `0x01:0x06`. Interface 1 has a vendor `0xFFFF:1` collection with input report ID 5 only, no feature report. Identify `0x8F` works without `0xFD`; reads match yc500 **[HW]**. This USB ID is shared with other boards, so check the report descriptor before using their interfaces. |
 | Link | wired USB, or the 2.4 GHz receiver through the relay below. Not every receiver relays: the Typhoon Ultimate TKL's (device 2045) does not **[HW]**. Bluetooth does not expose the collection **[HW]** |
 
 USB VID `0x3151` is common. Other vendor IDs occur. They are not part of
@@ -192,6 +193,11 @@ upload for the session when a single-slot write does not read back after
 three looks; the switch is inferred from the miss, not evidenced per board.
 Magnetic boards, sub-layers and slots 126..127 are refused instead.
 
+The Akko 3098B (69, firmware 2.11) ignores both single-slot writes.
+Base and Fn bulk uploads changed slot 101 to F24 and read back, then
+restored the original layers. All four profiles' base and Fn tables
+matched their backups after the test. **[HW]**
+
 On yc500, `0x8A` (the gen2 keymatrix GET) answers all `0xFF`, not an
 echo. **[HW]** 1379 reads only the profile byte from a fixed table at
 `0x23C18`. **[FW]**
@@ -259,6 +265,10 @@ Opcode shared. Packet **[HW]**.
   `NORMAL`); `data/led-flags.vendor.json` lists it for 1074 boards and it
   agrees with every firmware verdict but the X65HE's. Boards without
   published firmware take it from there. **[JS]**
+- Akko 3098B (69, firmware 2.11): `7` rainbow, `8` fixed, confirmed by
+  the owner. LEDPARAM write/readback and restoration were tested on USB.
+  `ledFlagsSwapped: true` in the hand-added record takes precedence over
+  the firmware and vendor tables and is reported as hardware evidence. **[HW]**
 - Two images read end to end for that. Akko ACR75 v2 (606, firmware 3.03,
   yc500): `0x10145E2` tests 7 into the hue reseed at `0x10145EC` and 8 into
   the packet's RGB at `0x1014602`, where the RT100 (946, v507) has

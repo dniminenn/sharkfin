@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+# SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Extract the ROYUAN/AttackShark device catalog from the vendor app bundle.
 
@@ -666,7 +667,7 @@ PLACEHOLDER_IDS = {9999}
 KNOWN_DEVICE_FIELDS = {
     "id", "name", "displayName", "company", "vendor", "vendorId", "productId",
     "internalName", "keyLayout", "lightLayout", "sideLightLayout", "profiles",
-    "magnetic", "family", "bulkKeymap", "features", "screen", "switchTypes",
+    "magnetic", "family", "bulkKeymap", "features", "screen", "switchTypes", "ledFlagsSwapped",
 }
 
 

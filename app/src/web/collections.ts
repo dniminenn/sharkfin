@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 // Which HID collection carries the settings protocol. Same rules as
@@ -19,17 +20,34 @@ export const USAGES = [0x0001, 0x0002];
  */
 export const KEYBOARD_COLLECTIONS: HIDDeviceFilter[] = [
   { vendorId: 0x05ac, productId: 0x024f, usagePage: 0x01, usage: 0x06 },
+  // 3098B: settings are on the keyboard interface, not its vendor input collection.
+  { vendorId: 0x3151, productId: 0x4002, usagePage: 0x01, usage: 0x06 },
 ];
+
+const hasSettingsReport = (c: HIDCollectionInfo): boolean =>
+  c.featureReports.some(
+    (r) =>
+      r.reportId === 0 &&
+      r.items.reduce(
+        (bits, item) => bits + item.reportSize * item.reportCount,
+        0,
+      ) === 512,
+  ) || c.children.some(hasSettingsReport);
 
 const matches = (d: HIDDevice, f: HIDDeviceFilter) =>
   d.vendorId === f.vendorId &&
   d.productId === f.productId &&
-  d.collections.some((c) => c.usagePage === f.usagePage && c.usage === f.usage);
+  d.collections.some(
+    (c) => c.usagePage === f.usagePage && c.usage === f.usage && hasSettingsReport(c),
+  );
 
 export const isSettingsCollection = (d: HIDDevice, vendors: number[]) =>
   (vendors.includes(d.vendorId) &&
     d.collections.some(
-      (c) => c.usagePage === USAGE_PAGE && USAGES.includes(c.usage ?? -1),
+      (c) =>
+        c.usagePage === USAGE_PAGE &&
+        USAGES.includes(c.usage ?? -1) &&
+        hasSettingsReport(c),
     )) ||
   KEYBOARD_COLLECTIONS.some((f) => matches(d, f));
 

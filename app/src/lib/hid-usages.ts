@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 // HID keyboard usage IDs (usage page 0x07) and the consumer-page codes these
 // boards use, with display labels. Grouped for the assignment picker.
@@ -358,7 +359,7 @@ export function entryLabel(entry: number[], fnLayer = false): string {
     }
   }
   const [tag, a, b, c] = entry;
-  if (tag === 0 && (a !== 0 || c !== 0))
+  if (tag === 0)
     return [a, b, c].filter(Boolean).map(usageLabel).join("+");
   if (tag === 1) return "Mouse";
   if (tag === 3) return "Media";

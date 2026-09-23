@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 use std::time::{Duration, Instant};
 
@@ -170,6 +171,8 @@ pub struct ScanResult {
     /// Linux that is almost always a missing udev rule; without saying so
     /// the app reports "no device" with the keyboard plugged in.
     pub open_failed: bool,
+    /// None outside macOS. A status check never requests access.
+    pub input_monitoring: Option<crate::permissions::InputMonitoringStatus>,
     /// The firmware stalled and the board must be replugged. Nothing is
     /// retried while this is set.
     pub stalled: bool,
@@ -204,6 +207,7 @@ impl Inner {
 /// Open and identify. Frontend polls.
 #[tauri::command(async)]
 pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
+    let input_monitoring = crate::permissions::input_monitoring();
     let mut inner = state.inner.lock();
 
     if let Some(open) = &mut inner.open {
@@ -224,6 +228,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                 connected: Some(inner.open.as_ref().unwrap().connected(ok, hall)),
                 unknown: vec![],
                 open_failed: false,
+                input_monitoring,
                 stalled: false,
                 keyboard_offline: false,
             });
@@ -246,6 +251,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
                 connected: None,
                 unknown: vec![],
                 open_failed: false,
+                input_monitoring,
                 stalled: true,
                 keyboard_offline: false,
             });
@@ -340,6 +346,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
         connected,
         unknown,
         open_failed,
+        input_monitoring,
         stalled: false,
         keyboard_offline,
     })

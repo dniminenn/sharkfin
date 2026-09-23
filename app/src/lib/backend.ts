@@ -1,4 +1,5 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
+// SPDX-FileCopyrightText: Shiroki Satsuki <me@shirok1.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 import { invoke } from "@tauri-apps/api/core";
 
@@ -120,12 +121,16 @@ export interface DiscoveredUnknown {
   deviceId: number | null;
 }
 
+export type InputMonitoringStatus = "unknown" | "denied" | "granted";
+
 export interface ScanResult {
   connected: ConnectedDevice | null;
   unknown: DiscoveredUnknown[];
   /** A keyboard is there but its node can't be opened; on Linux that is
    * almost always a missing udev rule. */
   openFailed: boolean;
+  /** null outside macOS. Checking does not request access. */
+  inputMonitoring: InputMonitoringStatus | null;
   /** Firmware stalled; nothing is retried until the board is replugged. */
   stalled: boolean;
   /** A receiver is paired but its keyboard is asleep or off. A key press
@@ -224,6 +229,9 @@ export interface DeviceSettings {
 }
 
 export const scan = () => invoke<ScanResult>("scan");
+export const requestInputMonitoring = () => invoke<void>("request_input_monitoring");
+export const openInputMonitoringSettings = () => invoke<void>("open_input_monitoring_settings");
+export const revealCurrentApp = () => invoke<void>("reveal_current_app");
 /** The owner allows writes to a board the registry does not know, this session. */
 export const allowUnregistered = () => invoke<void>("allow_unregistered");
 /** What the owner established about this board in the check. Sends nothing;

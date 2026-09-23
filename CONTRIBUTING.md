@@ -21,6 +21,10 @@ npm run web:build      # the browser build -> app/dist-web
 cargo test --lib       # protocol tests, no hardware needed (app/src-tauri/)
 ```
 
+macOS bundles are ad-hoc signed by default. An Input Monitoring grant is
+keyed to the signature, so a rebuild needs a new grant; set
+`APPLE_SIGNING_IDENTITY` to a certificate for a build that keeps it.
+
 The browser build is the same frontend with `@/lib/backend` aliased to
 `src/web/backend.ts`, which drives the `app/src-web` wasm crate over WebHID.
 That crate includes the protocol, wire, ops, session and registry modules
@@ -245,7 +249,9 @@ exist, and they agree on every board but the X65HE.
 python3 tools/vendor_led_flags.py ~/vendor-builds/gearhub-*/dist/js ~/vendor-builds/monsgeek-*/dist/js
 ```
 
-Boards in neither file keep `8`. Owners can say otherwise from the
+Hardware-confirmed `ledFlagsSwapped: true` in `devices.extra.json` takes
+precedence over both files. Boards without any evidence keep `8`.
+Owners can say otherwise from the
 Lighting page, which settles it for that board without a release, and
 the data bundle prints which way the board is read and by what evidence.
 
