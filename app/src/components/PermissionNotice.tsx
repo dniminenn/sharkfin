@@ -16,7 +16,7 @@ import {
   type InputMonitoringStatus,
 } from "@/lib/backend";
 
-// Most of these boards are ROYUAN's 3151, but 277 of the 1384 in the registry
+// Most of these boards are ROYUAN's 3151, but 277 of the 1385 in the registry
 // ship under a different vendor ID, so matching 3151 alone locks their owners
 // out. Keep in step with `packaging/70-sharkfin.rules`.
 const UDEV_RULE =

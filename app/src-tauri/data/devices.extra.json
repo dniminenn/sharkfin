@@ -1205,6 +1205,38 @@
     }
   },
   {
+    "_why": "Reported in issue #65. Not in any vendor catalogue, the legacy table or the update channel, so an extraction alone will not add it. The board's own product string is 'Gaming Keyboard'; the owner names it an Atas A75.",
+    "_evidence": "Read sweep and setup from the owner's board (0.9.1, 3f089e3). identify 0x8F returns 0x094b = 2379. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers four u16 (180, 180, 3420, 3420) at bytes 1..8 and auto-OS 0x97 answers 1. Debounce 0x91 answers 5 at byte 2. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86. Setup remapped slot 3 from CapsLock to Esc, read it back, the keypress confirmed, and the undo read back. Setup found 4 profiles by switching, and the switch back read back. Rainbow flag 8 painted the rainbow and Static was tested. The owner confirmed their drawing: 82 of 84 keys.",
+    "_unknown": "Local81_Atas_A75 is the owner's drawing, baked against their keymap. Right Ctrl and the knob mute are drawn and absent from the keymap, so they stay unmatched. Power save is in the keymap at slot 84 and is not in the drawing. The owner reports no edge light; 0x88 answers a plausible state anyway, so sideLight stays off. 0xAD echoes the previous reply, so no display. The owner reports no magnetic switches, and the columns did not read as travel. lightLayout is empty, so the Lighting page offers the common effect set.",
+    "id": 2379,
+    "name": "atas_a75",
+    "displayName": "A75",
+    "company": "Atas",
+    "vendor": "Atas",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "atas_a75",
+    "keyLayout": "Local81_Atas_A75",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "_why": "In MonsGeek's own Driver tables (app.monsgeek.com), not in gearhub, which is the bundle the registry is extracted from. MonsGeek ships the same driver with its own catalogue.",
     "_evidence": "Transcribed by tools/extract_vendor_data.py from the MonsGeek web build saved 2026-09-11 under ~/vendor-builds/monsgeek-20260911, family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500). Light layout names are minified per brand and mapped onto gearhub's common table: main Ee, we, ut, ml, Wc, Zm, ny, ay, _e, O, MT, R, ET onto S; sides xe, te, ry onto $. No hardware report yet.",
     "id": 2381,

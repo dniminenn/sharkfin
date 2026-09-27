@@ -8605,6 +8605,35 @@
     }
   },
   {
+    "id": 2379,
+    "name": "atas_a75",
+    "displayName": "A75",
+    "company": "Atas",
+    "vendor": "Atas",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "atas_a75",
+    "keyLayout": "Local81_Atas_A75",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2381,
     "name": "ry5088_fun60ultra_8k_dm",
     "displayName": "FUN60 Ultra",
