@@ -104,7 +104,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        # Linux stays on 22.04. The linker stamps symbol versions from the
+        # libc it links, and a binary linked on ubuntu-latest (24.04) will
+        # not start on Ubuntu 22.04 or Debian 12. Do not move it to latest.
+        os: [ubuntu-22.04, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -135,3 +138,7 @@ jobs:
         run: |
           npm ci
           npx tauri build --no-bundle
+
+      - name: Binary stays on glibc 2.35
+        if: runner.os == 'Linux'
+        run: python3 tools/glibc_floor.py app/src-tauri/target/release/sharkfin

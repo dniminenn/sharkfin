@@ -1,5 +1,14 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.9.2
+
+**Linux downloads start on Ubuntu 22.04 and Debian 12.** The 0.9.1
+packages needed a C library from 2024, so those systems refused to open
+them.
+
+**Atas A75 and the Kwumsy K3 are in the registry**, from owners' reports.
+The pictures matched on the boards.
+
 ## What changed in 0.9.1
 
 **Pictures go to the slot you choose.** Boards whose display holds more

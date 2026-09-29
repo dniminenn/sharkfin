@@ -40,7 +40,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          # 22.04 is the glibc floor. The linker stamps symbol versions from
+          # the libc it links, and the AppImage copies this machine's
+          # libraries. ubuntu-latest is newer, and that stamp will not load
+          # on Ubuntu 22.04 or Debian 12. Do not move this job to latest.
+          - os: ubuntu-22.04
             args: ""
           - os: windows-latest
             args: ""
@@ -57,7 +61,8 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev \
             libayatana-appindicator3-dev libssl-dev libxdo-dev \
-            libsoup-3.0-dev libjavascriptcoregtk-4.1-dev libudev-dev
+            libsoup-3.0-dev libjavascriptcoregtk-4.1-dev libudev-dev \
+            squashfs-tools binutils
 
       - uses: actions/setup-node@v4
         with:
@@ -86,6 +91,49 @@ jobs:
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
+
+      # Tauri writes AppRun at mode 0770. linuxdeploy renames it to
+      # AppRun.wrapped and leaves the mode. A normal launch ignores it; the
+      # catalog mounts the image in a way that enforces it, and the file
+      # will not run. Repack with the bit set, then replace the draft asset.
+      # The same step refuses the upload if any shipped ELF needs a glibc
+      # newer than 2.35.
+      - name: Fix the AppImage and check the glibc floor
+        if: runner.os == 'Linux'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          imgs=(app/src-tauri/target/release/bundle/appimage/*.AppImage)
+          if [ "${#imgs[@]}" -ne 1 ]; then
+            echo "expected one AppImage, found ${#imgs[@]}" >&2
+            exit 1
+          fi
+          img=${imgs[0]}
+          chmod 0755 "$img"
+          work=$(mktemp -d)
+          offset=$("$img" --appimage-offset | tr -d '[:space:]')
+          unsquashfs -o "$offset" -d "$work/root" "$img"
+          python3 tools/glibc_floor.py \
+            app/src-tauri/target/release/sharkfin \
+            "$work/root"
+          chmod 0755 "$work/root/AppRun" "$work/root/AppRun.wrapped"
+          comp=$(unsquashfs -s -o "$offset" "$img" | sed -n 's/^Compression //p' | head -1)
+          mksquashfs "$work/root" "$work/new.sqfs" -comp "$comp" -noappend -all-root -no-progress
+          head -c "$offset" "$img" > "$work/fixed.AppImage"
+          cat "$work/new.sqfs" >> "$work/fixed.AppImage"
+          chmod 0755 "$work/fixed.AppImage"
+          off2=$("$work/fixed.AppImage" --appimage-offset | tr -d '[:space:]')
+          unsquashfs -o "$off2" -d "$work/check" "$work/fixed.AppImage" AppRun.wrapped
+          mode=$(stat -c %a "$work/check/AppRun.wrapped")
+          if [ "$mode" != "755" ]; then
+            echo "AppRun.wrapped is mode $mode" >&2
+            exit 1
+          fi
+          mv "$work/fixed.AppImage" "$img"
+          gh release upload "${{ github.ref_name }}" "$img" \
+            --repo "${{ github.repository }}" --clobber
 
   # The browser build is the same protocol core over WebHID. It ships as a
   # release asset so the site can pin a version instead of tracking master;
