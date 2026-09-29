@@ -8,6 +8,8 @@ instructions, so that copy is downloaded once.
 
 **The AppImage catalog page shows the Keys page** on an Attack Shark X86.
 
+**macOS asks for Input Monitoring again.**
+
 ## What changed in 0.9.2
 
 **Linux downloads start on Ubuntu 22.04 and Debian 12.** The 0.9.1
