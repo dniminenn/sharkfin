@@ -2493,6 +2493,35 @@
     "screen": null
   },
   {
+    "id": 1074,
+    "name": "kwumsy_k3",
+    "displayName": "K3",
+    "company": "Kwumsy",
+    "vendor": "Kwumsy",
+    "vendorId": 12625,
+    "productId": 16408,
+    "internalName": "kwumsy_k3",
+    "keyLayout": "Common82_M1_V5_TMR",
+    "lightLayout": "",
+    "sideLightLayout": "xt",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 1086,
     "name": "yc500_k247_soc",
     "displayName": "CMK75",

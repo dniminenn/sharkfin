@@ -1237,6 +1237,38 @@
     }
   },
   {
+    "_why": "Reported in issue #66. Not in any vendor catalogue, the legacy table or the update channel, so an extraction alone will not add it. The board's own product string is 'K3'; the owner names it a Kwumsy K3.",
+    "_evidence": "Read sweep and setup from the owner's board (0.9.1, 3f089e3). identify 0x8F returns 0x0432 = 1074. GET_KEYMATRIX 0x89 returns a raw yc500 keymap reading Esc, grave, Tab, CapsLock, LShift, LCtrl down column 0; the gen2 read 0x8A returns all 0xFF; the yc500 sleep read 0x92 answers four u16 (120, 120, 1680, 1680) at bytes 1..8 and auto-OS 0x97 answers. Debounce 0x91 answers 1 at byte 2. Edge 0x88 answers. That fixes the family as yc500, whose write paths are [HW] evidenced on an X86. Setup remapped slot 3 from CapsLock to Esc, read it back, the keypress confirmed, and the undo read back. Setup found 4 profiles by switching, and the switch back read back. Rainbow flag 8 painted the rainbow and Static was tested. Common82_M1_V5_TMR matched 84 of 84 keys and the owner pressed 6 of 6.",
+    "_unknown": "The owner confirmed the edge light, so sideLight is on; the layout token copies the other yc500 edge-light boards and nothing reads it. The keymap carries volume down 0xEA and volume up 0xE9, and no mute 0xE2; the knob list is the three names every volume knob is recorded with. Play/pause 0xCD sits in the navigation column. The owner did not say whether the board has Bluetooth; the sleep read answered four values, so both timers are on. 0xAD echoes the previous reply, so no display. The owner reported magnetic switches, and the columns did not read as travel, so magnetic stays off, the same call Setup made. lightLayout is empty, so the Lighting page offers the common effect set.",
+    "id": 1074,
+    "name": "kwumsy_k3",
+    "displayName": "K3",
+    "company": "Kwumsy",
+    "vendor": "Kwumsy",
+    "vendorId": 12625,
+    "productId": 16408,
+    "internalName": "kwumsy_k3",
+    "keyLayout": "Common82_M1_V5_TMR",
+    "lightLayout": "",
+    "sideLightLayout": "xt",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "_why": "In MonsGeek's own Driver tables (app.monsgeek.com), not in gearhub, which is the bundle the registry is extracted from. MonsGeek ships the same driver with its own catalogue.",
     "_evidence": "Transcribed by tools/extract_vendor_data.py from the MonsGeek web build saved 2026-09-11 under ~/vendor-builds/monsgeek-20260911, family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500). Light layout names are minified per brand and mapped onto gearhub's common table: main Ee, we, ut, ml, Wc, Zm, ny, ay, _e, O, MT, R, ET onto S; sides xe, te, ry onto $. No hardware report yet.",
     "id": 2381,
