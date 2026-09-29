@@ -129,9 +129,12 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
+      # The cache key otherwise only says Linux, so a binary cached on
+      # ubuntu-latest is restored here and the build does not start.
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: app/src-tauri
+          prefix-key: ${{ matrix.os }}
 
       - name: Build app (no bundling)
         working-directory: app
