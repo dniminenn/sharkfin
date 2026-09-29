@@ -1,5 +1,13 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.9.3
+
+**The Linux AppImage can be updated in place** from this release on.
+AppImageUpdate fetches the next one. The 0.9.2 file has no update
+instructions, so that copy is downloaded once.
+
+**The AppImage catalog page shows the Keys page** on an Attack Shark X86.
+
 ## What changed in 0.9.2
 
 **Linux downloads start on Ubuntu 22.04 and Debian 12.** The 0.9.1
