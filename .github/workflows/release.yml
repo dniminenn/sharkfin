@@ -135,7 +135,9 @@ jobs:
           chmod 0755 "$work/fixed.AppImage"
           off2=$("$work/fixed.AppImage" --appimage-offset | tr -d '[:space:]')
           unsquashfs -o "$off2" -d "$work/check" "$work/fixed.AppImage" \
-            AppRun.wrapped usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml
+            AppRun.wrapped \
+            usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml \
+            usr/share/metainfo/com.getsharkfin.sharkfin.appdata.xml
           mode=$(stat -c %a "$work/check/AppRun.wrapped")
           if [ "$mode" != "755" ]; then
             echo "AppRun.wrapped is mode $mode" >&2
@@ -143,6 +145,8 @@ jobs:
           fi
           grep -q '<id>com.getsharkfin.sharkfin</id>' \
             "$work/check/usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml"
+          grep -q 'https://getsharkfin.com/' \
+            "$work/check/usr/share/metainfo/com.getsharkfin.sharkfin.appdata.xml"
           info=$("$work/fixed.AppImage" --appimage-updateinformation 2>/dev/null | tr -d '\000[:space:]' || true)
           expect='gh-releases-zsync|dniminenn|sharkfin|latest|sharkfin_*_amd64.AppImage.zsync'
           if [ "$info" != "$expect" ]; then

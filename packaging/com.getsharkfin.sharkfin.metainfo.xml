@@ -10,7 +10,7 @@
     <p>Writes need a USB cable. sharkfin never flashes firmware.</p>
   </description>
   <launchable type="desktop-id">sharkfin.desktop</launchable>
-  <url type="homepage">https://github.com/dniminenn/sharkfin</url>
+  <url type="homepage">https://getsharkfin.com/</url>
   <screenshots>
     <screenshot type="default">
       <caption>Remapping keys on an Attack Shark X86</caption>

@@ -51,7 +51,8 @@
     "linux": {
       "appimage": {
         "files": {
-          "/usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml"
+          "/usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml",
+          "/usr/share/metainfo/com.getsharkfin.sharkfin.appdata.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml"
         }
       },
       "deb": {
@@ -59,7 +60,8 @@
           "/usr/lib/udev/rules.d/70-sharkfin.rules": "../../packaging/70-sharkfin.rules",
           "/usr/share/doc/sharkfin/copyright": "../../LICENSE",
           "/usr/share/doc/sharkfin/THIRD-PARTY-NOTICES.md": "../../THIRD-PARTY-NOTICES.md",
-          "/usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml"
+          "/usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml",
+          "/usr/share/metainfo/com.getsharkfin.sharkfin.appdata.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml"
         }
       },
       "rpm": {
@@ -67,7 +69,8 @@
           "/usr/lib/udev/rules.d/70-sharkfin.rules": "../../packaging/70-sharkfin.rules",
           "/usr/share/doc/sharkfin/copyright": "../../LICENSE",
           "/usr/share/doc/sharkfin/THIRD-PARTY-NOTICES.md": "../../THIRD-PARTY-NOTICES.md",
-          "/usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml"
+          "/usr/share/metainfo/com.getsharkfin.sharkfin.metainfo.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml",
+          "/usr/share/metainfo/com.getsharkfin.sharkfin.appdata.xml": "../../packaging/com.getsharkfin.sharkfin.metainfo.xml"
         }
       }
     }
