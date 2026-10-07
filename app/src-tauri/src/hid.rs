@@ -256,13 +256,32 @@ impl Transport {
 /// timeout; the board's flag is the caller's to clear.
 pub struct TravelStream {
     stop: Arc<AtomicBool>,
-    latest: Arc<Mutex<[u16; 128]>>,
+    latest: Arc<Mutex<[(u16, Instant); 128]>>,
+}
+
+/// A held key is reported on every scan pass, and the sender keeps one
+/// report, so with several keys down the reports overwrite one another and
+/// a release 0 is often lost. A slot quiet this long is up.
+const TRAVEL_STALE: Duration = Duration::from_millis(200);
+
+/// The counts as of `now`, with quiet slots read as released.
+fn settle(samples: &[(u16, Instant)], now: Instant) -> Vec<u16> {
+    samples
+        .iter()
+        .map(|&(c, at)| {
+            if now.saturating_duration_since(at) > TRAVEL_STALE {
+                0
+            } else {
+                c
+            }
+        })
+        .collect()
 }
 
 impl TravelStream {
     pub fn start(api: &HidApi, vendor_id: u16, product_id: u16) -> Result<Self, HidError> {
         let stop = Arc::new(AtomicBool::new(false));
-        let latest = Arc::new(Mutex::new([0u16; 128]));
+        let latest = Arc::new(Mutex::new([(0u16, Instant::now()); 128]));
         let mut nodes = 0;
         for d in api.device_list() {
             if (d.vendor_id(), d.product_id()) != (vendor_id, product_id)
@@ -282,7 +301,7 @@ impl TravelStream {
                         Ok(n) if n > 1 => {
                             if let Some((slot, counts)) = hall::parse_travel(buf[0], &buf[1..n]) {
                                 if let Some(v) = latest.lock().get_mut(usize::from(slot)) {
-                                    *v = counts;
+                                    *v = (counts, Instant::now());
                                 }
                             }
                         }
@@ -300,9 +319,10 @@ impl TravelStream {
         Ok(Self { stop, latest })
     }
 
-    /// The last count seen for every slot, 0 for released or never seen.
+    /// The last count seen for every slot, 0 for released, never seen, or
+    /// quiet long enough that its release was lost.
     pub fn snapshot(&self) -> Vec<u16> {
-        self.latest.lock().to_vec()
+        settle(&*self.latest.lock(), Instant::now())
     }
 }
 
@@ -522,5 +542,19 @@ mod tests {
         assert!(!is_stall_message(
             "HidD_SetFeature: (0x00000001) Incorrect function."
         ));
+    }
+}
+
+#[cfg(test)]
+mod travel_tests {
+    use super::*;
+
+    #[test]
+    fn a_quiet_slot_reads_as_released() {
+        let now = Instant::now();
+        let fresh = now - Duration::from_millis(50);
+        let old = now - Duration::from_millis(500);
+        let samples = [(300u16, fresh), (300u16, old), (0u16, fresh)];
+        assert_eq!(settle(&samples, now), vec![300, 0, 0]);
     }
 }

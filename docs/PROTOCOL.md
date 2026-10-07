@@ -663,11 +663,23 @@ the USB input endpoint directly and only while the device is configured,
 so the stream is cable only. On the wire it is an input report on the
 `0xFFFF:1` collection (Transport, Akko 3098B row) **[HW]**.
 
+The sender holds one report: it stores the five bytes and sets a pending
+bit, with no queue. Keys past the threshold in the same pass overwrite
+each other, and a release 0 can be overwritten before the endpoint takes
+it. On the TK75HE-V2, release reports go missing from six or seven keys
+held together even with the host's input queue raised to 512, and from
+twenty or more however deep the queue **[HW]**. sharkfin reads a slot
+quiet for 200 ms as released.
+
 GamaKay TK75HE-V2 (device 3833, `3151:5030`, issue #67) **[HW]**: a burst
 while a key moves, a slower repeat while it is held, 0 on release, keys
 pressed together interleaved. Full travel is about 810 counts on that
-board: half-hundredths, the scale of its firmware. sharkfin reads the
-stream for the Switches page's live view, by cable.
+board: half-hundredths, the scale of its firmware. The counts are the
+scan's calibrated reading and pass through no other filter. 810 counts is
+4.05 mm, the travel of the switch the firmware was written for, not of the
+switch the board ships with, which travels about 3.5 mm. The vendor's tool
+caps actuation at 3.3 mm. sharkfin reads the stream for the Switches
+page's live view, by cable.
 
 Never sent: `0x1C` and `0x1E` are sensor calibration. On, they zero the
 stored travel tables in RAM; off, they save them to flash, so on-then-off
