@@ -11,6 +11,13 @@ interface HIDCollectionInfo {
     reportId: number;
     items: { reportSize: number; reportCount: number }[];
   }[];
+  inputReports: { reportId: number }[];
+}
+
+interface HIDInputReportEvent extends Event {
+  readonly device: HIDDevice;
+  readonly reportId: number;
+  readonly data: DataView;
 }
 
 interface HIDDevice {
@@ -23,6 +30,8 @@ interface HIDDevice {
   close(): Promise<void>;
   sendFeatureReport(reportId: number, data: BufferSource): Promise<void>;
   receiveFeatureReport(reportId: number): Promise<DataView>;
+  addEventListener(type: "inputreport", listener: (e: HIDInputReportEvent) => void): void;
+  removeEventListener(type: "inputreport", listener: (e: HIDInputReportEvent) => void): void;
 }
 
 interface HIDDeviceFilter {

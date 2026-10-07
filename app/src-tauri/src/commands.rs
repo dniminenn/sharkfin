@@ -42,6 +42,9 @@ struct Inner {
     /// The last picture upload, for the bundle. Keyed by device id, so it
     /// outlives the handle and never describes another board.
     screen_write: Option<ops::ScreenOutcome>,
+    /// Readers on the board's vendor input collections while the `0x1B`
+    /// travel stream is on. Cleared with the handle.
+    travel: Option<hid::TravelStream>,
 }
 
 struct OpenDevice {
@@ -130,6 +133,7 @@ impl Default for AppState {
                 owner: OwnerRecord::default(),
                 switch_trial: None,
                 screen_write: None,
+                travel: None,
             }),
         }
     }
@@ -234,6 +238,7 @@ pub fn scan(state: tauri::State<AppState>) -> Result<ScanResult, String> {
             });
         }
         inner.open = None;
+        inner.travel = None;
     }
 
     let found = {
@@ -479,6 +484,7 @@ fn run<T>(
                 log::warn!("device stalled, dropping handle: {e}");
                 log::warn!("wire before the stall: {}", crate::hid::wire_trace());
                 inner.open = None;
+                inner.travel = None;
                 inner.stalled = true;
                 Err(STALL_MESSAGE.into())
             } else {
@@ -1179,6 +1185,55 @@ pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSetting
         }
         Ok(hall::assemble(f, &columns, &dks_all))
     })
+}
+
+/// Live travel on a magnetic gen2 board, by cable. `0x1B 01` starts the
+/// board's stream and readers on its vendor input collections; `0x1B 00`
+/// stops it. The board's flag lives in RAM, so a reboot also stops it.
+#[tauri::command(async)]
+pub fn travel_stream(state: tauri::State<AppState>, on: bool) -> Result<(), String> {
+    require_cable(&state)?;
+    let (vid, pid) = {
+        let inner = state.inner.lock();
+        let open = inner.open.as_ref().ok_or("no device connected")?;
+        if ops::hall_format(&open.spec, open.revision)?.format != hall::Format::Gen2 {
+            return Err("Live travel is read from gen2 boards only.".into());
+        }
+        (open.spec.vendor_id, open.spec.product_id)
+    };
+    if !on {
+        state.inner.lock().travel = None;
+    }
+    write_gap(&state, SETTING_GAP);
+    with_writable(&state, |t, _| t.send(&hall::travel_stream_packet(on)))?;
+    if on {
+        let started = {
+            let mut inner = state.inner.lock();
+            let api = inner.api()?;
+            hid::TravelStream::start(api, vid, pid)
+        };
+        match started {
+            Ok(stream) => state.inner.lock().travel = Some(stream),
+            Err(e) => {
+                write_gap(&state, SETTING_GAP);
+                let _ = with_writable(&state, |t, _| t.send(&hall::travel_stream_packet(false)));
+                return Err(e.to_string());
+            }
+        }
+    }
+    Ok(())
+}
+
+/// The last count seen for each of the 128 slots, in `unitMm` each; 0 is
+/// released. An error when the stream is off.
+#[tauri::command(async)]
+pub fn travel_read(state: tauri::State<AppState>) -> Result<Vec<u16>, String> {
+    let inner = state.inner.lock();
+    inner
+        .travel
+        .as_ref()
+        .map(|s| s.snapshot())
+        .ok_or_else(|| "live travel is off".to_string())
 }
 
 /// `slots`: the keys a write addresses, so the check's trial can open just

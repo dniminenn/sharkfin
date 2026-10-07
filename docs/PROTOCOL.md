@@ -666,8 +666,8 @@ so the stream is cable only. On the wire it is an input report on the
 GamaKay TK75HE-V2 (device 3833, `3151:5030`, issue #67) **[HW]**: a burst
 while a key moves, a slower repeat while it is held, 0 on release, keys
 pressed together interleaved. Full travel is about 810 counts on that
-board: half-hundredths, the scale of its firmware. sharkfin does not read
-the stream.
+board: half-hundredths, the scale of its firmware. sharkfin reads the
+stream for the Switches page's live view, by cable.
 
 Never sent: `0x1C` and `0x1E` are sensor calibration. On, they zero the
 stored travel tables in RAM; off, they save them to flash, so on-then-off

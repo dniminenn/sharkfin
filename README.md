@@ -71,7 +71,8 @@ switch model, which one is fitted. Written only on boards whose own firmware
 has been read for it, which is the ry5088 lineage and the yc3121 magnetic
 lineage from firmware 2.00 today, and shown read-only elsewhere. Older
 yc3121 magnetic firmware takes settings but cannot report them; the page
-says so.
+says so. By cable, the page can also show how far each key is pressed as
+you press it.
 
 A board that is not in the list still works. sharkfin reads which command
 set it speaks off the board's own answers, says so, and asks before it

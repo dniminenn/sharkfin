@@ -4,13 +4,14 @@
 //! hidapi transport to the vendor collection, cable or 2.4 GHz relay.
 
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
 use hidapi::{BusType, HidApi, HidDevice};
 use parking_lot::Mutex;
 
-use crate::protocol::{REPORT_LEN, USAGES, USAGE_PAGE};
+use crate::protocol::{hall, REPORT_LEN, USAGES, USAGE_PAGE};
 pub use crate::wire::LinkKind as Link;
 use crate::wire::{block_on, Wire, WireError};
 
@@ -245,6 +246,69 @@ impl Transport {
             out.copy_from_slice(&wire[..REPORT_LEN]);
         }
         Ok(out)
+    }
+}
+
+/// Live travel, read off the board's `0xFFFF` input collections while the
+/// `0x1B` flag is on. Which interface carries report 5 differs by board, so
+/// every node of the board on that page gets a reader; reports that are not
+/// travel are dropped. Dropping this stops the readers within a read
+/// timeout; the board's flag is the caller's to clear.
+pub struct TravelStream {
+    stop: Arc<AtomicBool>,
+    latest: Arc<Mutex<[u16; 128]>>,
+}
+
+impl TravelStream {
+    pub fn start(api: &HidApi, vendor_id: u16, product_id: u16) -> Result<Self, HidError> {
+        let stop = Arc::new(AtomicBool::new(false));
+        let latest = Arc::new(Mutex::new([0u16; 128]));
+        let mut nodes = 0;
+        for d in api.device_list() {
+            if (d.vendor_id(), d.product_id()) != (vendor_id, product_id)
+                || d.usage_page() != USAGE_PAGE
+            {
+                continue;
+            }
+            let Ok(dev) = api.open_path(d.path()) else {
+                continue;
+            };
+            nodes += 1;
+            let (stop, latest) = (stop.clone(), latest.clone());
+            std::thread::spawn(move || {
+                let mut buf = [0u8; REPORT_LEN + 1];
+                while !stop.load(Ordering::Relaxed) {
+                    match dev.read_timeout(&mut buf, 50) {
+                        Ok(n) if n > 1 => {
+                            if let Some((slot, counts)) = hall::parse_travel(buf[0], &buf[1..n]) {
+                                if let Some(v) = latest.lock().get_mut(usize::from(slot)) {
+                                    *v = counts;
+                                }
+                            }
+                        }
+                        Ok(_) => {}
+                        Err(_) => break,
+                    }
+                }
+            });
+        }
+        if nodes == 0 {
+            return Err(WireError::Transport(
+                "no vendor input collection to read travel from".into(),
+            ));
+        }
+        Ok(Self { stop, latest })
+    }
+
+    /// The last count seen for every slot, 0 for released or never seen.
+    pub fn snapshot(&self) -> Vec<u16> {
+        self.latest.lock().to_vec()
+    }
+}
+
+impl Drop for TravelStream {
+    fn drop(&mut self) {
+        self.stop.store(true, Ordering::Relaxed);
     }
 }
 

@@ -1275,6 +1275,24 @@ pub async fn get_switches() -> Result<JsValue, JsValue> {
     to_js(&hall::assemble(f, &columns, &dks_all))
 }
 
+/// Live travel by cable, gen2 only: `0x1B 01` on, `0x1B 00` off. The
+/// reports are read on the JS side, which holds the device.
+#[wasm_bindgen]
+pub async fn travel_stream(on: bool) -> Result<(), JsValue> {
+    require_cable()?;
+    gap(|s| &mut s.last_cmd, SETTING_GAP_MS).await;
+    let _busy = acquire().await;
+    let (t, spec) = get_open(true)?;
+    let (revision, _) = open_switches()?;
+    if ops::hall_format(&spec, revision)?.format != hall::Format::Gen2 {
+        return Err(JsValue::from("Live travel is read from gen2 boards only."));
+    }
+    t.send(&hall::travel_stream_packet(on))
+        .await
+        .map_err(fail)?;
+    Ok(())
+}
+
 /// `slots`: the keys a write addresses, so the check's trial can open just
 /// those; `None` is a write to every key, which no trial covers.
 fn require_hall_writes(spec: &DeviceSpec, slots: Option<&[u8]>) -> Result<hall::Columns, JsValue> {

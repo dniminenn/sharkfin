@@ -44,6 +44,8 @@ pub fn run() {
             commands::apply_owner_record,
             commands::set_switch_trial,
             commands::get_switches,
+            commands::travel_stream,
+            commands::travel_read,
             commands::set_switch_key,
             commands::set_switch_keys,
             commands::set_switches_all,

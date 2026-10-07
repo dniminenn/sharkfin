@@ -242,6 +242,10 @@ export const applyOwnerRecord = (record: OwnerRecord) =>
 export const setSwitchTrial = (slot: number | null) =>
   invoke<void>("set_switch_trial", { slot });
 export const getSwitches = () => invoke<SwitchSettings>("get_switches");
+/** Live travel on a gen2 board by cable: the board streams every key's depth. */
+export const travelStream = (on: boolean) => invoke<void>("travel_stream", { on });
+/** The last depth seen per slot, 128 entries in the board's counts (`unitMm` each). */
+export const travelRead = () => invoke<number[]>("travel_read");
 export const setSwitchKey = (key: KeySwitch) => invoke<void>("set_switch_key", { key });
 /** One or two keys in one visit; a snap pair goes through here. */
 export const setSwitchKeys = (keys: KeySwitch[]) => invoke<void>("set_switch_keys", { keys });

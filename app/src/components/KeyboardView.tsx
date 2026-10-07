@@ -58,6 +58,9 @@ interface Props {
   modified: Set<number>;
   /** A slot that was just written; its cap flashes once. */
   flash?: number | null;
+  /** How far each key is pressed, 0..1, drawn as a fill rising from the
+   *  cap's foot. Keys absent from the map are up. */
+  depth?: Map<number, number>;
   /** Place a popover anchor over the selected key, for a picker that
    *  opens on the key itself. The Popover root is the caller's. */
   anchor?: boolean;
@@ -157,6 +160,7 @@ export default function KeyboardView({
   entries,
   modified,
   flash = null,
+  depth,
   anchor = false,
   editor,
   labelFor,
@@ -220,6 +224,15 @@ export default function KeyboardView({
                 }}
               >
                 {capLegend(label)}
+                {!dead && depth?.get(k.matrixIndex!) ? (
+                  <span
+                    className="pointer-events-none absolute inset-x-0 bottom-0"
+                    style={{
+                      height: `${Math.round(depth.get(k.matrixIndex!)! * 100)}%`,
+                      background: "color-mix(in oklab, var(--ring) 55%, transparent)",
+                    }}
+                  />
+                ) : null}
                 {isMod && (
                   <span className="absolute right-[8%] top-[8%] h-[0.45em] w-[0.45em] rounded-full bg-(--ring)" />
                 )}

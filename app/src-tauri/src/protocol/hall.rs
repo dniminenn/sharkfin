@@ -24,6 +24,28 @@ pub const DKS_ACTIONS_ALL: u8 = 10;
 /// read apply 0..5 and treat the rest as 0.
 pub const SWITCH_TYPE: u8 = 252;
 
+/// `0x1B [flag]`, gen2 only: stream live travel. The handler stores the
+/// byte to a RAM flag the key scan reads (2268 `0x80109ec`), so any
+/// nonzero value starts it and a reboot forgets it. The sender writes the
+/// USB input endpoint, so the stream is cable only. Issue #67.
+pub const TRAVEL_STREAM: u8 = 0x1B;
+/// The stream's input report: `[0x1B, lo, hi, slot]` under report ID 5 on
+/// the board's `0xFFFF` input collection. Counts are `Columns::unit_mm`.
+pub const TRAVEL_REPORT_ID: u8 = 5;
+
+pub fn travel_stream_packet(on: bool) -> [u8; REPORT_LEN] {
+    packet(TRAVEL_STREAM, &[on as u8], Checksum::Bit7)
+}
+
+/// One travel report as `(slot, counts)`; `None` for the other traffic
+/// the collection carries. `data` is the report without its ID byte.
+pub fn parse_travel(report_id: u8, data: &[u8]) -> Option<(u8, u16)> {
+    if report_id != TRAVEL_REPORT_ID || data.len() < 4 || data[0] != TRAVEL_STREAM {
+        return None;
+    }
+    Some((data[3], u16::from_le_bytes([data[1], data[2]])))
+}
+
 /// Bit 7 of the mode byte: rapid trigger on. Bits 0..6 pick the key's
 /// kind.
 pub const MODE_RAPID_TRIGGER: u8 = 0x80;
@@ -554,6 +576,17 @@ mod tests {
             (&[SET, SWITCH_TYPE, 0, 3, 1][..], 57, 0)
         );
         assert_eq!(g.decode(TRAVEL, &[0u8; 256]).len(), 128);
+    }
+
+    #[test]
+    fn travel_stream_is_one_flag_and_a_five_byte_report() {
+        let on = travel_stream_packet(true);
+        assert_eq!(&on[..3], &[TRAVEL_STREAM, 1, 0]);
+        assert_eq!(travel_stream_packet(false)[1], 0);
+        assert_eq!(parse_travel(5, &[0x1B, 0x2A, 0x03, 7]), Some((7, 0x032A)));
+        assert_eq!(parse_travel(5, &[0x1B, 0, 0, 7]), Some((7, 0)));
+        assert_eq!(parse_travel(5, &[0x0F, 1, 0]), None);
+        assert_eq!(parse_travel(6, &[0x1B, 0x2A, 0x03, 7]), None);
     }
 
     #[test]

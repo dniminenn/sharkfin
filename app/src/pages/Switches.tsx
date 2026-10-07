@@ -37,12 +37,17 @@ import {
   setSwitchKey,
   setSwitchKeys,
   setSwitchPreset,
+  travelRead,
+  travelStream,
   type ConnectedDevice,
   type KeySwitch,
   type SwitchSettings,
   type SwitchType,
   type TravelRange,
 } from "@/lib/backend";
+
+/** The depth fill's full scale. Boards bottom out near 4 mm. */
+const FULL_TRAVEL_MM = 4.0;
 
 /** The backend decides (DeviceSpec::hall_reads and friends); this only reads
  *  its verdict. */
@@ -479,6 +484,34 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
     );
   }, [selected, settings, layers]);
 
+  // Live travel: the board streams each key's depth by cable, gen2 only.
+  // Off again when the toggle, the page or the board goes.
+  const [live, setLive] = useState(false);
+  const [depth, setDepth] = useState<number[] | null>(null);
+  useEffect(() => {
+    if (!device) setLive(false);
+  }, [device]);
+  useEffect(() => {
+    if (!live) return;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let cancelled = false;
+    travelStream(true)
+      .then(() => {
+        if (cancelled) return;
+        timer = setInterval(() => travelRead().then(setDepth).catch(() => {}), 50);
+      })
+      .catch((e) => {
+        toast.error(t("Live travel failed: {e}", { e: String(e) }));
+        setLive(false);
+      });
+    return () => {
+      cancelled = true;
+      if (timer) clearInterval(timer);
+      setDepth(null);
+      travelStream(false).catch(() => {});
+    };
+  }, [live]);
+
   if (!device) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -504,7 +537,17 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
   const writable = canWriteSwitches(device);
   const models = device.spec.switchTypes ?? [];
   const unit = settings.unitMm;
+  const decimals = unit >= 0.1 ? 1 : unit >= 0.01 ? 2 : 3;
   const ranges = rangesFor(device, unit);
+  const canLive = device.link === "usb" && settings.format === "gen2" && !global;
+  const depthMap =
+    live && depth
+      ? new Map<number, number>(
+          depth
+            .map((c, slot): [number, number] => [slot, Math.min(1, (c * unit) / FULL_TRAVEL_MM)])
+            .filter(([, v]) => v > 0),
+        )
+      : undefined;
   const bySlot = new Map(settings.keys.map((k) => [k.slot, k]));
   const keysBySlot = new Map(
     layout.keys.filter((k) => k.matrixIndex !== null).map((k) => [k.matrixIndex!, k]),
@@ -679,25 +722,37 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
         </div>
       )}
 
+      {canLive && (
+        <div className="flex items-center justify-end gap-2 text-sm">
+          <Label htmlFor="live-travel">{t("Live travel")}</Label>
+          <Switch id="live-travel" checked={live} onCheckedChange={setLive} disabled={busy} />
+        </div>
+      )}
       <KeyboardView
         layout={layout}
         selected={selected?.matrixIndex ?? null}
         entries={new Map()}
         modified={new Set(settings.keys.filter((k) => k.kind !== KIND_PLAIN).map((k) => k.slot))}
+        depth={depthMap}
         labelFor={(k) => {
+          if (live && depth && k.matrixIndex !== null && depth[k.matrixIndex] > 0) {
+            return (depth[k.matrixIndex] * unit).toFixed(decimals);
+          }
           const s = k.matrixIndex === null ? undefined : bySlot.get(k.matrixIndex);
           if (!s) return k.text ?? k.code;
           const kind = KINDS.find((x) => x.value === s.kind);
           return s.kind === KIND_PLAIN
-            ? `${s.travel.toFixed(unit >= 0.1 ? 1 : unit >= 0.01 ? 2 : 3)}${s.rapidTrigger ? " RT" : ""}`
+            ? `${s.travel.toFixed(decimals)}${s.rapidTrigger ? " RT" : ""}`
             : (kind?.label() ?? String(s.kind));
         }}
         onSelect={setSelected}
       />
       <p className="text-center text-xs text-muted-foreground">
-        {t(
-          "Each key shows its actuation point, or its kind when it is not a plain key. Click a key to edit it alone.",
-        )}
+        {live
+          ? t("Press keys: each cap shows how far it is pressed, in millimetres.")
+          : t(
+              "Each key shows its actuation point, or its kind when it is not a plain key. Click a key to edit it alone.",
+            )}
       </p>
 
       <div className="grid gap-6 lg:grid-cols-2">

@@ -8,7 +8,7 @@
 
 import init, * as core from "../../src-web/pkg/sharkfin_web";
 import { takePicked } from "./file-store";
-import { isSettingsCollection, requestFilters } from "./collections";
+import { isSettingsCollection, requestFilters, USAGE_PAGE } from "./collections";
 
 export const BUILD: "app" | "browser" = "browser";
 
@@ -371,6 +371,45 @@ export const setSwitchTrial = (slot: number | null): Promise<void> =>
   withCore(async () => {
     core.set_switch_trial(slot ?? undefined);
   });
+
+// Live travel: once `0x1B 01` is sent the board streams input report 5 on
+// its vendor page. Which interface carries it differs by board, so every
+// granted collection of the board on that page is listened to.
+let travelDevices: HIDDevice[] = [];
+const travelLatest = new Uint16Array(128);
+const onTravelReport = (e: HIDInputReportEvent) => {
+  const d = e.data;
+  if (e.reportId !== 5 || d.byteLength < 4 || d.getUint8(0) !== 0x1b) return;
+  travelLatest[d.getUint8(3)] = d.getUint16(1, true);
+};
+export const travelStream = async (on: boolean): Promise<void> => {
+  await ensure();
+  for (const d of travelDevices) d.removeEventListener("inputreport", onTravelReport);
+  travelDevices = [];
+  travelLatest.fill(0);
+  if (!on) {
+    await core.travel_stream(false);
+    return;
+  }
+  const st = JSON.parse(core.status() as string) as { connected: ConnectedDevice | null };
+  const spec = st.connected?.spec;
+  if (!spec) throw new Error("no device connected");
+  for (const d of await navigator.hid.getDevices()) {
+    if (d.vendorId !== spec.vendorId || d.productId !== spec.productId) continue;
+    const carries = (c: HIDCollectionInfo): boolean =>
+      (c.usagePage === USAGE_PAGE && c.inputReports.some((r) => r.reportId === 5)) ||
+      c.children.some(carries);
+    if (!d.collections.some(carries)) continue;
+    if (!d.opened) await d.open();
+    d.addEventListener("inputreport", onTravelReport);
+    travelDevices.push(d);
+  }
+  if (travelDevices.length === 0) {
+    throw new Error("The browser was not given this board's travel reports. Add the keyboard again from the picker.");
+  }
+  await core.travel_stream(true);
+};
+export const travelRead = async (): Promise<number[]> => Array.from(travelLatest);
 
 export const getSwitches = (): Promise<SwitchSettings> =>
   withCore(async () => JSON.parse((await core.get_switches()) as string) as SwitchSettings);
