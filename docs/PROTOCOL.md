@@ -28,7 +28,7 @@ v113_oledv106` (Hator HTK4100UA, yc3123). Bootloader: first 20 KB of the
 |---|---|
 | Collection | usage page `0xFFFF`, usage `2`; the Akko ACR75 v2 (device 606) reports usage `1` on the same page **[HW]**, and the vendor's own driver filters for both **[JS]**. The Akko 5075B Plus-S in Mac mode (device 1033, `05ac:024f`) has no vendor collection and answers on its keyboard collection, usage page `0x01` usage `6` **[HW]** (issue #58); the vendor's driver carries the same exception **[JS]**. Feature reports on a keyboard collection pass Chromium's protected-report rule; input and output reports would not. |
 | Reports | 64 bytes, feature, report ID 0, both directions |
-| Akko 3098B | Device 69, `3151:4002`: settings on interface 0, keyboard collection `0x01:0x06`. Interface 1 has a vendor `0xFFFF:1` collection with input report ID 5 only, no feature report. Identify `0x8F` works without `0xFD`; reads match yc500 **[HW]**. This USB ID is shared with other boards, so check the report descriptor before using their interfaces. |
+| Akko 3098B | Device 69, `3151:4002`: settings on interface 0, keyboard collection `0x01:0x06`. Interface 1 has a vendor `0xFFFF:1` collection with input report ID 5 only, no feature report: the travel stream under Magnetic switches. Identify `0x8F` works without `0xFD`; reads match yc500 **[HW]**. This USB ID is shared with other boards, so check the report descriptor before using their interfaces. |
 | Link | wired USB, or the 2.4 GHz receiver through the relay below. Not every receiver relays: the Typhoon Ultimate TKL's (device 2045) does not **[HW]**. Bluetooth does not expose the collection **[HW]** |
 
 USB VID `0x3151` is common. Other vendor IDs occur. They are not part of
@@ -636,6 +636,36 @@ The partner slot is stored as row and column (`slot / 6`, `slot % 6`, apply
 `0x0800dd7a`). Pressing a snap key releases its partner if the partner is
 down; releasing it presses the partner again if the partner is still held.
 Both keys carry kind 7 and each other's slot.
+
+#### Travel stream `0x1B` [FW] [HW]
+
+`0x1B [flag]`, Bit7. Handler 2268 `0x80109ec`, 2116 `0x8012d1e`, 3708
+`0x80141c6`: byte 1 is stored to a RAM flag and nothing else is read, so
+any nonzero value starts the stream and 0 stops it. Not saved.
+
+While the flag is set, the key scan (2268 `0x800cf96`, 2116 `0x800d56e`,
+3708 `0x800eb92` and `0x800f37e`) reports every key past a fixed threshold
+on every pass, and once more with travel 0 when the key drops below it.
+The threshold is 15 counts on 2268 and 2116, 20 on 3708. Actuation,
+release and rapid trigger play no part.
+
+| offset | |
+|---|---|
+| 0 | report ID 5 |
+| 1 | `0x1B` |
+| 2..3 | travel, u16 little-endian, the scan's raw counts |
+| 4 | slot, as `0x8A` numbers it |
+
+Sender 2268 `0x8010164`, 2116 `0x8012254`, 3708 `0x8013724`. It writes
+the USB input endpoint directly and only while the device is configured,
+so the stream is cable only. On the wire it is an input report on the
+`0xFFFF:1` collection (Transport, Akko 3098B row) **[HW]**.
+
+GamaKay TK75HE-V2 (device 3833, `3151:5030`, issue #67) **[HW]**: a burst
+while a key moves, a slower repeat while it is held, 0 on release, keys
+pressed together interleaved. Full travel is about 810 counts on that
+board, so the counts are not the hundredths the settings columns use; the
+scale is per image. sharkfin does not read the stream.
 
 Never sent: `0x1C` and `0x1E` are sensor calibration. On, they zero the
 stored travel tables in RAM; off, they save them to flash, so on-then-off
