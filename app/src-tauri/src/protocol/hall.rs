@@ -54,7 +54,8 @@ const YC500_FULL_TRAVEL: i32 = 40;
 
 /// Firmware clamps at gen2 apply, mirrored so the picture never lies:
 /// travel below 0.10 mm becomes 0.15, a zero rapid-trigger step becomes
-/// 0.01, a dead zone past 3.40 mm becomes 0.30.
+/// 0.01, a dead zone past 3.40 mm becomes 0.30. Counts from 2268 at
+/// hundredths; the page's ranges keep every scale well inside them.
 pub const GEN2_MIN_TRAVEL_MM: f64 = 0.10;
 pub const GEN2_MIN_RT_MM: f64 = 0.01;
 pub const GEN2_MAX_DEAD_MM: f64 = 3.40;
@@ -67,30 +68,64 @@ pub enum Format {
 }
 
 impl Format {
-    pub fn for_family(family: &str) -> Option<Format> {
-        match family {
-            "gen2" => Some(Format::Gen2),
-            "yc500" => Some(Format::Yc500),
-            _ => None,
-        }
-    }
-
     pub fn slots(self) -> usize {
         match self {
             Format::Gen2 => 128,
             Format::Yc500 => 126,
         }
     }
+}
 
-    pub fn unit_mm(self) -> f64 {
-        match self {
-            Format::Gen2 => 0.01,
-            Format::Yc500 => 0.1,
+/// One gen2 travel count in millimetres, by firmware version as the
+/// vendor's driver scales it: tenths below 3.00, hundredths from 3.00,
+/// half-hundredths from 5.00. 3708 `v507` doubles 2268 `v309`'s scan
+/// constants and the TK75HE-V2 bottoms out near 810 counts (issue #67).
+/// Every gen2 image read answers the version; without it the scale of
+/// the images read is assumed.
+pub fn gen2_unit_mm(revision: Option<u16>) -> f64 {
+    match revision {
+        Some(r) if r >= 0x0500 => 0.005,
+        Some(r) if r < 0x0300 => 0.1,
+        _ => 0.01,
+    }
+}
+
+/// The column format and the size of one travel count.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Columns {
+    pub format: Format,
+    pub unit_mm: f64,
+}
+
+impl Columns {
+    pub fn gen2(revision: Option<u16>) -> Columns {
+        Columns {
+            format: Format::Gen2,
+            unit_mm: gen2_unit_mm(revision),
         }
     }
 
+    pub fn yc500() -> Columns {
+        Columns {
+            format: Format::Yc500,
+            unit_mm: 0.1,
+        }
+    }
+
+    pub fn for_board(family: &str, revision: Option<u16>) -> Option<Columns> {
+        match family {
+            "gen2" => Some(Columns::gen2(revision)),
+            "yc500" => Some(Columns::yc500()),
+            _ => None,
+        }
+    }
+
+    pub fn slots(self) -> usize {
+        self.format.slots()
+    }
+
     pub fn wide(self, subop: u8) -> bool {
-        self == Format::Gen2
+        self.format == Format::Gen2
             && matches!(
                 subop,
                 TRAVEL | LIFT | RT_PRESS | RT_LIFT | DKS_START | DEAD_BOTTOM
@@ -124,7 +159,7 @@ impl Format {
     }
 
     pub fn to_wire(self, subop: u8, mm: f64) -> u16 {
-        match self {
+        match self.format {
             Format::Gen2 => {
                 let mm = match subop {
                     TRAVEL | LIFT | DKS_START => mm.max(GEN2_MIN_TRAVEL_MM),
@@ -132,7 +167,7 @@ impl Format {
                     DEAD_BOTTOM => mm.clamp(0.0, GEN2_MAX_DEAD_MM),
                     _ => mm,
                 };
-                (mm / 0.01).round().clamp(0.0, 65535.0) as u16
+                (mm / self.unit_mm).round().clamp(0.0, 65535.0) as u16
             }
             Format::Yc500 => {
                 let tenths = (mm * 10.0).round() as i32;
@@ -147,8 +182,8 @@ impl Format {
     }
 
     pub fn to_mm(self, subop: u8, wire: u16) -> f64 {
-        match self {
-            Format::Gen2 => f64::from(wire) * 0.01,
+        match self.format {
+            Format::Gen2 => f64::from(wire) * self.unit_mm,
             Format::Yc500 => {
                 let b = i32::from(wire);
                 let tenths = match subop {
@@ -267,7 +302,7 @@ impl KeySwitch {
     }
 
     /// Column value for a sub-op, clamped the way the firmware would.
-    pub fn wire(&self, f: Format, subop: u8) -> u16 {
+    pub fn wire(&self, f: Columns, subop: u8) -> u16 {
         match subop {
             MODE => u16::from(self.mode_byte()),
             TRAVEL => f.to_wire(subop, self.travel),
@@ -290,7 +325,7 @@ impl KeySwitch {
 /// time, 25 bottom dead zone. Bytes 1 and 2 are stored and never
 /// read. Values are yc500 column bytes.
 pub fn global_packet(key: &KeySwitch, all: bool) -> [u8; REPORT_LEN] {
-    let f = Format::Yc500;
+    let f = Columns::yc500();
     let mut buf = packet(
         SET_GLOBAL,
         &[
@@ -317,7 +352,7 @@ pub fn global_packet(key: &KeySwitch, all: bool) -> [u8; REPORT_LEN] {
 /// block: 1.9 mm actuation, 2.9 release, 0.3 rapid trigger steps,
 /// 0.6 mm dead zone, 0.4 mm dynamic start, 300 ms mod-tap.
 pub fn yc500_default(slot: u8) -> KeySwitch {
-    let f = Format::Yc500;
+    let f = Columns::yc500();
     KeySwitch {
         slot,
         kind: KIND_NORMAL,
@@ -387,7 +422,7 @@ pub struct SwitchSettings {
 
 /// Columns as read, keyed by sub-op, into per-key records. `dks_all`
 /// is the sub-op 10 read: four blocks of one byte a slot.
-pub fn assemble(f: Format, columns: &[(u8, Vec<u16>)], dks_all: &[u8]) -> SwitchSettings {
+pub fn assemble(f: Columns, columns: &[(u8, Vec<u16>)], dks_all: &[u8]) -> SwitchSettings {
     let col = |subop: u8, s: usize| -> u16 {
         columns
             .iter()
@@ -395,10 +430,7 @@ pub fn assemble(f: Format, columns: &[(u8, Vec<u16>)], dks_all: &[u8]) -> Switch
             .and_then(|(_, v)| v.get(s).copied())
             .unwrap_or(0)
     };
-    let block = match f {
-        Format::Gen2 => 128,
-        Format::Yc500 => 126,
-    };
+    let block = f.slots();
     let keys = (0..f.slots())
         .map(|s| {
             let mode = col(MODE, s) as u8;
@@ -424,8 +456,8 @@ pub fn assemble(f: Format, columns: &[(u8, Vec<u16>)], dks_all: &[u8]) -> Switch
         })
         .collect();
     SwitchSettings {
-        format: f,
-        unit_mm: f.unit_mm(),
+        format: f.format,
+        unit_mm: f.unit_mm,
         keys,
     }
 }
@@ -454,7 +486,7 @@ mod tests {
 
     #[test]
     fn single_slot_packet_matches_the_handler() {
-        let g = Format::Gen2;
+        let g = Columns::gen2(Some(0x0309));
         let p = g.set_one(TRAVEL, 5, true, 200).unwrap();
         assert_eq!(&p[..5], &[SET, TRAVEL, 0, 5, 1]);
         assert_eq!((p[8], p[9]), (200, 0));
@@ -468,7 +500,7 @@ mod tests {
         );
         let m = g.set_one(MODE, 3, false, 0x80).unwrap();
         assert_eq!((m[4], m[8], m[9]), (0, 0x80, 0));
-        let y = Format::Yc500;
+        let y = Columns::yc500();
         assert!(
             y.set_one(TRAVEL, 126, true, 1).is_none(),
             "1618 keeps 126 slots"
@@ -482,7 +514,7 @@ mod tests {
 
     #[test]
     fn bulk_pages_are_28_wide_or_56_narrow_with_last_on_the_final_page() {
-        let g = Format::Gen2;
+        let g = Columns::gen2(Some(0x0309));
         let vals = [200u16; 128];
         let wide = g.set_all(TRAVEL, &vals, true);
         assert_eq!(wide.len(), 5);
@@ -495,7 +527,7 @@ mod tests {
         assert_eq!(narrow[2][8 + 15], 0x80);
         assert_eq!(narrow[2][8 + 16], 0);
         // 1618: 56, 56, 14.
-        let y = Format::Yc500.set_all(TRAVEL, &[18; 128], true);
+        let y = Columns::yc500().set_all(TRAVEL, &[18; 128], true);
         assert_eq!(y.len(), 3);
         assert_eq!(y[2][8 + 13], 18);
         assert_eq!(y[2][8 + 14], 0);
@@ -504,7 +536,7 @@ mod tests {
 
     #[test]
     fn gen2_units_and_clamps_follow_the_firmware() {
-        let g = Format::Gen2;
+        let g = Columns::gen2(Some(0x0309));
         assert_eq!(g.to_wire(TRAVEL, 2.0), 200);
         assert_eq!(g.to_mm(TRAVEL, 50), 0.5);
         let k = key();
@@ -524,12 +556,24 @@ mod tests {
         assert_eq!(g.decode(TRAVEL, &[0u8; 256]).len(), 128);
     }
 
+    #[test]
+    fn gen2_scale_follows_the_firmware_version() {
+        assert_eq!(Columns::gen2(Some(0x0200)).unit_mm, 0.1);
+        assert_eq!(Columns::gen2(Some(0x0309)).unit_mm, 0.01);
+        assert_eq!(Columns::gen2(Some(0x0507)).unit_mm, 0.005);
+        assert_eq!(Columns::gen2(None).unit_mm, 0.01);
+        let g = Columns::gen2(Some(0x0507));
+        assert_eq!(g.to_wire(TRAVEL, 2.0), 400);
+        assert!((g.to_mm(TRAVEL, 810) - 4.05).abs() < 1e-9);
+        assert_eq!(g.format, Format::Gen2);
+    }
+
     /// 1618 evaluator: a key fires when live travel (tenths) exceeds the
     /// byte, so the 18/28 defaults are 1.9 and 2.9 mm and the dead
     /// zone byte 33 is 4.0 - 3.4 = 0.6 mm from the bottom.
     #[test]
     fn yc500_units_carry_the_one_tenth_offset() {
-        let y = Format::Yc500;
+        let y = Columns::yc500();
         assert_eq!(y.to_mm(TRAVEL, 18), 1.9);
         assert_eq!(y.to_mm(LIFT, 28), 2.9);
         assert_eq!(y.to_mm(RT_PRESS, 2), 0.3);
@@ -542,7 +586,7 @@ mod tests {
         let pages = [7u8; 128];
         assert_eq!(y.decode(TRAVEL, &pages).len(), 126);
         assert_eq!(y.get_pages(TRAVEL), 2);
-        assert_eq!(Format::Gen2.get_pages(TRAVEL), 4);
+        assert_eq!(Columns::gen2(None).get_pages(TRAVEL), 4);
     }
 
     #[test]
@@ -568,7 +612,7 @@ mod tests {
         let mut dks = vec![0u8; 512];
         dks[128 * 2 + 5] = 0x55;
         let s = assemble(
-            Format::Gen2,
+            Columns::gen2(Some(0x0309)),
             &[(MODE, vec![0x82; 128]), (SWITCH_TYPE, vec![7; 128])],
             &dks,
         );
@@ -578,7 +622,7 @@ mod tests {
         assert!(s.keys[5].rapid_trigger);
         let mut dks = vec![0u8; 504];
         dks[126 * 3 + 1] = 9;
-        let s = assemble(Format::Yc500, &[], &dks);
+        let s = assemble(Columns::yc500(), &[], &dks);
         assert_eq!(s.keys.len(), 126);
         assert_eq!(s.keys[1].dks_actions[3], 9);
         assert_eq!(s.unit_mm, 0.1);

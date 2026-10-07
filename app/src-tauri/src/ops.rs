@@ -73,14 +73,14 @@ pub fn scaled_profiles(spec: &DeviceSpec) -> bool {
     spec.family == "yc500" && spec.magnetic
 }
 
-pub fn hall_format(spec: &DeviceSpec, revision: Option<u16>) -> Result<hall::Format, String> {
+pub fn hall_format(spec: &DeviceSpec, revision: Option<u16>) -> Result<hall::Columns, String> {
     if !spec.hall_reads(revision) {
         return Err(format!(
             "{} has no magnetic switches sharkfin can read",
             spec.label()
         ));
     }
-    hall::Format::for_family(&spec.family)
+    hall::Columns::for_board(&spec.family, revision)
         .ok_or_else(|| "no switch column format for this family".to_string())
 }
 

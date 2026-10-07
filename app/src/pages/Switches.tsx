@@ -142,7 +142,7 @@ function Row({
   onChange: (v: number) => void;
   disabled?: boolean;
 }) {
-  const decimals = unit >= 0.1 ? 1 : 2;
+  const decimals = unit >= 0.1 ? 1 : unit >= 0.01 ? 2 : 3;
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm">
@@ -689,7 +689,7 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
           if (!s) return k.text ?? k.code;
           const kind = KINDS.find((x) => x.value === s.kind);
           return s.kind === KIND_PLAIN
-            ? `${s.travel.toFixed(unit >= 0.1 ? 1 : 2)}${s.rapidTrigger ? " RT" : ""}`
+            ? `${s.travel.toFixed(unit >= 0.1 ? 1 : unit >= 0.01 ? 2 : 3)}${s.rapidTrigger ? " RT" : ""}`
             : (kind?.label() ?? String(s.kind));
         }}
         onSelect={setSelected}

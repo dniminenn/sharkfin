@@ -1127,7 +1127,7 @@ pub fn write_screen_image(
     out
 }
 
-fn hall_format(state: &tauri::State<AppState>) -> Result<hall::Format, String> {
+fn hall_format(state: &tauri::State<AppState>) -> Result<hall::Columns, String> {
     let inner = state.inner.lock();
     let open = inner.open.as_ref().ok_or("no device connected")?;
     ops::hall_format(&open.spec, open.revision)
@@ -1186,7 +1186,7 @@ pub fn get_switches(state: tauri::State<AppState>) -> Result<hall::SwitchSetting
 fn require_hall_writes(
     state: &tauri::State<AppState>,
     slots: Option<&[u8]>,
-) -> Result<hall::Format, String> {
+) -> Result<hall::Columns, String> {
     let inner = state.inner.lock();
     let open = inner.open.as_ref().ok_or("no device connected")?;
     if !crate::session::hall_write_allowed(

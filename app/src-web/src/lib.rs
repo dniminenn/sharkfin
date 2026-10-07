@@ -1241,7 +1241,7 @@ pub async fn get_switches() -> Result<JsValue, JsValue> {
     let (t, spec) = get_open(false)?;
     let (revision, _) = open_switches()?;
     let f = ops::hall_format(&spec, revision)?;
-    async fn column(t: &Transport, f: hall::Format, subop: u8) -> Result<Vec<u8>, JsValue> {
+    async fn column(t: &Transport, f: hall::Columns, subop: u8) -> Result<Vec<u8>, JsValue> {
         let mut out = Vec::with_capacity(256);
         for page in 0..f.get_pages(subop) {
             out.extend_from_slice(
@@ -1277,7 +1277,7 @@ pub async fn get_switches() -> Result<JsValue, JsValue> {
 
 /// `slots`: the keys a write addresses, so the check's trial can open just
 /// those; `None` is a write to every key, which no trial covers.
-fn require_hall_writes(spec: &DeviceSpec, slots: Option<&[u8]>) -> Result<hall::Format, JsValue> {
+fn require_hall_writes(spec: &DeviceSpec, slots: Option<&[u8]>) -> Result<hall::Columns, JsValue> {
     let (revision, _) = open_switches()?;
     let (owner, trial) = STATE.with(|s| {
         let s = s.borrow();

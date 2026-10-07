@@ -523,7 +523,7 @@ firmware.
 | images read | 2268 X65HE `v309`, 2116 TITAN68HE `v304`, 3708 SK61HE `v507` | 1618 ER75 `v200`, 1466 K85 `v107` |
 | columns | from every image | from firmware 2.00 (`0x80` reply `02 00`); 1.07 has no `0x65` or `0xE5` |
 | slots a column | 128 | 126 (21 rows of 6) |
-| travel columns | u16 little-endian, hundredths of a millimetre | one byte, tenths, offset by one (below) |
+| travel columns | u16 little-endian; one count is 0.1 mm below firmware 3.00, 0.01 mm from 3.00, 0.005 mm from 5.00 **[JS]**. 3708 `v507` doubles 2268 `v309`'s scan constants and travel default **[FW]**; the TK75HE-V2 (`v5`) bottoms out near 810 counts **[HW]** | one byte, tenths, offset by one (below) |
 | write evidenced for | `ry5088_` lineage | `yc3121_` lineage |
 | profiles on the wire | as is | `profile * 4 + sublayer` (below) |
 
@@ -578,9 +578,11 @@ becomes 1, a bottom dead zone above 340 becomes 30. Defaults are 200
 travel, 280 release, 50 for both steps and the first point, 30 dead zone,
 0 mod-tap time, 255 snap partner.
 
-`0xE6` (the vendor's precision read) is not handled by any of the three
-images; the reply is the echoed request. The vendor's driver falls back to
-0.01 mm for such boards, which is what the firmware uses.
+The vendor's driver reads the version at connect and picks the count
+scale from it as in the table above. Eight ry5088 records also send
+`0xE6`, a feature list: byte 1 `0xAA`, byte 2 the scale (0 for 0.01 mm,
+1 for 0.005, 2 for 0.001), 0.01 assumed on no answer **[JS]**. None of the
+three images handles it; the reply is the echoed request.
 
 #### Keymap sub-layers
 
@@ -664,8 +666,8 @@ so the stream is cable only. On the wire it is an input report on the
 GamaKay TK75HE-V2 (device 3833, `3151:5030`, issue #67) **[HW]**: a burst
 while a key moves, a slower repeat while it is held, 0 on release, keys
 pressed together interleaved. Full travel is about 810 counts on that
-board, so the counts are not the hundredths the settings columns use; the
-scale is per image. sharkfin does not read the stream.
+board: half-hundredths, the scale of its firmware. sharkfin does not read
+the stream.
 
 Never sent: `0x1C` and `0x1E` are sensor calibration. On, they zero the
 stored travel tables in RAM; off, they save them to flash, so on-then-off
