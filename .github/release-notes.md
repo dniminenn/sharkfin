@@ -1,5 +1,16 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.9.5
+
+**Keys no longer stick in the live travel view.** A board streaming travel
+keeps one report at a time, so with several keys down a release can go
+unreported and the key stayed pressed in the picture. A key that has gone
+quiet now reads as up. Seen on a GamaKay TK75HE-V2 in issue #67.
+
+**The live buttons on the Switches tab show what they will write.** A board
+can bottom out deeper than the deepest actuation it accepts; the button
+now says so and shows the value it sets.
+
 ## What changed in 0.9.4
 
 **Live travel.** On a board with magnetic switches, plugged in by cable,
