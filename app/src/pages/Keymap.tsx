@@ -443,6 +443,7 @@ export default function KeymapPage({
           preview={previewCustom}
           onUse={useDrawing}
           onClose={() => setDrawing(false)}
+          live={!!device && device.link === "usb" && device.switches !== "none" && device.spec.family === "gen2"}
         />
       )}
 

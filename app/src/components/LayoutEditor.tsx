@@ -15,6 +15,7 @@ import { t } from "@/lib/i18n";
 import type { BoardLayout } from "@/lib/layout-loader";
 import type { Inference } from "@/lib/layout-infer";
 import { CODE_TO_USAGE, entryLabel } from "@/lib/hid-usages";
+import { travelRead, travelStream } from "@/lib/backend";
 import { directUsage, matchRank } from "@/components/KeyPicker";
 import { FN_ENTRY, kleToLayout } from "@/lib/kle";
 import {
@@ -48,6 +49,9 @@ interface Props {
   preview: (layout: BoardLayout) => Promise<Inference | null>;
   onUse: (layout: BoardLayout) => Promise<void>;
   onClose: () => void;
+  /** The board streams live travel (magnetic gen2, by cable), so a key
+   *  pressed on it can name the slot for the drawing. */
+  live?: boolean;
 }
 
 type Selection = { kind: "key"; id: number } | { kind: "knob" } | null;
@@ -132,6 +136,7 @@ export default function LayoutEditor({
   preview,
   onUse,
   onClose,
+  live = false,
 }: Props) {
   const [selected, setSelected] = useState<Selection>(null);
   const [open, setOpen] = useState(false);
@@ -310,6 +315,71 @@ export default function LayoutEditor({
       }),
     );
   };
+
+  // Slot finder. A key pressed on the board names its slot through the
+  // travel stream; the slot's keymap entry labels the selected drawn key,
+  // or picks out the drawn key already holding it.
+  const [listen, setListen] = useState(false);
+  const pressRef = useRef<(slot: number) => void>(() => {});
+  pressRef.current = (slot) => {
+    const matrix = inference?.matrix ?? nearest?.matrix;
+    if (!matrix || !draft) return;
+    const entry = matrix.slice(slot * 4, slot * 4 + 4);
+    const name = entryLabel(entry);
+    if (selectedKey) {
+      const usage = drawableUsage(entry);
+      if (usage === null) {
+        toast(t("Slot {n} is {label}, which cannot be drawn.", { n: slot, label: name }));
+        return;
+      }
+      updateKey(selectedKey.id, { usage, note: undefined });
+      setSelected(null);
+      toast(t("{label}, slot {n}, set on the selected key.", { label: legend(usage), n: slot }));
+      return;
+    }
+    const i = inference?.layout.keys.findIndex((k) => k.matrixIndex === slot) ?? -1;
+    const drawn = i >= 0 ? draft.keys[i] : undefined;
+    if (drawn) {
+      setSelected({ kind: "key", id: drawn.id });
+      toast(t("Slot {n} is {label}: the highlighted key.", { n: slot, label: name }));
+    } else {
+      toast(t("Slot {n} is {label}, not drawn yet. Click a key to give it this label, then press again.", { n: slot, label: name }));
+    }
+  };
+  useEffect(() => {
+    if (!listen) return;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let cancelled = false;
+    let prev: number[] = [];
+    travelStream(true)
+      .then(() => {
+        if (cancelled) return;
+        timer = setInterval(
+          () =>
+            travelRead()
+              .then((d) => {
+                for (let s = 0; s < d.length; s++) {
+                  if (d[s] > 0 && !(prev[s] > 0)) {
+                    pressRef.current(s);
+                    break;
+                  }
+                }
+                prev = d;
+              })
+              .catch(() => {}),
+          50,
+        );
+      })
+      .catch((e) => {
+        toast.error(t("Live travel failed: {e}", { e: String(e) }));
+        setListen(false);
+      });
+    return () => {
+      cancelled = true;
+      if (timer) clearInterval(timer);
+      travelStream(false).catch(() => {});
+    };
+  }, [listen]);
 
   const addKey = () => {
     if (!draft) return;
@@ -640,6 +710,17 @@ export default function LayoutEditor({
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {live && (
+            <label className="mr-2 flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                className="accent-(--primary)"
+                checked={listen}
+                onChange={(e) => setListen(e.target.checked)}
+              />
+              {t("Press keys on the board to label")}
+            </label>
+          )}
           <Button size="sm" variant="ghost" onClick={undo} disabled={!history.length}>
             <Undo2 className="mr-1 h-3.5 w-3.5" /> {t("Undo")}
           </Button>
