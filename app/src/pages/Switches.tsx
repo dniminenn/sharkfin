@@ -645,6 +645,10 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
   const maxLiftMm = maxLift * unit;
   const snap = (r: { min: number; max: number; step: number }, mm: number) =>
     Math.min(r.max, Math.max(r.min, Math.round(mm / r.step) * r.step));
+  // What the buttons write: the live figures snapped to the register's
+  // range. A board can bottom out past the deepest actuation it accepts.
+  const peakSet = snap(ranges.travel, peakMm);
+  const liftSet = snap(ranges.fireLift, maxLiftMm);
   const bySlot = new Map(settings.keys.map((k) => [k.slot, k]));
   const keysBySlot = new Map(
     layout.keys.filter((k) => k.matrixIndex !== null).map((k) => [k.matrixIndex!, k]),
@@ -950,18 +954,20 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
                       size="sm"
                       variant="outline"
                       disabled={!writable || peakMm <= 0}
-                      onClick={() => setDraftKey({ ...draftKey, travel: snap(ranges.travel, peakMm) })}
+                      onClick={() => setDraftKey({ ...draftKey, travel: peakSet })}
                     >
-                      {t("Actuate at the deepest point: {mm} mm", { mm: peakMm.toFixed(decimals) })}
+                      {peakSet < peakMm - unit / 2
+                        ? t("Actuate as deep as this board allows: {mm} mm", { mm: peakSet.toFixed(decimals) })
+                        : t("Actuate at the deepest point: {mm} mm", { mm: peakSet.toFixed(decimals) })}
                     </Button>
                     {draftKey.rapidTrigger && (
                       <Button
                         size="sm"
                         variant="outline"
                         disabled={!writable || maxLiftMm <= 0}
-                        onClick={() => setDraftKey({ ...draftKey, rtLift: snap(ranges.fireLift, maxLiftMm) })}
+                        onClick={() => setDraftKey({ ...draftKey, rtLift: liftSet })}
                       >
-                        {t("Release step from the largest lift: {mm} mm", { mm: maxLiftMm.toFixed(decimals) })}
+                        {t("Release step from the largest lift: {mm} mm", { mm: liftSet.toFixed(decimals) })}
                       </Button>
                     )}
                   </div>
