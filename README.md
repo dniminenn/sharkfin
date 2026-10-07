@@ -72,7 +72,9 @@ has been read for it, which is the ry5088 lineage and the yc3121 magnetic
 lineage from firmware 2.00 today, and shown read-only elsewhere. Older
 yc3121 magnetic firmware takes settings but cannot report them; the page
 says so. By cable, the page can also show how far each key is pressed as
-you press it.
+you press it, set a key's actuation point from where you pressed it, take
+a rapid trigger step from how far you lift, and compare how deep every key
+bottoms out. Drawing a board, a key pressed on it names its slot.
 
 A board that is not in the list still works. sharkfin reads which command
 set it speaks off the board's own answers, says so, and asks before it

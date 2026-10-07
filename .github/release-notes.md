@@ -4,7 +4,12 @@ Beta. Back up from the Device tab before you rely on it.
 
 **Live travel.** On a board with magnetic switches, plugged in by cable,
 the Switches tab can show how far each key is pressed as you press it, in
-millimetres. Worked out from the board's own firmware and a GamaKay
+millimetres. With a key picked, it keeps the deepest point you reached and
+the largest lift that did not let go, and sets the actuation point or the
+rapid trigger release step from them with one click. Press every key to
+the bottom and it says which ones read short. Drawing a board that has no
+picture, a key pressed on it names its slot, so the drawn key takes the
+right label. Worked out from the board's own firmware and a GamaKay
 TK75HE-V2 owner's capture in issue #67.
 
 **Travel values read right on boards with firmware 5.00 and later.** Those

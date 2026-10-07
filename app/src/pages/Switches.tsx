@@ -4,7 +4,7 @@
 // has been read (registry gate). yc500 below 2.00 takes one board-wide
 // record and reports nothing back. Each write is a flash save: button, not
 // slider.
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PageHeader, Section } from "@/components/Page";
@@ -243,6 +243,23 @@ function ModelSelect({
         ))}
       </SelectContent>
     </Select>
+  );
+}
+
+/** The last three seconds of one key's depth, with the actuation and
+ *  release points drawn across it. */
+function Trace({ values, max, marks }: { values: number[]; max: number; marks: number[] }) {
+  const w = 240;
+  const h = 48;
+  const y = (mm: number) => h - Math.min(1, Math.max(0, mm / max)) * h;
+  const points = values.map((v, i) => `${(i / 59) * w},${y(v)}`).join(" ");
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} className="h-12 w-full" aria-hidden="true">
+      {marks.map((m, i) => (
+        <line key={i} x1={0} x2={w} y1={y(m)} y2={y(m)} stroke="currentColor" strokeOpacity={0.3} strokeDasharray="3 3" />
+      ))}
+      {values.length > 1 && <polyline points={points} fill="none" stroke="var(--ring)" strokeWidth={1.5} />}
+    </svg>
   );
 }
 
@@ -498,7 +515,10 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
     travelStream(true)
       .then(() => {
         if (cancelled) return;
-        timer = setInterval(() => travelRead().then(setDepth).catch(() => {}), 50);
+        timer = setInterval(
+          () => travelRead().then((d) => onSampleRef.current(d)).catch(() => {}),
+          50,
+        );
       })
       .catch((e) => {
         toast.error(t("Live travel failed: {e}", { e: String(e) }));
@@ -510,6 +530,68 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
       setDepth(null);
       travelStream(false).catch(() => {});
     };
+  }, [live]);
+
+  // What the stream is used for beyond the picture: the deepest point each
+  // key reached (bottom-out comparison, actuation by feel) and, for the
+  // selected key, a short trace and the largest lift that did not let go
+  // (a rapid trigger release step the hands actually produce).
+  const [peak, setPeak] = useState<number[] | null>(null);
+  const [trace, setTrace] = useState<number[]>([]);
+  const [maxLift, setMaxLift] = useState(0);
+  const selectedSlotRef = useRef<number | null>(null);
+  const cycleRef = useRef({ slot: -1, peak: 0, trough: 0, maxLift: 0 });
+  const onSampleRef = useRef<(d: number[]) => void>(() => {});
+  onSampleRef.current = (d) => {
+    setDepth(d);
+    setPeak((prev) => {
+      const p = prev ? prev.slice() : new Array<number>(d.length).fill(0);
+      let changed = !prev;
+      for (let i = 0; i < d.length; i++) {
+        if (d[i] > (p[i] ?? 0)) {
+          p[i] = d[i];
+          changed = true;
+        }
+      }
+      return changed ? p : prev;
+    });
+    const slot = selectedSlotRef.current;
+    if (slot === null) return;
+    const c = d[slot] ?? 0;
+    const cy = cycleRef.current;
+    if (cy.slot !== slot) {
+      cycleRef.current = { slot, peak: 0, trough: 0, maxLift: 0 };
+      setTrace([]);
+      setMaxLift(0);
+      return;
+    }
+    if (c === 0) {
+      cy.peak = 0;
+      cy.trough = 0;
+    } else if (c > cy.peak) {
+      cy.peak = c;
+      cy.trough = c;
+    } else if (c < cy.trough) {
+      cy.trough = c;
+    } else if (c > cy.trough && cy.peak - cy.trough >= 2) {
+      // Rising again after a dip that did not reach 0: that dip is a lift.
+      cy.maxLift = Math.max(cy.maxLift, cy.peak - cy.trough);
+      cy.peak = c;
+      cy.trough = c;
+      setMaxLift(cy.maxLift);
+    }
+    setTrace((prev) => (prev.length >= 60 ? [...prev.slice(1), c] : [...prev, c]));
+  };
+  useEffect(() => {
+    selectedSlotRef.current = selected?.matrixIndex ?? null;
+  }, [selected]);
+  useEffect(() => {
+    if (!live) {
+      setPeak(null);
+      setTrace([]);
+      setMaxLift(0);
+      cycleRef.current = { slot: -1, peak: 0, trough: 0, maxLift: 0 };
+    }
   }, [live]);
 
   if (!device) {
@@ -548,6 +630,21 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
             .filter(([, v]) => v > 0),
         )
       : undefined;
+  // Bottom-out comparison: once enough keys have been pressed to the bottom,
+  // a key whose deepest point is short of the middle one by a tenth is
+  // called out. Sensor drift and a badly seated switch both show up here.
+  const bottomed = live && peak ? peak.map((c, slot) => [slot, c] as const).filter(([slot, c]) => c > 0 && keysBySlot.has(slot)) : [];
+  const bottomMedian = bottomed.length ? [...bottomed].map(([, c]) => c).sort((a, b) => a - b)[Math.floor(bottomed.length / 2)] : 0;
+  const shortKeys =
+    bottomed.length >= 8
+      ? bottomed.filter(([, c]) => c < bottomMedian * 0.9).map(([slot]) => keysBySlot.get(slot)!.text ?? keysBySlot.get(slot)!.code)
+      : [];
+  const selectedSlot = selected?.matrixIndex ?? null;
+  const nowMm = selectedSlot !== null && depth ? (depth[selectedSlot] ?? 0) * unit : 0;
+  const peakMm = selectedSlot !== null && peak ? (peak[selectedSlot] ?? 0) * unit : 0;
+  const maxLiftMm = maxLift * unit;
+  const snap = (r: { min: number; max: number; step: number }, mm: number) =>
+    Math.min(r.max, Math.max(r.min, Math.round(mm / r.step) * r.step));
   const bySlot = new Map(settings.keys.map((k) => [k.slot, k]));
   const keysBySlot = new Map(
     layout.keys.filter((k) => k.matrixIndex !== null).map((k) => [k.matrixIndex!, k]),
@@ -754,6 +851,29 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
               "Each key shows its actuation point, or its kind when it is not a plain key. Click a key to edit it alone.",
             )}
       </p>
+      {live && (
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+          <span>
+            {bottomed.length < 8
+              ? t("Press every key to the bottom to compare them: {n} so far.", { n: bottomed.length })
+              : shortKeys.length === 0
+                ? t("{n} keys bottom out at about {mm} mm. None reads short.", {
+                    n: bottomed.length,
+                    mm: (bottomMedian * unit).toFixed(decimals),
+                  })
+                : t("{n} keys bottom out at about {mm} mm. These read short: {keys}.", {
+                    n: bottomed.length,
+                    mm: (bottomMedian * unit).toFixed(decimals),
+                    keys: shortKeys.join(", "),
+                  })}
+          </span>
+          {bottomed.length > 0 && (
+            <Button size="sm" variant="ghost" onClick={() => setPeak(null)}>
+              {t("Start again")}
+            </Button>
+          )}
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         {draftAll && (
@@ -814,6 +934,44 @@ export default function SwitchesPage({ device }: { device: ConnectedDevice | nul
                 </Select>
               </div>
               <p className="text-xs text-muted-foreground">{kindHint(draftKey.kind)}</p>
+              {live && selectedSlot !== null && (
+                <div className="space-y-2 rounded-md border p-3 text-sm">
+                  <div className="flex items-baseline justify-between">
+                    <Label>{t("Live")}</Label>
+                    <span className="font-mono text-muted-foreground">{nowMm.toFixed(decimals)} mm</span>
+                  </div>
+                  <Trace
+                    values={trace.map((c) => c * unit)}
+                    max={FULL_TRAVEL_MM}
+                    marks={[draftKey.travel, draftKey.lift]}
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={!writable || peakMm <= 0}
+                      onClick={() => setDraftKey({ ...draftKey, travel: snap(ranges.travel, peakMm) })}
+                    >
+                      {t("Actuate at the deepest point: {mm} mm", { mm: peakMm.toFixed(decimals) })}
+                    </Button>
+                    {draftKey.rapidTrigger && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={!writable || maxLiftMm <= 0}
+                        onClick={() => setDraftKey({ ...draftKey, rtLift: snap(ranges.fireLift, maxLiftMm) })}
+                      >
+                        {t("Release step from the largest lift: {mm} mm", { mm: maxLiftMm.toFixed(decimals) })}
+                      </Button>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {t(
+                      "Press the key the way you type. The deepest point and the largest lift that did not let go are kept until you pick another key. Apply writes them.",
+                    )}
+                  </p>
+                </div>
+              )}
               <PlainRows
                 value={draftKey}
                 ranges={ranges}
