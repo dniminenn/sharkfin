@@ -1,5 +1,18 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.9.4
+
+**Live travel.** On a board with magnetic switches, plugged in by cable,
+the Switches tab can show how far each key is pressed as you press it, in
+millimetres. Worked out from the board's own firmware and a GamaKay
+TK75HE-V2 owner's capture in issue #67.
+
+**Travel values read right on boards with firmware 5.00 and later.** Those
+boards count travel in half-hundredths of a millimetre; sharkfin took every
+board as hundredths, so the Switches tab showed double the real travel and
+wrote half of what was set. The scale now follows the board's firmware
+version, as the vendor's software does.
+
 ## What changed in 0.9.3
 
 **The Linux AppImage can be updated in place** from this release on.
