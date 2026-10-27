@@ -37,6 +37,7 @@ import {
 import {
   STEPS,
   clearWizard,
+  colourFlagIsDistinct,
   codeForUsage,
   didNotTake,
   freshState,
@@ -793,16 +794,22 @@ function ColoursStep({
         setLedOff(true);
         return;
       }
-      // The reading decides how a reply is decoded as well as how a packet
-      // is encoded, so it goes in before the first read. Both readings of
-      // the current lighting are kept: whichever the board turns out to
-      // have is the one written back, as the bytes it came from.
+      // Read both flag interpretations before writing. Preset flags are
+      // lost by decoding, so their decoded colours are not safe backups.
       const sw = effectiveSwap(spec.id, dflt);
-      await setLedFlagsSwapped(false);
-      const plain = await getLedParam();
-      await setLedFlagsSwapped(true);
-      const swapped = await getLedParam();
-      await setLedFlagsSwapped(sw);
+      let plain;
+      let swapped;
+      try {
+        await setLedFlagsSwapped(false);
+        plain = await getLedParam();
+        await setLedFlagsSwapped(true);
+        swapped = await getLedParam();
+      } finally {
+        await setLedFlagsSwapped(sw);
+      }
+      if (!colourFlagIsDistinct({ plain, swapped })) {
+        throw new Error(t("Setup cannot preserve this lighting preset. No colour was written. Skip this step."));
+      }
       let c: ColourState = {
         sw,
         originals: { plain, swapped },
@@ -841,14 +848,16 @@ function ColoursStep({
 
   const restore = async (c: ColourState): Promise<ColourState> => {
     if (!c.originals) return c;
+    const previous = effectiveSwap(spec.id, dflt);
     const truth =
       c.answer === "solid" || c.answer === "cycling" ? trueSwap(c.sw, c.answer) : c.sw;
     try {
+      if (!colourFlagIsDistinct(c.originals)) {
+        throw new Error(t("Setup cannot preserve the saved lighting preset. No restore was written. Use the Lighting tab to choose a preset."));
+      }
       await setLedFlagsSwapped(truth);
       const want = truth ? c.originals.swapped : c.originals.plain;
       await setLedParam(want);
-      if (c.answer === "cycling")
-        writeChoice(spec.id, truth !== dflt ? { swapped: truth, dflt } : null);
       let restoredReadBack: boolean | null = null;
       try {
         const got = await getLedParam();
@@ -856,9 +865,13 @@ function ColoursStep({
       } catch {
         restoredReadBack = false;
       }
+      if (!restoredReadBack) await setLedFlagsSwapped(previous);
+      else if (c.answer === "cycling")
+        writeChoice(spec.id, truth !== dflt ? { swapped: truth, dflt } : null);
       return { ...c, restored: true, restoredReadBack };
     } catch (e) {
       setColour({ ...c, restored: false });
+      await setLedFlagsSwapped(previous);
       throw e;
     }
   };
@@ -870,9 +883,19 @@ function ColoursStep({
         colour.answer === "solid" || colour.answer === "cycling"
           ? trueSwap(colour.sw, colour.answer)
           : colour.sw;
-      await setLedFlagsSwapped(truth);
-      const got = await getLedParam();
-      setColour({ ...colour, restoredReadBack: restoredColourMatches(colour, got) });
+      const previous = effectiveSwap(spec.id, dflt);
+      try {
+        await setLedFlagsSwapped(truth);
+        const got = await getLedParam();
+        const matches = restoredColourMatches(colour, got);
+        if (!matches) await setLedFlagsSwapped(previous);
+        else if (colour.answer === "cycling")
+          writeChoice(spec.id, truth !== dflt ? { swapped: truth, dflt } : null);
+        setColour({ ...colour, restoredReadBack: matches });
+      } catch (e) {
+        await setLedFlagsSwapped(previous);
+        throw e;
+      }
     });
 
   const answer = (a: "solid" | "cycling" | "neither") =>
@@ -886,10 +909,23 @@ function ColoursStep({
   const lightEdge = () =>
     run(async () => {
       if (!colour) return;
-      const settings = await getSettings();
-      const side = settings.sideLight;
-      if (!side) throw new Error(t("the keyboard did not answer for its edge light"));
-      let c: ColourState = { ...colour, sideOriginal: side };
+      const sw = effectiveSwap(spec.id, dflt);
+      let plain;
+      let swapped;
+      try {
+        await setLedFlagsSwapped(false);
+        plain = (await getSettings()).sideLight;
+        await setLedFlagsSwapped(true);
+        swapped = (await getSettings()).sideLight;
+      } finally {
+        await setLedFlagsSwapped(sw);
+      }
+      if (!plain || !swapped) throw new Error(t("the keyboard did not answer for its edge light"));
+      if (!colourFlagIsDistinct({ plain, swapped })) {
+        throw new Error(t("Setup cannot preserve this edge lighting preset. No colour was written. Skip this step."));
+      }
+      const side = sw ? swapped : plain;
+      let c: ColourState = { ...colour, sideOriginal: side, sideOriginals: { plain, swapped }, sideSw: sw };
       setColour(c);
       await setSideLight({
         mode: 1,
@@ -905,18 +941,48 @@ function ColoursStep({
       setColour(c);
     });
 
+  const restoreEdge = async (c: ColourState) => {
+    const previous = effectiveSwap(spec.id, dflt);
+    try {
+      // Older runs have only one decoded backup. A true dazzle bit is
+      // representable; false could have come from any of the preset flags.
+      if (!c.sideOriginal || (c.sideOriginals
+        ? !colourFlagIsDistinct(c.sideOriginals)
+        : !c.sideOriginal.dazzle)) {
+        throw new Error(t("Setup cannot preserve the saved edge lighting preset. No restore was written. Use the Lighting tab to choose a preset."));
+      }
+      const sw = c.sideSw ?? previous;
+      await setLedFlagsSwapped(sw);
+      const want = c.sideOriginals
+        ? (sw ? c.sideOriginals.swapped : c.sideOriginals.plain)
+        : c.sideOriginal;
+      await setSideLight(want);
+      const got = (await getSettings()).sideLight;
+      if (!got || !(["mode", "speed", "brightness", "option", "dazzle", "r", "g", "b"] as const)
+        .every((key) => got[key] === want[key])) {
+        throw new Error(t("The edge light restore did not read back. Setup keeps the saved lighting and stops here."));
+      }
+    } catch (e) {
+      setColour({ ...c, sideRestored: false });
+      throw e;
+    } finally {
+      // A failed read or write must not leave the backend on a trial reading.
+      try {
+        await setLedFlagsSwapped(previous);
+      } catch (e) {
+        setColour({ ...c, sideRestored: false });
+        throw e;
+      }
+    }
+    setColour({ ...c, sideRestored: true });
+  };
+
   const answerEdge = (edge: "yes" | "no") =>
     run(async () => {
       if (!colour || !colour.sideOriginal) return;
       const c: ColourState = { ...colour, edge };
       setColour(c);
-      try {
-        await setSideLight(colour.sideOriginal);
-        setColour({ ...c, sideRestored: true });
-      } catch (e) {
-        setColour({ ...c, sideRestored: false });
-        throw e;
-      }
+      await restoreEdge(c);
       // The firmware answers the edge-light read whether or not the
       // hardware exists; on a board the registry does not know, what the
       // owner saw is the only evidence.
@@ -1068,11 +1134,7 @@ function ColoursStep({
                 size="sm"
                 disabled={busy}
                 onClick={() =>
-                  run(async () => {
-                    if (!colour.sideOriginal) return;
-                    await setSideLight(colour.sideOriginal);
-                    setColour({ ...colour, sideRestored: true });
-                  })
+                  run(async () => { await restoreEdge(colour); })
                 }
               >
                 {t("Put the edge light back")}

@@ -328,6 +328,17 @@ describe("lighting restore readback", () => {
     })).toBeNull();
   });
 
+  it("does not verify a preset restore from lossy decoded equality", () => {
+    // Akko 5075B Plus: a preset flag decoded as fixed red under both readings.
+    const preset = { ...original, mode: 5, speed: 3, brightness: 1, dazzle: false, r: 255, g: 0, b: 0 };
+    const ambiguous: ColourState = {
+      ...colour,
+      originals: { plain: preset, swapped: { ...preset } },
+      answer: "neither",
+    };
+    expect(restoredColourMatches(ambiguous, preset)).toBe(false);
+  });
+
   it("checks every lighting field under the owner's flag reading", () => {
     expect(restoredColourMatches(colour, original)).toBe(true);
     for (const field of ["mode", "speed", "brightness", "option", "r", "g", "b"] as const) {

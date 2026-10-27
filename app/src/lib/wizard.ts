@@ -32,8 +32,7 @@ export interface PictureResult {
 export interface ColourState {
   /** The reading in force when the red went out. */
   sw: boolean;
-  /** What the board showed before, read under both readings so whichever
-   *  turns out right can be written back as the bytes it came from. */
+  /** Decoded originals under both flag readings, not a raw wire backup. */
   originals: { plain: LedParam; swapped: LedParam } | null;
   written: boolean;
   /** The lighting read back as Static after the write. */
@@ -44,6 +43,9 @@ export interface ColourState {
   /** And read back as what was written. */
   restoredReadBack: boolean | null;
   sideOriginal: SledParam | null;
+  /** Optional for runs saved before edge flag preservation was checked. */
+  sideOriginals?: { plain: SledParam; swapped: SledParam };
+  sideSw?: boolean;
   sideWritten: boolean;
   edge: "yes" | "no" | null;
   sideRestored: boolean | null;
@@ -346,9 +348,16 @@ export function rainbowNibble(sw: boolean, answer: "solid" | "cycling"): 7 | 8 {
 export const trueSwap = (sw: boolean, answer: "solid" | "cycling") =>
   answer === "solid" ? sw : !sw;
 
-/** Compare the restore with the original under the owner's flag reading. */
+/** Equal dazzle readings cannot distinguish a preset flag from fixed RGB.
+ *  The decoded API cannot put that original flag back. */
+export function colourFlagIsDistinct(originals: NonNullable<ColourState["originals"]>): boolean {
+  return originals.plain.dazzle !== originals.swapped.dazzle;
+}
+
+/** Compare a representable restore under the owner's flag reading.
+ *  Decoded equality cannot verify a saved preset's original wire flag. */
 export function restoredColourMatches(c: ColourState, got: LedParam): boolean {
-  if (!c.originals) return false;
+  if (!c.originals || !colourFlagIsDistinct(c.originals)) return false;
   const swapped =
     c.answer === "solid" || c.answer === "cycling" ? trueSwap(c.sw, c.answer) : c.sw;
   const want = swapped ? c.originals.swapped : c.originals.plain;
