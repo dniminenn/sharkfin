@@ -13,7 +13,7 @@ blank is a plain grid of key slots. All three work the same.
 | | count |
 |---|---:|
 | total | 1412 |
-| writable | 1180 |
+| writable | 1181 |
 | drawn | 372 |
 | drawn after confirmation | 833 |
 
@@ -108,7 +108,7 @@ blank is a plain grid of key slots. All three work the same.
 | akko 5075 V5 ISO | 3954 | 38ee:0005 | unknown |  | auto |
 | akko 5075 VЗ HE | 3129 | 3151:502d | gen2 | yes | auto |
 | akko 5075B Plus | 338 | 0461:4003 | yc500 | yes | auto |
-| akko 5075B Plus | 1042 | 3151:4015 | unknown |  |  |
+| akko 5075B Plus | 1042 | 3151:4015 | yc500 | yes |  |
 | akko 5075B Plus-S | 1033 | 05ac:024f | yc500 | yes | yes |
 | akko 5075B Plus-S | 1528 | 3151:4003 | yc500 | yes | auto |
 | akko 5075B Plus-S | 2567 | 3151:4015 | unknown |  |  |

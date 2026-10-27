@@ -438,6 +438,33 @@ mod tests {
     use super::*;
 
     #[test]
+    fn akko_5075b_plus_matches_the_hardware_report() {
+        let d = by_id(1042).expect("5075B Plus present");
+        assert_eq!((d.vendor_id, d.product_id), (0x3151, 0x4015));
+        assert_eq!(d.family, "yc500");
+        assert!(d.led_wire().swapped);
+        assert_eq!(d.led_flags_source, "hardware");
+        assert!(d.features.side_light);
+        assert_eq!(d.key_layout, "Unknown");
+        let rainbow =
+            crate::protocol::LedParam::from_reply_for(&[0x87, 5, 2, 1, 7, 255, 0, 0], d.led_wire())
+                .unwrap();
+        assert!(rainbow.dazzle);
+        let red =
+            crate::protocol::LedParam::from_reply_for(&[0x87, 5, 2, 1, 8, 255, 0, 0], d.led_wire())
+                .unwrap();
+        assert!(!red.dazzle);
+        assert_eq!(red.to_packet_for(d.led_wire())[4] & 15, 8);
+        let side = crate::protocol::SledParam::from_reply_on(
+            &[0x88, 5, 1, 0, 8, 255, 128, 0],
+            d.led_wire().swapped,
+        )
+        .unwrap();
+        assert!(!side.dazzle);
+        assert_eq!(side.to_packet_on(d.led_wire().swapped)[4] & 15, 8);
+    }
+
+    #[test]
     fn akko_3098b_matches_the_hardware_report() {
         let d = by_id(69).expect("3098B present");
         assert_eq!(d.label(), "Akko 3098B");

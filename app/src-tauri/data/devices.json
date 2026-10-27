@@ -2528,10 +2528,11 @@
     "internalName": "yc500_5075bplus_soc",
     "keyLayout": "Unknown",
     "lightLayout": "",
-    "sideLightLayout": "",
+    "sideLightLayout": "owner",
     "profiles": 4,
     "magnetic": false,
-    "family": "unknown",
+    "family": "yc500",
+    "ledFlagsSwapped": true,
     "features": {
       "knob": [
         "AudioVolumeDown",
@@ -2543,7 +2544,7 @@
       "sleepBT": false,
       "magneticSwitches": false,
       "screen": false,
-      "sideLight": false
+      "sideLight": true
     },
     "screen": null
   },

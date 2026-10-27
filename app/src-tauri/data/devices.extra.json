@@ -1,5 +1,24 @@
 [
   {
+    "_override": true,
+    "_why": "The legacy entry for Akko 5075B Plus device 1042 left the protocol family unknown and disabled its physical edge lighting.",
+    "_evidence": "USB 3151:4015 hardware round-trips: identify 0x8F returns 1042; 0x89 returns a yc500 keymap, 0x8A returns all FF, 0x91 has no gen2 sleep timers, and 0x92 returns yc500 sleep timers. Changing only the main lighting flag from 7 to 8 preserved ripple mode and made it red, confirmed visually by the owner. After selecting the swapped interpretation, the owner confirmed independent main and edge RGB selection through Lighting. Both 0x87 and 0x88 were read back. The owner then deliberately selected rainbow on both, which read back as flag 7.",
+    "_unknown": "Full key geometry, per-key painting, macros, all effects and report-rate behaviour have not been verified. Keep Unknown so the picture requires matching and owner confirmation. Existing legacy profile and knob metadata are unchanged; debounce and sleep controls remain disabled.",
+    "id": 1042,
+    "family": "yc500",
+    "ledFlagsSwapped": true,
+    "sideLightLayout": "owner",
+    "features": {
+      "knob": ["AudioVolumeDown", "AudioVolumeMute", "AudioVolumeUp"],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "_why": "Akko 3098B device 69 was absent from the registry. It is not the 3098B Plus (1280/1281). Settings use the keyboard collection on USB interface 0; the vendor input collection on interface 1 has no feature reports.",
     "_evidence": "2026-09-23 owner report and USB hardware round-trips, firmware 2.11. Identify 0x8F gives 69; 0x89 returns a yc500 keymap and 0x8A all FF. The owner confirmed 98/98 keys and supplied a reference image for the geometry; unmodified profile 2 supplies the fixed slots in Local98_Akko_3098B. Four profiles were switched and read back in setup. Base/Fn single-slot writes 0x13/0x15 leave slot 101 unchanged; whole-layer uploads 0x09/0x10 change it to F24 and read back, then restore the original full layer. All four base and four Fn layers matched the backup after testing. LED 0x07 changes stored RGB and 0x87 reads it back; restored state matches after settling. The owner confirms nibble 7 is rainbow, 8 is fixed colour.",
     "_unknown": "No edge lighting, magnetic switches, display or knob. Debounce and sleep replies carry zero defaults, so these features stay disabled. Full lighting-effect catalogue, macros and per-key painting have not been tested on this board.",
