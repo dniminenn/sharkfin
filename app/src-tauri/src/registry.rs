@@ -828,6 +828,10 @@ mod tests {
                 "Local88_Cherry_MX82_TMR_DE",
                 include_str!("../../src/lib/layouts/vendor/Local88_Cherry_MX82_TMR_DE.json"),
             ),
+            (
+                "Local102_AttackShark_X98HE",
+                include_str!("../../src/lib/layouts/vendor/Local102_AttackShark_X98HE.json"),
+            ),
         ];
         for (name, text) in LOCAL {
             let v: serde_json::Value = serde_json::from_str(text).expect("parses");

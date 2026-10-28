@@ -11187,5 +11187,13 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_override": true,
+    "_why": "Reported in issue #99 with an owner-confirmed layout.",
+    "_evidence": "The owner confirms Common102_SG9009 and reports everything tried worked. All 102 keys match without ambiguous slots. Local102_AttackShark_X98HE keeps the confirmed mapping specific to device 2964.",
+    "_unknown": "Individual write round-trips were not reported. The X96HE and Legion K98 keep their existing shared picture.",
+    "id": 2964,
+    "keyLayout": "Local102_AttackShark_X98HE"
   }
 ]

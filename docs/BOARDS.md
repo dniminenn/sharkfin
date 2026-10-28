@@ -14,8 +14,8 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 1412 |
 | writable | 1181 |
-| drawn | 372 |
-| drawn after confirmation | 833 |
+| drawn | 373 |
+| drawn after confirmation | 832 |
 
 | board | id | usb | family | write | draw |
 |---|---|---|---|---|---|
@@ -310,7 +310,7 @@ blank is a plain grid of key slots. All three work the same.
 | AttackShark X87Ultra | 2852 | 3151:5030 | gen2 | yes | auto |
 | AttackShark X87Ultra | 3438 | 3151:504c | gen2 | yes | auto |
 | AttackShark X96HE | 2792 | 3151:5030 | gen2 | yes | auto |
-| AttackShark X98HE | 2964 | 3151:5030 | gen2 | yes | auto |
+| AttackShark X98HE | 2964 | 3151:5030 | gen2 | yes | yes |
 | AttackShark X98PRO | 1996 | 3151:4015 | yc500 | yes | yes |
 | AttackShark X98PRO | 2934 | 3151:5002 | gen2 | yes | yes |
 | AttackShark X98PRO | 4109 | 3151:5056 | gen2 | yes | auto |
