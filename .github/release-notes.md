@@ -1,5 +1,11 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.11.1
+
+- Show the effective Command and Option assignments on K86 and VGN A75 in Mac mode, and use them during Setup key checks.
+- Add the ALUX68 PLUS layout for device 2303, with Home above Delete.
+- Reject the ADX MK0620 probe echo instead of reporting a false device ID.
+
 ## What changed in 0.11.0
 
 - Add the confirmed Attack Shark X98HE layout. (`dbb63f7`)
