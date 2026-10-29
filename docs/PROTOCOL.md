@@ -34,6 +34,11 @@ v113_oledv106` (Hator HTK4100UA, yc3123). Bootloader: first 20 KB of the
 USB VID `0x3151` is common. Other vendor IDs occur. They are not part of
 the HID layout.
 
+The ADX MK0620 report in issue #98 answers every probe with the request
+bytes except byte 3 set to `FF`. Its `8F 00 00 FF 00 00 00 70`, followed
+by zeros, is rejected as an identification response, not registered as
+device `16711680`. This does not establish its protocol family.
+
 GET replies echo the opcode in byte 0, except bulk page reads (keymatrix,
 Fn layer, macro, userpic), which return raw page bytes. **[HW]**
 

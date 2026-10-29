@@ -765,6 +765,13 @@ pub fn packet(opcode: u8, payload: &[u8], checksum: Checksum) -> [u8; REPORT_LEN
 
 /// 0x8F reply: [0x8F, device_id as u32 LE, ..].
 pub fn parse_device_id(reply: &[u8]) -> Option<u32> {
+    // ADX MK0620 (#98) returns the request with byte 3 set to FF for
+    // every command. That status reply is not device ID 0x00FF0000.
+    let mut refused = packet(cmd::GET_USB_VERSION, &[], Checksum::Bit7);
+    refused[3] = 0xFF;
+    if reply == refused {
+        return None;
+    }
     if reply.len() >= 5 && reply[0] == cmd::GET_USB_VERSION {
         Some(u32::from_le_bytes([reply[1], reply[2], reply[3], reply[4]]))
     } else {

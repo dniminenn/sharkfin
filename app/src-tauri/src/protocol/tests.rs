@@ -148,6 +148,26 @@ fn device_id() {
 }
 
 #[test]
+fn rejected_identify_is_not_a_device_id() {
+    // Full 0x8F response from the ADX MK0620 bundle in issue #98.
+    let mut reply = [0u8; 64];
+    reply[..8].copy_from_slice(&[0x8F, 0, 0, 0xFF, 0, 0, 0, 0x70]);
+    assert_eq!(parse_device_id(&reply), None);
+    assert_eq!(parse_device_id(&[]), None);
+    assert_eq!(parse_device_id(&[0x8F, 0, 0, 0xFF]), None);
+}
+
+#[test]
+fn identify_does_not_reject_an_id_just_for_containing_ff() {
+    let mut reply = [0u8; 64];
+    reply[0] = 0x8F;
+    reply[1..5].copy_from_slice(&2303u32.to_le_bytes());
+    assert_eq!(parse_device_id(&reply), Some(2303));
+    reply[1..5].copy_from_slice(&0x00FF0001u32.to_le_bytes());
+    assert_eq!(parse_device_id(&reply), Some(0x00FF0001));
+}
+
+#[test]
 fn led_speed_inverts_on_wire() {
     let p = LedParam {
         mode: 2,
