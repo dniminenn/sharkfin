@@ -11161,9 +11161,9 @@
     }
   },
   {
-    "_why": "Reported in issues #89 and #90. Device 2303 is absent from the vendor catalogue; #90 contains no additional bundle.",
-    "_evidence": "The owner's 0.10.0 sweep identifies 2303 on 3151:502d. 0x8A returns a gen2 keymap and 0x91 returns sleep values at bytes 8..15. The owner confirms magnetic switches, and setup read columns as travel. The owner reports everything tried worked and no edge lighting.",
-    "_unknown": "Common68_DK68HE matched all 68 entries but was not approved; setup recorded the key marked Del sending Home. keyLayout remains Unknown rather than assigning guessed physical slots. No profiles or remaps were tested, so profiles stays 1. The controller lineage and fitted radios are not established; no lineage-specific magnetic writes or sleep controls are enabled. No display version answered.",
+    "_why": "Reported in issues #89 and #90. Device 2303 is absent from the extracted catalogue; #90 contains no additional bundle.",
+    "_evidence": "The owner's 0.10.0 sweep identifies 2303 on 3151:502d. 0x8A returns a gen2 keymap and 0x91 returns sleep values at bytes 8..15. The owner confirms magnetic switches, and setup read columns as travel. The owner reports everything tried worked and no edge lighting. Device 2303, issue #89: all 68 slots come from the owner's USB keymap. Setup passed 5/6 positions; the top-right key shown as Del sent Home. AJAZZ's ALUX68 PLUS product photo confirms Home above Delete, followed by PgUp and PgDn. Geometry follows Common68_DK68HE with Home and Delete exchanged. The original picture was not approved; this corrected drawing is supported by the physical key test and manufacturer photo. Photo: https://ajazzbrand.com/cdn/shop/files/02_acad92a4-538b-45aa-a8a2-216beb16faea.jpg?v=1766566128&width=1600",
+    "_unknown": "Profiles and remaps were not tested, so profiles stays 1. AJAZZ driver V2.1.91 identifies 2303 as ry5088_sg9028_dm_8k_rt002, but its own firmware has not been obtained. The registry keeps the placeholder internalName to leave lineage-specific writes disabled. The official ALUX68 PLUS product listing describes a wired board. No display version answered. The firmware channel returned no record for 2303 on 2026-10-28. Driver: https://download.s21i.co99.net/25789609/0/0/ABUIABBPGAAgr5GpzQYo8Ijq1QY.zip",
     "id": 2303,
     "name": "ajazz_alux68_plus",
     "displayName": "ALUX68 PLUS",
@@ -11172,7 +11172,7 @@
     "vendorId": 12625,
     "productId": 20525,
     "internalName": "ajazz_alux68_plus",
-    "keyLayout": "Unknown",
+    "keyLayout": "Local68_Ajazz_ALUX68_Plus",
     "lightLayout": "",
     "sideLightLayout": "",
     "profiles": 1,

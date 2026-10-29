@@ -749,6 +749,10 @@ mod tests {
     fn local_layouts_stay_local() {
         static LOCAL: &[(&str, &str)] = &[
             (
+                "Local68_Ajazz_ALUX68_Plus",
+                include_str!("../../src/lib/layouts/vendor/Local68_Ajazz_ALUX68_Plus.json"),
+            ),
+            (
                 "Local98_Akko_3098B",
                 include_str!("../../src/lib/layouts/vendor/Local98_Akko_3098B.json"),
             ),

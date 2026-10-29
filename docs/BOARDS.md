@@ -14,7 +14,7 @@ blank is a plain grid of key slots. All three work the same.
 |---|---:|
 | total | 1412 |
 | writable | 1181 |
-| drawn | 373 |
+| drawn | 374 |
 | drawn after confirmation | 832 |
 
 | board | id | usb | family | write | draw |
@@ -53,7 +53,7 @@ blank is a plain grid of key slots. All three work the same.
 | AIM1Keys MATATAKI(JIS) | 3454 | 3151:5029 | unknown |  | yes |
 | AIM1Keys MATATAKI(US Separate) | 3026 | 3151:5029 | gen2 | yes | auto |
 | AJAZZ AK820 MAX | 1694 | 3151:4015 | yc500 | yes |  |
-| Ajazz ALUX68 PLUS | 2303 | 3151:502d | gen2 | yes |  |
+| Ajazz ALUX68 PLUS | 2303 | 3151:502d | gen2 | yes | yes |
 | AJAZZMOUSE AJAZZ KEYBOARD | 4257 | 39ab:9016 | gen2 | yes | auto |
 | AJAZZMOUSE AK029 V2 | 4106 | 3151:5030 | gen2 | yes | auto |
 | AJAZZMOUSE AK029 V2 | 4110 | 3151:5030 | gen2 | yes | auto |
