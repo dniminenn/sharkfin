@@ -13,6 +13,7 @@ import { deviceLabel } from "@/lib/brands";
 import { useBoardLayout } from "@/lib/layout-loader";
 import { effectiveSwap, writeChoice } from "@/lib/led-flags-store";
 import { emptyRecord, loadOwner, saveOwner } from "@/lib/owner-record";
+import { hasMacKeyActions } from "@/lib/key-action";
 import { usageLabel } from "@/lib/hid-usages";
 import {
   applyOwnerRecord,
@@ -104,7 +105,7 @@ export default function CheckPage({
   const [back, setBack] = useState(false);
   const lay = useBoardLayout(device);
   /** The running profile and its keymap, read for the keys and remap steps. */
-  const [keymap, setKeymap] = useState<{ profile: number; entries: Map<number, number[]> } | null>(null);
+  const [keymap, setKeymap] = useState<{ profile: number; entries: Map<number, number[]>; macMode: boolean } | null>(null);
   const [keymapError, setKeymapError] = useState<string | null>(null);
   const lastId = useRef<number | null>(null);
   const unplugged = useRef(false);
@@ -182,8 +183,10 @@ export default function CheckPage({
         } catch {
           // Profile 1 is where an unreadable board almost certainly is.
         }
+        const macMode = hasMacKeyActions(device.deviceId)
+          ? (await getSettings()).options?.macMode === true : false;
         const matrix = await readKeymap(profile);
-        if (live) setKeymap({ profile, entries: sliceEntries(matrix) });
+        if (live) setKeymap({ profile, entries: sliceEntries(matrix), macMode });
       } catch (e) {
         if (live) setKeymapError(String(e));
       }
@@ -618,7 +621,7 @@ function KeysStep({
   device: ConnectedDevice;
   lay: ReturnType<typeof useBoardLayout>;
   boardOk: WizardState["boardOk"];
-  keymap: { profile: number; entries: Map<number, number[]> } | null;
+  keymap: { profile: number; entries: Map<number, number[]>; macMode: boolean } | null;
   keymapError: string | null;
   onDone: (picture: WizardState["picture"]) => void;
 }) {
@@ -630,10 +633,12 @@ function KeysStep({
   // Targets follow the picture: a new picture restarts the test.
   useEffect(() => {
     if (lay.resolving) return;
-    setTargets(pressTargets(lay.layout, keymap?.entries));
+    setTargets(pressTargets(lay.layout, keymap?.entries, {
+      deviceId: device.deviceId, macMode: keymap?.macMode === true,
+    }));
     setResults([]);
     setFinished(false);
-  }, [lay.layout, lay.resolving, keymap]);
+  }, [lay.layout, lay.resolving, keymap, device.deviceId]);
 
   const current = targets && !finished ? targets[results.length] : undefined;
 
@@ -1347,7 +1352,7 @@ function RemapStep({
   onDone,
 }: {
   readOnly: boolean;
-  keymap: { profile: number; entries: Map<number, number[]> } | null;
+  keymap: { profile: number; entries: Map<number, number[]>; macMode: boolean } | null;
   keymapError: string | null;
   remap: RemapState | null;
   busy: boolean;
@@ -1540,7 +1545,7 @@ function SwitchesStep({
   onDone,
 }: {
   device: ConnectedDevice;
-  keymap: { profile: number; entries: Map<number, number[]> } | null;
+  keymap: { profile: number; entries: Map<number, number[]>; macMode: boolean } | null;
   result: WizardState["switches"];
   busy: boolean;
   grant: React.ReactNode;

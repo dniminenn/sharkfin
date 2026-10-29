@@ -429,6 +429,49 @@ Read-modify-write to keep unmodelled bits.
 Bit `128` locks the keyboard. The vendor's setter writes Mac mode at bit
 1 while its getter reads bit 0. **[JS]**
 
+### Mac modifiers
+
+K86 (2730), `v115_oledv108`, `firmwareFile.bin`. **[FW]**
+Addresses use image base `0x01000000`.
+
+| operation | address | behavior |
+|---|---|---|
+| Read base assignment | `0x0101B320` | Slot = column × 6 + row; load the four-byte entry |
+| Transform assignment | `0x0101B330` calls `0x0101AD6C` | Active when `(RAM[0x2162C] >> 1) & 3` is 1 or 2 |
+| Fn override | `0x0101B342` calls `0x01013E14` | Runs after the base transformation |
+| Modifier press | `0x01014778` | Usages `0xE0..0xE7` set modifier bits, not letter keys |
+
+The modifier transformation requires both the slot and the complete stored
+entry to match. At these slots, other assignments, including combos, pass
+through unchanged.
+
+| slot | stored entry | effective entry | Mac action |
+|---|---|---|---|
+| 11 | `00 00 E3 00` | `00 00 E2 00` | Left Option |
+| 17 | `00 00 E2 00` | `00 00 E3 00` | Left Command |
+| 65 | `00 00 E6 00` | `00 00 E7 00` | Right Command |
+| 77 | `00 00 65 00` | `00 00 E6 00` | Right Option |
+
+VGN A75 (1478), `v112_mledv105`, `firmwareFile.bin`. **[FW]**
+The caller at `0x01014D44` applies `0x01014C5C` before Fn overrides at
+`0x01014D56`. The selected profile's mode field must equal 1.
+
+| slot | stored entry | effective entry | Mac action |
+|---|---|---|---|
+| 17 | `00 00 E3 00` | `00 00 E2 00` | Left Option |
+| 23 | `00 00 E2 00` | `00 00 E3 00` | Left Command |
+| 65 | `00 00 E6 00` | `00 00 E7 00` | Right Command |
+| 65 | `00 00 E7 00` | `00 00 E6 00` | Right Option |
+
+The Keys page shows effective modifier actions when either board reports
+Mac mode. Picker choices retain their stored assignments in parentheses.
+Each table applies only to its named board.
+
+The same exact-entry requirement applies. Setup chooses test keys from
+the effective assignments on both boards, excluding effective Command
+keys because the operating system can intercept them. Stored keymaps
+and exported bundles retain the original entries.
+
 ### Other
 
 | | |

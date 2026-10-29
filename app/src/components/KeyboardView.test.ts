@@ -32,3 +32,17 @@ it("fits keypad legends on caps while retaining their identity in descriptions",
   }
   expect(buttons.find((b) => b.includes('aria-label="A"'))).toContain(">A</button>");
 });
+
+
+it("fits Mac modifier legends while keeping full accessible names", () => {
+  const html = renderToStaticMarkup(createElement(KeyboardView, {
+    layout,
+    entries: new Map(), modified: new Set<number>(), selected: null,
+    labelFor: (key) => key.code === "MetaLeft" ? "L-Option" : "L-Command",
+    onSelect: () => {},
+  }));
+  expect(html).toContain('aria-label="L-Option"');
+  expect(html).toContain('>L-Opt</button>');
+  expect(html).toContain('aria-label="L-Command"');
+  expect(html).toContain('>L-Cmd</button>');
+});

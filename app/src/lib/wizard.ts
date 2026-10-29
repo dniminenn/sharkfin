@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Check rules, apart from the page so they can be tested.
+import { keyActionEntry } from "./key-action";
 import type { ConnectedDevice, KeySwitch, LedParam, SledParam, SwitchSettings } from "@/lib/backend";
 import type { BoardLayout } from "@/lib/layout-loader";
 import { CODE_TO_USAGE, usageLabel } from "@/lib/hid-usages";
@@ -223,13 +224,16 @@ export interface PressTarget {
 export function pressTargets(
   layout: BoardLayout,
   entries?: Map<number, number[]>,
+  mode?: { deviceId: number; macMode: boolean },
 ): PressTarget[] {
   if (layout.grid) return [];
   const usable = layout.keys
     .filter((k) => k.type !== "knob" && k.matrixIndex !== null)
     .map((k) => {
       const entry = entries ? entries.get(k.matrixIndex!) : k.matrixEntry;
-      const usage = plainUsage(entry);
+      const usage = plainUsage(entry && mode
+        ? keyActionEntry(entry, k.matrixIndex, mode.deviceId, mode.macMode)
+        : entry);
       return { key: k, usage };
     })
     .filter((x): x is { key: (typeof layout.keys)[number]; usage: number } =>

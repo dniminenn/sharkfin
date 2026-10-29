@@ -35,7 +35,8 @@ const KEYPAD_LEGENDS: Record<string, string> = {
 
 // Only the cap is abbreviated; descriptions retain the keypad identity.
 const capLegend = (label: string) =>
-  KEYPAD_LEGENDS[label] ?? label.replace(/^Numpad([0-9])$/, "$1");
+  KEYPAD_LEGENDS[label] ?? label.replace(/^Numpad([0-9])$/, "$1")
+    .replace(/^([LR])-Command$/, "$1-Cmd").replace(/^([LR])-Option$/, "$1-Opt");
 
 function role(k: LayoutKey): "accent" | "mod" | "base" {
   if (ACCENT.has(k.code)) return "accent";

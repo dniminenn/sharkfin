@@ -545,3 +545,40 @@ describe("the report", () => {
     );
   });
 });
+
+describe("Mac-mode picture checks", () => {
+  const layout: BoardLayout = {
+    canvas: { width: 160, height: 40 },
+    keys: [
+      key("ControlLeft", 0, 0, 5, 0xe0),
+      key("MetaLeft", 40, 0, 17, 0xe3),
+      key("AltLeft", 80, 0, 23, 0xe2),
+      key("ControlRight", 120, 0, 71, 0xe4),
+    ],
+  };
+
+  it("skips effective Command and accepts effective Option on the A75", () => {
+    const targets = pressTargets(layout, undefined, { deviceId: 1478, macMode: true });
+    expect(targets.some((t) => t.slot === 23)).toBe(false);
+    const option = targets.find((t) => t.slot === 17)!;
+    expect(option.usage).toBe(0xe2);
+    expect(judgePress(option, "AltLeft").ok).toBe(true);
+    expect(judgePress(option, "MetaLeft").ok).toBe(false);
+  });
+
+  it("keeps Windows-mode and unknown-board checks strict", () => {
+    for (const mode of [{ deviceId: 1478, macMode: false }, { deviceId: 9999, macMode: true }]) {
+      const targets = pressTargets(layout, undefined, mode);
+      expect(targets.some((t) => t.slot === 17)).toBe(false);
+      const alt = targets.find((t) => t.slot === 23)!;
+      expect(judgePress(alt, "MetaLeft").ok).toBe(false);
+    }
+  });
+
+  it("uses a custom assignment instead of the factory swap", () => {
+    const entries = new Map(layout.keys.map((k) => [k.matrixIndex!, k.matrixEntry!]));
+    entries.set(23, [0, 0, 0xe0, 0]);
+    const targets = pressTargets(layout, entries, { deviceId: 1478, macMode: true });
+    expect(targets.find((t) => t.slot === 23)?.usage).toBe(0xe0);
+  });
+});

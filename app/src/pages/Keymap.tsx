@@ -33,7 +33,8 @@ import { useBoardProfile } from "@/lib/use-profile";
 import { type Inference } from "@/lib/layout-infer";
 import { fromLayout, type Draft } from "@/lib/layout-draft";
 import { DISABLED_GLYPH, PASSTHRU_GLYPH, entryLabel, usageLabel, type Assignable } from "@/lib/hid-usages";
-import { readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
+import { hasMacKeyActions, keyActionLabel } from "@/lib/key-action";
+import { getSettings, readKeymap, readFnKeymap, setKey, type ConnectedDevice } from "@/lib/backend";
 import Waiting from "@/components/Waiting";
 import { Banner, PageHeader, Segmented } from "@/components/Page";
 
@@ -78,6 +79,8 @@ export default function KeymapPage({
   const [draft, setDraft] = useState<Draft | null>(null);
   const [layer, setLayer] = useState<"base" | "fn">("base");
   const [entries, setEntries] = useState<Map<number, number[]> | null>(null);
+  const [macMode, setMacMode] = useState(false);
+  const loadGeneration = useRef(0);
   const [selected, setSelected] = useState<LayoutKey | null>(null);
   const [query, setQuery] = useState("");
   const [busy, setBusy] = useState(false);
@@ -135,19 +138,34 @@ export default function KeymapPage({
   }, [layout, layer]);
 
   const load = useCallback(async (prof: number, lay: "base" | "fn") => {
+    const generation = ++loadGeneration.current;
     setEntries(null);
+    setMacMode(false);
     try {
+      if (hasMacKeyActions(device?.deviceId)) {
+        const settings = await getSettings();
+        if (generation !== loadGeneration.current) return;
+        setMacMode(settings.options?.macMode === true);
+      }
       const matrix = lay === "fn" ? await readFnKeymap(prof) : await readKeymap(prof);
-      setEntries(sliceEntries(matrix));
+      if (generation === loadGeneration.current) setEntries(sliceEntries(matrix));
     } catch (e) {
-      toast.error(t("Failed to read keymap: {e}", { e: String(e) }));
+      if (generation === loadGeneration.current)
+        toast.error(t("Failed to read keymap: {e}", { e: String(e) }));
     }
-  }, []);
+  }, [device?.deviceId, device?.path]);
 
   useEffect(() => {
     if (connected) load(profile, layer);
     else setEntries(null);
+    return () => { ++loadGeneration.current; };
   }, [connected, profile, layer, load]);
+
+  const labelFor = (slot: number | null, entry: number[]) =>
+    keyActionLabel(entry, slot, device?.deviceId, macMode, layer === "fn");
+  const actionLabel = hasMacKeyActions(device?.deviceId) && macMode && layer === "base"
+    ? (entry: number[]) => labelFor(selected?.matrixIndex ?? null, entry)
+    : undefined;
 
   const modified = useMemo(() => {
     const s = new Set<number>();
@@ -244,7 +262,7 @@ export default function KeymapPage({
     }
     if (e.key === "Enter") {
       e.preventDefault();
-      const first = searchAssignables(query)[0];
+      const first = searchAssignables(query, actionLabel)[0];
       if (first) assign(first);
       return;
     }
@@ -293,6 +311,7 @@ export default function KeymapPage({
         query={query}
         current={selectedEntry}
         fnLayer={layer === "fn"}
+        actionLabel={actionLabel}
         canReset={defaults.has(selected.matrixIndex!)}
         disabled={busy || pending || switching}
         onAssign={assign}
@@ -464,14 +483,14 @@ export default function KeymapPage({
               selected && !offSelected && !pending
                 ? {
                     value: query,
-                    placeholder: entryLabel(selectedEntry ?? [0, 0, 0, 0], layer === "fn"),
+                    placeholder: labelFor(selected.matrixIndex, selectedEntry ?? [0, 0, 0, 0]),
                     onChange: setQuery,
                     onKeyDown: onCapKey,
                   }
                 : undefined
             }
             labelFor={(k, entry) =>
-              entry ? entryLabel(entry, layer === "fn") : (k.text ?? k.code)
+              entry ? labelFor(k.matrixIndex, entry) : (k.text ?? k.code)
             }
             onSelect={setSelected}
           />
@@ -504,7 +523,7 @@ export default function KeymapPage({
                     )}
                     style={{ "--key": "var(--key-base)", "--key-fg": "var(--key-legend)" } as React.CSSProperties}
                   >
-                    {k.text}
+                    {labelFor(k.matrixIndex, entries.get(k.matrixIndex!)!)}
                   </button>
                 );
                 return on ? (

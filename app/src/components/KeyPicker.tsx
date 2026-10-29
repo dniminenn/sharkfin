@@ -52,14 +52,16 @@ export function matchRank(q: string, label: string, code?: string, group?: strin
 
 /** Everything the query names, best match first. "left" finds the left
  *  arrow, "page" both page keys, "media" the whole group. */
-export function searchAssignables(query: string): Assignable[] {
+export function searchAssignables(query: string, labelFor?: (entry: number[]) => string): Assignable[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
   const out: { rank: number; item: Assignable }[] = [];
   for (const g of GROUPS)
     for (const item of g.items) {
       const code = item.entry[0] === 0 ? CODE_OF[item.entry[2]] : undefined;
-      const rank = matchRank(q, item.label, code, g.name);
+      const ranks = [matchRank(q, item.label, code, g.name),
+        ...(labelFor ? [matchRank(q, labelFor(item.entry))] : [])].filter((r) => r >= 0);
+      const rank = ranks.length ? Math.min(...ranks) : -1;
       if (rank >= 0) out.push({ rank, item });
     }
   out.sort((a, b) => a.rank - b.rank);
@@ -91,6 +93,7 @@ interface Props {
   query: string;
   current: number[] | undefined;
   fnLayer: boolean;
+  actionLabel?: (entry: number[]) => string;
   canReset: boolean;
   disabled: boolean;
   onAssign: (a: Assignable) => void;
@@ -102,6 +105,7 @@ export default function KeyPicker({
   query,
   current,
   fnLayer,
+  actionLabel,
   canReset,
   disabled,
   onAssign,
@@ -111,7 +115,7 @@ export default function KeyPicker({
   const recents = useMemo(readRecents, []);
 
   const q = query.trim().toLowerCase();
-  const hits = useMemo(() => searchAssignables(query), [query]);
+  const hits = useMemo(() => searchAssignables(query, actionLabel), [query, actionLabel]);
 
   const isCurrent = (a: Assignable) => !!current && a.entry.every((b, i) => b === current[i]);
 
@@ -124,7 +128,8 @@ export default function KeyPicker({
       data-first={first}
       className="rounded-md px-2 py-1 text-xs transition-colors hover:bg-accent disabled:opacity-50 data-[first=true]:ring-1 data-[first=true]:ring-(--ring) data-[on=true]:bg-primary data-[on=true]:text-primary-foreground"
     >
-      {item.label}
+      {actionLabel ? actionLabel(item.entry) : item.label}
+      {actionLabel && actionLabel(item.entry) !== item.label && ` (${item.label})`}
     </button>
   );
 
@@ -150,7 +155,7 @@ export default function KeyPicker({
         {optional && <SelectItem value="0">{t("none")}</SelectItem>}
         {COMBO_KEYS.map((k) => (
           <SelectItem key={`${field}-${k.usage}`} value={String(k.usage)}>
-            {k.label}
+            {actionLabel ? actionLabel([0, k.usage, 0, 0]) : k.label}
           </SelectItem>
         ))}
       </SelectContent>
@@ -166,7 +171,7 @@ export default function KeyPicker({
             {current
               ? fnLayer
                 ? t("Fn layer, now {label}", { label: entryLabel(current, true) })
-                : t("now {label}", { label: entryLabel(current, false) })
+                : t("now {label}", { label: actionLabel ? actionLabel(current) : entryLabel(current, false) })
               : fnLayer
                 ? t("Fn layer")
                 : ""}
@@ -178,6 +183,14 @@ export default function KeyPicker({
           </Button>
         )}
       </div>
+      {actionLabel && (
+        <p className="text-xs text-muted-foreground">
+          {t("Choices show what this key does in Mac mode. Stored assignments appear in parentheses.")}
+          {current && actionLabel(current) !== entryLabel(current) && (
+            <> {t("Stored now: {label}.", { label: entryLabel(current) })}</>
+          )}
+        </p>
+      )}
       <p className="text-xs text-muted-foreground">
         {q
           ? t("Enter takes the outlined match.")
@@ -216,6 +229,13 @@ export default function KeyPicker({
               <div className="mb-1 px-1 text-xs text-muted-foreground">
                 {t("Combo, up to three keys on one press")}
               </div>
+              {actionLabel && combo.main !== 0 && (
+                <p className="mb-1 px-1 text-xs text-muted-foreground">
+                  {t("Acts as {label}", {
+                    label: actionLabel([0, combo.extraA, combo.main, combo.extraB]),
+                  })}
+                </p>
+              )}
               <div className="flex flex-wrap items-center gap-1.5">
                 {comboSelect("main", t("key"), false)}
                 <span className="text-xs text-muted-foreground">+</span>
