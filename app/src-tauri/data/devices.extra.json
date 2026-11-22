@@ -60,7 +60,7 @@
     "productId": 16387,
     "internalName": "yc200_mk11",
     "keyLayout": "Common82_PC75S",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -152,7 +152,7 @@
     "productId": 16387,
     "internalName": "yc300_3084bp_iso_uk",
     "keyLayout": "Common85_3084BP",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -308,7 +308,7 @@
     "productId": 16405,
     "internalName": "yc500_5108bplus_uk_soc",
     "keyLayout": "Common108_MG108B",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -427,7 +427,7 @@
     "productId": 16405,
     "internalName": "yc3121_m3w_soc",
     "keyLayout": "Common87_MonsGeek_M3V5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -462,7 +462,7 @@
     "productId": 16405,
     "internalName": "yc500_m7wnosled_soc",
     "keyLayout": "Common68_MK902_2",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -521,7 +521,7 @@
     "productId": 16387,
     "internalName": "yc300_3098bplus",
     "keyLayout": "Common98_xl98",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -552,7 +552,7 @@
     "productId": 16405,
     "internalName": "yc500_mod007bpc_soc",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -587,7 +587,7 @@
     "productId": 16405,
     "internalName": "yc500_ice75_soc",
     "keyLayout": "Common82_SG9000_v3",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -623,8 +623,8 @@
     "productId": 16387,
     "internalName": "yc300_5075b_plus_s",
     "keyLayout": "Common82_MOD007BHE",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
@@ -687,7 +687,7 @@
     "productId": 16405,
     "internalName": "yc3121_mu01_soc",
     "keyLayout": "Common68_kc68rt",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -718,7 +718,7 @@
     "productId": 16437,
     "internalName": "yc3121_m1whes_hall_8k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 5,
     "magnetic": true,
@@ -749,7 +749,7 @@
     "productId": 16437,
     "internalName": "yc3121_mod007bv3he_soc_8k",
     "keyLayout": "Common82_MOD007BHE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 5,
     "magnetic": true,
@@ -785,7 +785,7 @@
     "productId": 16437,
     "internalName": "yc3121_mg75s_hes_dm_hall_8k",
     "keyLayout": "Common83_MG75S",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -845,8 +845,8 @@
     "productId": 16400,
     "internalName": "yc3121_top75b_soc",
     "keyLayout": "Common81_beat75",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -936,7 +936,7 @@
     "productId": 16387,
     "internalName": "yc300_5108bp_iso_ne",
     "keyLayout": "Common108_5108V5UK",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -968,8 +968,8 @@
     "productId": 16405,
     "internalName": "yc3121_kf102_soc",
     "keyLayout": "Common97_5098B",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
@@ -1009,7 +1009,7 @@
     "productId": 16405,
     "internalName": "yc3121_m1w_v5_soc",
     "keyLayout": "Common82_SG9000_v3",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -1101,7 +1101,7 @@
     "productId": 20528,
     "internalName": "ry5088_m1w_v5_soc_8k",
     "keyLayout": "Common82_M1_V5_TMR",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1166,7 +1166,7 @@
     "productId": 20526,
     "internalName": "ry5088_fun60_nolight_1k_005",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1222,7 +1222,7 @@
     "productId": 20525,
     "internalName": "ry5088_akko_fun60pro_1m_8k",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1278,7 +1278,7 @@
     "productId": 20527,
     "internalName": "ry5088_fun60pro_8k_002",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1334,7 +1334,7 @@
     "productId": 20528,
     "internalName": "ry5088_fun60max_8k",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1390,7 +1390,7 @@
     "productId": 20528,
     "internalName": "ry5088_fun60max2_8k",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1450,7 +1450,7 @@
     "productId": 20521,
     "internalName": "ry5088_fun60ultra_8k_dm_dfn4",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1544,7 +1544,7 @@
     "internalName": "kwumsy_k3",
     "keyLayout": "Common82_M1_V5_TMR",
     "lightLayout": "",
-    "sideLightLayout": "At",
+    "sideLightLayout": "Mt",
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
@@ -1574,7 +1574,7 @@
     "productId": 20525,
     "internalName": "ry5088_fun60ultra_8k_dm",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1630,7 +1630,7 @@
     "productId": 20528,
     "internalName": "ry5088_fun60ultra_8k_2049e",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1722,7 +1722,7 @@
     "productId": 20525,
     "internalName": "ry5088_fun60pro_8k_dm",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1778,7 +1778,7 @@
     "productId": 20528,
     "internalName": "ry5088_akko_m1_v5_uk_3m_pan1080_8k",
     "keyLayout": "Common82_M1_V5_UK",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -1847,8 +1847,8 @@
     "productId": 16405,
     "internalName": "yc3121_5075bplus_s_mac_soc",
     "keyLayout": "Common82_5075B",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -1911,8 +1911,8 @@
     "productId": 20517,
     "internalName": "pan1086_alice_soc",
     "keyLayout": "Common68_Alice",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -1943,7 +1943,7 @@
     "productId": 20528,
     "internalName": "ry5088_m1v5heb_soc_8k_dfn4",
     "keyLayout": "Common82_M1_V5_TMR",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -2016,8 +2016,8 @@
     "productId": 20528,
     "internalName": "ry5088_veekosk0038_8k_8k",
     "keyLayout": "Common68_K80X68",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -2068,8 +2068,8 @@
     "productId": 16400,
     "internalName": "yc3121_akko_k0039_1m",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -2099,8 +2099,8 @@
     "productId": 20482,
     "internalName": "yc3123_akko_5075bplus_3m_1k",
     "keyLayout": "Common82_SG9000_v2",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -2135,8 +2135,8 @@
     "productId": 20527,
     "internalName": "ry5088_akko5075b_3m_8k_1k_1049es",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -2203,8 +2203,8 @@
     "productId": 20527,
     "internalName": "ry5088_akko_5087b_3m_8k_1k",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -2267,7 +2267,7 @@
     "productId": 20527,
     "internalName": "ry5088_akko_mod007_v5_3m_8k_8k",
     "keyLayout": "Common82_MOD007V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -2364,7 +2364,7 @@
     "productId": 16387,
     "internalName": "yc3121_3084bp_iso_3m",
     "keyLayout": "Common85_3084BP",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -2396,7 +2396,7 @@
     "productId": 20482,
     "internalName": "yc3123_akko_kf106_3m_1k",
     "keyLayout": "Common87_KF106",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -2437,8 +2437,8 @@
     "productId": 20482,
     "internalName": "yc3123_akko_air01_3m_1k",
     "keyLayout": "Common84_Air01",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -2469,7 +2469,7 @@
     "productId": 20482,
     "internalName": "yc3123_akko_kf105_3m_1k",
     "keyLayout": "Common67_KF105",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -2510,7 +2510,7 @@
     "productId": 20482,
     "internalName": "yc3123_akko_mod007v5_3m_1k",
     "keyLayout": "Common82_MOD007V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -2551,7 +2551,7 @@
     "productId": 16400,
     "internalName": "yc3121_akko_3108_v3_single_1m",
     "keyLayout": "Common108_MG108B",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -2582,7 +2582,7 @@
     "productId": 20521,
     "internalName": "ry5088_akko_fun60_prob_jp_8k",
     "keyLayout": "Common61_FUN60B",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -2614,7 +2614,7 @@
     "productId": 20521,
     "internalName": "ry5088_akko_fun68_8k_1m",
     "keyLayout": "Common68_K80X68",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -2674,8 +2674,8 @@
     "productId": 20482,
     "internalName": "yc3123_akko_5087v2_3m_1k",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -2705,8 +2705,8 @@
     "productId": 20521,
     "internalName": "ry5088_akko_k0038_1m_8k_3099",
     "keyLayout": "Common68_K80X68",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -2757,8 +2757,8 @@
     "productId": 20528,
     "internalName": "ry5088_alice_soc_8k",
     "keyLayout": "Common68_AliceH",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
@@ -2814,7 +2814,7 @@
     "productId": 20521,
     "internalName": "ry5088_akko_mod007_v5_he_1m_8k",
     "keyLayout": "Common82_MOD007V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -2884,8 +2884,8 @@
     "productId": 20482,
     "internalName": "yc3123_akko_5075s_1m_1k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -2915,8 +2915,8 @@
     "productId": 20525,
     "internalName": "ry5088_akko_5075bv2he_1m",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -2983,8 +2983,8 @@
     "productId": 20482,
     "internalName": "yc3123_akko_5087v2_1m_1k",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -3014,8 +3014,8 @@
     "productId": 20521,
     "internalName": "ry5088_akko_5087bv2he_1m_8k",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -3078,7 +3078,7 @@
     "productId": 20482,
     "internalName": "yc3123_akko_3068b_3m_1k_soc",
     "keyLayout": "Common68_FUN68",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -3110,7 +3110,7 @@
     "productId": 16437,
     "internalName": "yc3121_mod0078_he_b_3m",
     "keyLayout": "Common82_MOD007BHE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -3146,7 +3146,7 @@
     "productId": 16437,
     "internalName": "yc3121_mod0078_he_c_3m",
     "keyLayout": "Common82_SG9000_v2",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -3182,7 +3182,7 @@
     "productId": 20528,
     "internalName": "ry5088_akko_mod68_8k_8k_3m",
     "keyLayout": "Common68_ROYALAXE_K80X68",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 2,
     "magnetic": true,
@@ -3243,7 +3243,7 @@
     "productId": 20521,
     "internalName": "ry5088_akko_mod68_8k_1m",
     "keyLayout": "Local68_Akko_MOD68",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -3305,8 +3305,8 @@
     "productId": 6150,
     "internalName": "yc3123_fl_k2505mmxf_3m_1k",
     "keyLayout": "Common104_K2513",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
@@ -3340,7 +3340,7 @@
     "productId": 20521,
     "internalName": "ry5088_akko_5087hejp_1m_8k",
     "keyLayout": "Common92_5087HEJP",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -3401,8 +3401,8 @@
     "productId": 6150,
     "internalName": "yc3123_fl_k2514_3m_1k",
     "keyLayout": "Common87_K2514",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
@@ -3436,8 +3436,8 @@
     "productId": 20528,
     "internalName": "ry5088_akko_tac87_1m_8k",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
@@ -3496,7 +3496,7 @@
     "productId": 20482,
     "internalName": "yc3123_akko_mg108b_3m_1k",
     "keyLayout": "Common108_MG108B",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -3528,8 +3528,8 @@
     "productId": 6150,
     "internalName": "yc3123_fl_k2513h_c_uk_3m_1k",
     "keyLayout": "Common104_K2513UK",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
@@ -3564,8 +3564,8 @@
     "productId": 6150,
     "internalName": "yc3123_fl_k2405_3m_1k_rgb_kb_soc_v100",
     "keyLayout": "Common82_K2405",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
@@ -3595,7 +3595,7 @@
     "productId": 6150,
     "internalName": "yc3123_fl_k258_21_3m_1k",
     "keyLayout": "Common21_K258",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -3627,7 +3627,7 @@
     "productId": 6150,
     "internalName": "yc3123_fl_k258_87_3m_1k",
     "keyLayout": "Common87_K258",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -3658,8 +3658,8 @@
     "productId": 20556,
     "internalName": "ry6609_5075v3_8k_8k_3m",
     "keyLayout": "Common82_5075B",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -3690,8 +3690,8 @@
     "productId": 20556,
     "internalName": "ry6609_5087v3_8k_8k_3m",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -3722,8 +3722,8 @@
     "productId": 6150,
     "internalName": "yc3123_fl_k2514c_uk_3m_1k",
     "keyLayout": "Common87_K2514UK",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 3,
     "magnetic": false,
     "family": "gen2",
@@ -3757,8 +3757,8 @@
     "productId": 1,
     "internalName": "ry5088_akko_veekosshine68_3m_8k",
     "keyLayout": "Common68_K80X68",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -3809,8 +3809,8 @@
     "productId": 9,
     "internalName": "ry5088_akko_veekosshine68_1m_8k",
     "keyLayout": "Common68_K80X68",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 2,
     "magnetic": true,
     "family": "gen2",
@@ -3865,7 +3865,7 @@
     "productId": 20528,
     "internalName": "ry5088_gem02_8k_8k",
     "keyLayout": "Common102",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -3929,7 +3929,7 @@
     "productId": 20528,
     "internalName": "ry5088_gem01_8k_8k",
     "keyLayout": "Common83_mineral01",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -3994,7 +3994,7 @@
     "productId": 6150,
     "internalName": "yc3123_fl_k258_87uk_3m_1k",
     "keyLayout": "Common87_K2514H_CUK",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -4025,7 +4025,7 @@
     "productId": 6150,
     "internalName": "yc3123_k2506mxa_ua_dm",
     "keyLayout": "Common67_K2506MA",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -4060,7 +4060,7 @@
     "productId": 20482,
     "internalName": "yc3123_5108v5_soc",
     "keyLayout": "Common108_MG108B",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -4092,7 +4092,7 @@
     "productId": 20564,
     "internalName": "vgn_neon75_extreme",
     "keyLayout": "Local82_VGN_Neon75_Extreme",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "Yt",
     "profiles": 4,
     "magnetic": true,
@@ -4123,7 +4123,7 @@
     "productId": 16400,
     "internalName": "yc3121_akko_3087s_us_single_1m",
     "keyLayout": "Common87_MonsGeek_M3V5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -4154,7 +4154,7 @@
     "productId": 20528,
     "internalName": "ry5088_akko_fun60max_3m_8k",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -4210,7 +4210,7 @@
     "productId": 20528,
     "internalName": "ry5088_m1v5he_3m_8k_8k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 2,
     "magnetic": true,
@@ -4278,7 +4278,7 @@
     "productId": 20521,
     "internalName": "ry5088_akko_mod007sv3he_us_b_1m_8k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -4334,7 +4334,7 @@
     "productId": 20521,
     "internalName": "ry5088_akko_mod007sv3he_uk_b_1m_8k",
     "keyLayout": "Common83_mod007sv3he_uk",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -4390,7 +4390,7 @@
     "productId": 20528,
     "internalName": "ry5088_akko_mod68_uk_8k_8k_3m",
     "keyLayout": "Common69_MOD68UK",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 2,
     "magnetic": true,
@@ -4447,8 +4447,8 @@
     "productId": 20528,
     "internalName": "ry5088_akko_5075_v3_he_3m_8k_8k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
@@ -4503,8 +4503,8 @@
     "productId": 20528,
     "internalName": "ry5088_akko_5087_v3_he_3m_8k_8k",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
@@ -4555,7 +4555,7 @@
     "productId": 10,
     "internalName": "yc3121_akko_5075a_1m_1k_rgb_v500",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -4590,7 +4590,7 @@
     "productId": 10,
     "internalName": "yc3121_akko_5075b_1m_1k_rgb_v500",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -4626,7 +4626,7 @@
     "productId": 13862,
     "internalName": "yc3121_fl_k258_87_us_soc",
     "keyLayout": "Common87_K258",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -4658,7 +4658,7 @@
     "productId": 13862,
     "internalName": "yc3121_fl_k258_87_uk_soc",
     "keyLayout": "Common87_K258_UK",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -4689,7 +4689,7 @@
     "productId": 13862,
     "internalName": "yc3121_fl_k258_21_soc",
     "keyLayout": "Common21_K258",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": false,
@@ -4720,7 +4720,7 @@
     "productId": 9,
     "internalName": "ry5088_akko_mod68_uk_8k_1m_v500",
     "keyLayout": "Common69_MOD68UK",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 2,
     "magnetic": true,
@@ -4778,7 +4778,7 @@
     "productId": 20564,
     "internalName": "vgn_neon75_extreme_v2",
     "keyLayout": "Local82_VGN_Neon75_Extreme",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "Yt",
     "profiles": 4,
     "magnetic": true,
@@ -4809,7 +4809,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_mod68_3m_8k_8k_v400",
     "keyLayout": "Common68_ROYALAXE_K80X68",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -4870,7 +4870,7 @@
     "productId": 20528,
     "internalName": "ry5088_akko_mod007_v5_he_b_3m_8k_8k_v500",
     "keyLayout": "Common82_MOD007V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -4936,7 +4936,7 @@
     "productId": 20521,
     "internalName": "ry5088_akko_mod007_v5_he_b_1m_8k_8k_v500",
     "keyLayout": "Common82_MOD007V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -5002,7 +5002,7 @@
     "productId": 20556,
     "internalName": "ry6609_akko_5108s_v5_3m_8k_8k",
     "keyLayout": "Common108_5108V5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -5034,8 +5034,8 @@
     "productId": 1,
     "internalName": "ry5088_akko_5087_v3_he_3m_8k_8k_v400",
     "keyLayout": "Common88_5087V5",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
@@ -5095,7 +5095,7 @@
     "productId": 9,
     "internalName": "ry5088_fun68_uk_dm_8k",
     "keyLayout": "Common68_fun68_uk",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -5152,7 +5152,7 @@
     "productId": 3,
     "internalName": "ry6609_akko_5087_v5_3m_8k_8k",
     "keyLayout": "Common88_5087V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -5184,7 +5184,7 @@
     "productId": 3,
     "internalName": "ry6609_akko_5075_v5_3m_8k_8k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -5219,8 +5219,8 @@
     "productId": 20482,
     "internalName": "yc3123_akko_air01uk_3m_1k",
     "keyLayout": "Common84_Air01UK",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -5251,8 +5251,8 @@
     "productId": 20528,
     "internalName": "ry5088_akko_k0038b_3m_8k_8k",
     "keyLayout": "Common68_K80X68",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -5303,8 +5303,8 @@
     "productId": 20521,
     "internalName": "ry5088_akko_k0038_1m_8k",
     "keyLayout": "Common68_K80X68",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -5355,8 +5355,8 @@
     "productId": 20545,
     "internalName": "siukie_ach105w",
     "keyLayout": "Local105_Siukie_ACH105W",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 1,
     "magnetic": false,
     "family": "gen2",
@@ -5386,7 +5386,7 @@
     "productId": 5,
     "internalName": "ry6602_akko_5108_v5_3m_1k_1k",
     "keyLayout": "Common108_5108V5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -5418,7 +5418,7 @@
     "productId": 5,
     "internalName": "ry6602_akko_5087_v5_1k_1k_3m",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -5449,7 +5449,7 @@
     "productId": 5,
     "internalName": "ry6602_akko_5075_v5_3m_1k_1k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -5485,8 +5485,8 @@
     "productId": 6150,
     "internalName": "yc3123_k2505_soc",
     "keyLayout": "Common82_K2505~k1",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -5522,8 +5522,8 @@
     "productId": 6150,
     "internalName": "yc3123_k2505_soc",
     "keyLayout": "Common82_K2505",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -5562,8 +5562,8 @@
     "productId": 6150,
     "internalName": "yc3123_k2505uk_3m_1k_soc",
     "keyLayout": "Common83_K2505UK",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -5602,8 +5602,8 @@
     "productId": 6150,
     "internalName": "yc3123_k2506mxe_3m_1k_soc",
     "keyLayout": "Common67_K2506_v2",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -5638,8 +5638,8 @@
     "productId": 6150,
     "internalName": "yc3123_k2506mxe_3m_1k_soc",
     "keyLayout": "Common67_K2506_v2",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -5674,8 +5674,8 @@
     "productId": 6150,
     "internalName": "yc3123_k2506mxg_uk_soc",
     "keyLayout": "Common68_K2506_UK_v2",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -5711,8 +5711,8 @@
     "productId": 6147,
     "internalName": "ry5088_k2506he_c_3m_8k_8k",
     "keyLayout": "Common67_K2506",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
@@ -5773,8 +5773,8 @@
     "productId": 6147,
     "internalName": "ry5088_k2506he_c_3m_8k_8k",
     "keyLayout": "Common67_K2506",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -5810,8 +5810,8 @@
     "productId": 6147,
     "internalName": "ry5088_k2506hee_uk_3m_8k_8k",
     "keyLayout": "Common68_K2506_UK",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -5846,8 +5846,8 @@
     "productId": 6147,
     "internalName": "ry5088_k2505_8k_8k_new_ua",
     "keyLayout": "Common82_K2505~k2",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -5911,8 +5911,8 @@
     "productId": 6147,
     "internalName": "ry5088_k2505_8k_8k_new_us",
     "keyLayout": "Common82_K2505~k2",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -5976,8 +5976,8 @@
     "productId": 6147,
     "internalName": "ry5088_k2505hee_8k_uk",
     "keyLayout": "Common83_K2505UK~k1",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "gen2",
@@ -6041,8 +6041,8 @@
     "productId": 1,
     "internalName": "ry5088_akko_5087_v5_he_3m_8k_8k",
     "keyLayout": "Common87_5087SV3",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
@@ -6097,8 +6097,8 @@
     "productId": 1,
     "internalName": "ry5088_akko_5075_v5_he_3m_8k_8k_ry1049es",
     "keyLayout": "Common82_PC75S",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
@@ -6158,7 +6158,7 @@
     "productId": 16400,
     "internalName": "yc3121_akko_3098s_1m_single",
     "keyLayout": "Common98_xl98",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -6189,8 +6189,8 @@
     "productId": 20566,
     "internalName": "ry6602_akko_air01_uk_3m_1k_1k",
     "keyLayout": "Common84_Air01UK",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -6221,8 +6221,8 @@
     "productId": 6147,
     "internalName": "ry5088_k2505_8k_8k_ry1049",
     "keyLayout": "Common82_K2505",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
@@ -6311,7 +6311,7 @@
     "productId": 20528,
     "internalName": "ry5088_akko_fun60_b_uk_3m_8k_1k",
     "keyLayout": "Common61_gk06uk",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -6397,8 +6397,8 @@
     "productId": 6147,
     "internalName": "ry5088_fl_k2505_uk_3m_8k_8k",
     "keyLayout": "Common83_K2505UK",
-    "lightLayout": "v",
-    "sideLightLayout": "Yi",
+    "lightLayout": "K",
+    "sideLightLayout": "ii",
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
@@ -6487,7 +6487,7 @@
     "productId": 20556,
     "internalName": "ry6609_akko_5108s_v5_3m_8k_8k",
     "keyLayout": "Common108_5108V5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -6519,7 +6519,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5108_v5_he_3m_8k_8k",
     "keyLayout": "Common108_5108V5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -6571,7 +6571,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5075_v5_he_3m_8k_8k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -6626,7 +6626,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5087_v5_he_3m_8k_8k_ry1049es",
     "keyLayout": "Common88_5087V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -6671,7 +6671,7 @@
     "productId": 20528,
     "internalName": "ry5088_akko_5075_uk_tmr_3m_8k_8k",
     "keyLayout": "Common83_mod007sv3he_uk",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -6748,7 +6748,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5087_v5_he_tmr_3m_8k_8k",
     "keyLayout": "Common88_5087V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -6804,7 +6804,7 @@
     "productId": 20528,
     "internalName": "ry5088_akko_5075_us_tmr_3m_8k_8k_ry1049es",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -6881,8 +6881,8 @@
     "productId": 6147,
     "internalName": "ry5088_fl_k2507_us_3m_8k_8k",
     "keyLayout": "Common104_K2507",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
@@ -6972,8 +6972,8 @@
     "productId": 6147,
     "internalName": "ry5088_fl_k2507_uk_3m_8k_8k",
     "keyLayout": "Common104_K2507UK",
-    "lightLayout": "v",
-    "sideLightLayout": "Yi",
+    "lightLayout": "K",
+    "sideLightLayout": "ii",
     "profiles": 3,
     "magnetic": true,
     "family": "gen2",
@@ -7037,7 +7037,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5087_v5_he_tmr_us_b_3m_8k_8k",
     "keyLayout": "Common88_5087V5HETMR",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7111,7 +7111,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_mod68_he_3m_8k_8k",
     "keyLayout": "Common68_ROYALAXE_K80X68",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7159,8 +7159,8 @@
     "productId": 20482,
     "internalName": "yc3123_akko_air01_3m_1k_3818",
     "keyLayout": "Common84_Air01",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -7191,7 +7191,7 @@
     "productId": 16405,
     "internalName": "yc3121_nbd_mk905_uk_3m",
     "keyLayout": "Common87_BK_UK",
-    "lightLayout": "se",
+    "lightLayout": "pe",
     "sideLightLayout": "",
     "profiles": 2,
     "magnetic": false,
@@ -7222,7 +7222,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_mod68_he_1m_8k_8k",
     "keyLayout": "Common68_ROYALAXE_K80X68",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7270,7 +7270,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5087_v5_he_uk_tmr_3m_8k_8k",
     "keyLayout": "Common88_5087V5HEUK",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7344,7 +7344,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_mod007_v5_tmr_8k_8k_v500",
     "keyLayout": "Common83_MOD007V5HE_TMR",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7428,7 +7428,7 @@
     "productId": 20527,
     "internalName": "ry5088_fl_k2501_3m_8k_8k",
     "keyLayout": "Common87_K2501",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 3,
     "magnetic": true,
@@ -7466,7 +7466,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_fun60_ultra_tmr_3m_8k_8k",
     "keyLayout": "Common61_gk06",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7521,7 +7521,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5108_v5_he_b_3m_8k_8k",
     "keyLayout": "Common108_5108V5HE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7573,7 +7573,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5087_v5_he_us_b_3m_8k_8k",
     "keyLayout": "Common88_5087V5HETMR",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7618,7 +7618,7 @@
     "productId": 20528,
     "internalName": "ry5088_fun60maxc_3m_8k",
     "keyLayout": "Common61_fun60maxc",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7675,7 +7675,7 @@
     "productId": 3,
     "internalName": "ry6609_akko_5075b_v5_3m_8k_8k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -7710,7 +7710,7 @@
     "productId": 3,
     "internalName": "ry6609_akko_5087_v5_b_3m_8k_8k",
     "keyLayout": "Common87_5087V5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -7742,7 +7742,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5075_v5_he_us_b_3m_8k_8k",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7790,7 +7790,7 @@
     "productId": 5,
     "internalName": "ry6602_akko_5108_v5_iso_3m_1k_1k_argb",
     "keyLayout": "Common82_5075_v5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -7826,7 +7826,7 @@
     "productId": 5,
     "internalName": "ry6602_akko_5075_v5_iso_3m_1k_1k",
     "keyLayout": "Common82_5075_v5_de",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -7858,7 +7858,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_5098_v5_he_3m_8k_8k",
     "keyLayout": "Common98_5098",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -7929,7 +7929,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_akko_5075_v5_he_iso_3m_8k_8k",
     "keyLayout": "Common82_5075_v5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -8003,7 +8003,7 @@
     "productId": 5,
     "internalName": "ry6602_akko_5098_v5_3m_8k",
     "keyLayout": "Common98_5098",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -8044,8 +8044,8 @@
     "productId": 5,
     "internalName": "ry6602_akko_air01_us_3m_1k_1k",
     "keyLayout": "Local83_Akko_Air01",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "gen2",
@@ -8077,8 +8077,8 @@
     "productId": 5,
     "internalName": "ry6602_akko_k0061_3m_1k_1k",
     "keyLayout": "Common68_K0061",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": false,
     "family": "unknown",
@@ -8113,7 +8113,7 @@
     "productId": 5,
     "internalName": "ry6602_akko_akko_mg108b_v2_3m_1k_1k",
     "keyLayout": "Common108_MG108BV2",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -8145,7 +8145,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_0001_hf_kf106_3m_8k_8k",
     "keyLayout": "Common67_4031",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -8208,8 +8208,8 @@
     "productId": 22,
     "internalName": "ry5088_akko_raid_75_he",
     "keyLayout": "Common82_SG9000",
-    "lightLayout": "v",
-    "sideLightLayout": "Y",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
     "profiles": 4,
     "magnetic": true,
     "family": "unknown",
@@ -8265,7 +8265,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_akko_5075_v5_he_iso_b_1m_8k",
     "keyLayout": "Common82_5075_v5",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -8339,7 +8339,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_fun87_he_1m_8k",
     "keyLayout": "Common88_akko_fun87_he",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -8403,7 +8403,7 @@
     "productId": 1,
     "internalName": "ry5088_akko_m1v5_tmr_iso_3m_8k_8k",
     "keyLayout": "Common82_M1_V5_ISO",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 2,
     "magnetic": true,
@@ -8472,7 +8472,7 @@
     "productId": 64,
     "internalName": "ry5088_001_akko_m1_tmr_iso_b_3m_8k_8k_ry1033_dfn4_v400h",
     "keyLayout": "Common82_M1_V5_ISO",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 2,
     "magnetic": true,
@@ -8554,7 +8554,7 @@
     "productId": 64,
     "internalName": "ry5088_001_akko_m1_tmr_iso_c_3m_8k_8k_ry1033_dfn4_v400h",
     "keyLayout": "Common82_M1_V5_TMR",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 2,
     "magnetic": true,
@@ -8698,7 +8698,7 @@
     "productId": 36883,
     "internalName": "RY6602_BEAT75_3M_1K_ARGB_KB_RY1049ES_RT001",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -8784,7 +8784,7 @@
     "productId": 36869,
     "internalName": "RY8016_JC_RM_Nyxxx60_1M_ARGB_OPS",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -8841,7 +8841,7 @@
     "productId": 20584,
     "internalName": "RY8016_RY_RY60Pro_1M_ARGB_OPS",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -8873,7 +8873,7 @@
     "productId": 20584,
     "internalName": "RY8016_NBD_MK25061_V2_VK_Cyber_68_1M_ARGB_OPS",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -9106,7 +9106,7 @@
     "productId": 36869,
     "internalName": "RY5088_HF_KF109_optical_axi_1M_ARGB_OPS",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -9495,7 +9495,7 @@
     "productId": 20521,
     "internalName": "ry5088_dw84pro_1m_8k",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -9659,7 +9659,7 @@
     "productId": 36883,
     "internalName": "ry6602_k81_v3_3m_1k_rt001",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -9860,7 +9860,7 @@
     "productId": 36,
     "internalName": "ry6602_fl_k2612_1m_1k",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "Wg",
     "profiles": 4,
     "magnetic": true,
@@ -9922,7 +9922,7 @@
     "productId": 36886,
     "internalName": "ry5088_zdm_beat75_v2_core75HE_1m_8k",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -10004,7 +10004,7 @@
     "productId": 36883,
     "internalName": "ry6602_jc_gk8773gw_3m_1k_1k",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -10139,7 +10139,7 @@
     "productId": 36886,
     "internalName": "ry5088_zdm_beat75_v4_urx75_1m_8k",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -10635,7 +10635,7 @@
     "productId": 36886,
     "internalName": "ry5088_hc_lp75811_3m_8k_1k_argb_kb_1049ew_84key",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "ED",
     "profiles": 4,
     "magnetic": true,
@@ -10797,7 +10797,7 @@
     "productId": 301,
     "internalName": "ry5088_cherrymx82_de_8k_8k",
     "keyLayout": "Local88_Cherry_MX82_TMR_DE",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -10834,7 +10834,7 @@
     "productId": 321,
     "internalName": "ry5088_cherry_k5_tmr_de_8k_dm",
     "keyLayout": "Common67_beat65",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": true,
@@ -10866,7 +10866,7 @@
     "_unknown": "Common82_M1_V5_TMR matched the keymap 84 of 84 in Setup and the owner's photo shows the same 75% with a knob and a Home, PgUp, PgDn, End column. Setup found 4 profiles and switched them. Debounce 0x91 answers 1 at byte 2. The owner saw red on the edge light, so sideLight is on; the layout token copies the other yc500 edge-light boards and nothing reads it. The B in the name is the multi-mode line, so both sleep timers are on. 0xAD echoes, no display. Its white sibling 695 and the other yc300_ records were not swept and keep family unknown.",
     "id": 594,
     "keyLayout": "Common82_M1_V5_TMR",
-    "sideLightLayout": "At",
+    "sideLightLayout": "Mt",
     "family": "yc500",
     "bulkKeymap": true,
     "features": {
@@ -10929,7 +10929,7 @@
     "internalName": "akko_5075b_plus_s_mac",
     "keyLayout": "Local82_Akko_5075B_Plus_S",
     "lightLayout": "",
-    "sideLightLayout": "At",
+    "sideLightLayout": "Mt",
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
@@ -10956,7 +10956,7 @@
     "_unknown": "No photo. Published firmware 1768_v104 exists but led_flags.py reads no renderer out of it. Knob keeps the vendor's three actions; nothing tested them.",
     "id": 1768,
     "keyLayout": "Common81_DK82US",
-    "sideLightLayout": "At",
+    "sideLightLayout": "Mt",
     "profiles": 4,
     "family": "yc500",
     "features": {
@@ -10987,7 +10987,7 @@
     "internalName": "luminkey60_pro",
     "keyLayout": "Local61_Luminkey60_Pro",
     "lightLayout": "",
-    "sideLightLayout": "At",
+    "sideLightLayout": "Mt",
     "profiles": 4,
     "magnetic": false,
     "family": "yc500",
@@ -11014,7 +11014,7 @@
     "productId": 16405,
     "internalName": "akko_mu01_uk",
     "keyLayout": "Common69_MU01UK",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -11042,7 +11042,7 @@
     "productId": 16405,
     "internalName": "akko_5098b_de",
     "keyLayout": "Unknown",
-    "lightLayout": "v",
+    "lightLayout": "K",
     "sideLightLayout": "",
     "profiles": 4,
     "magnetic": false,
@@ -11195,5 +11195,3286 @@
     "_unknown": "Individual write round-trips were not reported. The X96HE and Legion K98 keep their existing shared picture.",
     "id": 2964,
     "keyLayout": "Local102_AttackShark_X98HE"
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main fe onto K. No hardware report yet.",
+    "_unknown": "Akko ships no picture for Common82_PC75B_PIusS in the saved build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 1374,
+    "name": "yc300_pc75_s_mac_white_plus",
+    "displayName": "PC75B Plus",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 1452,
+    "productId": 591,
+    "internalName": "yc300_pc75_s_mac_white_plus",
+    "keyLayout": "Common82_PC75B_PIusS",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "Volume_Brightness",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main fe onto K. No hardware report yet.",
+    "id": 3938,
+    "name": "ry6609_akko_5098_v5_3m_8k_8k",
+    "displayName": "5098 V5",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 3,
+    "internalName": "ry6609_akko_5098_v5_3m_8k_8k",
+    "keyLayout": "Common98_5098",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 420,
+      "h": 116,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main Ju onto K. No hardware report yet.",
+    "id": 4134,
+    "name": "ry5088_akko_5075_v5_he_argb_kb_v400_key75_1m_8k",
+    "displayName": "5075 V5 HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_akko_5075_v5_he_argb_kb_v400_key75_1m_8k",
+    "keyLayout": "Common82_5075_v5",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "LEDONOFF",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main fe onto K; side te onto H. No hardware report yet.",
+    "id": 4135,
+    "name": "ry6609_akko_k0069_3m_8k_8k",
+    "displayName": "K0069",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 3,
+    "internalName": "ry6609_akko_k0069_3m_8k_8k",
+    "keyLayout": "Common68_ROYALAXE_K80X68",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main fe onto K. No hardware report yet.",
+    "_unknown": "Akko ships no picture for Common67_KF105_tmr in the saved build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 4176,
+    "name": "ry5088_hf_kf105_3m_8k_8k",
+    "displayName": "KF105 TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_hf_kf105_3m_8k_8k",
+    "keyLayout": "Common67_KF105_tmr",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 95,
+        "name": "Starlight"
+      },
+      {
+        "code": 24,
+        "name": "Astrolink"
+      },
+      {
+        "code": 63,
+        "name": "AstroAim"
+      },
+      {
+        "code": 72,
+        "name": "Red Jade"
+      },
+      {
+        "code": 0,
+        "name": "Prism"
+      },
+      {
+        "code": 7,
+        "name": "Mechanical Switches"
+      }
+    ],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "MediaPlayPause",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main fe onto K. No hardware report yet.",
+    "_unknown": "Akko ships no picture for Common67_KF106_tmr in the saved build. The Keys page matches a picture against the board and asks the owner to confirm it, as for Unknown.",
+    "id": 4177,
+    "name": "ry5088_hf_kf106_3m_8k_8k",
+    "displayName": "KF106 TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 1,
+    "internalName": "ry5088_hf_kf106_3m_8k_8k",
+    "keyLayout": "Common67_KF106_tmr",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 240,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 95,
+        "name": "Starlight"
+      },
+      {
+        "code": 24,
+        "name": "Astrolink"
+      },
+      {
+        "code": 63,
+        "name": "AstroAim"
+      },
+      {
+        "code": 72,
+        "name": "Red Jade"
+      },
+      {
+        "code": 0,
+        "name": "Prism"
+      },
+      {
+        "code": 7,
+        "name": "Mechanical Switches"
+      }
+    ],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "MediaPlayPause",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main pu onto K. No hardware report yet.",
+    "id": 4208,
+    "name": "ry5088_akko_5098_v5_he_tmr_3m_8k_8k",
+    "displayName": "5098 V5 HE TMR",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 64,
+    "internalName": "ry5088_akko_5098_v5_he_tmr_3m_8k_8k",
+    "keyLayout": "Common98_5098",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": {
+      "w": 420,
+      "h": 116,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 102,
+        "name": "Aurora Axis"
+      },
+      {
+        "code": 95,
+        "name": "Starlight"
+      },
+      {
+        "code": 24,
+        "name": "Astrolink"
+      },
+      {
+        "code": 63,
+        "name": "AstroAim"
+      },
+      {
+        "code": 72,
+        "name": "Red Jade"
+      },
+      {
+        "code": 124,
+        "name": "棱镜轴"
+      },
+      {
+        "code": 7,
+        "name": "Mechanical Switches"
+      }
+    ],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main s1 onto K; side te onto H. No hardware report yet.",
+    "id": 4311,
+    "name": "ry6602_akko_air01b_us_3m_1k_1k",
+    "displayName": "Air01",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 5,
+    "internalName": "ry6602_akko_air01b_us_3m_1k_1k",
+    "keyLayout": "Common84_Air01",
+    "lightLayout": "K",
+    "sideLightLayout": "H",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main fe onto K. No hardware report yet.",
+    "id": 4341,
+    "name": "ry5088_mod007pc_dm_8k",
+    "displayName": "MOD007 PC HE",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 64,
+    "internalName": "ry5088_mod007pc_dm_8k",
+    "keyLayout": "Common82_SG9000",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 24,
+        "name": "Astrolink"
+      },
+      {
+        "code": 1,
+        "name": "Magnetic Jade"
+      },
+      {
+        "code": 2,
+        "name": "Jade Pro"
+      },
+      {
+        "code": 3,
+        "name": "Jade Gaming"
+      },
+      {
+        "code": 4,
+        "name": "Uranus"
+      },
+      {
+        "code": 5,
+        "name": "King"
+      }
+    ],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main fe onto K. No hardware report yet.",
+    "id": 4374,
+    "name": "ry6602_akko_5108_v5_iso_b_1m_1k_1k_argb",
+    "displayName": "5075 V5 ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 70,
+    "internalName": "ry6602_akko_5108_v5_iso_b_1m_1k_1k_argb",
+    "keyLayout": "Common82_5075_v5",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "LEDONOFF",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Akko's own Cloud Driver tables (web.akkogear.com), not in gearhub, which is the bundle the registry is extracted from. Akko ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Akko web build saved 2026-11-22 under ~/vendor-builds/akko-20261122. Family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500) when this internal name appears there; otherwise unknown. Light layout names are minified per brand and mapped onto gearhub's common table: main Jp onto K. No hardware report yet.",
+    "id": 4379,
+    "name": "ry6602_akko_5098_v5_iso_3m_8k",
+    "displayName": "5098 V5 ISO",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 14574,
+    "productId": 70,
+    "internalName": "ry6602_akko_5098_v5_iso_3m_8k",
+    "keyLayout": "Common98_5098_UK",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": {
+      "w": 420,
+      "h": 116,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In MonsGeek's own Driver tables (app.monsgeek.com), not in gearhub, which is the bundle the registry is extracted from. MonsGeek ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the MonsGeek web build saved 2026-11-22 under ~/vendor-builds/monsgeek-20261122, family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500). Light layout names are minified per brand and mapped onto gearhub's common table: main du onto K. No hardware report yet.",
+    "id": 4180,
+    "name": "ry5088_akko_fun60_pro_jp_8k",
+    "displayName": "FUN60 Pro JP",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_akko_fun60_pro_jp_8k",
+    "keyLayout": "Common61_FUN60B",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 25,
+        "name": "Glare"
+      },
+      {
+        "code": 1,
+        "name": "Magnetic Jade"
+      },
+      {
+        "code": 2,
+        "name": "Jade Pro"
+      },
+      {
+        "code": 3,
+        "name": "Jade Gaming"
+      },
+      {
+        "code": 4,
+        "name": "Uranus"
+      },
+      {
+        "code": 5,
+        "name": "King"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In MonsGeek's own Driver tables (app.monsgeek.com), not in gearhub, which is the bundle the registry is extracted from. MonsGeek ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the MonsGeek web build saved 2026-11-22 under ~/vendor-builds/monsgeek-20261122, family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500). Light layout names are minified per brand and mapped onto gearhub's common table: main Te onto K. No hardware report yet.",
+    "id": 4294,
+    "name": "ry5088_akko_fun60_d_1m_8k",
+    "displayName": "FUN60 PRO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_akko_fun60_d_1m_8k",
+    "keyLayout": "Common61_gk06",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 25,
+        "name": "Glare"
+      },
+      {
+        "code": 31,
+        "name": "Flash"
+      },
+      {
+        "code": 1,
+        "name": "Magnetic Jade"
+      },
+      {
+        "code": 2,
+        "name": "Jade Pro"
+      },
+      {
+        "code": 3,
+        "name": "Jade Gaming"
+      },
+      {
+        "code": 4,
+        "name": "Uranus"
+      },
+      {
+        "code": 5,
+        "name": "King"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In MonsGeek's own Driver tables (app.monsgeek.com), not in gearhub, which is the bundle the registry is extracted from. MonsGeek ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the MonsGeek web build saved 2026-11-22 under ~/vendor-builds/monsgeek-20261122, family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500). Light layout names are minified per brand and mapped onto gearhub's common table: main Te onto K. No hardware report yet.",
+    "id": 4372,
+    "name": "ry5088_akko_fun60d_uk_dm_8k",
+    "displayName": "FUN60 PRO ISO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 64,
+    "internalName": "ry5088_akko_fun60d_uk_dm_8k",
+    "keyLayout": "Common61_gk06uk",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 25,
+        "name": "Glare"
+      },
+      {
+        "code": 1,
+        "name": "Magnetic Jade"
+      },
+      {
+        "code": 2,
+        "name": "Jade Pro"
+      },
+      {
+        "code": 3,
+        "name": "Jade Gaming"
+      },
+      {
+        "code": 4,
+        "name": "Uranus"
+      },
+      {
+        "code": 5,
+        "name": "King"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In MonsGeek's own Driver tables (app.monsgeek.com), not in gearhub, which is the bundle the registry is extracted from. MonsGeek ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the MonsGeek web build saved 2026-11-22 under ~/vendor-builds/monsgeek-20261122, family from the factory switch in that build (findRy5088Device is gen2, findYC300Device and findYC3121Device are yc500). Light layout names are minified per brand and mapped onto gearhub's common table: main Te onto K. No hardware report yet.",
+    "id": 4397,
+    "name": "ry6602_akko_m1_v5_iso_3m_1k_1k_argb",
+    "displayName": "M1 V5 ISO",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 14574,
+    "productId": 70,
+    "internalName": "ry6602_akko_m1_v5_iso_3m_1k_1k_argb",
+    "keyLayout": "Common82_M1_V5_ISO",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "VolumeBrightnessToggle3",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-11-22 under ~/vendor-builds/hator-20261122, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "id": 4478,
+    "name": "yc3123_k2505_j_3m_1k_soc",
+    "displayName": "HTK3181EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6163,
+    "internalName": "yc3123_k2505_j_3m_1k_soc",
+    "keyLayout": "Common83_K2505UK",
+    "lightLayout": "K",
+    "sideLightLayout": "Eu",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In Hator's own SyncHUB tables (the hator.io web build), not in gearhub, which is the bundle the registry is extracted from. Hator ships the same driver with its own catalogue.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the Hator web build saved 2026-11-22 under ~/vendor-builds/hator-20261122, family from the loader dependencies in that build. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "id": 4484,
+    "name": "yc3123_k2505_j_3m_1k_soc",
+    "displayName": "HTK3189EU",
+    "company": "Hator",
+    "vendor": "Hator",
+    "vendorId": 14234,
+    "productId": 6163,
+    "internalName": "yc3123_k2505_j_3m_1k_soc",
+    "keyLayout": "Common83_K2505UK",
+    "lightLayout": "K",
+    "sideLightLayout": "Eu",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; XP, eB have no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 2293,
+    "name": "pan1086_aj68_soc",
+    "displayName": "AJ68",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 20517,
+    "internalName": "pan1086_aj68_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; K6 has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 2451,
+    "name": "pan1086_nj68pro_soc",
+    "displayName": "NJ68 PRO",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 20517,
+    "internalName": "pan1086_nj68pro_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": {
+      "w": 160,
+      "h": 80,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "AudioVolumeMute",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4240,
+    "name": "ry6609_k2607_87_3m_8k_8k",
+    "displayName": "K2607-87",
+    "company": "ARDORGAMING",
+    "vendor": "ARDORGAMING",
+    "vendorId": 14505,
+    "productId": 37,
+    "internalName": "ry6609_k2607_87_3m_8k_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeUp",
+        "AudioVolumeMute",
+        "AudioVolumeDown"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4241,
+    "name": "ry6609_k2607_21_3m_8k_8k",
+    "displayName": "K2607-21",
+    "company": "ARDORGAMING",
+    "vendor": "ARDORGAMING",
+    "vendorId": 14505,
+    "productId": 37,
+    "internalName": "ry6609_k2607_21_3m_8k_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4280,
+    "name": "ry5088_fl_k2601b_1m_8k",
+    "displayName": "Alpha75",
+    "company": "腹灵",
+    "vendor": "腹灵",
+    "vendorId": 14505,
+    "productId": 35,
+    "internalName": "ry5088_fl_k2601b_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 153,
+        "name": "耀光"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; hc, X6 have no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4300,
+    "name": "ry6602_t75_v5_3m_1k",
+    "displayName": "T75",
+    "company": "XINMENGV5",
+    "vendor": "XINMENGV5",
+    "vendorId": 14763,
+    "productId": 36883,
+    "internalName": "ry6602_t75_v5_3m_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 139,
+        "name": "双玉"
+      },
+      {
+        "code": 0,
+        "name": "高特"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4309,
+    "name": "ry5088_fl_k232he_d_1m_8k_wb",
+    "displayName": "APEX75 PRO",
+    "company": "腹灵",
+    "vendor": "腹灵",
+    "vendorId": 14505,
+    "productId": 35,
+    "internalName": "ry5088_fl_k232he_d_1m_8k_wb",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 23,
+        "name": "冰薄荷"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; H6, G6 have no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4315,
+    "name": "ry6602_sg_sg9138_3m_1k",
+    "displayName": "H87 KB",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36871,
+    "internalName": "ry6602_sg_sg9138_3m_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; H6, G6 have no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4316,
+    "name": "ry6609_sg_sg9138_3m_1k",
+    "displayName": "H87 KB",
+    "company": "惠科",
+    "vendor": "惠科",
+    "vendorId": 14763,
+    "productId": 36872,
+    "internalName": "ry6609_sg_sg9138_3m_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4320,
+    "name": "ry6602_jc_gk8775gw_3m_1k_1k",
+    "displayName": "GK8775GW",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36883,
+    "internalName": "ry6602_jc_gk8775gw_3m_1k_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 128,
+      "h": 128,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "MediaPlayPause",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; Jo has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4324,
+    "name": "ry5088_zdm_beat68_v2_core68HE_1m_8k",
+    "displayName": "Core 68HE Pro",
+    "company": "URX(R)",
+    "vendor": "URX(R)",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_zdm_beat68_v2_core68HE_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 1,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": 0.2
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": 0.2
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 147,
+        "name": "URX磁轴"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4325,
+    "name": "ry5088_zdm_beat75_v4_urx75_1m_8k",
+    "displayName": "Core 75HE",
+    "company": "URX(R)",
+    "vendor": "URX(R)",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_zdm_beat75_v4_urx75_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": 0.2
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": 0.2
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 147,
+        "name": "URX磁轴"
+      },
+      {
+        "code": 0,
+        "name": "高特"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4329,
+    "name": "yc3121_nbd_mk825_gk_soc",
+    "displayName": "GK-G01W",
+    "company": "MICROPACK",
+    "vendor": "MICROPACK",
+    "vendorId": 12625,
+    "productId": 16405,
+    "internalName": "yc3121_nbd_mk825_gk_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4334,
+    "name": "ry5088_gk6860g_1m_8k_rgb",
+    "displayName": "strayfe x PietSmiet 100 HE",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 2436,
+    "productId": 1005,
+    "internalName": "ry5088_gk6860g_1m_8k_rgb",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4337,
+    "name": "ry6602_mk25062_3m_1k",
+    "displayName": "MK25062",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36871,
+    "internalName": "ry6602_mk25062_3m_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; Jo has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4346,
+    "name": "ry5088_zdm_beat75_v4_1m_8k",
+    "displayName": "Beat75",
+    "company": "XINMENGV5",
+    "vendor": "XINMENGV5",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_zdm_beat75_v4_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 139,
+        "name": "双玉"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4352,
+    "name": "ry5088_cr_k105_1m_8k",
+    "displayName": "K105",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_cr_k105_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 240,
+      "h": 135,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4357,
+    "name": "ry5088_fl_k2619_3m_0005_8k",
+    "displayName": "K2619",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14505,
+    "productId": 35,
+    "internalName": "ry5088_fl_k2619_3m_0005_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 163,
+        "name": "十字静音"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4359,
+    "name": "ry5088_zdm_beat75_v4_3m_8k",
+    "displayName": "Beat75",
+    "company": "XINMENGV5",
+    "vendor": "XINMENGV5",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_zdm_beat75_v4_3m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 139,
+        "name": "双玉"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4362,
+    "name": "pan1086_k77_signokb_k744_soc",
+    "displayName": "SIGNOKB-744",
+    "company": "SIGNOKB744",
+    "vendor": "SIGNOKB744",
+    "vendorId": 12625,
+    "productId": 20517,
+    "internalName": "pan1086_k77_signokb_k744_soc",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4363,
+    "name": "ry5088_fl_k2617_3m_0005_8k",
+    "displayName": "K2617",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14505,
+    "productId": 35,
+    "internalName": "ry5088_fl_k2617_3m_0005_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 163,
+        "name": "十字静音"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4364,
+    "name": "ry5088_fl_k2619_uk_3m_0005_8k",
+    "displayName": "K2619 UK",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14505,
+    "productId": 35,
+    "internalName": "ry5088_fl_k2619_uk_3m_0005_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 163,
+        "name": "十字静音"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; FB has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4365,
+    "name": "ry6602_mk830v2_3m_1k",
+    "displayName": "GT75",
+    "company": "ImboXGT",
+    "vendor": "ImboXGT",
+    "vendorId": 14763,
+    "productId": 36871,
+    "internalName": "ry6602_mk830v2_3m_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; Jv, tB have no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4368,
+    "name": "ry6602_jc_gk7030gw_3m_8k_8k",
+    "displayName": "GK7030GW",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36888,
+    "internalName": "ry6602_jc_gk7030gw_3m_8k_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 135,
+      "h": 240,
+      "mode": "16",
+      "layers": 5
+    },
+    "travel": {
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; Jv has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4371,
+    "name": "ry6602_jc_gk6952gw_3m_1k_1k",
+    "displayName": "GK6952GW",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36883,
+    "internalName": "ry6602_jc_gk6952gw_3m_1k_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": null,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; W6, nB have no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4388,
+    "name": "ry6602_sg_sg9088_3m_1k",
+    "displayName": "K87 PRO",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36871,
+    "internalName": "ry6602_sg_sg9088_3m_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4389,
+    "name": "ry5088_cr_cr104_1m_8k",
+    "displayName": "K104",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_cr_cr104_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": {
+      "w": 24,
+      "h": 8,
+      "mode": "24",
+      "layers": 5
+    },
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": true,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; BB has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4393,
+    "name": "ry6602_osd_he67_1k",
+    "displayName": "HE67",
+    "company": "OUSAID",
+    "vendor": "OUSAID",
+    "vendorId": 14763,
+    "productId": 36883,
+    "internalName": "ry6602_osd_he67_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": null,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 139,
+        "name": "双玉"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 81,
+        "name": "磁紫轴"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4400,
+    "name": "ry5088_mc_k80_gk68m_1m_8k",
+    "displayName": "GK-68M",
+    "company": "MICROPACK",
+    "vendor": "MICROPACK",
+    "vendorId": 12625,
+    "productId": 20521,
+    "internalName": "ry5088_mc_k80_gk68m_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": null,
+        "default": 2.8
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": null,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 0,
+        "name": "高特"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4411,
+    "name": "ry6709_fl_k256_104_3m_8k_8k",
+    "displayName": "K256",
+    "company": "ABKO",
+    "vendor": "ABKO",
+    "vendorId": 14763,
+    "productId": 36888,
+    "internalName": "ry6709_fl_k256_104_3m_8k_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 159,
+        "name": "白冰轴"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4415,
+    "name": "ry6709_fl_k255_104_3m_8k_8k",
+    "displayName": "K255",
+    "company": "ABKO",
+    "vendor": "ABKO",
+    "vendorId": 14505,
+    "productId": 38,
+    "internalName": "ry6709_fl_k255_104_3m_8k_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 159,
+        "name": "白冰轴"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4430,
+    "name": "ry6709_fl_k2620_104_3m_8k_8k",
+    "displayName": "A108KHE",
+    "company": "ABKO",
+    "vendor": "ABKO",
+    "vendorId": 14505,
+    "productId": 38,
+    "internalName": "ry6709_fl_k2620_104_3m_8k_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 159,
+        "name": "白冰轴"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba, G6 have no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4439,
+    "name": "ry5088_sg9151_1m_0005_8k",
+    "displayName": "SG9151",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 36886,
+    "internalName": "ry5088_sg9151_1m_0005_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": 0.005,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.005,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 0,
+        "name": "高特"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; gB has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4440,
+    "name": "ry6709_beat75_v6_3m",
+    "displayName": "Beat75",
+    "company": "XINMENGV5",
+    "vendor": "XINMENGV5",
+    "vendorId": 14763,
+    "productId": 36888,
+    "internalName": "ry6709_beat75_v6_3m",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": null,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.005,
+        "max": 2,
+        "step": null,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 0,
+        "name": "高特"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      },
+      {
+        "code": 46,
+        "name": "赤霄轴"
+      },
+      {
+        "code": 139,
+        "name": "双玉"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; hc, X6 have no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4441,
+    "name": "ry6602_t75_v5_3m_1k",
+    "displayName": "A75HE",
+    "company": "XINMENGV5",
+    "vendor": "XINMENGV5",
+    "vendorId": 14763,
+    "productId": 36883,
+    "internalName": "ry6602_t75_v5_3m_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.01,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [
+      {
+        "code": 139,
+        "name": "双玉"
+      },
+      {
+        "code": 0,
+        "name": "高特"
+      },
+      {
+        "code": 1,
+        "name": "磁玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4443,
+    "name": "ry5088_jhtw_rk852v1_1m_8k",
+    "displayName": "852",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 12625,
+    "productId": 20528,
+    "internalName": "ry5088_jhtw_rk852v1_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 2,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 70,
+        "name": "璃玉轴"
+      },
+      {
+        "code": 33,
+        "name": "冰玉"
+      },
+      {
+        "code": 2,
+        "name": "磁玉pro"
+      },
+      {
+        "code": 3,
+        "name": "磁玉gaming"
+      },
+      {
+        "code": 4,
+        "name": "天王"
+      },
+      {
+        "code": 5,
+        "name": "万磁王"
+      }
+    ],
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; ba has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4444,
+    "name": "ry6602_mk25062_3m_1k",
+    "displayName": "PEI-FR24",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36871,
+    "internalName": "ry6602_mk25062_3m_1k",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4451,
+    "name": "ry5088_jc_gk6870gw_v2_3m_8k_8k",
+    "displayName": "IRIS 75",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36886,
+    "internalName": "ry5088_jc_gk6870gw_v2_3m_8k_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.2,
+        "step": 0.01,
+        "default": null
+      },
+      "firePress": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.01,
+        "max": 2,
+        "step": 0.01,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "default": null
+      }
+    },
+    "switchReplaceable": true,
+    "switchTypes": [
+      {
+        "code": 15,
+        "name": "凯华轴"
+      },
+      {
+        "code": 7,
+        "name": "机械轴"
+      }
+    ],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content; H6 has no table there, so none is named. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4461,
+    "name": "ry6609_yx_k88_3m",
+    "displayName": "K88",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14763,
+    "productId": 36872,
+    "internalName": "ry6609_yx_k88_3m",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 3,
+    "magnetic": false,
+    "family": "unknown",
+    "screen": null,
+    "travel": null,
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4475,
+    "name": "ry5088_gk6860g_v1_1m_8k_rgb",
+    "displayName": "strayfe x PietSmiet 100 HE",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 2436,
+    "productId": 1005,
+    "internalName": "ry5088_gk6860g_v1_1m_8k_rgb",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.001,
+        "default": 2
+      },
+      "firePress": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "fireLift": {
+        "min": 0.001,
+        "max": 2,
+        "step": 0.001,
+        "default": null
+      },
+      "deadzone": {
+        "min": 0,
+        "max": 1,
+        "step": 0.001,
+        "default": 0.3
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
+    "_why": "In the qmk.top root build's tables (the vendor's own host, a single-file build for magnetic boards), not in gearhub v4, which is the bundle the registry is extracted from.",
+    "_evidence": "Transcribed by tools/extract_vendor_data.py from the qmk.top root build saved 2026-11-22 under ~/vendor-builds/qmktop-20261122. That build ships no loader chunks, so the family is unknown and the app settles it from the board at connect. Light layout names are mapped onto the gearhub bundle's by content. No hardware report yet.",
+    "_unknown": "The qmk.top build bundles no picture for it. The Keys page matches a picture against the board and asks the owner to confirm it.",
+    "id": 4477,
+    "name": "ry5088_gk8140g_v1_1m_8k",
+    "displayName": "RXD 60 Pro HE",
+    "company": "rongyuan",
+    "vendor": "rongyuan",
+    "vendorId": 14724,
+    "productId": 1006,
+    "internalName": "ry5088_gk8140g_v1_1m_8k",
+    "keyLayout": "Unknown",
+    "lightLayout": "K",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "unknown",
+    "screen": null,
+    "travel": {
+      "travel": {
+        "min": 0.1,
+        "max": 3.3,
+        "step": 0.005,
+        "default": 2
+      }
+    },
+    "switchReplaceable": false,
+    "switchTypes": [],
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

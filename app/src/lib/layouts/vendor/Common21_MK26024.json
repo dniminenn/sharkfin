@@ -1,9 +1,9 @@
 {
  "canvas": {"width":238,"height":286},
  "keys": [
-  {"code":"AudioVolumeDown","type":"knob","x":139,"y":0,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,234,0],"hidUsage":null,"consumerUsage":234},
-  {"code":"AudioVolumeMute","type":"knob","x":156,"y":0,"w":18,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,226,0],"hidUsage":null,"consumerUsage":226},
-  {"code":"AudioVolumeUp","type":"knob","x":174,"y":0,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,233,0],"hidUsage":null,"consumerUsage":233},
+  {"code":"AudioVolumeDown","type":"knob","x":186,"y":0,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,234,0],"hidUsage":null,"consumerUsage":234},
+  {"code":"AudioVolumeMute","type":"knob","x":203,"y":0,"w":18,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,226,0],"hidUsage":null,"consumerUsage":226},
+  {"code":"AudioVolumeUp","type":"knob","x":221,"y":0,"w":17,"h":52,"text":null,"matrixIndex":null,"matrixEntry":[3,0,233,0],"hidUsage":null,"consumerUsage":233},
   {"code":"Numpad0","type":"key","x":1,"y":245,"w":86,"h":40,"text":"0\nIns","matrixIndex":null,"matrixEntry":[0,0,98,0],"hidUsage":98,"consumerUsage":null},
   {"code":"NumpadAdd","type":"key","x":139,"y":107,"w":40,"h":86,"text":"+","matrixIndex":null,"matrixEntry":[0,0,87,0],"hidUsage":87,"consumerUsage":null},
   {"code":"NumpadEnter","type":"key","x":139,"y":199,"w":40,"h":86,"text":"Enter","matrixIndex":null,"matrixEntry":[0,0,88,0],"hidUsage":88,"consumerUsage":null},
@@ -23,6 +23,7 @@
   {"code":"NumpadSubtract","type":"key","x":139,"y":61,"w":40,"h":40,"text":"-","matrixIndex":null,"matrixEntry":[0,0,86,0],"hidUsage":86,"consumerUsage":null},
   {"code":"Fn","type":"key","x":1,"y":6,"w":40,"h":40,"text":"Fn","matrixIndex":null,"matrixEntry":[10,1,0,0],"hidUsage":null,"consumerUsage":null},
   {"code":"Escape","type":"key","x":47,"y":6,"w":40,"h":40,"text":"Esc","matrixIndex":null,"matrixEntry":[0,0,41,0],"hidUsage":41,"consumerUsage":null},
-  {"code":"Backspace","type":"key","x":93,"y":6,"w":40,"h":40,"text":"←","matrixIndex":null,"matrixEntry":[0,0,42,0],"hidUsage":42,"consumerUsage":null}
+  {"code":"Backspace","type":"key","x":93,"y":6,"w":40,"h":40,"text":"←","matrixIndex":null,"matrixEntry":[0,0,42,0],"hidUsage":42,"consumerUsage":null},
+  {"code":"LaunchCalculator","type":"key","x":139,"y":6,"w":40,"h":40,"text":"Cal","matrixIndex":null,"matrixEntry":[3,0,146,1],"hidUsage":null,"consumerUsage":402}
  ]
 }

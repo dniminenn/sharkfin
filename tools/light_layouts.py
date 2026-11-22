@@ -60,7 +60,7 @@ OPTION_WORDS = {
 }
 
 LAYOUT_RE = re.compile(
-    r"\b([A-Za-z_$][\w$]*) = \{\s*isRgb: (!0|!1),\s*types: \[(.*?)\],?\s*\}", re.S
+    r"(?<![\w$])([A-Za-z_$][\w$]*) = \{\s*isRgb: (!0|!1),\s*types: \[(.*?)\],?\s*\}", re.S
 )
 FIELD_RE = re.compile(r'(\w+): ("[^"]*"|\[[^\]]*\]|!0|!1|\d+)')
 
