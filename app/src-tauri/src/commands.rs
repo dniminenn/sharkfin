@@ -1824,21 +1824,3 @@ fn unregistered_bundle(state: &tauri::State<AppState>, path: String) -> Result<S
     let _ = writeln!(out, "```");
     Ok(out)
 }
-
-#[tauri::command(async)]
-pub fn raw_command(
-    state: tauri::State<AppState>,
-    opcode: u8,
-    payload: Vec<u8>,
-    checksum: String,
-) -> Result<Vec<u8>, String> {
-    let mode = match checksum.as_str() {
-        "bit7" => Checksum::Bit7,
-        "bit8" => Checksum::Bit8,
-        _ => Checksum::None,
-    };
-    with_open(&state, |t, _| {
-        let reply = t.roundtrip(opcode, &payload, mode)?;
-        Ok(reply.to_vec())
-    })
-}

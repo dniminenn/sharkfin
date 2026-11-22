@@ -79,7 +79,6 @@ pub fn run() {
             commands::contribution_bundle,
             commands::export_config,
             commands::import_config,
-            commands::raw_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

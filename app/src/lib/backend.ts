@@ -335,9 +335,3 @@ export const exportConfig = (path: string) =>
   invoke<string>("export_config", { path });
 export const importConfig = (path: string) =>
   invoke<string>("import_config", { path });
-
-export const rawCommand = (
-  opcode: number,
-  payload: number[],
-  checksum: "bit7" | "bit8" | "none",
-) => invoke<number[]>("raw_command", { opcode, payload, checksum });

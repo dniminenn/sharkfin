@@ -1781,21 +1781,3 @@ pub async fn unknown_bundle(device: JsHidDevice) -> Result<JsValue, JsValue> {
     let _ = writeln!(out, "```");
     Ok(out.into())
 }
-
-#[wasm_bindgen]
-pub async fn raw_command(
-    opcode: u8,
-    payload: Vec<u8>,
-    checksum: String,
-) -> Result<Vec<u8>, JsValue> {
-    let mode = match checksum.as_str() {
-        "bit7" => Checksum::Bit7,
-        "bit8" => Checksum::Bit8,
-        _ => Checksum::None,
-    };
-    let _busy = acquire().await;
-    read_quiet().await;
-    let (t, _) = get_open(false)?;
-    let reply = t.roundtrip(opcode, &payload, mode).await.map_err(fail)?;
-    Ok(reply.to_vec())
-}

@@ -538,12 +538,3 @@ export const importConfig = (_path: string): Promise<string> =>
     if (raw === null) throw "no file was picked";
     return (await core.import_config(raw)) as string;
   });
-
-export const rawCommand = (
-  opcode: number,
-  payload: number[],
-  checksum: "bit7" | "bit8" | "none",
-): Promise<number[]> =>
-  withCore(async () =>
-    Array.from(await core.raw_command(opcode, new Uint8Array(payload), checksum)),
-  );
