@@ -14499,5 +14499,37 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #105. Not in the current vendor catalogues, so an extraction alone will not add it. The vendor's older driver table names id 762 yc500_feker_ik75, IK75; the owner's board is the IK75 PRO.",
+    "_evidence": "Read sweep and setup from the owner's board (0.11.1, a8d1709, browser). identify 0x8F returns 0x02fa = 762 on 3151:4010. 0x89 returns a yc500 keymap, 0x8A returns all 0xFF, 0x92 answers four u16 (120, 120, 1680, 1680) at bytes 1..8 and auto-OS 0x97 answers 1. That fixes the family as yc500. Debounce 0x91 answers 1 at byte 2. Setup wrote slot 3 Caps to Esc: read back and felt, then undone. It found 4 profiles and switched them. The owner saw 8 paint the rainbow and confirmed the edge light. Local82_Feker_IK75_Pro is Common82_NBD_IK75 baked against that keymap, 85 of 85 with no twin keys once the knob press is drawn as Play/Pause, which slot 84 carries; the owner confirmed the picture and pressed 6 of 6.",
+    "_unknown": "No photo. 0xAD and 0xAE echo the previous reply, so no display. The light layout name is not observable from a sweep. The firmware channel has no record for 762.",
+    "id": 762,
+    "name": "feker_ik75_pro",
+    "displayName": "IK75 PRO",
+    "company": "FEKER",
+    "vendor": "FEKER",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "feker_ik75_pro",
+    "keyLayout": "Local82_Feker_IK75_Pro",
+    "lightLayout": "",
+    "sideLightLayout": "owner",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "MediaPlayPause",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
   }
 ]

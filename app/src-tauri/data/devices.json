@@ -1185,6 +1185,35 @@
     }
   },
   {
+    "id": 762,
+    "name": "feker_ik75_pro",
+    "displayName": "IK75 PRO",
+    "company": "FEKER",
+    "vendor": "FEKER",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "feker_ik75_pro",
+    "keyLayout": "Local82_Feker_IK75_Pro",
+    "lightLayout": "",
+    "sideLightLayout": "owner",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "MediaPlayPause",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 768,
     "name": "royalaxe_l98",
     "displayName": "L98",
