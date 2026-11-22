@@ -1460,6 +1460,35 @@
     "screen": null
   },
   {
+    "id": 840,
+    "name": "ousaid_dk67_v2",
+    "displayName": "DK67 V2",
+    "company": "OUSAID",
+    "vendor": "OUSAID",
+    "vendorId": 12625,
+    "productId": 16400,
+    "internalName": "ousaid_dk67_v2",
+    "keyLayout": "Local66_Ousaid_DK67_V2",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 847,
     "name": "yc580_yi66",
     "displayName": "YZ166",
