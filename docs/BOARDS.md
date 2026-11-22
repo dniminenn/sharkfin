@@ -13,7 +13,7 @@ blank is a plain grid of key slots. All three work the same.
 | | count |
 |---|---:|
 | total | 1500 |
-| writable | 1229 |
+| writable | 1305 |
 | drawn | 384 |
 | drawn after confirmation | 874 |
 
@@ -90,77 +90,77 @@ blank is a plain grid of key slots. All three work the same.
 | akko 3084BP-ISO-DE | 2950 | 3151:4003 | yc500 | yes | auto |
 | akko 3084BP-ISO-UK | 771 | 0461:4003 | yc500 | yes | auto |
 | akko 3084S | 457 | 0461:4003 | unknown |  |  |
-| akko 3087S US | 3296 | 3151:4010 | unknown |  | auto |
+| akko 3087S US | 3296 | 3151:4010 | yc500 | yes | auto |
 | Akko 3098B | 69 | 3151:4002 | yc500 | yes | yes |
 | akko 3098B Plus | 1280 | 3151:4003 | yc500 | yes | auto |
 | akko 3098B Plus | 1281 | 3151:4015 | unknown |  |  |
-| akko 3098S | 3656 | 3151:4010 | unknown |  | auto |
-| akko 3108 V3 | 3039 | 3151:4010 | unknown |  | yes |
+| akko 3098S | 3656 | 3151:4010 | yc500 | yes | auto |
+| akko 3108 V3 | 3039 | 3151:4010 | yc500 | yes | yes |
 | akko 5075 V3 | 2753 | 3151:5002 | gen2 | yes |  |
 | akko 5075 V3 | 3127 | 3151:5002 | gen2 | yes | auto |
-| akko 5075 V3 | 3263 | 3151:504c | unknown |  |  |
+| akko 5075 V3 | 3263 | 3151:504c | gen2 | yes |  |
 | akko 5075 V3 HE | 2807 | 3151:502f | gen2 | yes | auto |
-| akko 5075 V3 HE | 3357 | 3151:5030 | unknown |  | auto |
-| akko 5075 V5 | 3448 | 38ee:0003 | unknown |  | auto |
-| akko 5075 V5 | 3582 | 38ee:0005 | unknown |  | auto |
-| akko 5075 V5 | 3912 | 38ee:0003 | unknown |  | auto |
-| akko 5075 V5 HE | 3779 | 38ee:0001 | unknown |  | auto |
+| akko 5075 V3 HE | 3357 | 3151:5030 | gen2 | yes | auto |
+| akko 5075 V5 | 3448 | 38ee:0003 | gen2 | yes | auto |
+| akko 5075 V5 | 3582 | 38ee:0005 | gen2 | yes | auto |
+| akko 5075 V5 | 3912 | 38ee:0003 | gen2 | yes | auto |
+| akko 5075 V5 HE | 3779 | 38ee:0001 | gen2 | yes | auto |
 | akko 5075 V5 HE | 4134 | 39ab:9016 | gen2 | yes | auto |
-| akko 5075 V5 HE ISO | 3964 | 38ee:0001 | unknown |  | auto |
-| akko 5075 V5 HE ISO | 4060 | 38ee:0001 | unknown |  | auto |
-| akko 5075 V5 HE TMR | 3785 | 3151:5030 | unknown |  | yes |
-| akko 5075 V5 HE TMR | 3800 | 3151:5030 | unknown |  | auto |
-| akko 5075 V5 HE-B | 3951 | 38ee:0001 | unknown |  | auto |
-| akko 5075 V5 ISO | 3954 | 38ee:0005 | unknown |  | auto |
+| akko 5075 V5 HE ISO | 3964 | 38ee:0001 | gen2 | yes | auto |
+| akko 5075 V5 HE ISO | 4060 | 38ee:0001 | gen2 | yes | auto |
+| akko 5075 V5 HE TMR | 3785 | 3151:5030 | gen2 | yes | yes |
+| akko 5075 V5 HE TMR | 3800 | 3151:5030 | gen2 | yes | auto |
+| akko 5075 V5 HE-B | 3951 | 38ee:0001 | gen2 | yes | auto |
+| akko 5075 V5 ISO | 3954 | 38ee:0005 | gen2 | yes | auto |
 | akko 5075 V5 ISO | 4374 | 38ee:0046 | gen2 | yes | auto |
 | akko 5075 VЗ HE | 3129 | 3151:502d | gen2 | yes | auto |
 | akko 5075B Plus | 338 | 0461:4003 | yc500 | yes | auto |
 | akko 5075B Plus | 1042 | 3151:4015 | yc500 | yes |  |
 | akko 5075B Plus-S | 1033 | 05ac:024f | yc500 | yes | yes |
 | akko 5075B Plus-S | 1528 | 3151:4003 | yc500 | yes | auto |
-| akko 5075B Plus-S | 2567 | 3151:4015 | unknown |  |  |
+| akko 5075B Plus-S | 2567 | 3151:4015 | yc500 | yes |  |
 | akko 5075S | 459 | 0461:4003 | unknown |  |  |
 | akko 5075S | 1452 | 0461:4003 | unknown |  |  |
 | akko 5075S | 1594 | 0461:4003 | unknown |  |  |
-| akko 5075S | 3368 | 38ee:000a | unknown |  | auto |
-| akko 5075S | 3369 | 38ee:000a | unknown |  | auto |
+| akko 5075S | 3368 | 38ee:000a | yc500 | yes | auto |
+| akko 5075S | 3369 | 38ee:000a | yc500 | yes | auto |
 | akko 5075S+ | 620 | 0461:4003 | unknown |  |  |
 | akko 5075S-ABNT2 | 885 | 3151:4010 | unknown |  |  |
 | akko 5087 V3 | 3095 | 3151:5002 | gen2 | yes | auto |
-| akko 5087 V3 | 3130 | 3151:5002 | unknown |  | auto |
-| akko 5087 V3 | 3265 | 3151:504c | unknown |  | auto |
+| akko 5087 V3 | 3130 | 3151:5002 | gen2 | yes | auto |
+| akko 5087 V3 | 3265 | 3151:504c | gen2 | yes | auto |
 | akko 5087 V3 HE | 2829 | 3151:502f | gen2 | yes | auto |
 | akko 5087 V3 HE | 3131 | 3151:5029 | gen2 | yes | auto |
-| akko 5087 V3 HE | 3359 | 3151:5030 | unknown |  | auto |
-| akko 5087 V5 | 3444 | 38ee:0003 | unknown |  | auto |
-| akko 5087 V5 | 3579 | 38ee:0005 | unknown |  | auto |
-| akko 5087 V5 | 3913 | 38ee:0003 | unknown |  |  |
-| akko 5087 V5 HE | 3640 | 38ee:0001 | unknown |  | auto |
-| akko 5087 V5 HE | 3643 | 38ee:0001 | unknown |  | auto |
-| akko 5087 V5 HE | 3782 | 38ee:0001 | unknown |  | auto |
-| akko 5087 V5 HE TMR | 3791 | 38ee:0001 | unknown |  | auto |
-| akko 5087 V5 HE TMR | 3813 | 38ee:0001 | unknown |  | auto |
-| akko 5087 V5 HE TMR ISO | 3827 | 38ee:0001 | unknown |  | auto |
+| akko 5087 V3 HE | 3359 | 3151:5030 | gen2 | yes | auto |
+| akko 5087 V5 | 3444 | 38ee:0003 | gen2 | yes | auto |
+| akko 5087 V5 | 3579 | 38ee:0005 | gen2 | yes | auto |
+| akko 5087 V5 | 3913 | 38ee:0003 | gen2 | yes |  |
+| akko 5087 V5 HE | 3640 | 38ee:0001 | gen2 | yes | auto |
+| akko 5087 V5 HE | 3643 | 38ee:0001 | gen2 | yes | auto |
+| akko 5087 V5 HE | 3782 | 38ee:0001 | gen2 | yes | auto |
+| akko 5087 V5 HE TMR | 3791 | 38ee:0001 | gen2 | yes | auto |
+| akko 5087 V5 HE TMR | 3813 | 38ee:0001 | gen2 | yes | auto |
+| akko 5087 V5 HE TMR ISO | 3827 | 38ee:0001 | gen2 | yes | auto |
 | akko 5087B V2 | 1330 | 3151:4015 | unknown |  |  |
 | akko 5087S | 458 | 0461:4003 | unknown |  |  |
 | akko 5087S | 1436 | 0461:4003 | unknown |  |  |
 | akko 5087S V2 | 1495 | 3151:4010 | unknown |  |  |
-| akko 5087V3 HE TMR | 3424 | 38ee:0001 | unknown |  | auto |
-| akko 5087V5 HE | 3900 | 38ee:0001 | unknown |  | auto |
+| akko 5087V3 HE TMR | 3424 | 38ee:0001 | gen2 | yes | auto |
+| akko 5087V5 HE | 3900 | 38ee:0001 | gen2 | yes | auto |
 | akko 5098 V5 | 3938 | 38ee:0003 | gen2 | yes | auto |
-| akko 5098 V5 | 3993 | 38ee:0005 | unknown |  | auto |
-| akko 5098 V5 HE | 3956 | 38ee:0001 | unknown |  | auto |
+| akko 5098 V5 | 3993 | 38ee:0005 | gen2 | yes | auto |
+| akko 5098 V5 HE | 3956 | 38ee:0001 | gen2 | yes | auto |
 | akko 5098 V5 HE TMR | 4208 | 38ee:0040 | gen2 | yes | auto |
 | akko 5098 V5 ISO | 4379 | 38ee:0046 | gen2 | yes | auto |
 | akko 5098B | 1923 | 3151:4015 | yc500 | yes |  |
 | akko 5098B | 2254 | 3151:4015 | yc500 | yes |  |
-| akko 5108 V5 | 3285 | 3151:5002 | unknown |  | yes |
-| akko 5108 V5 | 3405 | 3151:504c | unknown |  | auto |
-| akko 5108 V5 | 3543 | 38ee:0005 | unknown |  | auto |
-| akko 5108 V5 | 3739 | 3151:504c | unknown |  | auto |
-| akko 5108 V5 HE | 3773 | 38ee:0001 | unknown |  | auto |
-| akko 5108 V5 HE | 3869 | 38ee:0001 | unknown |  | auto |
-| akko 5108 V5 ISO | 3955 | 38ee:0005 | unknown |  | auto |
+| akko 5108 V5 | 3285 | 3151:5002 | gen2 | yes | yes |
+| akko 5108 V5 | 3405 | 3151:504c | gen2 | yes | auto |
+| akko 5108 V5 | 3543 | 38ee:0005 | gen2 | yes | auto |
+| akko 5108 V5 | 3739 | 3151:504c | gen2 | yes | auto |
+| akko 5108 V5 HE | 3773 | 38ee:0001 | gen2 | yes | auto |
+| akko 5108 V5 HE | 3869 | 38ee:0001 | gen2 | yes | auto |
+| akko 5108 V5 ISO | 3955 | 38ee:0005 | gen2 | yes | auto |
 | akko 5108B Plus | 678 | 3151:4003 | unknown |  |  |
 | akko 5108B Plus | 1023 | 3151:4015 | yc500 | yes | yes |
 | akko 5108B Plus | 1148 | 3151:4003 | unknown |  |  |
@@ -169,30 +169,30 @@ blank is a plain grid of key slots. All three work the same.
 | akko 5108S | 652 | 3151:4003 | unknown |  |  |
 | akko ACR Pro75 | 1264 | 3151:4003 | unknown |  |  |
 | Akko ACR75 v2 | 606 | 3151:4003 | yc500 | yes | yes |
-| akko Air01 | 3013 | 3151:5002 | unknown |  | yes |
+| akko Air01 | 3013 | 3151:5002 | gen2 | yes | yes |
 | akko Air01 | 4010 | 38ee:0005 | gen2 | yes | yes |
 | akko Air01 | 4311 | 38ee:0005 | gen2 | yes | yes |
-| akko Air01 UK | 3452 | 3151:5002 | unknown |  |  |
-| akko Air01 UK | 3658 | 3151:5056 | unknown |  |  |
-| akko Armor Alice | 2655 | 3151:5025 | unknown |  |  |
-| akko Armor Alice | 3105 | 3151:5030 | unknown |  |  |
-| akko FUN60 KizunaAI SE | 3052 | 3151:5029 | unknown |  | auto |
+| akko Air01 UK | 3452 | 3151:5002 | gen2 | yes |  |
+| akko Air01 UK | 3658 | 3151:5056 | gen2 | yes |  |
+| akko Armor Alice | 2655 | 3151:5025 | gen2 | yes |  |
+| akko Armor Alice | 3105 | 3151:5030 | gen2 | yes |  |
+| akko FUN60 KizunaAI SE | 3052 | 3151:5029 | gen2 | yes | auto |
 | akko FUN68 optical | 4014 | 38ee:0049 | unknown |  |  |
-| akko FUN87 KizunaAI PE | 3187 | 3151:5029 | unknown |  | auto |
-| akko Gem 01 | 3275 | 3151:5030 | unknown |  | auto |
-| akko Gem 02 | 3273 | 3151:5030 | unknown |  | auto |
+| akko FUN87 KizunaAI PE | 3187 | 3151:5029 | gen2 | yes | auto |
+| akko Gem 01 | 3275 | 3151:5030 | gen2 | yes | auto |
+| akko Gem 02 | 3273 | 3151:5030 | gen2 | yes | auto |
 | akko Gem02 | 2619 | 3151:5030 | gen2 | yes | auto |
 | akko K0039 | 2881 | 3151:5030 | gen2 | yes | auto |
 | akko K0069 | 4135 | 38ee:0003 | gen2 | yes | auto |
-| akko KF105 | 3031 | 3151:5002 | unknown |  | auto |
+| akko KF105 | 3031 | 3151:5002 | gen2 | yes | auto |
 | akko KF105 TMR | 4176 | 38ee:0001 | gen2 | yes |  |
-| akko KF106 | 3008 | 3151:5002 | unknown |  | auto |
-| akko KF106 | 4031 | 38ee:0001 | unknown |  | auto |
+| akko KF106 | 3008 | 3151:5002 | gen2 | yes | auto |
+| akko KF106 | 4031 | 38ee:0001 | gen2 | yes | auto |
 | akko KF106 TMR | 4177 | 38ee:0001 | gen2 | yes |  |
-| akko Linx 68 | 4017 | 38ee:0005 | unknown |  | auto |
-| akko M1 V5 HE | 3300 | 3151:5030 | unknown |  | auto |
+| akko Linx 68 | 4017 | 38ee:0005 | gen2 | yes | auto |
+| akko M1 V5 HE | 3300 | 3151:5030 | gen2 | yes | auto |
 | akko MG108 | 575 | 3151:4003 | unknown |  |  |
-| akko MG108B V2 | 4018 | 38ee:0005 | unknown |  | auto |
+| akko MG108B V2 | 4018 | 38ee:0005 | gen2 | yes | auto |
 | akko Mineral01 | 2903 | 3151:5030 | gen2 | yes | auto |
 | akko Mineral02 | 2581 | 3151:5030 | gen2 | yes | auto |
 | akko Mineral02 | 2885 | 3151:5030 | gen2 | yes | auto |
@@ -200,13 +200,13 @@ blank is a plain grid of key slots. All three work the same.
 | akko MOD007 V5 HE | 2453 | 3151:5030 | gen2 | yes | auto |
 | akko MOD007 V5 HE | 2839 | 3151:502f | gen2 | yes | yes |
 | akko MOD007 V5 HE | 3113 | 3151:5029 | gen2 | yes | yes |
-| akko MOD007 V5 HE | 3401 | 3151:5030 | unknown |  | yes |
-| akko MOD007 V5 HE | 3402 | 3151:5029 | unknown |  | yes |
-| akko MOD007 V5 HE TMR | 3842 | 38ee:0001 | unknown |  |  |
-| akko MOD007B HE | 3160 | 3151:4035 | unknown |  | auto |
-| akko MOD007B HE | 3161 | 3151:4035 | unknown |  |  |
+| akko MOD007 V5 HE | 3401 | 3151:5030 | gen2 | yes | yes |
+| akko MOD007 V5 HE | 3402 | 3151:5029 | gen2 | yes | yes |
+| akko MOD007 V5 HE TMR | 3842 | 38ee:0001 | gen2 | yes |  |
+| akko MOD007B HE | 3160 | 3151:4035 | yc500 | yes | auto |
+| akko MOD007B HE | 3161 | 3151:4035 | yc500 | yes |  |
 | akko MOD007B HE PC | 1637 | 3151:4035 | yc500 | yes | auto |
-| akko MOD007B PC | 1395 | 3151:4015 | unknown |  | auto |
+| akko MOD007B PC | 1395 | 3151:4015 | yc500 | yes | auto |
 | akko MOD007B V3-HE(UK) | 2872 | 3151:5030 | gen2 | yes | yes |
 | akko MOD007B V3-HE(UK) | 4030 | 3151:5030 | gen2 | yes | yes |
 | akko MOD007B V3-HE(US) | 2871 | 3151:5030 | gen2 | yes | auto |
@@ -214,16 +214,16 @@ blank is a plain grid of key slots. All three work the same.
 | akko MOD007PC-CX  | 1304 | 3151:4015 | unknown |  |  |
 | akko MOD007S V3-HE | 2683 | 3151:5029 | gen2 | yes | auto |
 | akko MOD007S V3-HE UK | 2704 | 3151:5029 | gen2 | yes | yes |
-| akko MOD007S V3-HE UK | 3322 | 3151:5029 | unknown |  | yes |
-| akko MOD007S V3-HE US | 3321 | 3151:5029 | unknown |  | auto |
-| akko MOD07 V5 | 3034 | 3151:5002 | unknown |  | yes |
-| akko MOD68 | 3162 | 3151:5030 | unknown |  | auto |
+| akko MOD007S V3-HE UK | 3322 | 3151:5029 | gen2 | yes | yes |
+| akko MOD007S V3-HE US | 3321 | 3151:5029 | gen2 | yes | auto |
+| akko MOD07 V5 | 3034 | 3151:5002 | gen2 | yes | yes |
+| akko MOD68 | 3162 | 3151:5030 | gen2 | yes | auto |
 | akko MOD68 | 3163 | 3151:5029 | gen2 | yes | yes |
-| akko MOD68 | 3397 | 38ee:0001 | unknown |  | auto |
-| akko MOD68 HE | 3815 | 38ee:0001 | unknown |  | auto |
-| akko MOD68 HE | 3820 | 38ee:0001 | unknown |  | auto |
-| akko MOD68 ISO | 3341 | 3151:5030 | unknown |  | auto |
-| akko MOD68 ISO | 3378 | 38ee:0009 | unknown |  | auto |
+| akko MOD68 | 3397 | 38ee:0001 | gen2 | yes | auto |
+| akko MOD68 HE | 3815 | 38ee:0001 | gen2 | yes | auto |
+| akko MOD68 HE | 3820 | 38ee:0001 | gen2 | yes | auto |
+| akko MOD68 ISO | 3341 | 3151:5030 | gen2 | yes | auto |
+| akko MOD68 ISO | 3378 | 38ee:0009 | gen2 | yes | auto |
 | akko MU01 | 1588 | 3151:4015 | yc500 | yes | auto |
 | akko MU01 | 1798 | 3151:4015 | yc500 | yes | yes |
 | akko MU02 | 1991 | 3151:4015 | unknown |  |  |
@@ -233,16 +233,16 @@ blank is a plain grid of key slots. All three work the same.
 | akko PC75B Plus+ | 695 | 3151:4003 | unknown |  |  |
 | akko PC75S+ | 668 | 0461:4003 | unknown |  |  |
 | akko PC98B Plus+ | 679 | 3151:4003 | unknown |  |  |
-| akko RAID 75 HE | 4049 | 38ee:0016 | unknown |  | auto |
+| akko RAID 75 HE | 4049 | 38ee:0016 | gen2 | yes | auto |
 | akko RAY68 | 2743 | 3151:5030 | gen2 | yes | auto |
 | akko RAY68 | 2924 | 3151:5030 | gen2 | yes | auto |
 | akko SPR75 | 848 | 3151:4003 | unknown |  |  |
 | akko TAC75 HE | 2782 | 3151:502d | gen2 | yes | yes |
-| akko TAC87 | 2735 | 3151:4010 | unknown |  | auto |
+| akko TAC87 | 2735 | 3151:4010 | yc500 | yes | auto |
 | akko TAC87 | 2786 | 3151:5002 | gen2 | yes | auto |
-| akko TAC87 | 3200 | 3151:5030 | unknown |  | auto |
-| akko TOP75B | 1714 | 3151:4010 | unknown |  | auto |
-| akko xG AIR 3 | 3818 | 3151:5002 | unknown |  | yes |
+| akko TAC87 | 3200 | 3151:5030 | gen2 | yes | auto |
+| akko TOP75B | 1714 | 3151:4010 | yc500 | yes | auto |
+| akko xG AIR 3 | 3818 | 3151:5002 | gen2 | yes | yes |
 | ANGRYSHARK Final 75 | 3089 | 3151:5029 | gen2 | yes | auto |
 | ANTESPORTS APEX 350 | 4321 | 3151:5002 | gen2 | yes | auto |
 | apexkey Votin 84 | 4067 | 3151:504c | gen2 | yes | auto |
