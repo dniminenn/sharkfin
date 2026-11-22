@@ -14563,5 +14563,33 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #113. Device 3489 is in no vendor catalogue, so an extraction alone will not add it.",
+    "_evidence": "Read sweep and setup from the owner's board (0.11.1, desktop). identify 0x8F returns 0x0da1 = 3489 on 3151:5041. 0x8A returns a gen2 keymap, 0x89 returns the options echo and 0x91 answers sleep timers (600, 600, 600, 600) at bytes 8..15, which fixes the family as gen2. Setup found 4 profiles and switched them. The owner saw 8 paint the rainbow and confirmed the edge light. Local87_Siukie_PL87W is Common87_702 baked against that keymap, 87 of 87 with no twin keys; the owner confirmed the picture.",
+    "_unknown": "No photo. Remap was not tested. The owner reports that something is off without saying what. 0xAD answers zeros, so no display. The light layout name is not observable from a sweep. The firmware channel has no record for 3489.",
+    "id": 3489,
+    "name": "siukie_pl87w",
+    "displayName": "PL87W",
+    "company": "Siukie",
+    "vendor": "Siukie",
+    "vendorId": 12625,
+    "productId": 20545,
+    "internalName": "siukie_pl87w",
+    "keyLayout": "Local87_Siukie_PL87W",
+    "lightLayout": "",
+    "sideLightLayout": "owner",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
   }
 ]

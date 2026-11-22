@@ -34987,6 +34987,31 @@
     }
   },
   {
+    "id": 3489,
+    "name": "siukie_pl87w",
+    "displayName": "PL87W",
+    "company": "Siukie",
+    "vendor": "Siukie",
+    "vendorId": 12625,
+    "productId": 20545,
+    "internalName": "siukie_pl87w",
+    "keyLayout": "Local87_Siukie_PL87W",
+    "lightLayout": "",
+    "sideLightLayout": "owner",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "gen2",
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": true
+    }
+  },
+  {
     "id": 3492,
     "name": "ry6609_zdm_m101_3m_8k_8k",
     "displayName": "M101",
