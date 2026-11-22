@@ -61,6 +61,9 @@ export interface BoardLayoutState {
    *  for a board whose built-in picture is wrong, and for one that never
    *  had a picture. */
   sweep: () => void;
+  /** Forget a "none of these" answer and resolve again, as on a first
+   *  connect. Setup's Start over uses it so the pictures come back. */
+  reopen: () => void;
   /** Match a pasted drawing against the board; returns the match rate and,
    *  when it clears the bar, makes it the pending picture. */
   tryCustom: (layout: BoardLayout) => Promise<number>;
@@ -466,6 +469,12 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     setAttempt((n) => n + 1);
   }, [id]);
 
+  const reopen = useCallback(() => {
+    if (id !== undefined) clearStore(rejectedKey(id));
+    matricesRef.current = [];
+    setAttempt((n) => n + 1);
+  }, [id]);
+
   const previewCustom = useCallback(
     async (geometry: BoardLayout) => {
       const matrices = await readMatrices();
@@ -506,6 +515,7 @@ export function useBoardLayout(device: ConnectedDevice | null): BoardLayoutState
     confirm,
     reject,
     sweep,
+    reopen,
     tryCustom,
     previewCustom,
     nearest,

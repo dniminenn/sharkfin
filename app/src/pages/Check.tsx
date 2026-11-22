@@ -163,6 +163,7 @@ export default function CheckPage({
     // A trial opened for a test that was abandoned goes back to what is saved.
     applyOwnerRecord(loadOwner(id) ?? emptyRecord()).catch(() => {});
     setSwitchTrial(null).catch(() => {});
+    lay.reopen();
     setError(null);
     setBack(false);
     setKeymap(null);
