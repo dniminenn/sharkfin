@@ -378,6 +378,9 @@ echo 'SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151|0461|046a|05ac|0984|0db0|145f|
   && sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
 
+To check a download: `gh attestation verify FILE --repo dniminenn/sharkfin`.
+SHA256SUMS lists every file.
+
 Not sure if your board is supported? See
 [docs/BOARDS.md](https://github.com/dniminenn/sharkfin/blob/master/docs/BOARDS.md)
 or [getsharkfin.com/boards](https://getsharkfin.com/boards/).

@@ -128,7 +128,9 @@ page reaches only the keyboard's settings channel and never sees your typing.
 It keeps working without a connection after the first visit, and the browser
 can install it as an app.
 
-For the desktop app, download a release or build it yourself:
+For the desktop app, download a release or build it yourself. Each release
+lists its SHA256SUMS, and every file in it is attested by the build that made
+it: `gh attestation verify FILE --repo dniminenn/sharkfin` checks a download.
 
 ```sh
 cd app
