@@ -14651,5 +14651,34 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #122. Not in the current vendor catalogues, so an extraction alone will not add it. The vendor's older driver table names id 138 yzw_ak980_dm, MOD003/004, Akko.",
+    "_evidence": "Read sweep and setup from the owner's board (0.11.1, browser). identify 0x8F returns 0x008a = 138 on 3151:4002, answering on its keyboard collection like the 3098B (69). 0x89 returns a yc500 keymap and 0x8A returns all 0xFF, which fixes the family as yc500. Setup wrote slot 3 Caps to Esc across the whole layer: read back and felt, then undone. It found 4 profiles and switched them. The owner saw 7 paint the rainbow, so the flags are swapped. Local97_Akko_MOD003 is the owner's own drawing, 97 of 97 against that keymap; the owner confirmed it and sent a photo.",
+    "_unknown": "The owner reports that Radiant turns the backlight off, and that backlight off, the WASD and arrow swap and Windows lock do nothing; those options are not established for this board. 0x91 answers 0 at byte 2 and 0x92 answers no timers, so debounce and sleep stay off. No edge light. 0xAD answers zeros, so no display. The firmware channel has no record for 138.",
+    "id": 138,
+    "name": "akko_mod003",
+    "displayName": "MOD003",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16386,
+    "internalName": "akko_mod003",
+    "keyLayout": "Local97_Akko_MOD003",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "ledFlagsSwapped": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

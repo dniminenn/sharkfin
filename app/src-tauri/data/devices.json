@@ -27,6 +27,32 @@
     }
   },
   {
+    "id": 138,
+    "name": "akko_mod003",
+    "displayName": "MOD003",
+    "company": "akko",
+    "vendor": "akko",
+    "vendorId": 12625,
+    "productId": 16386,
+    "internalName": "akko_mod003",
+    "keyLayout": "Local97_Akko_MOD003",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "ledFlagsSwapped": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 243,
     "name": "yzw_yz84_dm",
     "displayName": "YZ84",
