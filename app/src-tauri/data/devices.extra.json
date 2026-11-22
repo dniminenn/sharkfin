@@ -14591,5 +14591,37 @@
       "screen": false,
       "sideLight": true
     }
+  },
+  {
+    "_why": "Reported in issue #116. Device 4258 is in no vendor catalogue, so an extraction alone will not add it.",
+    "_evidence": "Read sweep and setup from the owner's board (0.11.1, browser). identify 0x8F returns 0x10a2 = 4258 on 3151:502f. 0x8A returns a gen2 keymap and 0x91 answers sleep timers (120, 120, 1800, 120) at bytes 8..15, which fixes the family as gen2. The owner confirms magnetic switches and setup read the columns as travel. Setup set slot 41 Space to 0.1 mm: read back and felt light, then restored and felt normal. It wrote slot 3 Caps to Esc: read back and felt, then undone. It found 4 profiles and switched them. Local81_Nyfter_HE82K is Common81_DK82UK baked against that keymap, 85 of 85 with no twin keys; the owner confirmed the picture, pressed 8 of 8 and sent a photo.",
+    "_unknown": "The rainbow flag was not tested. No edge light. 0xAD answers a version record naming PAN108OLED, but the panel's size is unknown, so screen stays off. The controller lineage is not established, so the registry keeps a placeholder internalName and switch writes rest on the owner's own check. The firmware channel has no record for 4258.",
+    "id": 4258,
+    "name": "nyfter_he82k",
+    "displayName": "HE 82K",
+    "company": "Nyfter",
+    "vendor": "Nyfter",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "nyfter_he82k",
+    "keyLayout": "Local81_Nyfter_HE82K",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

@@ -57264,6 +57264,35 @@
     }
   },
   {
+    "id": 4258,
+    "name": "nyfter_he82k",
+    "displayName": "HE 82K",
+    "company": "Nyfter",
+    "vendor": "Nyfter",
+    "vendorId": 12625,
+    "productId": 20527,
+    "internalName": "nyfter_he82k",
+    "keyLayout": "Local81_Nyfter_HE82K",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": false,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 4259,
     "name": "ry6602_kk_k21_a_1m_1k",
     "displayName": "K21",

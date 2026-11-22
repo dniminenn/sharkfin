@@ -874,6 +874,10 @@ mod tests {
                 "Local87_Siukie_PL87W",
                 include_str!("../../src/lib/layouts/vendor/Local87_Siukie_PL87W.json"),
             ),
+            (
+                "Local81_Nyfter_HE82K",
+                include_str!("../../src/lib/layouts/vendor/Local81_Nyfter_HE82K.json"),
+            ),
         ];
         for (name, text) in LOCAL {
             let v: serde_json::Value = serde_json::from_str(text).expect("parses");
