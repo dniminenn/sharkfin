@@ -2879,22 +2879,27 @@
     "vendorId": 12625,
     "productId": 16405,
     "internalName": "yc3121_fk5253_soc",
-    "keyLayout": "Unknown",
+    "keyLayout": "Local84_Keydous_NJ87",
     "lightLayout": "",
     "sideLightLayout": "",
     "profiles": 1,
     "magnetic": false,
-    "family": "unknown",
+    "family": "yc500",
     "features": {
-      "knob": [],
-      "debounce": false,
-      "sleep24": false,
-      "sleepBT": false,
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
       "magneticSwitches": false,
       "screen": false,
       "sideLight": false
     },
-    "screen": null
+    "screen": null,
+    "ledColourScale": 102
   },
   {
     "id": 1154,

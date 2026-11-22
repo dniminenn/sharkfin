@@ -822,6 +822,9 @@ pub struct LedWire {
     /// Highest brightness the board takes: the vendor's light table, 4 on
     /// most boards, 7 on the MK12 and MK14.
     pub brightness_max: u8,
+    /// GET returns each colour channel stored as `c * colour_scale / 255`;
+    /// 255 is verbatim. Keydous NJ87 v118 stores 102 **[FW]**.
+    pub colour_scale: u8,
 }
 
 impl LedWire {
@@ -829,12 +832,23 @@ impl LedWire {
         swapped: false,
         speed_max: 5,
         brightness_max: 4,
+        colour_scale: 255,
     };
     pub const GEN2: LedWire = LedWire {
         swapped: false,
         speed_max: 4,
         brightness_max: 4,
+        colour_scale: 255,
     };
+
+    /// Rounds up, so writing the result back stores the value that was read.
+    fn unscale(self, c: u8) -> u8 {
+        let k = u32::from(self.colour_scale);
+        if k == 0 || k >= 255 {
+            return c;
+        }
+        ((u32::from(c) * 255).div_ceil(k)).min(255) as u8
+    }
 }
 
 const COMMON_COLORS: [(u8, u8, u8); 7] = [
@@ -934,7 +948,11 @@ impl LedParam {
         let mode = reply[1];
         let flags = reply[4];
         let nibble = flags & 0x0F;
-        let (mut r, mut g, mut b) = (reply[5], reply[6], reply[7]);
+        let (mut r, mut g, mut b) = (
+            wire.unscale(reply[5]),
+            wire.unscale(reply[6]),
+            wire.unscale(reply[7]),
+        );
         if (r, g, b) == (0xFA, 0xFA, 0xFA) {
             (r, g, b) = (0xFF, 0xFF, 0xFF);
         }

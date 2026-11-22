@@ -299,6 +299,20 @@ Opcode shared. Packet **[HW]**.
   red, orange, yellow, green, cyan, blue, magenta.
 - RGB below `0x080808` renders as unlit **[HW]**. Backlight-off is an
   options bit, not a black write.
+- Keydous NJ87 (1151, v118, yc500) stores the backlight colour scaled and
+  reads it back that way. The edge light is stored verbatim. **[FW]**
+
+  | path | address | operation |
+  |---|---|---|
+  | dispatch | `0x01023540` | `0x07` and `0x87` through the tables at `0x01023562` and `0x010235AA` |
+  | SET `0x07` | `0x01023356` | stores mode, speed, brightness and flags; each of R, G, B as `c * 102 / 255` |
+  | GET `0x87` | `0x01022C00` | returns the stored bytes unchanged |
+  | SET `0x08` | `0x010232EC` | stores bytes 1..7 verbatim |
+
+  The decompressed `1151_v118.pkg` image is 282912 bytes, SHA-256
+  `a1e4e7e32edea7f6c12aaeb2da0ae0806845009d6e39ea6f9661f61f09cfe42b`.
+  `ledColourScale: 102` reads each byte back as `ceil(c * 255 / 102)`,
+  which stores the same byte when written.
 
 Wire modes, the same numbers in both families' device classes: 1 static,
 2 breathing, 3 spectrum, 4 wave (4 dirs), 5 ripple, 6 star dots, 7 flow

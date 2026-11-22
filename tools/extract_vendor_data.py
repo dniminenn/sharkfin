@@ -668,6 +668,7 @@ KNOWN_DEVICE_FIELDS = {
     "id", "name", "displayName", "company", "vendor", "vendorId", "productId",
     "internalName", "keyLayout", "lightLayout", "sideLightLayout", "profiles",
     "magnetic", "family", "bulkKeymap", "features", "screen", "switchTypes", "ledFlagsSwapped",
+    "ledColourScale",
 }
 
 

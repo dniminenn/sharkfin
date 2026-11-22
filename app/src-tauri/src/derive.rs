@@ -176,6 +176,7 @@ pub fn derive_spec(
         light: None,
         led_flags_swapped: false,
         led_flags_source: "",
+        led_colour_scale: None,
     }
 }
 

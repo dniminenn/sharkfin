@@ -14476,5 +14476,28 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_override": true,
+    "_why": "Reported in issue #108. The legacy entry for Keydous NJ87 device 1151 left the protocol family unknown and had no picture.",
+    "_evidence": "Read sweep and setup from the owner's board (0.11.1, a8d1709, desktop). identify 0x8F returns 0x047f = 1151 on 3151:4015. 0x89 returns a yc500 keymap, 0x8A returns all 0xFF and 0x92 answers four u16 (180, 300, 1800, 1800) at bytes 1..8, which fixes the family as yc500. Debounce 0x91 answers 5 at byte 2. Local84_Keydous_NJ87 is Common84_sg9035 baked against that keymap, 87 of 87 with no twin keys; the owner confirmed the picture and pressed 6 of 6. The published v118 image carries the same table at 0x339ec for 92 of its 95 slots; the other three, the knob, read PrintScreen, ScrollLock and Pause there. In that image SET 0x07 stores each backlight colour byte as c * 102 / 255 and GET 0x87 returns the stored byte, so ledColourScale is 102; SET 0x08 stores the edge light verbatim (docs/PROTOCOL.md). That is why setup's restore never read back on this board. The owner saw 8 paint the rainbow.",
+    "_unknown": "Profiles and remaps were not tested, so profiles stays 1. No photo. 0xAD and 0xAE echo the previous reply, so no display. The owner is not sure about edge lighting and setup found none, so sideLight stays off.",
+    "id": 1151,
+    "keyLayout": "Local84_Keydous_NJ87",
+    "family": "yc500",
+    "ledColourScale": 102,
+    "features": {
+      "knob": [
+        "AudioVolumeDown",
+        "AudioVolumeMute",
+        "AudioVolumeUp"
+      ],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]

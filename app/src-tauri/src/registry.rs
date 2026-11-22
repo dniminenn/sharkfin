@@ -93,6 +93,10 @@ pub struct DeviceSpec {
     /// "hardware", "firmware", "vendor driver", or empty for the default.
     #[serde(default, skip_deserializing)]
     pub led_flags_source: &'static str,
+    /// The backlight reads back each colour channel at this fraction of 255
+    /// of what was written (`LedWire::colour_scale`). Absent: verbatim.
+    #[serde(default)]
+    pub led_colour_scale: Option<u8>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -208,6 +212,7 @@ impl DeviceSpec {
                 .map(|l| l.brightness_max)
                 .unwrap_or(4)
                 .max(1),
+            colour_scale: self.led_colour_scale.unwrap_or(255),
         }
     }
 
@@ -465,6 +470,20 @@ mod tests {
         .unwrap();
         assert!(!side.dazzle);
         assert_eq!(side.to_packet_on(d.led_wire().swapped)[4] & 15, 8);
+    }
+
+    /// v118 stores the backlight colour at 102/255 and reads it back so.
+    #[test]
+    fn keydous_nj87_reads_its_colour_back_scaled() {
+        let d = by_id(1151).expect("NJ87 present");
+        assert_eq!(d.family, "yc500");
+        assert_eq!(d.led_colour_scale, Some(102));
+        assert_eq!(d.led_wire().colour_scale, 102);
+        let stored =
+            crate::protocol::LedParam::from_reply_for(&[0x87, 1, 3, 4, 7, 102, 0, 9], d.led_wire())
+                .unwrap();
+        assert_eq!((stored.r, stored.g, stored.b), (255, 0, 23));
+        assert_eq!(by_id(1042).unwrap().led_wire().colour_scale, 255);
     }
 
     #[test]
@@ -838,6 +857,10 @@ mod tests {
             (
                 "Local102_AttackShark_X98HE",
                 include_str!("../../src/lib/layouts/vendor/Local102_AttackShark_X98HE.json"),
+            ),
+            (
+                "Local84_Keydous_NJ87",
+                include_str!("../../src/lib/layouts/vendor/Local84_Keydous_NJ87.json"),
             ),
         ];
         for (name, text) in LOCAL {

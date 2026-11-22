@@ -38,6 +38,49 @@ fn speed_range_follows_the_family() {
     assert_eq!((w.speed, w.brightness), (4, 6));
 }
 
+/// NJ87 v118 stores `c * 102 / 255`; writing the decoded colour back must
+/// store the same byte, or a restore never reads back.
+#[test]
+fn scaled_colour_reads_survive_a_write_back() {
+    use super::*;
+    let wire = LedWire {
+        colour_scale: 102,
+        ..LedWire::YC500
+    };
+    let store = |c: u8| (u32::from(c) * 102 / 255) as u8;
+    for s in 0..=102u8 {
+        let mut reply = [0u8; 64];
+        reply[0] = cmd::GET_LEDPARAM;
+        reply[1] = 1;
+        reply[2] = 3;
+        reply[3] = 4;
+        reply[4] = 7;
+        // Green at full stored scale keeps the near-black floor out of it.
+        (reply[5], reply[6]) = (s, 102);
+        let p = LedParam::from_reply_for(&reply, wire).unwrap();
+        assert_eq!(store(p.to_packet_for(wire)[5]), s, "stored {s}");
+    }
+    let red = LedParam {
+        mode: 1,
+        speed: 2,
+        brightness: 4,
+        option: 0,
+        dazzle: false,
+        r: 255,
+        g: 0,
+        b: 0,
+    };
+    let mut reply = [0u8; 64];
+    reply[..8].copy_from_slice(&red.to_packet_for(wire)[..8]);
+    reply[0] = cmd::GET_LEDPARAM;
+    reply[5] = store(reply[5]);
+    assert_eq!(LedParam::from_reply_for(&reply, wire).unwrap().r, 255);
+    assert_eq!(
+        LedParam::from_reply_for(&reply, LedWire::YC500).unwrap().r,
+        102
+    );
+}
+
 #[test]
 fn swapped_lineage_trades_the_two_flag_values() {
     use super::*;

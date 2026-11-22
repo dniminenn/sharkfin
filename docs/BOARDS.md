@@ -13,8 +13,8 @@ blank is a plain grid of key slots. All three work the same.
 | | count |
 |---|---:|
 | total | 1500 |
-| writable | 1305 |
-| drawn | 384 |
+| writable | 1306 |
+| drawn | 385 |
 | drawn after confirmation | 874 |
 
 | board | id | usb | family | write | draw |
@@ -701,7 +701,7 @@ blank is a plain grid of key slots. All three work the same.
 | Keydous NJ81-MAX | 4140 | 3151:504c | gen2 | yes | auto |
 | Keydous NJ81-MAX CP | 4207 | 39ab:9016 | gen2 | yes | auto |
 | Keydous NJ81S | 819 | 3151:4010 | unknown |  |  |
-| Keydous NJ87 | 1151 | 3151:4015 | unknown |  |  |
+| Keydous NJ87 | 1151 | 3151:4015 | yc500 | yes | yes |
 | Keydous NJ98 | 1021 | 3151:4015 | unknown |  |  |
 | Keydous NJ98-CP | 1259 | 3151:4015 | yc500 | yes |  |
 | Keydous NJ98-CP | 2576 | 3151:502f | gen2 | yes | yes |
