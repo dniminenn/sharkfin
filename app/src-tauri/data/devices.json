@@ -10684,6 +10684,32 @@
     }
   },
   {
+    "id": 2505,
+    "name": "monsgeek_fun60_pro_uk",
+    "displayName": "FUN60 PRO UK",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20525,
+    "internalName": "monsgeek_fun60_pro_uk",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "ledFlagsSwapped": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 2507,
     "name": "ry5088_gk75_dm_8k_002_nolight",
     "displayName": "GK75",

@@ -18,7 +18,7 @@
 
 ![keymap editor](docs/keys-abyss.png)
 
-Remap keys, set the RGB, record macros and change device settings on 1506
+Remap keys, set the RGB, record macros and change device settings on 1507
 keyboards built on ROYUAN hardware: Attack Shark, Hator, ikbc, NOPPOO,
 Epomaker, Akko, MEETION, rongyuan and more.
 
@@ -51,7 +51,7 @@ By brand, with what each board has:
 
 **Beta, so back up first.**
 
-1312 of 1506 accept changes, 190 more once the board itself has said which
+1313 of 1507 accept changes, 190 more once the board itself has said which
 command set it speaks, 4 are read-only. 391 are drawn out of the box
 and 874 more after a one-time check against your board; the rest show a
 slot grid.

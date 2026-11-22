@@ -14680,5 +14680,34 @@
       "screen": false,
       "sideLight": false
     }
+  },
+  {
+    "_why": "Reported in issue #118. Not in the current vendor catalogues, so an extraction alone will not add it. The vendor's older driver table names id 2505 ry5088_fun60pro_uk_8k_dm, FUN60 PRO UK, MonsGeek, magnetic.",
+    "_evidence": "Read sweep and setup from the owner's board (0.11.1, desktop). identify 0x8F returns 0x09c9 = 2505 on 3151:502d. 0x8A returns a gen2 keymap and 0x89 returns the options echo, which fixes the family as gen2. The owner confirms magnetic switches and setup read the columns as travel; slot 41 Space set to 0.1 mm read back and was restored. It found 4 profiles and switched them. The owner saw 7 paint the rainbow, so the flags are swapped.",
+    "_unknown": "The owner answered that Common61_H60_UK does not match, although it pairs all 62 entries, and sent no photo, so keyLayout stays Unknown and the Keys page offers pictures. The light switch test did not feel lighter, so switch writes are not unlocked and the registry keeps a placeholder internalName. 0x91 answers no sleep timers. No edge light. The firmware channel has no record for 2505.",
+    "id": 2505,
+    "name": "monsgeek_fun60_pro_uk",
+    "displayName": "FUN60 PRO UK",
+    "company": "MonsGeek",
+    "vendor": "MonsGeek",
+    "vendorId": 12625,
+    "productId": 20525,
+    "internalName": "monsgeek_fun60_pro_uk",
+    "keyLayout": "Unknown",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": true,
+    "family": "gen2",
+    "ledFlagsSwapped": true,
+    "features": {
+      "knob": [],
+      "debounce": false,
+      "sleep24": false,
+      "sleepBT": false,
+      "magneticSwitches": true,
+      "screen": false,
+      "sideLight": false
+    }
   }
 ]
