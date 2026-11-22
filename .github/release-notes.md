@@ -1,5 +1,18 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.12.0
+
+- Add 88 boards from the vendors' latest catalogues and 7 from reports, 1507 in all. (`5a148ed`)
+- Let 76 Akko and MonsGeek boards accept changes without asking first, by the command set Akko's own driver names. (`37561ab`)
+- Add FEKER IK75 PRO, OUSAID DK67 V2, Siukie PL87W, Nyfter HE 82K, CoolKiller CK75, Akko MOD003 and MonsGeek FUN60 PRO UK. (`07a9e01`, `60092b4`, `5dc2afa`, `8b566b1`, `3b92289`, `2def304`, `544d5391`)
+- Support the Keydous NJ87, and read its backlight colour the way its firmware stores it. (`7fcd72a`)
+- Turn on wireless sleep settings for the Akko 5075B Plus. (`a44439f`)
+- Let Setup carry on when a lighting restore does not read back but looks right to you. (`c29f0ea`)
+- Offer the pictures again after Start over in Setup. (`c6b8fd3`)
+- Remove the unused raw command, which could send any opcode. (`210b03f`)
+- Restrict the desktop app to its own files with a content security policy. (`fafebb7`)
+- Attest every release file and list its checksum, so a download can be verified. (`553b049`)
+
 ## What changed in 0.11.1
 
 - Show the effective Command and Option assignments on K86 and VGN A75 in Mac mode, and use them during Setup key checks.
