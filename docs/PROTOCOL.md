@@ -794,6 +794,45 @@ on every magnetic yc500 board (`0x89` reads `base + byte1 * 512`, the
 switch block is `slot >> 2`), and `0x85` answers the same number. The Fn
 layer opcodes take the profile as is.
 
+#### NJ98-CP 1259, v1.30
+
+`1259_v130_oledv112_mledv109.pkg`, `firmwareFile.bin`, 282912 bytes,
+SHA-256 `1792fa5218f18aa81912e93a56166962b4056cd8df4021375adf9893cc40cbf2`.
+Addresses include the `0x01000000` image base. These findings apply to
+this image, not the gen2 NJ98-CP variants.
+
+| path | address | operation |
+|---|---|---|
+| dispatch | `0x0101B1D2` | low-opcode table at `0x0101B22A`; `0x65` and `0xE5` reach the reject at `0x0101B334` |
+| settings `0x1A` | `0x0101AC68` | stores packet bytes 1..6 and 8..16; byte 25 is not read; selects preset 3 and queues apply |
+| preset SET `0x1D` | `0x0101AAF2` | stores byte 1 as preset and calls `0x01018BC8` |
+| preset GET `0x9D` | `0x0101AAD2` | returns preset at byte 1 and zeroes bytes 2..7 |
+| defaults/load | `0x01018BC8` | 126 slots; factory travel byte 13, release 28, rapid-trigger steps 2, first point 2, action bytes 0, time 30 |
+| apply | `0x01019A7E` | byte 5 chooses all keys or slot at byte 6; mode at 3, travel at 4, release at 8, rapid-trigger steps at 9..10 |
+| single-slot extras | `0x01019C14` | kind 2 copies first point and actions from bytes 11..15; kinds 3, 4 and 5 copy time from byte 16 |
+| save | `0x01019C96` | erases then writes 1408 bytes from RAM `0x23658` to `0x01080000`, or `0x01085000` when profile byte equals 4 |
+
+The all-keys path updates mode, travel, release and rapid-trigger steps.
+It does not fan out the single-slot extras. Slot 90 has separate travel
+and release handling at `0x01019B1C` and `0x01019BB8`; the single-slot
+path clamps both bytes to at least 10. The all-keys path takes different
+branches and must not be treated as an equivalent loop of single writes.
+
+The existing 1618/1466 controls are not a complete match: their factory
+travel byte is 18, and the 1618 record includes a writable bottom dead
+zone. This image has no `0x65`/`0xE5` column access and does not consume
+that dead-zone field. Its travel scale and supported key modes still
+need evaluator evidence before exposing the full switch editor.
+
+| display path | address | operation |
+|---|---|---|
+| version `0xAD` | `0x0101A376` | queues the OLED version request |
+| RGB565 announce `0xA5` | `0x0101A870` | reads length at bytes 4..5, box at 8..11 and an extra byte at 18 |
+| RGB565 data `0x25` | `0x0101A8D0` | reads frame at byte 1, page at 4..5, length at 6, data at 8; 56-byte pages |
+
+Panel dimensions and the meaning of announce byte 18 remain unverified.
+The presence of these handlers does not establish a screen geometry.
+
 ## Destructive opcodes
 
 Live writes. Do not send on an unknown family. Do not send them as a
