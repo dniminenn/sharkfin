@@ -81,9 +81,9 @@ set it speaks off the board's own answers, says so, and asks before it
 writes anything. Send a report from the Contribute tab and it gets a real
 entry.
 
-If Setup cannot confirm that your original lighting was restored, it keeps
-the saved lighting and stops before further tests. **Check the lighting
-again** only reads the keyboard; Start over stays disabled until it matches.
+If Setup cannot confirm that your original lighting was restored, it says
+so. **Check the lighting again** only reads the keyboard; if the lighting
+looks the way it did before, say so and Setup carries on.
 
 If your board shows the grid, or the picture is wrong, draw it on the
 Keys page: start from a preset or the closest stored picture, and each key

@@ -43,6 +43,9 @@ export interface ColourState {
   restored: boolean | null;
   /** And read back as what was written. */
   restoredReadBack: boolean | null;
+  /** The read disagreed and the owner saw their lighting back. Optional for
+   *  runs saved before it existed. */
+  restoreSeen?: boolean;
   sideOriginal: SledParam | null;
   /** Optional for runs saved before edge flag preservation was checked. */
   sideOriginals?: { plain: SledParam; swapped: SledParam };
@@ -300,7 +303,8 @@ export function pendingWrite(s: WizardState): string | null {
   const c = s.colour;
   if (c?.written && c.answer === null) return "the backlight is still red";
   if (c?.written && c.answer !== null && c.restored !== true) return "the backlight has not been put back";
-  if (c?.written && c.restoredReadBack === false) return "the backlight restore has not read back";
+  if (c?.written && c.restoredReadBack === false && !c.restoreSeen)
+    return "the backlight restore has not read back";
   if (c?.sideWritten && c.sideRestored !== true) return "the edge light has not been put back";
   const p = s.profiles;
   if (p && p !== "one" && p.away) return "the keyboard is on another profile";
@@ -425,7 +429,7 @@ export function checkReport(
           (c.restored === false
             ? ", colour not put back"
             : c.restoredReadBack === false
-              ? ", restore did not read back"
+              ? ", restore did not read back" + (c.restoreSeen ? ", owner saw it back" : "")
               : "")
         : c.answer === "neither"
           ? "no change seen" + (c.restored === false ? ", colour not put back" : "")

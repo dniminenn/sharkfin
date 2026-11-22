@@ -170,6 +170,20 @@ describe("setup lighting safety", () => {
     expect(mocks.setLedParam).not.toHaveBeenCalled();
   });
 
+  it("lets the owner carry on past a restore that never reads back, writing nothing", async () => {
+    const state = edgeState();
+    state.colour = { ...state.colour!, restoredReadBack: false, answer: "cycling" };
+    const { tree, props } = colours(state);
+    await click(tree, "It looks the way it did");
+    expect(props.setColour).toHaveBeenLastCalledWith(
+      expect.objectContaining({ restoredReadBack: false, restoreSeen: true }),
+    );
+    expect(mocks.setLedFlagsSwapped).toHaveBeenLastCalledWith(true);
+    expect(mocks.setLedParam).not.toHaveBeenCalled();
+    const after = colours({ ...state, colour: { ...state.colour!, restoreSeen: true } });
+    expect(find(after.tree, (el) => el.props.children === "Check the lighting again")).toBeUndefined();
+  });
+
   it("restores the prior interpretation when main recovery write fails", async () => {
     const state = edgeState();
     state.colour = { ...state.colour!, restored: false, answer: "cycling" };

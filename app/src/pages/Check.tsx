@@ -128,7 +128,8 @@ export default function CheckPage({
     const loaded = loadWizard(id) ?? freshState();
     // A failed restore still owns the saved original, even if an older
     // version let the run advance past Colours.
-    if (loaded.colour?.written && loaded.colour.restoredReadBack === false) loaded.step = "colours";
+    if (loaded.colour?.written && loaded.colour.restoredReadBack === false && !loaded.colour.restoreSeen)
+      loaded.step = "colours";
     if (unplugged.current && RUNNING.includes(loaded.step)) {
       loaded.replugs += 1;
       setBack(true);
@@ -903,6 +904,19 @@ function ColoursStep({
       }
     });
 
+  // Some firmware stores the colour transformed, so the read never matches.
+  // The owner's eyes settle it; the report keeps the failed read.
+  const acceptRestore = () =>
+    run(async () => {
+      if (!colour) return;
+      if (colour.answer === "cycling") {
+        const truth = trueSwap(colour.sw, colour.answer);
+        await setLedFlagsSwapped(truth);
+        writeChoice(spec.id, truth !== dflt ? { swapped: truth, dflt } : null);
+      }
+      setColour({ ...colour, restoreSeen: true });
+    });
+
   const answer = (a: "solid" | "cycling" | "neither") =>
     run(async () => {
       if (!colour) return;
@@ -1071,15 +1085,20 @@ function ColoursStep({
             </Button>
           )}
         </>
-      ) : colour.restoredReadBack === false ? (
+      ) : colour.restoredReadBack === false && !colour.restoreSeen ? (
         <>
           <p>{t("Your lighting went back out but did not read back the same.")}</p>
           <p className="text-muted-foreground">
-            {t("Setup keeps the original lighting and stops here. Checking again only reads the keyboard.")}
+            {t("If it looks the way it did before setup, carry on. Checking again only reads the keyboard.")}
           </p>
-          <Button size="sm" onClick={recheckRestore} disabled={busy}>
-            {t("Check the lighting again")}
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" onClick={acceptRestore} disabled={busy}>
+              {t("It looks the way it did")}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={recheckRestore} disabled={busy}>
+              {t("Check the lighting again")}
+            </Button>
+          </div>
         </>
       ) : (
         <>

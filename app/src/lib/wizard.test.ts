@@ -266,6 +266,12 @@ describe("pending writes", () => {
     expect(
       pendingWrite({
         ...s,
+        colour: { ...colour, answer: "solid", restored: true, restoredReadBack: false, restoreSeen: true },
+      }),
+    ).toBeNull();
+    expect(
+      pendingWrite({
+        ...s,
         colour: { ...colour, answer: "solid", restored: true, sideWritten: true, sideRestored: null },
       }),
     ).toBe("the edge light has not been put back");
