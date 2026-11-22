@@ -118,6 +118,31 @@
     "switchTypes": []
   },
   {
+    "id": 391,
+    "name": "coolkiller_ck75",
+    "displayName": "CK75",
+    "company": "CoolKiller",
+    "vendor": "CoolKiller",
+    "vendorId": 1452,
+    "productId": 591,
+    "internalName": "coolkiller_ck75",
+    "keyLayout": "Local84_CoolKiller_CK75",
+    "lightLayout": "",
+    "sideLightLayout": "",
+    "profiles": 4,
+    "magnetic": false,
+    "family": "yc500",
+    "features": {
+      "knob": [],
+      "debounce": true,
+      "sleep24": true,
+      "sleepBT": true,
+      "magneticSwitches": false,
+      "screen": false,
+      "sideLight": false
+    }
+  },
+  {
     "id": 413,
     "name": "yc200_pc75b",
     "displayName": "PC75B Plus",
