@@ -2,8 +2,8 @@
   {
     "_override": true,
     "_why": "The legacy entry for Akko 5075B Plus device 1042 left the protocol family unknown and disabled its physical edge lighting.",
-    "_evidence": "USB 3151:4015 hardware round-trips: identify 0x8F returns 1042; 0x89 returns a yc500 keymap, 0x8A returns all FF, 0x91 has no gen2 sleep timers, and 0x92 returns yc500 sleep timers. Changing only the main lighting flag from 7 to 8 preserved ripple mode and made it red, confirmed visually by the owner. After selecting the swapped interpretation, the owner confirmed independent main and edge RGB selection through Lighting. Both 0x87 and 0x88 were read back. The owner then deliberately selected rainbow on both, which read back as flag 7.",
-    "_unknown": "Full key geometry, per-key painting, macros, all effects and report-rate behaviour have not been verified. Keep Unknown so the picture requires matching and owner confirmation. Existing legacy profile and knob metadata are unchanged; debounce and sleep controls remain disabled.",
+    "_evidence": "USB 3151:4015 hardware round-trips: identify 0x8F returns 1042; 0x89 returns a yc500 keymap, 0x8A returns all FF, 0x91 has no gen2 sleep timers, and 0x92 returns yc500 sleep timers. Changing only the main lighting flag from 7 to 8 preserved ripple mode and made it red, confirmed visually by the owner. After selecting the swapped interpretation, the owner confirmed independent main and edge RGB selection through Lighting. Both 0x87 and 0x88 were read back. The owner then deliberately selected rainbow on both, which read back as flag 7. Firmware v104 implements SET sleep 0x12 at 0x01022B22, storing four u16 from bytes 8..15 in the same RAM fields returned by GET 0x92 at 0x01022536. This matches the existing yc500 writer; see docs/PROTOCOL.md for image hash and field addresses.",
+    "_unknown": "Full key geometry, per-key painting, macros, all effects and report-rate behaviour have not been verified. Keep Unknown so the picture requires matching and owner confirmation. Existing legacy profile and knob metadata are unchanged; debounce remains disabled. Sleep timing and persistence have not been tested on hardware.",
     "id": 1042,
     "family": "yc500",
     "ledFlagsSwapped": true,
@@ -11,8 +11,8 @@
     "features": {
       "knob": ["AudioVolumeDown", "AudioVolumeMute", "AudioVolumeUp"],
       "debounce": false,
-      "sleep24": false,
-      "sleepBT": false,
+      "sleep24": true,
+      "sleepBT": true,
       "magneticSwitches": false,
       "screen": false,
       "sideLight": true

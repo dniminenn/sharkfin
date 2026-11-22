@@ -419,6 +419,20 @@ gen2  GET 0x91  bytes 8..15                      [HW]
 gen2  SET 0x11  bytes 8..15                      [FW]
 ```
 
+Akko 5075B Plus, device 1042 `v104`, implements the yc500 layout
+above **[FW]**. Addresses include the `0x01000000` image base.
+
+| path | address | operation |
+|---|---|---|
+| dispatch | `0x01023076` | Bit7 checksum; `0x12` through the table at `0x01023098`, `0x92` through the table at `0x010230F0` |
+| SET `0x12` | `0x01022B22` | reads four u16 at bytes 8, 10, 12, 14 into RAM `0x21A28`, `0x21A2C`, `0x21A2A`, `0x21A2E`; sets pending flag `0x2047E` |
+| GET `0x92` | `0x01022536` | reads those same four RAM values into reply bytes 1, 3, 5, 7 |
+
+The decompressed `1042_v104.pkg` image is 282912 bytes, SHA-256
+`afc70808ed20348143a83bc91a8a7e0ebc83eb092252c25227178f1fcfeb50ce`.
+This establishes the setter's field layout. Persistence and actual sleep
+timing have not been round-tripped on this board.
+
 ### Options bitfield, yc500 [HW]
 
 `SET 0x06` / `GET 0x86`. Reply byte 2: `1` Win lock, `2` Mac mode, `8`

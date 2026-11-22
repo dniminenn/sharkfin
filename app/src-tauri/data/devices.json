@@ -2540,8 +2540,8 @@
         "AudioVolumeUp"
       ],
       "debounce": false,
-      "sleep24": false,
-      "sleepBT": false,
+      "sleep24": true,
+      "sleepBT": true,
       "magneticSwitches": false,
       "screen": false,
       "sideLight": true

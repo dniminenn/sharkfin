@@ -445,6 +445,9 @@ mod tests {
         assert!(d.led_wire().swapped);
         assert_eq!(d.led_flags_source, "hardware");
         assert!(d.features.side_light);
+        // v104 SET 0x12 and GET 0x92 address the same four timer fields.
+        assert!(d.features.sleep24);
+        assert!(d.features.sleep_bt);
         assert_eq!(d.key_layout, "Unknown");
         let rainbow =
             crate::protocol::LedParam::from_reply_for(&[0x87, 5, 2, 1, 7, 255, 0, 0], d.led_wire())
