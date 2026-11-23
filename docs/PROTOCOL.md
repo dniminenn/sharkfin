@@ -332,32 +332,47 @@ underneath is ignored while the key is lit. **[HW]**
 
 ### Timing [FW]
 
-Read from `3708_v507` (H60 Pro, ry5088 gen2, base `0x08000000`) and
-`1379_v108` (RT100, yc3121 yc500, base `0x01000000`; its data section
-sits `0x200` earlier in the OTA file than in flash). Both families render
-on a 5 ms tick.
+Read from `3708_v507` (H60 Pro, ry5088 gen2, base `0x08000000`; the same
+engine in `2305_v305` FUN60 Pro and `2454_v413` NJ81-CP) and `1379_v108`
+(RT100, yc3121 yc500, base `0x01000000`; its data section sits `0x200`
+earlier in the OTA file than in flash). yc500 renders on a 5 ms tick.
+gen2 runs one lighting step per 125 µs tick, and a step lights one LED.
 
 | | gen2 | yc500 |
 |---|---|---|
-| tick | timer `0x40001000`, period `0x7c`, prescale `0xd7` (`0x0801939c`); tick fn `0x08013d18` bumps a pending count at `0x200103e0`, dispatcher `0x08008310` drains it | 1 ms flag at `0x20cc0+0xc`; every 5th sets `+0xd`, main loops (`0x01015bc6`, `0x0101644a`) then run `0x010204da` |
-| 5 ms proof | task block every 2 ticks, `0x08017d30` counts 100 blocks, `0x08017d62` then decrements sleep in seconds (config `+0x16`) | `0x01015fd6` adds 1 per flag and compares with sleep × 1000 (`0x01016150`) |
-| mode table | `0x08008330`, 25 entries; 1 `0x0800a878`, 2 `0x0800cc6c`, 3 `0x0800b544`, 4 `0x0800b2d0`, 5 `0x0800bd14`, 6 `0x0800af14`, 7 `0x08008b98`, 8 `0x0800baf8`, 9 `0x080097a4`, 10 `0x08009bb8`, 11 `0x0800c81c`, 12 `0x08009a04`, 14 `0x08008e6c`, 15 `0x0800b01c`, 16 `0x08009f00`, 17 `0x0800a948`, 18 `0x0800a250` | switch8 `0x0101f666`/`0x0101f6be`; 1 `0x0101f4e4`, 2 `0x0101f294`, 3 `0x0101f214`, 4 `0x0101ef88`, 5 `0x0101eefe`, 6 `0x0101ed28`, 7 `0x0101eae0`, 8 `0x0101e998`, 9 `0x0101e56c`, 10 `0x0101e47e`, 11 `0x0101e0d8`, 12 `0x0101df98`, 14 `0x0101ee74`, 15 `0x0101e23a`, 16 `0x0101dd32`, 17 `0x0101da6a`, 18 `0x0101dbcc`, 19 `0x0101e6f6` |
+| clock | 12 MHz × 72 / 4 = 216 MHz (`0x080014ea`); timers count at 1 MHz | |
+| tick | timer `0x40001000`, period `0x7c`, prescale `0xd7` (`0x0801939c`): 125 µs (FUN60 and NJ81-CP: period `0x7d`, 126 µs). Handler `0x08013d18` bumps a pending count at `0x200103e0`; the main loop calls the dispatcher `0x08008310` (`0x0801707c`), which clears it and runs one step | 1 ms flag at `0x20cc0+0xc`; every 5th sets `+0xd`, main loops (`0x01015bc6`, `0x0101644a`) then run `0x010204da` |
+| 5 ms proof | | `0x01015fd6` adds 1 per flag and compares with sleep × 1000 (`0x01016150`) |
+| mode table | tbb at `0x0800832e`, indexed by the wire mode: 1 `0x0800c0f0`, 2 `0x08008950`, 3 `0x0800a878`, 4 `0x0800cc6c`, 5 `0x0800b544`, 6 `0x0800b2d0`, 7 `0x0800bd14`, 8 `0x0800af14`, 9 `0x08008b98`, 10 `0x0800baf8`, 11 `0x080097a4`, 12 `0x08009bb8`, 13 `0x0800c81c`, 14 `0x08009a04`, 15 `0x0800c9e8`, 16 `0x08008e6c`, 17 `0x0800b01c`, 18 `0x08009f00`, 19 `0x0800a948`, 20 and 22 `0x0800a250` | switch8 `0x0101f666`/`0x0101f6be`; 1 `0x0101f4e4`, 2 `0x0101f294`, 3 `0x0101f214`, 4 `0x0101ef88`, 5 `0x0101eefe`, 6 `0x0101ed28`, 7 `0x0101eae0`, 8 `0x0101e998`, 9 `0x0101e56c`, 10 `0x0101e47e`, 11 `0x0101e0d8`, 12 `0x0101df98`, 14 `0x0101ee74`, 15 `0x0101e23a`, 16 `0x0101dd32`, 17 `0x0101da6a`, 18 `0x0101dbcc`, 19 `0x0101e6f6` |
 | per-mode store | config `0x2000f328`: `+8` mode, `+0x22` speed[32], `+0x42` brightness[32], `+0x62` flags[32], `+0x82` rgb[32][3] (`0x08014374`) | config `0x21cc0`: `+0x1a` mode, `+0x40` speed[32], `+0x60` brightness[32], `+0x80` flags[32], `+0xa0` rgb[32][3] (`0x010249fa`) |
 | framebuffer | 6 rows × 24 columns × 4 bytes at state `+0x98` | 6 rows × 18 columns on this board |
 | presets, flags 0..7 | `0x0801cf10`: red, `ff7f00`, yellow, green, cyan, blue, magenta, white | `0x1036910`: red, `ff8000`, yellow, green, cyan, blue, magenta, white |
 
-gen2 speed, wire `w` 0..4, in frames:
+gen2 speed: render state `+0x23` holds `s` = wire + 1 (`0x08014aac`).
+Wash effects walk a 6 × 16 grid (Neon 6 × 24) one cell every `s` ticks.
+Per-key effects walk the board's LEDs one a tick: 61 on the H60 Pro and
+FUN60, 80 on the NJ81-CP. Faders bounce a level (`0x08007010`); the hue
+walker crosses R to G to B to R, 765 a turn (`0x08007062`). Rules in
+ticks:
 
-| modes | rule |
+| mode | rule |
 |---|---|
-| 1, 2, 14 | advance every `w` frames; 0 advances every frame |
-| 2 | level bounces 0..100 by 8 per advance |
-| 4, 6, 15 | move `6 - w` per frame |
-| 3, 5 | event every `200 + 200w` |
-| 4, 15 | spawn every `250 + 250w` |
-| 7 | event every `100 + 100w` |
-| 8 | event every `500 + 250w` |
-| 12, 16 | counter seeded with `200w`, `150w` |
+| 2 breathing | grid; level 0..255 by 3 a visit |
+| 3 spectrum | grid; hue +3 a visit |
+| 4 wave | grid; level 0..100 by 4, columns 8 apart; rainbow hue +6, columns 24 apart |
+| 11 spring, 15 loop | grid; level 0..100 by 4; rainbow hue +6 |
+| 12 neon | 6 × 24 grid; level 0..100 by 4; rainbow hue +6 |
+| 16 colour grid | keys, one every `s` ticks; level by 0..8 at random, new colour when dark |
+| 5 ripple, 7 flow, 14 radiant | event every `200 + 200s` |
+| 6 star dots, 17 snowfall | event every `250 + 250s` |
+| 9 layers | script step every `100 + 100s`; rests 10000 |
+| 10 sine | event every `500 + 250s` |
+| 18 meteor | event every `150 + 150s` |
+| 6, 7 | keys fade by `6 - s` a visit |
+| 8 key shadow | lit while held, then fades by `6 - s` a visit |
+| 9 | keys fade by 14 a visit |
+| 10, 17, 18 | keys fade by `14 - 2s` a visit |
+| 14 | keys fade by `10 - s` a visit |
 
 yc500 speed: each mode's apply routine reads its own six-word table by
 wire `w` (0..5), all consecutive from `0x10362c4`. Breathing scales each
@@ -697,7 +712,10 @@ slot.
 
 Sub-layer 0 is the hold, sub-layer 1 the tap. The tick counts while the
 key is down and compares against the mod-tap byte doubled
-(`0x0800eeaa`), so the byte is 10 ms at the 5 ms tick; released before
+(`0x0800eeaa`). The key pass runs once per tick of timer `0x40000800`,
+period 5000 at 1 MHz (start `0x08012e80`, handler `0x08010660`; the same
+in FUN60 Pro `2305_v305`), not on the 125 µs lighting tick, so the byte
+is 10 ms; released before
 that, the tap key is pressed and released. Movement under 0.30 mm is
 ignored.
 

@@ -71,6 +71,35 @@ describe("effects", () => {
     expect(colorAt("yc500", p, { x: 0.5, y: 0.5 }, 0, 0)).toEqual(colorAt("yc500", p, { x: 0.5, y: 0.5 }, 0, 5000));
   });
 
+  it("times a gen2 breath from its 125 us tick and 6 x 16 scan", () => {
+    // 170 visits of 96 cells, every wire + 1 ticks: 2.04 s at wire 0.
+    expect(breathFrames("gen2", 0) * 5).toBeCloseTo(2040);
+    expect(breathFrames("gen2", 4) * 5).toBeCloseTo(10200);
+    const at = (f: number) => colorAt("gen2", { ...base, mode: 2, speed: 4 }, { x: 0.5, y: 0.5 }, 0, f);
+    expect(at(0)).toEqual([0, 0, 0]);
+    expect(at(204)).toEqual([200, 100, 50]);
+    expect(at(408)).toEqual([0, 0, 0]);
+  });
+
+  it("turns gen2 spectrum once every 255 visits", () => {
+    const p = { ...base, mode: 3, speed: 4, rainbow: true };
+    const at = (f: number) => colorAt("gen2", p, { x: 0.5, y: 0.5 }, 0, f);
+    expect(at(612)).toEqual(at(0));
+    expect(at(306)).not.toEqual(at(0));
+  });
+
+  it("fades a gen2 key shadow over 100 / (6 - s) visits of every key", () => {
+    // Fastest speed, 61 keys: 20 visits of 61 ticks, 152.5 ms.
+    const p = { ...base, mode: 8, speed: 4 };
+    const lit = (f: number) =>
+      Array.from({ length: 61 }, (_, i) => i).filter((i) =>
+        colorAt("gen2", p, { x: 0.5, y: 0.5 }, i, f, 61).some((v) => v > 0),
+      );
+    const first = lit(1);
+    expect(first).toHaveLength(1);
+    expect(lit(31)).not.toContain(first[0]);
+  });
+
   it("breathes back to dark within one cycle", () => {
     const total = breathFrames("yc500", 3);
     const dark = colorAt("yc500", { ...base, mode: 2, speed: 2 }, { x: 0.5, y: 0.5 }, 0, total);

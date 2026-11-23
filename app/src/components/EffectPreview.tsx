@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
-// The board picture lit by the effect the Lighting page holds, animated on
-// the firmware's 5 ms tick. Paints straight into the DOM from a frame
+// The board picture lit by the effect the Lighting page holds, animated in
+// 5 ms frames. Paints straight into the DOM from a frame
 // loop rather than through React state, so a 100-key picture at 60 fps
 // costs one style write per key and no renders.
 
@@ -39,7 +39,7 @@ export default function EffectPreview({
       for (let i = 0; i < leds.length; i++) {
         const el = refs.current[i];
         if (!el) continue;
-        const [r, g, b] = colorAt(family, p, leds[i], i, frame);
+        const [r, g, b] = colorAt(family, p, leds[i], i, frame, leds.length);
         el.style.background = `rgb(${r} ${g} ${b})`;
         el.style.boxShadow = `0 0 1.2cqw 0.3cqw rgb(${r} ${g} ${b} / 0.7)`;
       }

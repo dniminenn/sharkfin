@@ -1,13 +1,27 @@
 // SPDX-FileCopyrightText: JR Lanteigne <root@dnim.dev>
 // SPDX-License-Identifier: GPL-3.0-or-later
 // A sketch of each backlight effect for the Lighting page preview. The
-// timing comes from the firmware (docs/PROTOCOL.md, "Timing"): both
-// families render on a 5 ms tick; yc500 paces each mode from its own
-// speed table, gen2 from a formula of the wire speed. Layers and Sine
-// wave follow the yc500 firmware's scripts. The other shapes are
-// approximations; the board's own routines were not transcribed.
+// timing comes from the firmware (docs/PROTOCOL.md, "Timing"): yc500 steps
+// each mode on a 5 ms tick from its own speed table; gen2 runs one step
+// per 125 us tick and lights one LED per step, so an effect's pace depends
+// on how many LEDs it walks. Layers and Sine wave follow the yc500
+// firmware's scripts. The shapes are approximations.
 
+/** One preview frame. Frame counts below are in these units. */
 export const FRAME_MS = 5;
+
+/** The gen2 engine: the tick, and the cells the wash effects walk per
+ *  pass (6 x 16; Neon 6 x 24). Per-key effects walk the board's LEDs. */
+export const GEN2 = { tickMs: 0.125, grid: 96, neonGrid: 144 };
+
+/** gen2 ticks as preview frames. */
+const ticks = (n: number) => (n * GEN2.tickMs) / FRAME_MS;
+
+/** Frames a gen2 per-key fade takes to cover 0..100 at `step` a visit. */
+const fadeFrames = (step: number, count: number) => ticks((100 / step) * count);
+
+/** How often the preview presses a key for the reactive effects. */
+const PRESS_FRAMES = 220 / FRAME_MS;
 
 export type Family = "yc500" | "gen2";
 
@@ -124,7 +138,7 @@ const LAYERS = (() => {
     }
     step++;
   }
-  return { cells, total: step + LAYERS_REST };
+  return { cells, steps: step };
 })();
 
 /** Host 0..4 to the wire byte: yc500 1..5 inverted, gen2 0..4 inverted. */
@@ -155,42 +169,49 @@ function stepFrames(family: Family, mode: number, wire: number): number {
         return 8;
     }
   }
-  // gen2: event modes wait a base of frames times (1 + wire).
+  // gen2: the effect's event counter, in ticks; the firmware's speed byte
+  // is wire + 1. Reactive modes step at the preview's own key presses.
+  const s = wire + 1;
   switch (mode) {
-    case 3:
     case 5:
-      return 200 + 200 * wire;
-    case 4:
-    case 15:
-      return 250 + 250 * wire;
     case 7:
-      return 100 + 100 * wire;
+    case 14:
+      return ticks(200 + 200 * s);
+    case 6:
+    case 17:
+      return ticks(250 + 250 * s);
     case 8:
-      return 500 + 250 * wire;
-    case 12:
-      return 100 + 200 * wire;
-    case 16:
-      return 100 + 150 * wire;
+      return PRESS_FRAMES;
+    case 9:
+      return ticks(100 + 100 * s);
+    case 10:
+      return ticks(500 + 250 * s);
+    case 18:
+      return ticks(150 + 150 * s);
     default:
       return 8;
   }
 }
 
-/** Hue turns completed by a frame, for the modes that walk the palette. */
-function hueTurns(family: Family, mode: number, wire: number, frame: number): number {
+/** Hue turns, or level cycles for a fixed colour, completed by a frame. */
+function hueTurns(family: Family, mode: number, wire: number, frame: number, rainbow: boolean): number {
   if (family === "yc500") {
     if (mode === 3) return (Math.floor(frame / 2) * tab(YC500.spectrum, wire)) / HUE_CYCLE;
     return (frame * (tab(YC500.hue, wire) + 1)) / HUE_CYCLE;
   }
-  // gen2 movers step 6 - wire units of a hundred per frame.
-  return (frame * (6 - wire)) / 100;
+  // gen2 visits each grid cell once a pass, every `wire + 1` ticks: the hue
+  // walker moves 3 (Spectrum) or 6 of 765 a visit, the fader 4 of 200.
+  const visit = ticks(GEN2.grid * (wire + 1));
+  if (mode === 3) return frame / (255 * visit);
+  if (mode === 12) return frame / (127.5 * ticks(GEN2.neonGrid * (wire + 1)));
+  return frame / ((rainbow ? 127.5 : 50) * visit);
 }
 
 /** How long a full breath takes, in frames, both directions. */
 export function breathFrames(family: Family, wire: number): number {
   if (family === "yc500") return 2 * (tab(YC500.breath, wire) + YC500.hold);
-  // gen2: 0..100 in steps of 8, one step every `wire` frames.
-  return 2 * Math.ceil(100 / 8) * Math.max(1, wire);
+  // gen2: each cell bounces 0..255 by 3 a visit.
+  return 170 * ticks(GEN2.grid * (wire + 1));
 }
 
 function hsv(h: number, s: number, v: number): Rgb {
@@ -261,9 +282,19 @@ function breath(family: Family, wire: number, frame: number): { level: number; c
   return { level: f < half ? f / half : 1 - (f - half) / half, cycle };
 }
 
+/** A gen2 per-key light lit at `bornFrame`: up over `rise` frames, then
+ *  down over `fall`. */
+function flash(frame: number, bornFrame: number, rise: number, fall: number): number {
+  const t = frame - bornFrame;
+  if (t < 0) return 0;
+  if (t < rise) return t / rise;
+  return Math.max(0, 1 - (t - rise) / fall);
+}
+
 /**
  * The colour of one key at a frame. `index` identifies the key for the
- * effects that pick keys at random.
+ * effects that pick keys at random; `count` is how many LEDs the board has,
+ * which gen2's per-key effects walk.
  */
 export function colorAt(
   family: Family,
@@ -271,13 +302,16 @@ export function colorAt(
   led: Led,
   index: number,
   frame: number,
+  count = 61,
 ): Rgb {
   const wire = wireSpeed(family, p.speed);
+  const gen2 = family === "gen2";
+  const s = wire + 1;
   const gain = p.brightnessMax > 0 ? p.brightness / p.brightnessMax : 1;
   const stepLen = stepFrames(family, p.mode, wire);
   const step = Math.floor(frame / stepLen);
   const stepPhase = (frame % stepLen) / stepLen;
-  const turns = hueTurns(family, p.mode, wire, frame);
+  const turns = hueTurns(family, p.mode, wire, frame, p.rainbow);
   const { row, col } = cellOf(led);
 
   let c: Rgb;
@@ -301,7 +335,9 @@ export function colorAt(
     case 4: {
       // Every column holds its own hue, offset from its neighbour, and all
       // walk together, so the rainbow slides along the chosen direction.
-      const along = [led.x, 1 - led.x, led.y, 1 - led.y][p.option % 4] ?? led.x;
+      // gen2 offsets neighbouring columns by 24 of 765 hue, or 8 of 200 level.
+      const spread = gen2 ? (p.rainbow ? 0.5 : 0.64) : 1;
+      const along = ([led.x, 1 - led.x, led.y, 1 - led.y][p.option % 4] ?? led.x) * spread;
       c = p.rainbow
         ? hsv(along + turns, 1, 1)
         : scale([p.r, p.g, p.b], glow(0.5 + 0.5 * Math.cos((along + turns) * Math.PI * 2)));
@@ -319,6 +355,24 @@ export function colorAt(
       break;
     }
     case 6: {
+      if (gen2) {
+        // One star a step on a random key, up and down by 6 - s a visit.
+        const rise = fadeFrames(6 - s, count);
+        let level = 0;
+        let hue = 0;
+        for (let age = 0; age * stepLen <= 2 * rise + stepLen; age++) {
+          const born = step - age;
+          if (born < 0) break;
+          if (Math.floor(noise(4, born) * count) !== index) continue;
+          const l = flash(frame, born * stepLen, rise, rise);
+          if (l > level) {
+            level = l;
+            hue = noise(index, born);
+          }
+        }
+        c = scale(p.rainbow ? hsv(hue, 1, 1) : [p.r, p.g, p.b], glow(level));
+        break;
+      }
       // A new star every step; each burns for a while and fades.
       const life = 40;
       const born = step - (Math.floor(noise(index, 0) * life) % life);
@@ -341,10 +395,30 @@ export function colorAt(
       }
       const head = (step % cells) + stepPhase;
       const dist = ((pos - head) % cells + cells) % cells;
-      c = scale(base(p, Math.floor(step / cells)), glow(dist > cells - 6 ? (dist - (cells - 6)) / 6 : 0));
+      // gen2 lets each passed key fade by 6 - s a visit.
+      const tail = gen2 ? Math.max(1, fadeFrames(6 - s, count) / stepLen) : 6;
+      c = scale(base(p, Math.floor(step / cells)), glow(dist > cells - tail ? (dist - (cells - tail)) / tail : 0));
       break;
     }
     case 8: {
+      if (gen2) {
+        // A released key fades by 6 - s a visit.
+        const fall = fadeFrames(6 - s, count);
+        let level = 0;
+        let press = 0;
+        for (let age = 0; age * stepLen <= fall + stepLen; age++) {
+          const born = step - age;
+          if (born < 0) break;
+          if (Math.floor(noise(3, born) * count) !== index) continue;
+          const l = flash(frame, born * stepLen, 0, fall);
+          if (l > level) {
+            level = l;
+            press = born;
+          }
+        }
+        c = scale(base(p, press), glow(level));
+        break;
+      }
       // Reactive: a press lights a key and fades. The preview presses one
       // random key per step.
       const hit = Math.floor(noise(3, step) * 100);
@@ -352,9 +426,11 @@ export function colorAt(
       break;
     }
     case 9: {
-      // The firmware's script: cells stay lit until the cycle rests.
-      const cycle = Math.floor(step / LAYERS.total);
-      const now = step % LAYERS.total;
+      // The firmware's script: cells stay lit until the cycle rests. gen2
+      // rests 10000 ticks.
+      const total = LAYERS.steps + (gen2 ? Math.round(10000 / (100 + 100 * s)) : LAYERS_REST);
+      const cycle = Math.floor(step / total);
+      const now = step % total;
       const items = LAYERS.cells.get(row * GRID_COLS + col) ?? [];
       let lit: ScriptItem | null = null;
       for (const it of items) if (it.step <= now) lit = it;
@@ -389,7 +465,7 @@ export function colorAt(
     case 12: {
       // Neon: a rainbow sweep, left or right.
       const dir = p.option === 1 ? -1 : 1;
-      c = hsv(led.x * dir - turns, 1, 1);
+      c = hsv(led.x * (gen2 ? 0.5 : 1) * dir - turns, 1, 1);
       break;
     }
     case 14: {
@@ -409,6 +485,17 @@ export function colorAt(
       break;
     }
     case 16: {
+      if (gen2) {
+        // Each key fades in and out on its own, about 4 of 200 a visit
+        // every s passes, and takes a new colour when dark.
+        const cycle = 50 * ticks(count * s);
+        const ph = frame / cycle + noise(index, 8);
+        const n = Math.floor(ph);
+        const f = ph - n;
+        const tone: Rgb = p.rainbow ? hsv(noise(index, n), 1, 1) : PRESETS[Math.floor(noise(index, n) * 7)];
+        c = scale(tone, glow(f < 0.5 ? f * 2 : 2 - f * 2));
+        break;
+      }
       // Blocks of colour that change every so often.
       const cell = Math.floor(led.x * 6) + 6 * Math.floor(led.y * 3);
       const epoch = Math.floor(frame / 120);
@@ -417,7 +504,7 @@ export function colorAt(
     }
     case 17: {
       // Flakes fall one row every few frames, each in one colour.
-      const fallFrames = 12;
+      const fallFrames = gen2 ? stepLen : 12;
       const drop = frame / (fallFrames * GRID_ROWS) + noise(col, 0);
       const fall = ((drop % 1) + 1) % 1;
       const d = Math.abs(led.y - fall);
@@ -427,7 +514,7 @@ export function colorAt(
     }
     case 18: {
       // Meteors: streaks with a tail, a few columns at a time.
-      const fallFrames = 8;
+      const fallFrames = gen2 ? stepLen : 8;
       const drop = frame / (fallFrames * GRID_ROWS) + noise(col, 0);
       const head = ((drop % 1.5) + 1.5) % 1.5;
       const d = head - led.y;
