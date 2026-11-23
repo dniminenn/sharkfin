@@ -1,5 +1,9 @@
 Beta. Back up from the Device tab before you rely on it.
 
+## What changed in 0.12.1
+
+- Run the Lighting preview at the keyboard's own speed on most Akko, MonsGeek, Epomaker and Attack Shark boards. (`3bc036a`)
+
 ## What changed in 0.12.0
 
 - Add 88 boards from the vendors' latest catalogues and 7 from reports, 1507 in all. (`5a148ed`)
